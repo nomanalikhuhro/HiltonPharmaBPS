@@ -67,18 +67,47 @@
                             <td>@item.StatusType</td>
                             <td>@item.CreatedBy - @item.User_Name</td>
                             <td>@item.CreatedOn.Value.ToString("dd-MMM-yyyy")</td>
-                            <td>
-                                @if (@item.StatusType == "Objection")
+                          
+                                @if (@item.StatusType != "Objection")
                                 {
-                                    <a asp-action="Edit" asp-route-id="@item.TrackingId" asp-route-anotherId="@item.BpsRecordId" asp-controller="ListView"><i class="fa fa-edit" data-toggle="tooltip" data-placement="top" title="Edit" style="color:orange"></i></a>
-                                    <a asp-action="Details" asp-route-id="@item.TrackingId" asp-route-anotherId="@item.BpsRecordId" asp-controller="ListView"><i class="fa fa-eye" data-toggle="tooltip" data-placement="top" title="View"></i></a>
+                                <td style="text-align:center;">
+                                    <form asp-action="Details" asp-controller="ListView">
+                                        <input type="hidden" name="id" value="@item.TrackingId">
+                                        <input type="hidden" name="anotherId" value="@item.BpsRecordId">
+                                        <button type="submit" class="icon-navigation" data-toggle="tooltip" data-placement="top" title="View"><i class="fa fa-eye"></i></button>
+                                    </form>
+                                </td>
                                 }
                                 else
                                 {
+                                <td class="text-center">
+                                    <table>
+                                        <tr>
+                                            <td style="text-align:center;">
+                                                <form asp-action="Edit" asp-controller="ListView">
 
-                                    <a asp-action="Details" asp-route-id="@item.TrackingId" asp-route-anotherId="@item.BpsRecordId" asp-controller="ListView"><i class="fa fa-eye" data-toggle="tooltip" data-placement="top" title="View"></i></a>
+                                                    <input type="hidden" name="id" value="@item.TrackingId">
+                                                    <input type="hidden" name="anotherId" value="@item.BpsRecordId">
+                                                    <button type="submit" class="icon-navigation" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit" style="color:orange"></i></button>
+                                                </form>
+
+                                            </td>
+
+                                            <td>
+                                                <form asp-action="Details" asp-controller="ListView">
+                                                    <input type="hidden" name="id" value="@item.TrackingId">
+                                                    <input type="hidden" name="anotherId" value="@item.BpsRecordId">
+                                                    <button type="submit" class="icon-navigation" data-toggle="tooltip" data-placement="top" title="View"><i class="fa fa-eye"></i></button>
+                                                </form>
+
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                </td>
+
                                 }
-                            </td>
+                           
                         </tr>
                     }
                     
