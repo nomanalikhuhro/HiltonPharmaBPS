@@ -2215,25 +2215,25 @@ where HCPREQID = '" + trackingid + "'";
                     }
                 //  }
 
-                using (MySqlConnection connection = new MySqlConnection(_connectionString))
-                {
-                    connection.Open();
+                //using (MySqlConnection connection = new MySqlConnection(_connectionString))
+                //{
+                //    connection.Open();
 
-                    using (MySqlCommand command = new MySqlCommand("SpStartWF", connection))
-                    {
-                        command.CommandType = CommandType.StoredProcedure;
+                //    using (MySqlCommand command = new MySqlCommand("SpStartWF", connection))
+                //    {
+                //        command.CommandType = CommandType.StoredProcedure;
 
-                        command.Parameters.AddWithValue("p_TrackingId", trackingid);
-                        command.Parameters.AddWithValue("p_HCPReqId", hcpid);
-                        command.Parameters.AddWithValue("p_BpsId", bpsid);
-                        command.Parameters.AddWithValue("p_User", EmpidSessionValue);
+                //        command.Parameters.AddWithValue("p_TrackingId", trackingid);
+                //        command.Parameters.AddWithValue("p_HCPReqId", hcpid);
+                //        command.Parameters.AddWithValue("p_BpsId", bpsid);
+                //        command.Parameters.AddWithValue("p_User", EmpidSessionValue);
 
-                        // Execute the stored procedure
-                        command.ExecuteNonQuery();
-                        command.CommandTimeout = 3000;
+                //        // Execute the stored procedure
+                //        command.ExecuteNonQuery();
+                //        command.CommandTimeout = 3000;
 
-                    }
-                }
+                //    }
+                //}
                 return Json(new { success = true });
             }
             catch (Exception ex)

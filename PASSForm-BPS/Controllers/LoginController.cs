@@ -96,28 +96,26 @@ namespace PASSForm_BPS.Controllers
                         //    return RedirectToAction("ApprovedView", "ListView");
 
                         //}
-                        else if (user.RoleId! == 16)
-                        {
-                            HttpContext.Session.SetString("EmpIdbps", user.EmpId.ToString());
-                            HttpContext.Session.SetString("roleid", user.RoleId.ToString());
-                            HttpContext.Session.SetString("uname", user.UserName.ToString());
-                            Response.Cookies.Append("roleid", user.RoleId.ToString(), new CookieOptions
-                            {
-                                Expires = DateTime.Now.AddDays(7), // Set the expiration date (optional)
-                                Path = "/", // Set the cookie path (optional)
-                                Domain = "192.168.10.30", // Set the cookie domain
-                                Secure = true, // Make the cookie secure (optional)
-                                HttpOnly = true // Make the cookie accessible only through HTTP (optional)
-                            });
+                        //else if (user.RoleId! == 16)
+                        //{
+                        //    HttpContext.Session.SetString("EmpIdbps", user.EmpId.ToString());
+                        //    HttpContext.Session.SetString("roleid", user.RoleId.ToString());
+                        //    HttpContext.Session.SetString("uname", user.UserName.ToString());
+                        //    Response.Cookies.Append("roleid", user.RoleId.ToString(), new CookieOptions
+                        //    {
+                        //        Expires = DateTime.Now.AddDays(7), // Set the expiration date (optional)
+                        //        Path = "/", // Set the cookie path (optional)
+                        //        Domain = "192.168.10.30", // Set the cookie domain
+                        //        Secure = true, // Make the cookie secure (optional)
+                        //        HttpOnly = true // Make the cookie accessible only through HTTP (optional)
+                        //    });
 
 
-                            ViewBag.RoleId = "2";
-                            // return View("_RolesBasePartialView");
-                            //return RedirectToAction("ApprovedView", "ListView");
+                        //    ViewBag.RoleId = "2";
 
-                            return RedirectToAction("PendingView", "ListView");
+                        //    return RedirectToAction("PendingView", "ListView");
 
-                        }
+                        //}
                         else
                         {
                             HttpContext.Session.SetString("EmpIdbps", user.EmpId.ToString());

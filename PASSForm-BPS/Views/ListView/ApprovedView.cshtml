@@ -44,7 +44,7 @@
             <table class="table hide" id="App_DataTable">
                 <thead>
                     <tr class="table table-striped">
-                        <th>Request ID</th>
+  @*                      <th>Request ID</th>*@
                         <th>Territory Code</th>
       @*                  <th>Territory Manager Name</th>*@
                         <th>Status</th>
@@ -60,7 +60,7 @@
                     @foreach (var item in Model)
                     {
                         <tr>
-                            <td>@item.TrackingId</td>
+                          @*  <td>@item.TrackingId</td>*@
 @*                            <td>@($"{item.TrackingId.Substring(0, 3)}-GAD-{item.TrackingId.Substring(item.TrackingId.Length - 4)}")</td>*@
                             <td>@item.TMCode</td>
                   @*          <td>@item.User_Name</td>*@
@@ -152,7 +152,7 @@
                 .appendTo('#App_DataTable thead');
 
             var table = $('#App_DataTable').DataTable({
-                order: [[5, "desc"]],
+                order: [[4, "desc"]],
                 orderCellsTop: true,
                 fixedHeader: true,
 
