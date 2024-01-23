@@ -1,0 +1,237 @@
+﻿@{
+    Layout = null;
+    @model List<PASSForm_BPS.Models.wf_worklist>
+
+}
+<html>
+<head>
+    <title>Your View</title>
+
+    <style>
+
+        .dropdown {
+        position: relative;
+        display: inline-block;
+        }
+
+        .dropdown-content {
+        display: none;
+        position: absolute;
+        right: 0;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+        }
+
+        .dropdown-content a {
+        color: black;
+        /* padding: 12px 16px;*/
+        text-decoration: none;
+        display: block;
+        }
+
+        .dropdown:hover .dropdown-content {
+        display: block;
+        }
+
+        .dropdown-content a:hover {
+        background-color: #f1f1f1;
+        }
+        /* The Modal (background) */
+        .modal {
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+        padding-top: 100px; /* Location of the box */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+
+        /* Modal Content */
+        .modal-content {
+        position: relative;
+        background-color: #fefefe;
+        margin: auto;
+        padding: 0;
+        border: 1px solid #888;
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        -webkit-animation-name: animatetop;
+        -webkit-animation-duration: 0.4s;
+        animation-name: animatetop;
+        animation-duration: 0.4s;
+        width: 50%;
+        height: auto;
+        border: 1px solid black;
+        border-radius: 10px;
+        }
+
+        /* Add Animation */
+
+
+        /* The Close Button */
+        .close {
+        color: white;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+        }
+
+
+
+        .modalcomments-body {
+
+        color: black;
+        font-size:15px;
+        }
+
+        .visible {
+        visibility: visible;
+        }
+
+        /* Assuming you already have a CSS class for hiding the modal */
+        #myModalComments {
+        visibility: hidden;
+        }
+        /* The Close Button */
+        .close {
+        font-size: 30px;
+        font-weight: bold;
+        text-align: end;
+        margin-top: -5%;
+        color: black;
+        }
+
+        .close:hover,
+        .close:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="myModalComments" class="modal" style="display:block; visibility:hidden;">
+        <div style="padding-left: 10%;padding-top: 5%;">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <div style="">
+                    <div style="text-align: center; height: 27px; background: linear-gradient(90deg, rgba(215,25,33,255) 47%, rgba(215,255,0,0.03974089635854339) 100%);">
+                        <p style=" font-weight: bold; font-style: italic; color:white">Comments:</p>
+                    </div>         
+                </div>
+                <div class="modalcomments-body" style="padding-left:8%; padding-top:3%;">
+                    <p></p>
+                </div>
+                <div style=" padding-top:2%;">
+                    <div style="text-align: center; height: 27px; background: linear-gradient(90deg, rgba(215,25,33,255) 47%, rgba(215,255,0,0.03974089635854339) 100%);">
+                        <p style="font-weight: bold; font-style: italic; color:white;">Files Uploaded:</p>
+                    </div>
+                </div>
+                <div class="modalfilepath-body" style="margin-bottom: 17px; padding-top:3%;">
+                    <table class="table hide" id="filePathsTable">
+                        <thead style="background:black;">
+                            <tr style="color:white;" class="table table-striped">
+                                <th>File Name:</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>   
+    </div>
+    @if (Model != null)
+    {
+        <div style="padding-top:90px; padding-right: 66px;">
+
+
+            <div style=" overflow-x: auto; border: 2px solid; background-color: white; border-radius: 10px; border-color: white; box-shadow: 1px 0px 9px 1px lightgray;">
+                <table class="table hide" id="App_DataTable">
+                    <thead>
+                        <tr class="table table-striped">               
+                            @*<th>Resquest ID</th>*@
+                            <th>Destination</th>
+                            <th>Action By</th>
+                            <th>Action</th>
+                            <th>Status</th>
+                            <th>Start Date</th>
+                            <th>Finish Date</th>
+                            <th>Comments</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @foreach (var items in Model)
+                        {
+                            <tr>
+@*
+                                <td>
+                                    @items.TrackingId
+                                </td>*@
+                                <td>
+                                    @items.Destination
+                                </td>
+                                <td>
+                                    @items.ActionByName
+                                </td>
+                                <td>
+                                    @items.Action
+                                </td>
+                                <td>
+                                    @items.Statustype
+                                </td>
+                                <td>
+                                    @items.StartDate.Value.ToString("dd-MM-yyyy")
+                                </td>
+@*                                <td>
+                                    @items.FinishDate.Value.ToString("dd-MM-yyyy")
+                                </td>*@
+                                <td>
+                                    @(items.FinishDate.HasValue ? items.FinishDate.Value.ToString("dd-MM-yyyy") : "")
+                                </td>
+                                <td>
+                                    <button class="dropbtn btn btn-primary" onclick="getComments(@items.WFWorklistId)">View</button>
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+            </table>
+        </div>
+        
+        </div>
+    }
+    else
+    {
+        @if (@ViewBag.AlertMessage != null)
+        {
+            <div>
+            <label id="ErrorLabel" style="color:red;font-size:10px;">@ViewBag.AlertMessage</label>
+            </div>
+        }
+    }
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="~/js/datatable_file.js"></script>
+    <script>
+        function closeModal() {
+            $('#myModalComments').removeClass('visible');
+        }
+    </script>
+</body>
+
+</html>

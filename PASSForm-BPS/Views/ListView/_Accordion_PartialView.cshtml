@@ -1,0 +1,623 @@
+﻿@{
+    Layout = null; 
+    @model PASSForm_BPS.ViewModel.BpsRecordsViewModel
+   
+    HashSet<string> displayedCombinations = new HashSet<string>();
+
+                                 
+    var totalByMonth = new decimal[ViewBag.MonthCount];
+    var isMonthPresent = new bool[ViewBag.MonthCount];
+                                        for (int i = 0; i < ViewBag.SalesByMonth.Count; i++)
+                                        {
+                                            isMonthPresent[i] = true;
+                                        }
+                                    
+
+}
+<html>
+<head>
+    <title>Your View</title>
+
+    <style>
+
+    </style>
+</head>
+<body>
+
+    <div style="padding-top: 15px;">
+        
+
+       
+ @*       <div style="padding-top:30px;">
+          @foreach (var chemist in Model.userChemMappings)
+                {
+            <div style="border: 1px solid; width:95%; background-color: white; border-radius: 10px; box-shadow: 1px 0px 9px 1px lightgray">
+                    <div class="section-header">
+                        <p>@chemist.ChemistName - @chemist.ChemistCode</p>
+                </div>
+                   
+                    <div>
+                        <p class="section-header-content">Pre-Sales</p>
+                        <div style=" overflow-x: auto;">
+                            <table id="customers">
+                                <tr>
+                                    <th>P.Nmae</th>
+                                    <th>Discount</th>
+                                    <th>Contribution</th>
+                                    @foreach (var mon in ViewBag.SalesByMonth)
+                                    {
+                                        <th>@mon.Month</th>
+                                    }
+                                </tr>
+                                <tr>
+                                    @foreach (var item in chemist.dsrHiltonDailySalesTeamToChemists)
+                                    {
+                                    <tr>
+                                        <td>@item.ProductName - @item.PackCode</td>
+                                        <td><input /></td>
+                                        <td><input /></td>
+                                            @for (int i = 0; i < ViewBag.SalesByMonth.Count; i++)
+                                            {
+                                                var monthValue = GetMonthValue(item, ViewBag.SalesByMonth[i].Month);
+                                                if (isMonthPresent[i])
+                                                {
+                                                <td>@monthValue</td>
+                                                    totalByMonth[i] += Convert.ToDecimal(monthValue ?? 0);
+                                                }
+                                            }
+                                    </tr>
+
+                                    }
+                                    @if (chemist.dsrHiltonDailySalesTeamToChemists.Any())
+                                    {
+                                    <tr class="total-row ">
+                                        <td>Total</td>
+                                        <td></td>
+                                        <td></td>
+                                            @for (int i = 0; i < totalByMonth.Length; i++)
+                                            {
+                                                if (isMonthPresent[i])
+                                                {
+                                                <td>@totalByMonth[i]</td>
+                                                }
+                                                else
+                                                {
+                                                <td></td>
+                                                }
+                                            }
+                                    </tr>
+                                    }
+                            </table>
+                        </div>
+                        @functions {
+                                object GetMonthValue(object obj, string month)
+                                {
+                                    var property = obj.GetType().GetProperty(month);
+                                    if (property != null)
+                                    {
+                                        return property.GetValue(obj);
+                                    }
+                                    return null;
+                                }
+                                }
+                   
+                    </div>
+
+                    <div style=" padding-top:20px;">
+                        <p class="section-header-content">Post-Sales</p>
+                        <div style=" overflow-x: auto;">
+                            <table id="customers">
+                                <tr>
+                                    <th>P.Nmae</th>
+                                    <th>Discount</th>
+                                    <th>Contribution</th>
+                                    @foreach (var mon in ViewBag.SalesByMonth)
+                                    {
+                                        <th>@mon.Month</th>
+                                    }
+                                </tr>
+                                <tr>
+                                    @foreach (var item in chemist.dsrHiltonDailySalesTeamToChemists)
+                                    {
+                                    <tr>
+                                        <td>@item.ProductName</td>
+                                        <td><input /></td>
+                                        <td><input /></td>
+                                            @foreach (var mon in ViewBag.SalesByMonth)
+                                            {
+                                            <td> <input /></td>
+                                            }
+                                    </tr>
+                                    }
+                                </tr>
+
+                            </table>
+                        </div>
+                 
+                    </div>
+          
+
+            </div>
+            }
+           
+
+
+        </div>*@
+@*
+                    @foreach (var chemist in Model.userChemMappings)
+            {
+            <input type="number" class="percentage-input" />
+            <button class="calculate-button-@chemist.ChemistCode" data-chemist="@chemist.ChemistCode" onclick="nextButton()">Next</button>
+                <button class="accordion">@chemist.ChemistName - @chemist.ChemistCode</button>
+               
+            <div class="panel">
+
+                <div >
+
+                    <div>
+                        <p class="section-header-content">Pre-Sales</p>
+                        <div style=" overflow-x: auto;">
+                            <table id="customers">
+                                <tr>
+                                    <th>P.Nmae</th>
+                                    <th class="userinputfield">Discount</th>
+                                    <th class="userinputfield">Contribution</th>
+                                    @foreach (var mon in ViewBag.SalesByMonth)
+                                    {
+                                        <th>@mon.Month</th>
+                                    }
+                                </tr>
+                                <tbody>
+                                    @foreach (var item in chemist.dsrHiltonDailySalesTeamToChemists)
+                                    {
+                                  <tr class="product-row">
+                                        <td>@item.ProductName - @item.PackCode</td>
+                                            <td><input id="" type="number" /></td>
+                                            <td> <input type="number" /></td>
+                                           
+                                            @for (int i = 0; i < ViewBag.SalesByMonth.Count; i++)
+                                            {
+                                                var monthValue = GetMonthValue(item, ViewBag.SalesByMonth[i].Month);
+                                                if (isMonthPresent[i])
+                                                {
+                                                    <td class="month-cell" >@monthValue</td>
+                                                    totalByMonth[i] += Convert.ToDecimal(monthValue ?? 0);
+                                                }
+                                            }
+                                    </tr>
+                                   
+                                    
+                                    }
+                                @if (chemist.dsrHiltonDailySalesTeamToChemists.Any()) 
+                                {
+                                    <tr class="total-row ">
+                                        <td>Total</td>
+                                        <td></td>
+                                        <td></td>
+                                        @for (int i = 0; i < totalByMonth.Length; i++)
+                                        {
+                                            if (isMonthPresent[i])
+                                            {
+                                                <td>@totalByMonth[i]</td>
+                                            }
+                                            else
+                                            {
+                                                <td></td>
+                                            }
+                                        }
+                                    </tr>
+                                    
+                                }
+                                </tbody>
+                            </table>
+                        </div>
+                        @functions {
+                        object GetMonthValue(object obj, string month)
+                        {
+                            var property = obj.GetType().GetProperty(month);
+                            if (property != null)
+                            {
+                                return property.GetValue(obj);
+                            }
+                            return null;
+                        }
+                    }
+
+                    </div>
+
+                    <div style=" padding-top:20px;">
+                        <p class="section-header-content">Post-Sales</p>
+                        <div style=" overflow-x: auto;">
+                            <table id="customers">
+                                <tr>
+                                    <th>P.Nmae</th>
+                                <th class="userinputfield">Discount</th>
+                                <th class="userinputfield">Contribution</th>
+                                    @foreach (var mon in ViewBag.SalesByMonth)
+                                    {
+                                        <th>@mon.Month</th>
+                                    }
+                                </tr>
+                                <tr>
+                                    @foreach (var item in chemist.dsrHiltonDailySalesTeamToChemists)
+                                    {
+                                    <tr>
+                                        <td>@item.ProductName - @item.PackCode</td>
+                                        <td ><input /></td>
+                                        <td><input /></td>
+                                            @foreach (var mon in ViewBag.SalesByMonth)
+                                            {
+                                            <td> <input style="width:90%" /></td>
+                                            }
+                                    </tr>
+                                    }
+                                </tr>
+
+                            </table>
+                        </div>
+
+                    </div>
+
+
+                </div>
+            
+
+        </div>
+
+        
+        }*@
+
+
+ @*       @foreach (var chemist in Model.userChemMappings)
+        {
+          
+            var accordionIndex = Model.userChemMappings.IndexOf(chemist);
+            var panelDivId = $"Pan{accordionIndex}"; 
+           var accoridonId = $"C{accordionIndex}";
+            var Percentage = $"{accoridonId}-Per{accordionIndex}";
+            <div>
+                            <div>
+                                <p class="section-header-content">Pre-Sales</p>
+                                <div style=" overflow-x: auto;">
+                                    <table id="customers">
+                                        <tr>
+                                            <th>P.Nmae</th>
+                                            <th class="userinputfield">Discount</th>
+                                            <th class="userinputfield">Contribution</th>
+                                            @foreach (var mon in ViewBag.SalesByMonth)
+                                            {
+                                                <th>@mon.Month</th>
+                                            }
+                                        </tr>
+
+                                        @foreach (var item in chemist.dsrHiltonDailySalesTeamToChemists)
+                                        {
+
+                                            var Index = chemist.dsrHiltonDailySalesTeamToChemists.IndexOf(item); // Get the index of the current item
+                                            var productNameId = $"{accoridonId}-P{Index}";
+                                            var discountId = $"{productNameId}-D{Index}";
+                                            var contributionId = $"{productNameId}-Con";
+                                            var totalMonths = ViewBag.MonthCount;
+                                            <tr class="data-row">
+
+                                                <td id="@productNameId">@item.ProductName</td>
+                                                <td><input id="@discountId" type="number" /></td>
+                                                <td><input id="@contributionId" onchange="ContributionCal('@productNameId','@totalMonths')" /></td>
+
+                                                @for (int i = 0; i < ViewBag.SalesByMonth.Count; i++)
+                                                {
+                                                    var monthValue = GetMonthValue(item, ViewBag.SalesByMonth[i].Month) == null ? 0 : GetMonthValue(item, ViewBag.SalesByMonth[i].Month);
+
+                                                    if (isMonthPresent[i])
+                                                    {
+                                                        var monthName = $"{productNameId}-{i}";
+                                            if (ViewBag.percentageval == 0)
+                                            {
+                                                <td id="@monthName" value="@monthValue">@monthValue</td>
+                                                totalByMonth[i] += Convert.ToDecimal(monthValue ?? 0);
+                                            }else{
+                                            var calculatedValue = (decimal)(Convert.ToDouble(monthValue ?? 0) * ViewBag.percentageval); // Multiply by 0.2
+                                            <td id="@monthName" value="@calculatedValue">@calculatedValue</td>
+                                                        totalByMonth[i] += Convert.ToDecimal(monthValue ?? 0);
+                                            }
+
+                                                    }
+                                                }
+                                            </tr>
+
+
+                                        }
+                                        @if (chemist.dsrHiltonDailySalesTeamToChemists.Any())
+                                        {
+                                            <tr class="total-row ">
+                                                <td>Total</td>
+                                                <td></td>
+                                                <td></td>
+                                                @for (int i = 0; i < totalByMonth.Length; i++)
+                                                {
+                                                    if (isMonthPresent[i])
+                                                    {
+                                                        <td>@totalByMonth[i]</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td></td>
+                                                    }
+                                                }
+                                            </tr>
+                                        }
+                                    </table>
+                                </div>
+                                @functions {
+                            object GetMonthValue(object obj, string month)
+                            {
+                                var property = obj.GetType().GetProperty(month);
+                                if (property != null)
+                                {
+                                    return property.GetValue(obj);
+                                }
+                                return null;
+                            }
+                    }
+
+                </div>
+
+                <div style=" padding-top:20px;">
+                    <p class="section-header-content">Post-Sales</p>
+                    <div style=" overflow-x: auto;">
+                        <table id="customers">
+                            <tr>
+                                <th>P.Nmae</th>
+                                <th class="userinputfield">Discount</th>
+                                <th class="userinputfield">Contribution</th>
+                                @foreach (var mon in ViewBag.SalesByMonth)
+                                            {
+                                                <th>@mon.Month</th>
+                                            }
+                                        </tr>
+                                        <tr>
+                                            @foreach (var item in chemist.dsrHiltonDailySalesTeamToChemists)
+                                            {
+                                                <tr>
+                                                    <td>@item.ProductName - @item.PackCode</td>
+                                                    <td><input /></td>
+                                                    <td><input /></td>
+                                                    @foreach (var mon in ViewBag.SalesByMonth)
+                                                    {
+                                                        <td> <input style="width:90%" /></td>
+                                                    }
+                                                </tr>
+                                            }
+                                        </tr>
+
+                            </table>
+                        </div>
+
+                    </div>
+
+
+                </div>
+             
+             
+        }*@
+
+
+
+        <div id="">
+            <div>
+                <p class="section-header-content">Pre-Sales</p>
+                <div style=" overflow-x: auto;">
+                    <table id="customers">
+                        <tr>
+                            <th>P.Nmae</th>
+                            <th class="userinputfield">Discount</th>
+                            <th class="userinputfield">Contribution</th>
+                            @foreach (var mon in ViewBag.SalesByMonth)
+                            {
+                                <th>@mon.Month</th>
+                            }
+                        </tr>
+                        <tbody id="tblBody-Pre-@Model.ChemistPanelId">
+                            @foreach (var chemist in Model.userChemMappings)                             
+                            {
+                                var accordionIndex = Model.userChemMappings.IndexOf(chemist);
+                                var panelDivId = $"Pan{accordionIndex}";
+                                var accoridonId = Model.ChemistPanelId + "-Pre";//$"C{ accordionIndex}";
+                                var Percentage = $"{accoridonId}-Per{accordionIndex}";
+                                string chmcode = chemist.ChemistCode;
+
+                                if (chmcode == @ViewBag.chemistId.ToString())
+                                {
+                                    @foreach (var item in chemist.dsrHiltonDailySalesTeamToChemists)
+                                    {
+                                        var Index = chemist.dsrHiltonDailySalesTeamToChemists.IndexOf(item); // Get the index of the current item
+                                        var productNameId = $"{accoridonId}-P{Index}";
+                                        var discountId = $"{productNameId}-D{Index}";
+                                        var contributionId = $"{discountId}-C{Index}";
+                                        var totalMonths = ViewBag.MonthCount;
+                                        var percentage = (ViewBag.percentageval * 100);
+                                        <tr>
+                                            <div id="monthCountID" style="display:none">@ViewBag.SalesByMonth.Count</div>
+                                            <td id="@productNameId">@item.ProductName</td>
+                                            <td id="@discountId">0%</td>
+                                            <td id="@contributionId">@percentage</td>
+                                            @for (int i = 0; i < ViewBag.SalesByMonth.Count; i++)
+                                            {
+                                                var monthValue = GetMonthValue(item, ViewBag.SalesByMonth[i].Month) == null ? 0 : GetMonthValue(item, ViewBag.SalesByMonth[i].Month);
+
+                                                if (isMonthPresent[i])
+                                                {
+                                                    var monthName = $"{productNameId}-{i}";
+                                                    if (ViewBag.percentageval == 0)
+                                                    {
+                                                        <td id="@monthName" value="@ViewBag.SalesByMonth[i].Month">@monthValue</td>
+                                                        totalByMonth[i] += Convert.ToDecimal(monthValue ?? 0);
+                                                    }
+                                                    else
+                                                    {
+                                                        var calculatedValue = (decimal)(Convert.ToDouble(monthValue ?? 0) * ViewBag.percentageval); // Multiply by 0.2
+                                                        <td id="@monthName" value="@ViewBag.SalesByMonth[i].Month">@calculatedValue</td>
+                                                        totalByMonth[i] += Convert.ToDecimal(calculatedValue);
+                                                    }
+
+                                                }
+                                            }
+                                            
+                                         </tr>
+                                        
+                                    }
+                                    @if (chemist.dsrHiltonDailySalesTeamToChemists.Any())
+                                    {
+                                        <tr class="total-row ">
+                                            <td>Total</td>
+                                            <td></td>
+                                            <td></td>
+                                            @for (int i = 0; i < totalByMonth.Length; i++)
+                                            {
+                                                if (isMonthPresent[i])
+                                                {
+                                                    <td>@totalByMonth[i]</td>
+                                                }
+                                                else
+                                                {
+                                                    <td></td>
+                                                }
+                                            }
+                                        </tr>
+                                    }
+                                }
+                            }
+
+                        </tbody>
+                    </table>
+                    @functions {
+                        object GetMonthValue(object obj, string month)
+                        {
+                            var property = obj.GetType().GetProperty(month);
+                            if (property != null)
+                            {
+                                return property.GetValue(obj);
+                            }
+                            return null;
+                        }
+                    }
+
+                </div>
+
+
+            </div>
+
+            <div style=" padding-top:20px;">
+                <p class="section-header-content">Post-Sales</p>
+                <div style=" overflow-x: auto;">
+                    <table id="customers">
+                        <thead>
+                            <tr>
+                            <th>P.Nmae</th>
+                            <th class="userinputfield">Discount</th>
+                            <th class="userinputfield">Contribution</th>
+                            @foreach (var mon in ViewBag.SalesByMonth)
+                            {
+                                <th>@mon.Month</th>
+                            }
+                            </tr>
+                        </thead>
+                        <tr>
+                        <tbody id="tblBody-Post-@Model.ChemistPanelId">
+                                @foreach (var chemist in Model.userChemMappings)
+                                {
+                                    var accordionIndex = Model.userChemMappings.IndexOf(chemist);
+                                    var panelDivId = $"Pan{accordionIndex}";
+                                    var accoridonId = Model.ChemistPanelId+"-Post";//$"C{accordionIndex}";
+                                    var Percentage = $"{accoridonId}-Per{accordionIndex}";
+                                    string chmcode = chemist.ChemistCode;
+
+                                    if (chmcode == @ViewBag.chemistId.ToString())
+                                    {
+                                        @foreach (var item in chemist.dsrHiltonDailySalesTeamToChemists)
+                                        {
+                                            var Index = chemist.dsrHiltonDailySalesTeamToChemists.IndexOf(item); // Get the index of the current item
+                                            var productNameId = $"{accoridonId}-P{Index}";
+                                            var discountId = $"{productNameId}-D{Index}";
+                                            var contributionId = $"{discountId}-C{Index}";
+                                            var totalMonths = ViewBag.MonthCount;
+                                            var percentage = (ViewBag.percentageval * 100);
+                                        <tr>
+                                            <td id="@productNameId">@item.ProductName</td>
+                                            <td id="@discountId">0%</td>
+                                            <td id="@contributionId">@percentage</td>
+                                                @foreach (var mon in ViewBag.SalesByMonth)
+                                                {
+                                                    var id = @productNameId + "-" + @ViewBag.SalesByMonth.IndexOf(mon);
+                                                    var i = @ViewBag.SalesByMonth.IndexOf(mon);
+                                                <td id="@id" value="@ViewBag.SalesByMonth[i].Month"> <input  /></td>
+                                                }
+
+                                        </tr>
+
+                                        }
+                     
+                                    }
+                                }
+
+                        </tbody>
+                        </tr>
+
+                    </table>
+                </div>
+
+            </div>
+
+
+        </div>
+        
+
+
+
+            
+        
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+
+
+
+
+        //function CalPercenatge(id, accid,index) {
+
+        //    ;
+        //    var inputValue = $("#" + id).val();
+        //    var panelid = "Pan"+index;
+
+        //    var fromDate = new Date($('#startdate').val());
+        //    var toDate = new Date($('#enddate').val());
+        //    var selectedMonthsAndYear = [];
+        //    while (fromDate <= toDate) {
+        //        selectedMonthsAndYear.push({
+        //            month: fromDate.toLocaleString('default', { month: 'long' }),
+        //            year: fromDate.getFullYear()
+        //        });
+        //        fromDate.setMonth(fromDate.getMonth() + 1);
+        //    }
+        //    $.ajax({
+        //        url: '/ListView/_Accordion_PartialView',
+        //        type: 'POST',
+        //        cache: false,
+        //        async: true,
+        //        data: { input: inputValue, selectedMonthsAndYear: selectedMonthsAndYear, fromDate: fromDate, toDate: toDate },
+        //        dataType: "html"
+        //    })
+        //        .done(function (result) {
+        //            $('#' + panelid).html(result);
+        //        })
+        //        .fail(function (xhr) {
+        //            console.log('error : ' + xhr.status + ' - ' + xhr.statusText + ' - ' + xhr.responseText);
+        //        });
+        //}
+    </script>
+    <script src="~/js/datatable_file.js"></script>
+       
+</body>
+
+</html>
+

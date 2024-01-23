@@ -1,0 +1,214 @@
+﻿@{
+    Layout = null;
+    @model PASSForm_BPS.Models.PreeAccordionModel
+
+    int preskucoloumindex = 0;
+    int prevaluecoloumindex = 0;
+
+    decimal totalCalculatedValues = 0;
+
+}
+<div id="sku-@ViewBag.checkboxindex" style="overflow:auto;">
+    <table id="customers">
+        <thead>
+
+            <tr style="font-size:11px;">
+
+                @foreach (var column in Model.Sku[0] as IDictionary<string, object>)
+                {
+
+                    <th style="display:none">@Model.Sku[0]</th>
+                    <th id="sku-pre-coloum-@preskucoloumindex">@column.Key</th>
+                    
+
+
+                    preskucoloumindex++;
+                }
+
+            </tr>
+        </thead>
+        <tbody id="tbl-pre-sku-@ViewBag.checkboxindex">
+            @if (Model.Sku != null)
+            {
+                try
+                {
+                    int packcodeIndex = 0;
+                    @foreach (var item in Model.Sku)
+                    {
+                        int skucoloumIndex = 0;
+                        <tr style="font-size:11px;">
+
+
+                            @foreach (var column in item as IDictionary<string, object>)
+                            {
+
+                                if (column.Key == "PackCode")
+                                {
+                                    <td id="sku-pre-pakcode-@ViewBag.checkboxindex-@packcodeIndex">@column.Value</td>
+                                }
+                                else if (column.Key == "ProductName")
+                                {
+                                    <td id="sku-pre-product-@ViewBag.checkboxindex-@packcodeIndex">@column.Value</td>
+                                }
+                                else if (column.Key == "Description")
+                                {
+                                    <td id="sku-pre-description-@ViewBag.checkboxindex-@packcodeIndex">@column.Value</td>
+                                }
+
+                                else if (column.Value is int intValue)
+                                {
+
+                                    var calculatedsku = (decimal)(Convert.ToDouble(column.Value ?? 0));
+                                    <td style="text-align:right;" id="sku-pre-column-@ViewBag.checkboxindex-@packcodeIndex">
+                                        
+                                    @*    @calculatedsku*@
+
+                                        @(calculatedsku != 0 ? calculatedsku : column.Value)
+                                    </td>
+
+
+                                }
+
+                                else if (column.Value == null)
+                                {
+                                    <td style="text-align:right;" id="sku-pre-column-@ViewBag.checkboxindex-@packcodeIndex-@skucoloumIndex">0</td>
+                                    skucoloumIndex++;
+                                }
+                                else if (column.Value is decimal decimalValue)
+                                {
+
+                                    var calculatedskus = (decimal)(Convert.ToDouble(column.Value ?? 0) * ViewBag.Contribution);
+
+                                    <td style="text-align:right;" id="sku-pre-column-@ViewBag.checkboxindex-@packcodeIndex-@skucoloumIndex">
+                                 
+                                        @(calculatedskus != 0 ? calculatedskus : column.Value)
+                                    </td>
+                                    skucoloumIndex++;
+                                }
+                                @*                                else if (column.Key == "Actual Discount")
+                                {
+                                    <td id="sku-pre-actdis-@ViewBag.checkboxindex-@packcodeIndex-@skucoloumIndex">@column.Value</td>
+                                }*@
+                                else
+                                {
+
+                                }
+
+
+                            }
+
+
+                        </tr>
+                        packcodeIndex++;
+                    }
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+
+            }
+        </tbody>
+    </table>
+
+</div>
+
+
+<div id="values-@ViewBag.checkboxindex" class="@ViewBag.TotalCalculatedSkus" style="display:none; overflow:auto;">
+    <table id="customers">
+        <thead>
+            <tr style="font-size:11px;">
+                @foreach (var column in Model.Value[0] as IDictionary<string, object>)
+                {
+
+                    <th id="value-pre-coloum-@prevaluecoloumindex">@column.Key</th>
+                    prevaluecoloumindex++;
+                }
+            </tr>
+        </thead>
+        <tbody id="tbl-pre-value-@ViewBag.checkboxindex">
+            @if (Model.Sku != null)
+            {
+                try
+                {
+                    int packcodeIndex = 0;
+                    @foreach (var item in Model.Value)
+                    {
+                        int valuecoloumIndex = 0;
+                        <tr style="font-size:11px;">
+                            @foreach (var column in item as IDictionary<string, object>)
+                            {
+                                if (column.Key == "PackCode")
+                                {
+                                    <td id="value-pre-pakcode-@ViewBag.checkboxindex-@packcodeIndex">@column.Value</td>
+                                }
+                                else if (column.Key == "ProductName")
+                                {
+                                    <td id="value-pre-product-@ViewBag.checkboxindex-@packcodeIndex">@column.Value</td>
+                                }
+                                else if (column.Key == "Description")
+                                {
+                                    <td id="value-pre-description-@ViewBag.checkboxindex-@packcodeIndex">@column.Value</td>
+                                }
+@*                                else if (column.Key == "ActualDiscount")
+                                {
+                                    <td id="value-pre-actdis-">@column.Value</td>
+                                }*@
+                                else if (column.Value == null)
+                                {
+                                    <td style="text-align:right;" id="value-pre-column-@ViewBag.checkboxindex-@packcodeIndex-@valuecoloumIndex">0.00</td>
+                                    valuecoloumIndex++;
+                                }
+                                else if (column.Value is decimal decimalValue)
+                                {
+                                    var calculatedValues = (decimal)(Convert.ToDouble(column.Value ?? 0) * ViewBag.Contribution);
+
+                                    totalCalculatedValues += calculatedValues;
+                                    <td style="text-align:right;" id="value-pre-column-@ViewBag.checkboxindex-@packcodeIndex-@valuecoloumIndex">
+                                        
+                                    @*    @calculatedValues.ToString("N2")*@
+                                        @(calculatedValues != 0 ? calculatedValues : column.Value)
+                                    </td>
+                                    valuecoloumIndex++;
+                                }
+
+                                else
+                                {
+
+                                }
+
+                            }
+                        </tr>
+                        packcodeIndex++;
+                    }
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+
+            }
+
+        </tbody>
+    </table>
+</div>
+@{
+    ViewBag.TotalCalculatedSkus = totalCalculatedValues;
+}
+
+<div style="text-align:right; margin-top:1%;">
+    <label>Chemist Total:</label>
+    <input  disabled type="text" id="total-@ViewBag.checkboxindex" value="@totalCalculatedValues.ToString("N2")" style="margin-left: 2%; text-align:right;" />
+</div>
+<div style="text-align:right; margin-top:2%; margin-bottom:10px;">
+
+    <label>Discount Percentage %:</label>
+
+    <input type="text" id="discountpercentage-pre-@ViewBag.checkboxindex" style="margin-left: 2%; text-align:right;" value="@ViewBag.DiscountPercentage" />
+</div>
+@*<div style="text-align:right; margin-top:2%;">
+    <label>BPS %:</label>
+    <input type="text" id="roi-${checkboxindex}" value="@totalCalculatedValues" style="margin-left: 2%;" />
+</div>*@

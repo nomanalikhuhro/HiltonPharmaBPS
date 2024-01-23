@@ -1,0 +1,375 @@
+﻿@inject IHttpContextAccessor httpContext;
+
+@{
+
+
+    var uname = httpContext.HttpContext.Session.GetString("uname");
+    var abc = @ViewBag.RoleId;
+    //int a = Context.Session.GetInt32("EmpId");
+
+    // var myValue = HttpContext.Session.GetString("EmpId");
+}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Business Planning Sheet</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link href="~/css/datatablecss/jquery.datatables.css" rel="stylesheet" />
+    <link href="~/css/datatablecss/jquery.datatables.min.css" rel="stylesheet" />
+    <link href="~/font-awesome-4.7.0/font-awesome-4.7.0/css/font-awesome.css" rel="stylesheet" />
+    <link href="~/font-awesome-4.7.0/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    @*<link rel="stylesheet" href="~/PASSForm_BPS.styles.css" asp-append-version="true" />*@
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            /*         display: flex;*/
+        }
+
+        .sidebar {
+            width: 250px;
+            width: 250px;
+            /*background: rgb(252,252,255);
+                            background: linear-gradient(180deg, rgba(252,252,255,1) 0%, rgba(162,207,233,1) 59%, rgba(81,150,192,1) 100%);*/
+            background: #eaeaea;
+            color: #fff;
+            position: fixed;
+            height: 100%;
+            overflow: auto;
+        }
+
+        img {
+            -webkit-filter: drop-shadow(5px 5px 5px #666666);
+            filter: drop-shadow(5px 5px 5px #666666);
+        }
+
+        .sidebar a {
+            display: block;
+            height: 50px;
+            border-bottom: 1px solid grey;
+            color: black;
+            font-size: 15px;
+            background: #ffffff;
+            padding: 16px;
+            text-decoration: none;
+            transition: background-color 2s ease-out 20ms
+        }
+
+        /*            .sidebar a:hover {
+                        background-color: #A6BB28;
+                        color: white;
+                    }*/
+
+        .content {
+            margin-left: 250px;
+            padding: 0px;
+        }
+
+        .topnav {
+            background: linear-gradient(90deg, rgba(215,25,33,255) 47%, rgba(215,255,0,0.03974089635854339) 100%);
+            font-size: 15px;
+            overflow: hidden;
+        }
+
+            .topnav a {
+                float: left;
+                display: block;
+                color: #fff;
+                text-align: center;
+                padding: 14px 16px;
+                text-decoration: none;
+                font-size: 18px;
+                font-variant: small-caps;
+            }
+
+        /*                .topnav a:hover {
+                            background-color: #555;
+                            color: #fff;
+                        }*/
+
+        @@media screen and (max-width: 700px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+                .sidebar a {
+                    float: left;
+                }
+
+            div.content {
+                margin-left: 0;
+            }
+        }
+
+        @@media screen and (max-width: 400px) {
+            .sidebar a {
+                text-align: center;
+                float: none;
+            }
+        }
+
+
+        .spinner {
+            position: fixed;
+            z-index: 999;
+            height: 100%;
+            width: 100%;
+            top: 0;
+            left: 0;
+            background-color: Black;
+            filter: alpha(opacity=60);
+            opacity: 0.6;
+            -moz-opacity: 0.8;
+        }
+
+        .loader {
+            margin: auto;
+            border: 16px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 16px solid #f10715;
+            border-bottom: 16px solid #f10715;
+            width: 200px;
+            height: 200px;
+            /* -webkit-animation: spin 2s linear infinite; */
+            animation: spin 2s linear infinite;
+            margin-top: 19%;
+            /* display: flex;
+                       justify-content: center;
+                       align-items: center; */
+        }
+
+        .inner-div {
+            background-color: white;
+            border-radius: 100px;
+            width: 168px;
+            height: 168px;
+            padding: 51%px;
+            /* position: absolute; */
+            top: 388px;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            position: fixed;
+        }
+
+            .inner-div img {
+                width: 116px;
+                margin-left: 15%;
+                /* height: 115px; */
+                margin-top: 12%;
+            }
+
+        @@-webkit-keyframes spin {
+            0% {
+                -webkit-transform: rotate(0deg);
+            }
+
+            100% {
+                -webkit-transform: rotate(360deg);
+            }
+        }
+
+        @@-keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loader {
+            animation: spin 2s linear infinite; /* Example: Apply the "spin" animation to an element with the class "spinner" */
+        }
+
+
+
+        /* The Modal (background) */
+        .errormodal {
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            padding-top: 100px; /* Location of the box */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+
+        /* Modal Content */
+        .errormodal-content {
+            position: relative;
+            background-color: #fefefe;
+            margin: auto;
+            padding: 0;
+            width: 35%;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+            -webkit-animation-name: animatetop;
+            -webkit-animation-duration: 0.4s;
+            animation-name: animatetop;
+            animation-duration: 0.4s;
+            height: 115px;
+            border-radius: 10px;
+            background: #eaeaea;
+            border: 0px solid black;
+        }
+
+        /* Add Animation */
+
+
+        /* The Close Button */
+        .close {
+            color: white;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+            .close:hover,
+            .close:focus {
+                color: #000;
+                text-decoration: none;
+                cursor: pointer;
+            }
+
+
+
+        .errormodal-body {
+            padding: 2px 16px;
+            text-align: center;
+            padding-top: 10%;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        }
+    </style>
+
+</head>
+<body style="background-color:#F7F9F9;">
+    @if (ViewBag.AlertMessage != null)
+    {
+
+
+
+        <div id="ErrorModel" class="errormodal" style="display:block; visibility:hidden">
+            <div style="padding-left: 10%;padding-top: 5%;">
+                <div class="errormodal-content">
+
+                    <div class="errormodal-body">
+                        <p>@ViewBag.AlertMessage </p>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- Modal content -->
+    }
+    <div class="">
+        <div class="sidebar">
+            <div style="text-align:center;margin-bottom:30px;">
+                <img src="~/images/logo.png" height="110px" width="140px" />
+
+            </div>
+            @if (@abc == "1")
+            {
+
+                <div>
+
+                    <a asp-area="" asp-controller="ListView" asp-action="Create">Created Request</a>
+                    <a asp-area="" asp-controller="ListView" asp-action="ApprovedView" asp-route-id="1">Submitted Request</a>
+                    <a asp-area="" asp-controller="ListView" asp-action="TrackingIDStatus" asp-route-id="1">TrackingId Status</a>
+                </div>
+            }
+            else
+            {
+                <div>
+
+                    <a asp-area="" asp-controller="ListView" asp-action="PendingView" asp-route-id="2">Pending for My Approval</a>
+                    <a asp-area="" asp-controller="ListView" asp-action="TrackingIDStatus" asp-route-id="2">TrackingId Status</a>
+
+                </div>
+            }
+            @*            <a href="#">My Submitted Request</a>
+            <a href="#">Pending For Approval</a>
+            <a href="#">Pending For My Approval</a>*@
+            <!-- Add more menu items as needed -->
+        </div>
+
+        <div class="content">
+            <div class="topnav">
+                <a style="text-decoration-style: solid; font-weight:bold; font-size:20px;" href="#">Business Planning Sheet</a>
+                <div style="display: grid; justify-content:end; align-items: center ; margin-top:1%;">
+                    <span style="display: flex; justify-content: center; align-items: center; flex-direction: row; font-weight:bold; font-size:20px;">
+                        @uname
+                        <span><a style="color: black; font-size:14px;" asp-controller="Login" asp-action="Logout">Logout</a></span>
+                    </span>
+                    @*<a style="color: black; font-weight: bold;" asp-controller="Login" asp-action="Logout"> Logout</a>*@
+
+                </div>
+                <span>  </span>
+                <!-- Add more navigation links as needed -->
+            </div>
+
+            <div class="container">
+
+                <div class="nav">
+                </div>
+                <main role="main" class="pb-3">
+
+                    @RenderBody()
+                </main>
+            </div>
+        </div>
+    </div>
+    @*   @Html.Partial("_RolesBasePartialView");*@
+    @*
+    <main role="main" class="pb-3">
+    @RenderBody()
+    </main>*@
+    <div class="spinner" style="display:none">
+        <div class="center-div">
+            <div class="loader"></div>
+            <div class="inner-div ">
+                <img src="~/Images/logo.png" alt="Logo" />
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    @*    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    *@
+    <script src="~/datatable/jquery.datatables.js"></script>
+    <script src="~/datatable/jquery.datatables.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/datatable_file.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+    <script>
+
+        //document.getElementById('ErrorModel').style.visibility = 'visible';
+        document.addEventListener("DOMContentLoaded", function () {
+            var modal = document.getElementById("ErrorModel");
+            window.onclick = function (event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+        });
+    </script>
+</body>
+</html>

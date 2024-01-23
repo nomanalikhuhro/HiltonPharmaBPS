@@ -1,0 +1,124 @@
+﻿@{
+    Layout = "_Layout"; // Set the layout page
+}
+
+<html>
+<head>
+    <title>Your View</title>
+    <style>
+        .lables{
+            font-weight:bold;
+        }
+
+        .trackbtn {
+            width: 25%;
+            border-radius: 5px;
+            height: 30px;
+            color: black;
+            background-color: white;
+            border: 3px solid black;
+        }
+    </style>
+
+</head>
+<body>
+    <div style="padding-top: 15px;">
+
+        <div style="border: 2px solid; background-color: white; border-radius: 10px; border-color: white; box-shadow: 1px 0px 9px 1px lightgray;">
+ 
+            <div style="padding-top: 15px; padding-left: 20px;">
+                <div class="conatiner">
+                    <div class="row">
+                        <div class="col-4">
+                            <form asp-controller="ListView" asp-action="Create" style="padding-left:12px;">
+                                <label style="font-weight:bold;">Tracking ID:</label>
+                                <div>
+                                    <input  type="text" name="inputValue" />
+                                    <span  class="text-danger"></span>
+                                    <button class="trackbtn" type="submit">Next</button>
+                                </div>
+                                @if (@ViewBag.AlertMessage != null)
+                                {
+                                    <label  id="ErrorLabel" style="color:red;font-size:10px;">@ViewBag.AlertMessage</label>
+                                }
+                            </form>
+                        </div>
+                        <div class="col-4">
+                            <label style="font-weight:bold;">Area:</label>
+                            <div>
+                                <input type="text" />
+                            </div>
+ 
+                        </div>
+                        <div class="col-4">
+                            <label style="font-weight:bold;">Distributor:</label>
+                            <div>
+                                <input type="text" />
+@*                                <select style="width: 70%; height: 30px;">
+                                    <option value="Select">Select</option>
+                                </select>*@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="padding-top:15px">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-4">
+                                <label style="font-weight:bold;">Territory Code:</label>
+                                <div>
+                                    <input type="text" />
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <label style="font-weight:bold;">TM Name:</label>
+                                <div>
+                                    <input type="text" />
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <label style="font-weight:bold;">MacroBrick:</label>
+                                <div>
+                                    <select id="selectedbrick" style="width: 70%; height: 30px;">
+                                        <option value="Select">Select</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="padding-top:10px;">
+                    <div style="padding:10px;">
+                        <label style="font-weight:bold;">Chemist:</label>
+                        <div style="padding-top: 5px;">
+                            <div >
+                                <label></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+
+
+
+
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const accordionItems = document.querySelectorAll('.accordion-item');
+
+            accordionItems.forEach(item => {
+                const header = item.querySelector('.accordion-header');
+
+                header.addEventListener('click', () => {
+                    item.classList.toggle('active');
+                });
+            });
+        });
+
+    </script>
+
+</body>
+
+</html>
+

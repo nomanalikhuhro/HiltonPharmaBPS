@@ -1,0 +1,111 @@
+﻿
+
+@model List<PASSForm_BPS.ViewModel.BPSRequestListViewModel>
+<html>
+<head>
+    <title>Your View</title>
+    <style>
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+            .dropdown-content a {
+                color: black;
+               /* padding: 12px 16px;*/
+                text-decoration: none;
+                display: block;
+            }
+
+
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
+</head>
+<body>
+    <div style="padding:70px;">
+        <p>
+            <a asp-action="Create" class="btn btn-primary">Create New</a>
+        </p>
+
+        <div style="border: 2px solid; background-color: white; border-radius: 10px; border-color: white; box-shadow: 1px 0px 9px 1px lightgray;">
+            <table class="table">
+                <thead>
+                    <tr class="table table-striped">
+                        <th>BPS Record ID</th>
+                        <th>TM Code</th>
+                        <th>TM Name</th>
+                        <th>HCP Form ID</th>
+                        <th>Status</th>
+                        <th>Created By</th>
+                        <th>Created ON</th>
+                    </tr>
+                </thead>
+                <tbody>
+                  @*  @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @item.BpsRecordId
+                            </td>
+                            <td>
+                                @item.TerritorieCode
+                            </td>
+                            <td>
+                                @item.TerritorieName
+                            </td>
+                            <td>
+                                @item.Hcpreqid
+                            </td>
+                            <td>
+                                @foreach (var sta in item.Status)
+                                {
+                                    @sta.StatusType
+                                }
+
+                            </td>
+                            <td>
+                                @item.CreatedBy
+                            </td>
+                            <td>
+                                @item.CreatedOn
+                            </td>
+                            <td>
+                                <div class="dropdown">
+                                    <button class="dropbtn btn btn-primary">Action</button>
+                                    <div class="dropdown-content">
+                                        <a asp-action="Edit" asp-route-id="@item.BpsRecordId">Edit</a>
+                                        <a asp-action="Details" asp-route-id="@item.BpsRecordId">Details</a>
+                                        <a asp-action="Delete" asp-route-id="@item.BpsRecordId">Delete</a>
+                                    </div>
+                                </div>
+
+                            </td>
+                        </tr>
+                    }*@
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</body>
+</html>
+
+

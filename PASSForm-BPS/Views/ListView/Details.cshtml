@@ -1,0 +1,1701 @@
+﻿@using System.Data;
+@inject Microsoft​.AspNetCore​.Http.IHttpContextAccessor httpContext;
+@{
+    ViewData["Title"] = "Details";
+    @model PASSForm_BPS.ViewModel.BPSDetailsViewModel
+
+    int presku = 0;
+    int prevalue = 0;
+    int postsku = 0;
+    int postvalue = 0;
+    int toggle = 0;
+    var poNumber = Model.detailbps.FirstOrDefault()?.PONumber;
+    @*============ (Start) Hassam ============*@
+    var hcpData = ViewBag.HCPDetails as System.Data.DataTable;
+    var hcpDocuments = ViewBag.DOCLIST as System.Data.DataTable;
+    var doctorsData = ViewBag.DoctorsData;
+    var previousPlans = ViewBag.PreviousPlans;
+    string roleId = httpContext.HttpContext.Session.GetString("roleid");
+
+    @*============ (End) Hassam ============*@
+
+    /*    var empIdCookie = Request.Cookies["roleid"].ToString(); *///ViewBag.roleid;
+                                                                    //var empIdCookie = Context.Request.Cookies["roleid"]?.ToString();
+
+}
+<html>
+<head>
+    <title>Your View</title>
+    <style>
+        .accordion {
+            background-color: #eee;
+            color: #444;
+            cursor: pointer;
+            padding: 18px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 15px;
+            transition: 0.4s;
+            margin-bottom: 20px;
+        }
+
+            .active, .accordion:hover {
+                background-color: #ccc;
+            }
+
+            .accordion:after {
+                content: '\002B';
+                color: #777;
+                font-weight: bold;
+                float: right;
+                margin-left: 5px;
+            }
+
+        .active:after {
+            content: "\2212";
+        }
+
+        .panel {
+            padding: 0 18px;
+            background-color: white;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.2s ease-out;
+        }
+
+
+
+        /* The Modal (background) */
+        .modal {
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            padding-top: 100px; /* Location of the box */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+
+        /* Modal Content */
+        .modal-content {
+            position: relative;
+            background-color: #fefefe;
+            margin: auto;
+            padding: 0;
+            border: 1px solid #888;
+            width: 49%;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+            -webkit-animation-name: animatetop;
+            -webkit-animation-duration: 0.4s;
+            animation-name: animatetop;
+            animation-duration: 0.4s;
+            height: 208px;
+            border: 3px solid black;
+            border-radius: 10px;
+        }
+
+        /* Add Animation */
+
+
+        /* The Close Button */
+        .close {
+            color: white;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+            .close:hover,
+            .close:focus {
+                color: #000;
+                text-decoration: none;
+                cursor: pointer;
+            }
+
+
+
+        .modal-body {
+            padding: 2px 16px;
+            text-align: center;
+            padding-top: 10%;
+            font-weight: bolder;
+            font-size: 25px;
+        }
+
+        .searchbutton {
+            width: 35%;
+            border-radius: 5px;
+            height: 35px;
+            color: #d71921;
+            background-color: white;
+            border: 3px solid #d71921;
+        }
+
+        .trackbtn {
+            width: 25%;
+            border-radius: 5px;
+            height: 30px;
+            color: #d71921;
+            background-color: white;
+            border: 3px solid #d71921;
+        }
+
+        .searchbutton[disabled] {
+            background-color: #ccc;
+            color: #888;
+            cursor: not-allowed;
+            background-color: #ccc;
+            border: 3px solid #ccc;
+        }
+
+
+            .searchbutton[disabled].active {
+                background-color: #ccc;
+            }
+
+        .createbtn {
+            width: 10%;
+            border-radius: 5px;
+            height: 35px;
+            background-color: white;
+            border: 3px solid black;
+            font-weight: 700;
+        }
+
+        /*        toggleswitchcss*/
+        .toggle-switch {
+            display: inline-block;
+            width: 50px;
+            height: 21px;
+            background-color: #ccc;
+            border-radius: 24px;
+            position: relative;
+            transition: background-color 0.4s;
+            cursor: pointer;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 1px;
+            bottom: 1px;
+            background-color: white;
+            border-radius: 50%;
+            transition: transform 0.4s;
+        }
+
+        /* Toggle switch states */
+        .on {
+            background-color: #2196F3;
+        }
+
+        .hide {
+            display: none;
+        }
+
+        .error-field {
+            border: 1px solid red;
+            border-radius: 5px;
+        }
+
+        /*======== (Start) Hassam ========*/
+
+        .hcp-modal-body {
+            position: relative;
+            padding: 1rem 1rem;
+            height: 550px;
+            overflow-y: scroll;
+        }
+
+
+        .hcp-modal-content {
+            position: relative;
+            background-color: #fefefe;
+            margin: auto;
+            padding: 0;
+            border: 1px solid #888;
+            width: 85%;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+            -webkit-animation-name: animatetop;
+            -webkit-animation-duration: 0.4s;
+            animation-name: animatetop;
+            animation-duration: 0.4s;
+            border-radius: 10px;
+        }
+
+
+        .hcp-modal {
+            position: fixed;
+            z-index: 1;
+            padding-top: 2%;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+            display: none
+        }
+
+        .previous-plan-hcp-modal {
+            position: fixed;
+            z-index: 1;
+            padding-top: 6%;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+            display: none
+        }
+
+        .previous-plan-modal-content {
+            position: relative;
+            background-color: #fefefe;
+            margin: auto;
+            padding: 0;
+            border: 1px solid #888;
+            width: 60%;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+            -webkit-animation-name: animatetop;
+            -webkit-animation-duration: 0.4s;
+            animation-name: animatetop;
+            animation-duration: 0.4s;
+            border-radius: 10px;
+        }
+
+        .previous-plan-modal-body {
+            position: relative;
+            padding: 1rem 1rem;
+            height: 350px;
+            overflow-y: scroll;
+        }
+
+        .show_previous_plan_btn {
+            background-color: #0074D9;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .section-header {
+            text-align: center;
+            background: rgb(71,154,186);
+            background: linear-gradient(180deg, rgba(71,154,186,1) 15%, rgba(11,86,115,1) 95%, rgba(35,148,191,1) 100%);
+            color: white;
+        }
+
+        .label-heading {
+            font-weight: bold;
+        }
+
+        .section {
+            margin: 0px 10px;
+            padding: 0px;
+            border: 1px solid;
+            border-radius: 5px;
+        }
+        /*======== (Start) Hassam ========*/
+    </style>
+</head>
+<body>
+    <div id="myModalDetails" class="modal" style="display:block; visibility:hidden">
+        <div style="padding-left: 10%;padding-top: 5%;">
+            <div class="modal-content">
+
+                <div class="modal-body">
+                    <p>Action Performed</p>
+
+                </div>
+
+            </div>
+        </div>
+        <!-- Modal content -->
+
+
+    </div>
+    <div style="padding-top: 15px;">
+
+        <div style="border: 2px solid; background-color: white; border-radius: 10px; border-color: white; box-shadow: 1px 0px 9px 1px lightgray;">
+            <div style="padding-top: 15px;">
+
+
+
+
+                @foreach (var rec in Model.detailbps)
+                {
+
+                    @*============ (Start) Hassam ============*@
+                    <div id="hcpDetailsModal" class="hcp-modal">
+                        <div class="hcp-modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">HCP Details</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" id="closeHCPModal" aria-label="Close"></button>
+                            </div>
+                            @foreach (DataRow item in hcpData.Rows)
+                            {
+                                <div class="hcp-modal-body">
+                                    @*========== (Start) HCP Detail Section ==========*@
+                                    <div id="tab-sec-1" class="row section">
+                                        <div class="section-header"><label>HCP Details Section</label></div>
+                                        <div class="p-3">
+                                            <div class="row my-2">
+                                                <div class="col-lg-4 form-group">
+                                                    <label class="label-heading">Team Type:</label>
+                                                    <input value="@item["TeamName"].ToString()" class="form-control" disabled />
+                                                </div>
+                                                <div class="col-lg-4 form-group">
+                                                    <label class="label-heading">ASM Name:</label>
+                                                    <input value="@item["asmName"].ToString()" class="form-control" disabled />
+                                                </div>
+                                                <div class="col-lg-4 form-group">
+                                                    <label class="label-heading">Territory Code:</label>
+                                                    <input value="@item["TMCode"].ToString()" class="form-control" disabled />
+                                                </div>
+                                            </div>
+
+                                            <div class="row my-2">
+                                                <div class="col-lg-4 form-group">
+                                                    <label class="label-heading">Territory Manager Name:</label>
+                                                    <input value="@item["TMName"].ToString()" class="form-control" disabled />
+                                                </div>
+                                                <div class="col-lg-4 form-group">
+                                                    <label class="label-heading">Base Area:</label>
+                                                    <input value="@item["BaseArea"].ToString()" class="form-control" disabled />
+                                                </div>
+                                                <div class="col-lg-4 form-group">
+                                                    <label class="label-heading">TM Employee Code:</label>
+                                                    <input value="@item["TMEmpNo"].ToString()" class="form-control" disabled />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @*========== (End) HCP Detail Section ==========*@
+
+                                    @*========== (Start) Category Section ==========*@
+                                    <div id="tab-sec-1" class="row section mt-3">
+                                        <div class="section-header"><label>Category Section</label></div>
+                                        <div class="p-3">
+                                            <div class="row">
+                                                <div class="col-lg-3 form-group my-2">
+                                                    <label class="label-heading">Category:</label>
+                                                    <input value="@item["PASSCategoryType"].ToString()" class="form-control" disabled />
+                                                </div>
+                                                @if (!string.IsNullOrEmpty(@item["PASSubCategoryType"].ToString()))
+                                                {
+                                                    <div class="col-lg-3 form-group my-2">
+                                                        <label class="label-heading">Sub Category:</label>
+                                                        <input value="@item["PASSubCategoryType"].ToString()" class="form-control" disabled />
+                                                    </div>
+                                                }
+                                            </div>
+                                            <div>
+                                                <div class="col-lg-12 my-2">
+                                                    <table class="table table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="text-center" scope="col">Name</th>
+                                                                <th class="text-center" scope="col">Action</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach (DataRow docItem in hcpDocuments.Rows)
+                                                            {
+                                                                <tr>
+                                                                    <td hidden>@docItem["fileid"].ToString()</td>
+                                                                    <td>@docItem["filename"].ToString()</td>
+                                                                    <td class="text-center">
+                                                                        @Html.ActionLink("", "Download", new { fileName = @docItem["filename"].ToString() },
+                                                            new { @class = "btn btn-sm  btn-primary fa fa-download", style = "margin-left:10px;" })
+                                                                    </td>
+                                                                </tr>
+                                                            }
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    @*========== (End) Category Section ==========*@
+
+                                    @*========== (Start) HCP Particular Section ==========*@
+                                    <div id="tab-sec-1" class="row section mt-3">
+                                        <div class="section-header"><label>HCP Details Section</label></div>
+                                        <div class="p-3">
+                                            <div class="row my-2">
+                                                <div class="col-lg-12">
+                                                    <h5>HCP Particulars</h5>
+                                                </div>
+                                            </div>
+                                            <div class="row my-2">
+                                                <div class="col-lg-4 form-group">
+                                                    <label class="label-heading">HCP Name:</label>
+                                                    <input value="@item["HCPName"].ToString()" class="form-control" disabled />
+                                                </div>
+                                                <div class="col-lg-4 form-group">
+                                                    <label class="label-heading">Speciality:</label>
+                                                    <input value="@item["Speciality"].ToString()" class="form-control" disabled />
+                                                </div>
+                                                <div class="col-lg-4 form-group">
+                                                    <label class="label-heading">PMC/CNIC #:</label>
+                                                    <input value="@item["PMC_CNIC"].ToString()" class="form-control" disabled />
+                                                </div>
+                                            </div>
+
+                                            <div class="row my-2">
+                                                <div class="col-lg-4 form-group">
+                                                    <label class="label-heading">City:</label>
+                                                    <input value="@doctorsData.doctorterritory[0].City" class="form-control" disabled />
+                                                </div>
+                                                <div class="col-lg-4 form-group">
+                                                    <label class="label-heading">Hospital:</label>
+                                                    <input value="@doctorsData.userdoctorHospitalsLST[0].HospitalName" class="form-control" disabled />
+                                                </div>
+                                            </div>
+
+                                            <div class="row my-2">
+                                                <div class="col-lg-12 form-group">
+                                                    <label class="label-heading">Description of Plan: </label>
+                                                    <textarea class="form-control" disabled rows="5">@item["DescriptionOfPlan"]</textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    @*========== (End) HCP Particular Section ==========*@
+
+                                    @*========== (Start) Previous Plan Section ==========*@
+                                    <div id="tab-sec-1" class="row section mt-3">
+                                        <div class="section-header"><label>Previous Plan</label></div>
+                                        <div class="p-3">
+                                            <div class="row my-2">
+                                                <div class="col-lg-12">
+                                                    <h5>Previous Plan</h5>
+                                                </div>
+                                            </div>
+                                            <div class="row my-2">
+                                                <div class="col-lg-4 form-group">
+                                                    <button id="openPreviousPlanModal" class="show_previous_plan_btn">Show Details</button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    @*========== (End) Previous Plan Section ==========*@
+
+                                    @*========== (Start) Payment Section ==========*@
+                                    <div id="tab-sec-1" class="row section mt-3">
+                                        <div class="section-header"><label>Payment Section</label></div>
+                                        <div class="p-3">
+                                            <div class="row my-2">
+                                                <div class="col-lg-12">
+                                                    <h5>Previous Plan</h5>
+                                                </div>
+                                            </div>
+                                            <div class="row my-2">
+                                                <div class="col-lg-4 form-group">
+                                                    <label class="label-heading">Estimated Support Rs:</label>
+                                                    <input value="@item["EstimatedSupport"].ToString()" class="form-control" disabled />
+                                                </div>
+                                                <div class="col-lg-4 form-group">
+                                                    <label class="label-heading">Vendor Details:</label>
+                                                    <input value="@item["vendordetails"].ToString()" class="form-control" disabled />
+                                                </div>
+                                                <div class="col-lg-4 form-group">
+                                                    <label class="label-heading">Beneficiary Name:</label>
+                                                    <input value="@item["BeneficiaryName"].ToString()" class="form-control" disabled />
+                                                </div>
+                                            </div>
+                                            <div class="row my-2">
+                                                <div class="col-lg-4 form-group">
+                                                    <label class="label-heading">NTN Number:</label>
+                                                    <input value="@item["ntnNumber"].ToString()" class="form-control" disabled />
+                                                </div>
+                                                <div class="col-lg-4 form-group">
+                                                    <label class="label-heading">Payment Mode:</label>
+                                                    <input value="@item["PaymentMode"].ToString()" class="form-control" disabled />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @*========== (End) Payment Section ==========*@
+
+                                </div>
+                            }
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" id="closeHCPDetailsModal" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="previousPlanModal" class="previous-plan-hcp-modal">
+                        <div class="previous-plan-modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Previous Plan</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" id="closePreviousPlanModal" aria-label="Close"></button>
+                            </div>
+                            @foreach (DataRow item in hcpData.Rows)
+                            {
+                                <div class="previous-plan-modal-body">
+                                    <table border="0" class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">
+                                                    Team
+                                                </th>
+                                                <th class="text-center">
+                                                    Category
+                                                </th>
+
+                                                <th class="text-center">
+                                                    Amount
+                                                </th>
+                                                <th class="text-center">
+                                                    Year
+                                                </th>
+                                            </tr>
+
+                                        </thead>
+                                        <tbody id="details">
+
+                                            @if (previousPlans != null)
+                                            {
+                                                @foreach (var previousPlanItem in previousPlans)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            @previousPlanItem.teamName
+                                                        </td>
+                                                        <td>
+                                                            @previousPlanItem.category
+                                                        </td>
+                                                        <td>
+                                                            @previousPlanItem.amount
+                                                        </td>
+                                                        <td>
+                                                            @previousPlanItem.createdOn
+                                                        </td>
+
+                                                    </tr>
+                                                }
+                                            }
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" id="closePreviousModal" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                    @*============ (End) Hassam ============*@
+
+                    <div style="padding-top: 15px; padding-left: 20px;">
+                        <div class="conatiner">
+                            <div class="row">
+                                <div class="col-4">
+                                    <form asp-controller="ListView" asp-action="Create" style="padding-left:12px;">
+                                        <label style="font-weight:bold;">Tracking ID:</label>
+                                        <div>
+                                            <input readonly style="color:transparent;" asp-for="@rec.TrackingId" id="tracid" value="@rec.TrackingId" type="text" name="inputValue" />
+                                            <span asp-validation-for="@rec.TrackingId" class="text-danger"></span>
+
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="col-4">
+
+
+                                    <label style="font-weight:bold;">Area:</label>
+                                    <div>
+                                        @foreach (var area in Model.requesthcp)
+                                        {
+                                            <input disabled value="@area.BaseArea" type="text" />
+                                        }
+                                    </div>
+
+                                </div>
+                                <div class="col-4">
+                                    <label style="font-weight:bold;">Distributor:</label>
+                                    <div>
+                                        @foreach (var dis in Model.distributers)
+                                        {
+                                            <input style="width:75%" disabled value="@dis.DistributerCode - @dis.DistrubiterName" type="text" />
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="padding-top:15px">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-4">
+                                        <label style="font-weight:bold;">Territory Code:</label>
+                                        <div>
+                                            @foreach (var tmcode in Model.requesthcp)
+                                            {
+                                                <input disabled value="@tmcode.Tmcode" type="text" />
+                                            }
+                                        </div>
+
+                                    </div>
+                                    <div class="col-4">
+                                        <label style="font-weight:bold;">TM Name:</label>
+                                        <div>
+                                            @foreach (var usr in Model.users)
+                                            {
+                                                <input disabled value="@usr.UserName" type="text" />
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <label style="font-weight:bold;">MacroBrick:</label>
+                                        <div>
+                                            @foreach (var mac in Model.macrobricks)
+                                            {
+                                                <input style="width:75%" disabled value="@mac.MacroBrickCode - @mac.MacroBrickName" type="text" />
+                                            }
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="padding-top:10px;">
+                            <div style="padding-top:10px;">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div style="padding:10px; ">
+                                                <label style="font-weight:bold;">Teams:</label>
+
+                                                <div style="padding-top: 5px; display:flex;">
+
+                                                    @foreach (var T in Model.teams)
+                                                    {
+                                                        <div style="border: 2px solid #d71921 ; width: 25%; border-radius: 15px; text-align: center; color: #d71921 ; font-weight:700">
+
+                                                            <label id="teamNames" value="@T.TeamName">@T.TeamName</label>
+                                                        </div>
+
+                                                    }
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <label style="font-weight:bold;">Creater Comments:</label><br />
+                                            @foreach(var com in Model.detailbps){
+                                                <textarea id="createcomments" style="width:85%; height:100px; margin-top:1%;">@com.Comments</textarea>
+
+                                            }
+                                           
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <div style="padding-top:20px;">
+            <div>
+                @foreach (var acc in Model.ChemistCodes)
+                {
+                    @foreach (var cn in Model.chemists)
+                    {
+                        if (cn.ChemistCode == acc)
+                        {
+                            <button class="accordion">@cn.ChemistName - @acc</button>
+                        }
+
+                    }
+                    <div class="panel">
+                        <p style="text-align: center; font-weight: bold; font-size: 20px;">Pre-Sales</p>
+                        <div style="text-align: center;">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-4">
+                                        <p style="text-align:right; color: #d71921;">Sale Units</p>
+                                    </div>
+                                    <div class="col-4">
+                                        <div id="toggle-@toggle" class="toggle-switch" onclick="edittoggleSwitchAction(this,@toggle)">
+                                            <div class="toggle-slider"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <p style="text-align:left; color: #d71921;">Sale Values</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="padding-top:15px; padding-left:15px;">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-3">
+                                       @* <label style="font-weight:bold">Pre Activity Sales</label>*@
+                                    </div>
+                                    <div class="col-3">
+                                        <label>From:</label>
+
+                                        @*@foreach (var group in Model.preDateRanges.Where(predat => predat.PreTotal != null && predat.Chemist_Code == acc)
+                                       .GroupBy(predat => predat.Chemist_Code))
+                                        {
+                                            var predat = group.First(); // Take the first item in each group
+
+                                            <input disabled type="date" value="@(predat.PreFromDate != null ? string.Format("{0:yyyy-MM-dd}", predat.PreFromDate) : string.Empty)" style="margin-left: 2%;" />
+                                        }*@
+                                        @foreach (var group in Model.preDateRanges.Where(predat => predat.PreTotal != null && predat.Chemist_Code == acc)
+                                       .GroupBy(predat => predat.Chemist_Code))
+                                        {
+                                            var predat = group.First(); // Take the first item in each group
+
+                                            <input disabled type="text" value="@(predat.PreFromDate != null ? predat.PreFromDate.Value.ToString("MMM yyyy") : string.Empty)" style="margin-left: 2%;" />
+                                        }
+                                    </div>
+                                    <div class="col-3">
+                                        <label>To:</label>
+
+
+@*                                        @foreach (var group in Model.preDateRanges.Where(predat => predat.PreTotal != null && predat.Chemist_Code == acc)
+                                       .GroupBy(predat => predat.Chemist_Code))
+                                        {
+                                            var predat = group.First(); // Take the first item in each group
+
+                                            <input disabled type="date" value="@(predat.PreToDate != null ? string.Format("{0:yyyy-MM-dd}", predat.PreToDate) : string.Empty)" style="margin-left: 2%;" />
+                                        }*@
+
+                                        @foreach (var group in Model.preDateRanges.Where(predat => predat.PreTotal != null && predat.Chemist_Code == acc)
+                                       .GroupBy(predat => predat.Chemist_Code))
+                                        {
+                                            var predat = group.First(); // Take the first item in each group
+
+                                            <input disabled type="text" value="@(predat.PreToDate != null ? predat.PreToDate.Value.ToString("MMM yyyy") : string.Empty)" style="margin-left: 2%;" />
+                                        }
+
+                                    </div>
+                                    <div class="col-3">
+                                    @foreach (var predat in Model.preDateRanges)
+                                    {
+                                    if (predat.PreTotal != null)
+                                    {
+                                    if (predat.Chemist_Code == acc)
+                                    {
+
+                                                            <div>
+                                                                <label>Contribution % :</label>
+                                                                <input disabled type="number" value="@(predat.Contribution != null ? string.Format("{0:yyyy-MM-dd}", predat.Contribution) : string.Empty)" style="margin-left: 2%; text-align:right; width:25%;" />
+                                                            </div>
+
+
+                                        
+                                    }
+                                    }
+                                    }
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @foreach (var skupre in Model.SalesUnitsPre)
+                        {
+                            @if (skupre.Key == acc)
+                            {
+                                <div id="sku-@presku" style="overflow:auto; ">
+                                    <table id="customers">
+                                        <thead>
+                                            <tr style="    font-size: 11px; background: #d71921; color: white; font-weight: bold;">
+                                                @foreach (var skucoloum in skupre.Value[0] as IDictionary<string, object>)
+                                                {
+                                            @*        <th>@skucoloum.Key</th>*@
+
+
+                                                    if (skucoloum.Key == "ActualDiscount")
+                                                    {
+                                                        <td>Actual Discount</td>
+                                                    }
+                                                    else if (skucoloum.Key == "Contribution")
+                                                    {
+                                                        <td>Contribution</td>
+                                                    }
+                                                   else  if (skucoloum.Key == "PackCode")
+                                                    {
+                                                        <td>Pack Code</td>
+                                                    }
+                                                    else if (skucoloum.Key == "ProductName")
+                                                    {
+                                                        <td>Product Name</td>
+                                                    }
+                                                    else if (skucoloum.Key == "Description")
+                                                    {
+                                                        <td>Description</td>
+                                                    }
+                                                    else
+                                                    {
+
+
+
+                                                        <td>
+
+                                                            @skucoloum.Key
+                                                        </td>
+
+                                                    }
+
+                                                }
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            @foreach (var skudata in skupre.Value)
+                                            {
+                                                <tr style="font-size:10px;">
+                                                    @foreach (var skudata1 in skudata)
+                                                    {
+
+                                                    @*    <td style="text-align:right;">@skudata1.Value</td>*@
+                                                        if (skudata1.Key == "PackCode")
+                                                        {
+                                                            <td>@skudata1.Value</td>
+                                                        }
+                                                        else if (skudata1.Key == "ProductName")
+                                                        {
+                                                            <td>@skudata1.Value</td>
+                                                        }
+                                                        else if (skudata1.Key == "Description")
+                                                        {
+                                                            <td>@skudata1.Value</td>
+                                                        }
+                                                        else
+                                                        {
+
+
+
+                                                            <td style="text-align:right;">
+
+                                                                @skudata1.Value
+                                                            </td>
+
+                                                        }
+
+
+                                                    }
+                                                </tr>
+
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                        }
+                        @foreach (var valpre in Model.SalesValuesPre)
+                        {
+                            @if (valpre.Key == acc)
+                            {
+                                <div id="value-@prevalue" style="overflow:auto; display:none">
+                                    <table id="customers">
+                                        <thead>
+                                            <tr style="   font-size: 11px; background: #d71921; color: white; font-weight: bold;">
+                                                @foreach (var valuecolumn in valpre.Value[0] as IDictionary<string, object>)
+                                                {
+                                                   @* <th>@valuecolumn.Key</th>*@
+
+                                                    if (valuecolumn.Key == "ActualDiscount")
+                                                    {
+                                                        <td>Actual Discount</td>
+                                                    }
+                                                    else if (valuecolumn.Key == "Contribution")
+                                                    {
+                                                        <td>Contribution</td>
+                                                    }
+                                                    else if (valuecolumn.Key == "PackCode")
+                                                    {
+                                                        <td>Pack Code</td>
+                                                    }
+                                                    else if (valuecolumn.Key == "ProductName")
+                                                    {
+                                                        <td>Product Name</td>
+                                                    }
+                                                    else if (valuecolumn.Key == "Description")
+                                                    {
+                                                        <td>Description</td>
+                                                    }
+                                                    else
+                                                    {
+
+
+
+                                                        <td>
+
+                                                            @valuecolumn.Key
+                                                        </td>
+
+                                                    }
+                                                }
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            @foreach (var valdata in valpre.Value)
+                                            {
+                                                <tr style="font-size:10px;">
+                                                    @foreach (var valdata1 in valdata)
+                                                    {
+
+                                                      @*  <td style="text-align:right;">@valdata1.Value</td>*@
+                                                        if (valdata1.Key == "PackCode")
+                                                        {
+                                                            <td>@valdata1.Value</td>
+                                                        }
+                                                        else if (valdata1.Key == "ProductName")
+                                                        {
+                                                            <td>@valdata1.Value</td>
+                                                        }
+                                                        else if (valdata1.Key == "Description")
+                                                        {
+                                                            <td>@valdata1.Value</td>
+                                                        }
+                                                        else
+                                                        {
+
+
+
+                                                            <td style="text-align:right;">
+
+                                                                @valdata1.Value
+                                                            </td>
+
+                                                        }
+     
+                                                    }
+                                                </tr>
+
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                        }
+                        <div>
+                            <div style="text-align:right; margin-top:2%;">
+                                <label>Chemist Total:</label>
+
+
+                                @foreach (var group in Model.preDateRanges.Where(predat => predat.PreTotal != null && predat.Chemist_Code == acc)
+                               .GroupBy(predat => predat.Chemist_Code))
+                                {
+                                    var predat = group.First(); // Take the first item in each group
+
+                                    <input disabled type="text" value="@(predat.PreTotal != null ? string.Format("{0:yyyy-MM-dd}", predat.PreTotal) : string.Empty)" style="margin-left: 2%; text-align:right;" />
+                                    @*<input disabled type="text" value="@(int.Parse(predat.PreTotal).ToString("#,##0") != null ? string.Format("{0:yyyy-MM-dd}", int.Parse(predat.PreTotal).ToString("#,##0")) : string.Empty)" style="margin-left: 2%; text-align:right;" />*@
+
+                                    @*<input disabled type="text" id="editChemistCode" hidden value="@(predat.PreTotal != null ? string.Format("{0:yyyy-MM-dd}", predat.PreTotal) : string.Empty)" style="margin-left: 2%; text-align:right;" />
+                                    <input disabled type="text" id="updateValue" style="margin-left: 2%; text-align:right;" />
+                                *@
+                                }
+
+                            </div>
+                            <div style="text-align:right; margin-top:2%;">
+                                <label>Discount Percentage %:</label>
+
+
+                                @foreach (var group in Model.preDateRanges.Where(predat => predat.PreTotal != null && predat.Chemist_Code == acc)
+                               .GroupBy(predat => predat.Chemist_Code))
+                                {
+                                    var predat = group.First(); // Take the first item in each group
+
+                                    <input disabled type="text" value="@(predat.discountpercentage != null ? string.Format("{0:yyyy-MM-dd}", predat.discountpercentage) : string.Empty)" style="margin-left: 2%; text-align:right;" />
+                                }
+
+                            </div>
+                        </div>
+
+
+                        <p style="text-align: center; font-weight: bold; font-size: 20px;">Post-Sales</p>
+                        <div style="text-align: center;">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-4">
+                                        <p style="text-align:right; color: #d71921;">Sale Units</p>
+                                    </div>
+                                    <div class="col-4">
+                                        <div id="toggle-@toggle" class="toggle-switch" onclick="editposttoggleSwitchAction(this,@toggle)">
+                                            <div class="toggle-slider"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <p style="text-align:left; color: #d71921;">Sale Values</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="padding-top:15px; padding-left:15px;">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-3">
+                                     @*   <label style="font-weight:bold">Pre Activity Sales</label>*@
+                                    </div>
+                                    <div class="col-3">
+                                        <label>From:</label>
+                                       @* @foreach (var postdat in Model.postDateRanges)
+                                        {
+                                            if (postdat.PostTotal != null)
+                                            {
+                                                if (postdat.Chemist_Code == acc)
+                                                {
+                                                    <input disabled type="date" value="@(postdat.PostFromDate != null ? string.Format("{0:yyyy-MM-dd}", postdat.PostFromDate) : string.Empty)" style="margin-left: 2%;" />
+                                                }
+                                            }
+
+                                        }*@
+
+                                        @foreach (var postdat in Model.postDateRanges.Where(postdat => postdat.PostTotal != null && postdat.Chemist_Code == acc))
+                                        {
+                                            <input disabled type="text" value="@(postdat.PostFromDate != null ? postdat.PostFromDate.Value.ToString("MMM yyyy") : string.Empty)" style="margin-left: 2%;" />
+                                        }
+
+
+                                    </div>
+                                    <div class="col-3">
+                                        <label>To:</label>
+                                        @*@foreach (var postdat in Model.postDateRanges)
+                                        {
+                                            if (postdat.PostTotal != null)
+                                            {
+                                                if (postdat.Chemist_Code == acc)
+                                                {
+                                                    <input disabled type="date" value="@(postdat.PostToDate != null ? string.Format("{0:yyyy-MM-dd}", postdat.PostToDate) : string.Empty)" style="margin-left: 2%;" />
+                                                }
+                                            }
+
+                                        }*@
+
+                                        @foreach (var postdat in Model.postDateRanges.Where(postdat => postdat.PostTotal != null && postdat.Chemist_Code == acc))
+                                        {
+                                            <input disabled type="text" value="@(postdat.PostToDate != null ? postdat.PostToDate.Value.ToString("MMM yyyy") : string.Empty)" style="margin-left: 2%;" />
+                                        }
+
+
+                                    </div>
+                                    <div class="col-3">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @foreach (var skupost in Model.SalesUnitsPost)
+                        {
+                            @if (skupost.Key == acc)
+                            {
+                                <div id="postsku-@postsku" style="overflow:auto; ">
+                                    <table id="customers">
+                                        <thead>
+                                            <tr style="   font-size: 11px; background: #d71921; color: white; font-weight: bold;">
+                                                @foreach (var skucoloum in skupost.Value[0] as IDictionary<string, object>)
+                                                {
+                                                   @* <th>@skucoloum.Key</th>*@
+                                                     if (skucoloum.Key == "PackCode")
+                                                    {
+                                                        <td>Pack Code</td>
+                                                    }
+                                                    else if (skucoloum.Key == "ProductName")
+                                                    {
+                                                        <td>Product Name</td>
+                                                    }
+                                                    else if (skucoloum.Key == "Description")
+                                                    {
+                                                        <td>Description</td>
+                                                    }
+                                                    else
+                                                    {
+
+
+
+                                                        <td>
+
+                                                            @skucoloum.Key
+                                                        </td>
+
+                                                    }
+                                                }
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            @foreach (var skudata in skupost.Value)
+                                            {
+                                                <tr style="font-size:10px;">
+                                                    @foreach (var skudata1 in skudata)
+                                                    {
+@*
+                                                        <td style="text-align:right;">@skudata1.Value</td>*@
+                                                        if (skudata1.Key == "PackCode")
+                                                        {
+                                                            <td>@skudata1.Value</td>
+                                                        }
+                                                        else if (skudata1.Key == "ProductName")
+                                                        {
+                                                            <td>@skudata1.Value</td>
+                                                        }
+                                                        else if (skudata1.Key == "Description")
+                                                        {
+                                                            <td>@skudata1.Value</td>
+                                                        }
+                                                        else
+                                                        {
+
+
+
+                                                            <td style="text-align:right;">
+
+                                                                @skudata1.Value
+                                                            </td>
+
+                                                        }
+
+                                                    }
+                                                </tr>
+
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                        }
+                        @foreach (var valpost in Model.SalesValuesPost)
+                        {
+                            @if (valpost.Key == acc)
+                            {
+                                <div id="postvalue-@postvalue" style="overflow:auto; display:none">
+                                    <table id="customers">
+                                        <thead>
+                                            <tr style="   font-size: 11px; background: #d71921; color: white; font-weight: bold;">
+                                                @foreach (var valuecolumn in valpost.Value[0] as IDictionary<string, object>)
+                                                {
+                                                   @* <th>@valuecolumn.Key</th>*@
+                                                    if (valuecolumn.Key == "PackCode")
+                                                    {
+                                                        <td>Pack Code</td>
+                                                    }
+                                                    else if (valuecolumn.Key == "ProductName")
+                                                    {
+                                                        <td>Product Name</td>
+                                                    }
+                                                    else if (valuecolumn.Key == "Description")
+                                                    {
+                                                        <td>Description</td>
+                                                    }
+                                                    else
+                                                    {
+
+
+
+                                                        <td>
+
+                                                            @valuecolumn.Key
+                                                        </td>
+
+                                                    }
+                                                }
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            @foreach (var valdata in valpost.Value)
+                                            {
+                                                <tr style="font-size:10px;">
+                                                    @foreach (var valdata1 in valdata)
+                                                    {
+
+                                                      @*  <td style="text-align:right;">@valdata1.Value</td>*@
+
+                                                        if (valdata1.Key == "PackCode")
+                                                        {
+                                                            <td>@valdata1.Value</td>
+                                                        }
+                                                        else if (valdata1.Key == "ProductName")
+                                                        {
+                                                            <td>@valdata1.Value</td>
+                                                        }
+                                                        else if (valdata1.Key == "Description")
+                                                        {
+                                                            <td>@valdata1.Value</td>
+                                                        }
+                                                        else
+                                                        {
+
+                                               
+
+                                                            <td style="text-align:right;">
+
+                                                                @valdata1.Value
+                                                            </td>
+                                                          
+                                                        }
+
+                                                    }
+                                                </tr>
+
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                        }
+                        <div>
+                            <div style="text-align:right; margin-top:2%;">
+                                <label>Chemsit Total:</label>
+                                @foreach (var postdat in Model.postDateRanges)
+                                {
+                                    if (postdat.PostTotal != null)
+                                    {
+                                        if (postdat.Chemist_Code == acc)
+                                        {
+@*                                            <input disabled type="text" value="@(postdat.PostTotal != null ? string.Format("{0:yyyy-MM-dd}", postdat.PostTotal) : string.Empty)" style="margin-left: 2%; text-align:right;" />*@
+
+                                            <input disabled type="text" value="@(postdat.PostTotal != null ? string.Format("{0:yyyy-MM-dd}", postdat.PostTotal) : string.Empty)" style="margin-left: 2%; text-align:right;" />
+                                        }
+                                    }
+
+                                }
+
+                            </div>
+                        </div>
+                        <div>
+                            <div style="text-align:right; margin-top:2%;">
+                                <label>Discount Percentage %:</label>
+                                @foreach (var postdat in Model.postDateRanges)
+                                {
+                                    if (postdat.PostTotal != null)
+                                    {
+                                        if (postdat.Chemist_Code == acc)
+                                        {
+                                            <input disabled type="text" value="@(postdat.discountpostcentage != null ? string.Format("{0:yyyy-MM-dd}", postdat.discountpostcentage) : string.Empty)" style="margin-left: 2%; text-align:right;" />
+                                        }
+                                    }
+
+                                }
+
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    presku++;
+                    prevalue++;
+                    postsku++;
+                    postvalue++;
+                    toggle++;
+                }
+                <div>
+                    <div style="text-align:right; margin-top:3%;">
+                        <label>Grand Toral:</label>
+                        @foreach (var grandtaotal in Model.customersmodels)
+                        {
+                            if (grandtaotal.grandtotal != null)
+                            {
+@*                                <input disabled type="text"  value="@(grandtaotal.grandtotal != null ? string.Format("{0:yyyy-MM-dd}", grandtaotal.grandtotal ) : string.Empty)" style="margin-left: 2%; text-align:right;"/>*@
+
+                                <input disabled type="text" value="@(grandtaotal.grandtotal != null ? string.Format("{0:yyyy-MM-dd}", grandtaotal.grandtotal) : string.Empty)" style="margin-left: 2%; text-align:right;" />
+                            }
+
+                        }
+
+                    </div>
+                </div>
+
+                <div>
+                    <div style="text-align:right; margin-top:2%;">
+                        <label>BPS Percentage %:</label>
+                        @foreach (var bpsperc in Model.customersmodels)
+                        {
+                            if (bpsperc.bpspercentage != null)
+                            {
+                                <input disabled type="text" value="@(bpsperc.bpspercentage != null ? string.Format("{0:yyyy-MM-dd}", bpsperc.bpspercentage ) : string.Empty)" style="margin-left: 2%; text-align:right;" />
+                            }
+
+                        }
+
+                    </div>
+                </div>
+
+                <div>
+                    <div style="text-align:right; margin-top:2%;">
+                        <label>Total ROI %:</label>
+                        @foreach (var roi in Model.customersmodels)
+                        {
+                            if (roi.totalroipercentage != null)
+                            {
+                                <input disabled type="text" value="@(roi.totalroipercentage != null ? string.Format("{0:yyyy-MM-dd}", roi.totalroipercentage ) : string.Empty)" style="margin-left: 2%; text-align:right;" />
+                            }
+
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        @if (roleId == "1" && ViewBag.Status == 6)
+        {
+
+            @if (Model.uploadedfiles.Count > 0)
+            {
+                <table id="customers">
+                    <tr>
+                        <th>FileName</th>
+                    </tr>
+
+                    @foreach (var f in Model.uploadedfiles)
+                    {
+
+                        <td>
+                            @{
+
+                                string[] parts = f.filename.Split('_');
+                                if (parts.Length > 1)
+                                {
+                                    string afterUnderscore = parts[1];
+                                    @afterUnderscore
+                                }
+                                else
+                                {
+                                    @f.filename
+                                }
+                            }
+                        </td>
+
+                    }
+
+
+                </table>
+                <div style="text-align:center; padding-top:4%;">
+                    <input disabled id="asmact" type="button" class="createbtn" value="Done" />
+                </div>
+            }
+            else
+            {
+                <div class="row">
+                    <div class="col-lg-4 form-group" id="showChooseFile" style="display: none;">
+                        <label for="files">Select files:</label>
+                        <input type="file" id="asmfile" class="form-control" name="Files" multiple />
+                    </div>
+                    <div class="col-lg-4 d-flex align-items-end">
+                        <div id="templateFile">
+                        </div>
+                    </div>
+                </div>
+                <div class="row my-3">
+                    <div class="col-lg-6">
+                        <ol id="filesList"></ol>
+                    </div>
+                </div>
+                <div style="text-align:center; padding-top:3%;">
+                    <input id="asmact" type="button" class="createbtn" value="Done" onclick="BpsASMActivity()" />
+                </div>
+            }
+
+        }
+@*        @if (roleId == "15" && Model.uploadedfiles.Count > 0)
+        {
+            <table id="customers">
+                <tr>
+                    <th>FileName</th>
+
+                </tr>
+
+                @foreach (var f in Model.uploadedfiles)
+                {
+                    <td>
+                        @{
+
+                            string[] parts = f.filename.Split('_');
+                            if (parts.Length > 1)
+                            {
+                                string afterUnderscore = parts[1];
+                                @afterUnderscore
+                            }
+                            else
+                            {
+                                @f.filename
+                            }
+                        }
+                    </td>
+
+                }
+            </table>
+
+            <div style="padding-top:3%;">
+                <label>Purchase Order:</label>
+                <input type="text" id="ponum" value="">
+            </div>
+            <div style="text-align:center; padding-top:3%;">
+                <input id="poactivity" type="button" class="createbtn" value="Done" onclick="BpsPoNumber()" />
+            </div>
+        }*@
+@*        @if (roleId == "16" && poNumber == null)
+        {
+
+
+            <div class="row mt-3">
+                <div class="col-lg-12">
+                    <button type="submit" class="btn btn-outline-primary" id="openHcpDetailsModal">HCP Details</button>
+                </div>
+            </div>
+       
+
+        }*@
+        else if (roleId == "16" && poNumber != null)
+        {
+            <table id="customers">
+                <tr>
+                    <th>FileName</th>
+                </tr>
+
+                @foreach (var f in Model.uploadedfiles)
+                {
+                    <td>
+                        @{
+
+                            string[] parts = f.filename.Split('_');
+                            if (parts.Length > 1)
+                            {
+                                string afterUnderscore = parts[1];
+                                @afterUnderscore
+                            }
+                            else
+                            {
+                                @f.filename
+                            }
+                        }
+                    </td>
+                }
+            </table>
+            @foreach (var po in Model.detailbps)
+            {
+                <div style="padding-top:3%;">
+                    <label>Purchase Order:</label>
+                    <input disabled type="text" value="@po.PONumber">
+                </div>
+
+            }
+            <div class="row">
+                <div class="col-lg-4 form-group">
+                    <label for="files">Select files:</label>
+                    <input type="file" id="asmfile" class="form-control" name="Files" multiple />
+                </div>
+                <div class="col-lg-4 d-flex align-items-end">
+                    <div id="templateFile" style="display:none;">
+                    </div>
+                </div>
+            </div>
+            <div class="row my-3">
+                <div class="col-lg-6">
+                    <ol id="filesList"></ol>
+                </div>
+            </div>
+
+        }
+        @if (ViewBag.roleid != null)
+        {
+            
+
+            @if (ViewBag.roleid != "1" && roleId != "15")
+            {
+
+                <div style="padding-top:20px;">
+                    <div>
+                        <label style="font-weight:bold; @((roleId == "16" && poNumber != null) ? "display:none;" : "")">Comments:</label><br />
+                        <textarea id="comments" style="width:60%; height:100px; margin-top:1%; @((roleId == "16" && poNumber != null) ? "display:none;" : "")"></textarea><br>
+                        <label class="hide" id="CommentsErrorLabel" style="color:red;font-size:10px;">Required! Please Enter Comments</label>
+                        <input type="text" style="visibility:hidden;" id="wlstid" value="@ViewBag.WorklistId"></input>
+                    </div>
+
+                    @if (poNumber == null && roleId == "2" || roleId == "3")
+                    {
+                    <div style="text-align:center; padding-top:3%;">
+                        <input id="approvebps" type="button" class="createbtn" value="Approve" onclick="BpsApproval()" />
+
+                    @*    <input id="pbjectionbps" type="button" class="createbtn" value="Objection" onclick="BpsObjection()" />*@
+                        </div>
+                    }
+                    else if (poNumber == null)
+                    {
+                        <div style="text-align:center; padding-top:3%;">
+                            <input id="approvebps" type="button" class="createbtn" value="Approve" onclick="BpsApproval()" />
+
+                            <input id="pbjectionbps" type="button" class="createbtn" value="Objection" onclick="BpsObjection()" />
+                        </div>
+                    }
+                </div>
+            }
+
+        }
+ 
+        @if (roleId == "16" && poNumber !=null)
+        {
+            <div style="text-align:center; padding-top:3%;">
+                <input id="maactivity" type="button" class="createbtn" value="Done" onclick="BpsMAActivity()" />
+            </div>
+
+        }
+            else if (poNumber == null)
+        {
+
+        }
+        
+
+    
+
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="~/js/datatable_file.js"></script>
+
+    <script src="~/js/modal.js"></script>
+
+
+
+    <script>
+
+        $(document).ready(function () {
+            let defaultValue = numberWithCommas($("#defaultValue")[0].value)
+            $("#updateValue").val(defaultValue);
+
+            let defaultChemistCode = numberWithCommas($("#defaultChemistCode")[0].value)
+            $("#updateChemistCode").val(defaultChemistCode);
+
+            let defaultGrandTotal = numberWithCommas($("#defaultGrandTotal")[0].value)
+            $("#updateGrandTotal").val(defaultGrandTotal);
+
+
+        });
+
+        function numberWithCommas(value) {
+            return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
+
+
+        function BpsMAActivity() {
+            ;
+            var fileInput = document.getElementById('asmfile');
+            var trackingid = document.getElementById("tracid").value;
+
+
+
+            var formData = new FormData();
+
+            if (fileInput != null) {
+                // Append each selected file to the FormData object
+                for (var i = 0; i < fileInput.files.length; i++) {
+                    formData.append('Files', fileInput.files[i]);
+                }
+            }
+            formData.append('TrackingId', trackingid);
+            $.ajax({
+                url: "/ListView/BpsMAActivity", // Replace with your controller and action names
+                type: 'POST', // Use GET or POST based on your server's requirements
+                data: formData, // Send the entire FormData object
+                contentType: false, // Required for sending FormData
+                processData: false, // Required for sending FormData
+                success: function (response) {
+                    if (data = true) {
+
+                        var modelvisisble = document.getElementById('myModalDetails').style.visibility = 'visible';
+
+                    } else {
+                        var modelvisisble = document.getElementById('myModalDetails').style.visibility = 'hidden';
+                    }
+                    setTimeout(function () {
+                        window.location.href = "/ListView/PendingView/2"; // you can pass true to reload function to ignore the client cache and reload from the server
+                    }, 5000);
+                },
+                error: function (xhr, status, error) {
+                    // Handle errors here
+                    console.error("Error:", status, error);
+                }
+            });
+
+        }
+
+        $.ajax({
+            url: '/ListView/GetTemplateByFileName',
+            type: 'GET',
+            data: { fileName: "Education annexure.docx" },
+            success: function (responseData) {
+                console.log('responseData', responseData)
+                if (responseData != null) {
+                    document.getElementById("templateFile").innerHTML += `<button onclick="downloadTemplate('${responseData.id}')" class="btn btn-outline-primary">Download File</button>`
+                }
+            }
+        });
+
+        var acc = document.getElementsByClassName("accordion");
+        var i;
+
+        for (i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function () {
+                this.classList.toggle("active");
+                var panel = this.nextElementSibling;
+                if (panel.style.maxHeight) {
+                    panel.style.maxHeight = null;
+                } else {
+                    panel.style.maxHeight = panel.scrollHeight + "px";
+                }
+            });
+        }
+
+
+        function BpsPoNumber() {
+            ;
+            var ponum = document.getElementById("ponum").value;
+            var trackingid = document.getElementById("tracid").value;
+            $.ajax({
+                url: "/ListView/PONumberActivity", // Replace with your controller and action names
+                type: 'POST', // Use GET or POST based on your server's requirements
+                data: { ponum: ponum, trackingid: trackingid }, // Send the entire FormData object
+                success: function (response) {
+                    if (data = true) {
+
+                        var modelvisisble = document.getElementById('myModalDetails').style.visibility = 'visible';
+
+                    } else {
+                        var modelvisisble = document.getElementById('myModalDetails').style.visibility = 'hidden';
+                    }
+                    setTimeout(function () {
+                        window.location.href = "/ListView/ApprovedView"; // you can pass true to reload function to ignore the client cache and reload from the server
+                    }, 5000);
+                },
+                error: function (xhr, status, error) {
+                    // Handle errors here
+                    console.error("Error:", status, error);
+                }
+            });
+        }
+
+    </script>
+
+</body>
+
+</html>
+
+
+
+
+
+
