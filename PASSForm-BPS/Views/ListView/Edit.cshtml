@@ -399,9 +399,9 @@
                                                         <div>
                                                             <label>Contribution % :</label>
                                                             <input disabled id="Contribution-@editcontributionindex" type="number" value="@(predat.Contribution != null ? string.Format("{0:yyyy-MM-dd}", predat.Contribution) : string.Empty)" style="margin-left: 2%; text-align:right;" />
-                                                            editcontributionindex++;
+                                                            
                                                         </div>
-
+                                                        editcontributionindex++;
                                                     }
                                                 }
                                             }
@@ -531,7 +531,7 @@
                                         {
                                             if (predat.Chemist_Code == acc)
                                             {
-                                                <input id="total-pre-@editretotalindex" disabled type="text" value="@(predat.PreTotal != null ? string.Format("{0:yyyy-MM-dd}", predat.PreTotal) : string.Empty)" style="margin-left: 2%; text-align:right;" />
+                                                <input class="Comma" id="total-pre-@editretotalindex" disabled type="text" value="@(predat.PreTotal != null ? string.Format("{0:yyyy-MM-dd}", predat.PreTotal) : string.Empty)" style="margin-left: 2%; text-align:right;" />
 
                                                 editretotalindex++;
                                             }
@@ -770,7 +770,7 @@
                                                                 else
                                                                 {
                                                                     <td>
-                                                                        <input style="text-align:right;" type="number" disabled id="value-edit-post-row-@chemindex-@editpackcoderowindexvalue-@editvalueindex" class="numeric" maxlength="5" value="@Convert.ToInt32(valdata1.Value)">
+                                                                        <input  style="text-align:right;" type="number" disabled id="value-edit-post-row-@chemindex-@editpackcoderowindexvalue-@editvalueindex" class="numeric" maxlength="5" value="@Convert.ToInt32(valdata1.Value)">
                                                                        
                                                                     </td>
                                                                    editvalueindex++;
@@ -797,7 +797,7 @@
                                         {
                                             if (postdat.Chemist_Code == acc)
                                             {
-                                                <input id="total-post-@editposttotalindex" disabled type="text" value="@(postdat.PostTotal != null ? string.Format("{0:yyyy-MM-dd}", postdat.PostTotal) : string.Empty)" style="margin-left: 2%; text-align:right;" />
+                                                <input class="Comma" id="total-post-@editposttotalindex" disabled type="text" value="@(postdat.PostTotal != null ? string.Format("{0:yyyy-MM-dd}", postdat.PostTotal) : string.Empty)" style="margin-left: 2%; text-align:right;" />
 
                                                 editposttotalindex++;
                                             }
@@ -850,7 +850,7 @@
                         {
                             if (grandtaotal.grandtotal != null)
                             {
-                                <input disabled type="text" id="editgrandtotal" value="@(grandtaotal.grandtotal != null ? string.Format("{0:yyyy-MM-dd}", grandtaotal.grandtotal ) : string.Empty)" style="margin-left: 2%; text-align:right;" />
+                                <input class="Comma" disabled type="text" id="editgrandtotal" value="@(grandtaotal.grandtotal != null ? string.Format("{0:yyyy-MM-dd}", grandtaotal.grandtotal ) : string.Empty)" style="margin-left: 2%; text-align:right;" />
                             }
 
                         }

@@ -493,48 +493,7 @@ namespace PASSForm_BPS.Controllers
 
                             };
 
-                            //============ (Start) Hassam ============
-                            int? hcpReqId = 0;
-                            int hcpId = 0;
-                            foreach (var item in bpsrcord)
-                            {
-                                hcpReqId  = item.Hcpreqid;
-                            }
 
-                            dt_HCPDETAILS = getHCPDETAILS(hcpReqId.ToString()).Tables[0];
-                            dt_HCPDOCS = getHCPDETAILS(hcpReqId.ToString()).Tables[1];
-
-                            foreach (DataRow item in dt_HCPDETAILS.Rows)
-                            {
-                                hcpId = Convert.ToInt32(item["HCPID"].ToString());
-                            }
-                            var doctorsData = GetDoctorHospitals(hcpId.ToString());
-                            var HcprequestsData = _passDbContext.Hcprequests.FromSqlRaw("select h.*,'' as Approver_Name,hp.HCPName,'' as User_Name,'' as StatusType,t.TeamName  as TeamName from hcprequest h left join hcpdetails hp on hp.HCPID = h.HCPID left join teams t on t.TeamCode = h.TeamId where h.HCPID = '" + hcpId + "'").ToList();
-                            var previousPlans = new List<object>();
-                            foreach (var hcpItem in HcprequestsData)
-                            {
-                                var teamsData = _passDbContext.Teams.FromSqlRaw("select * from Teams where TeamCode = {0}", hcpItem.TeamId).ToList();
-                                foreach (var teamItem in teamsData)
-                                {
-                                    if (hcpItem.TeamId == teamItem.TeamCode)
-                                    {
-                                        var data = new
-                                        {
-                                            teamName = teamItem.TeamName,
-                                            amount = hcpItem.EstimatedSupport,
-                                            category = hcpItem.PasscategoryCode,
-                                            createdOn = hcpItem.CreatedOn.Value.ToString("MMM-yyyy")
-                                        };
-                                        previousPlans.Add(data);
-                                    }
-                                }
-                            }
-
-                            ViewBag.DOCLIST = dt_HCPDOCS;
-                            ViewBag.HCPDetails = dt_HCPDETAILS;
-                            ViewBag.DoctorsData = doctorsData;
-                            ViewBag.PreviousPlans = previousPlans;
-                            //============ (End) Hassam ============
 
 
                             return View(DetailViewModel);
@@ -846,48 +805,7 @@ namespace PASSForm_BPS.Controllers
 
                             };
 
-                            //============ (Start) Hassam ============
-                            int? hcpReqId = 0;
-                            int hcpId = 0;
-                            foreach (var item in bpsrcord)
-                            {
-                                hcpReqId = item.Hcpreqid;
-                            }
 
-                            dt_HCPDETAILS = getHCPDETAILS(hcpReqId.ToString()).Tables[0];
-                            dt_HCPDOCS = getHCPDETAILS(hcpReqId.ToString()).Tables[1];
-
-                            foreach (DataRow item in dt_HCPDETAILS.Rows)
-                            {
-                                hcpId = Convert.ToInt32(item["HCPID"].ToString());
-                            }
-                            var doctorsData = GetDoctorHospitals(hcpId.ToString());
-                            var HcprequestsData = _passDbContext.Hcprequests.FromSqlRaw("select h.*,'' as Approver_Name,hp.HCPName,'' as User_Name,'' as StatusType,t.TeamName  as TeamName from hcprequest h left join hcpdetails hp on hp.HCPID = h.HCPID left join teams t on t.TeamCode = h.TeamId where h.HCPID = '" + hcpId + "'").ToList();
-                            var previousPlans = new List<object>();
-                            foreach (var hcpItem in HcprequestsData)
-                            {
-                                var teamsData = _passDbContext.Teams.FromSqlRaw("select * from Teams where TeamCode = {0}", hcpItem.TeamId).ToList();
-                                foreach (var teamItem in teamsData)
-                                {
-                                    if (hcpItem.TeamId == teamItem.TeamCode)
-                                    {
-                                        var data = new
-                                        {
-                                            teamName = teamItem.TeamName,
-                                            amount = hcpItem.EstimatedSupport,
-                                            category = hcpItem.PasscategoryCode,
-                                            createdOn = hcpItem.CreatedOn.Value.ToString("MMM-yyyy")
-                                        };
-                                        previousPlans.Add(data);
-                                    }
-                                }
-                            }
-
-                            ViewBag.DOCLIST = dt_HCPDOCS;
-                            ViewBag.HCPDetails = dt_HCPDETAILS;
-                            ViewBag.DoctorsData = doctorsData;
-                            ViewBag.PreviousPlans = previousPlans;
-                            //============ (End) Hassam ============
                             return View(DetailViewModel);
 
                         }
@@ -2269,76 +2187,9 @@ where HCPREQID = '" + trackingid + "'";
             }
         }
 
-        [HttpPost]
-        public IActionResult Approved(int trackingid)
-        {
-            try
-            {
-                var approv = @"Update bps_request
-set Status_ID = 1
-Where HCPREQID = '" + trackingid + "'";
-                var approvbps = _passDbContext.Database.ExecuteSqlRaw(approv);
 
-                var approved = @"Update hcprequest
-set Status_ID = 1
-Where HCPREQID = '" + trackingid + "'";
-                var approvhcp = _passDbContext.Database.ExecuteSqlRaw(approved);
 
-                return RedirectToAction("PendingView", "ListView", new { id = 2 });
-            }
-            catch (Exception ex)
-            {
-                DateTime timestampValue = DateTime.Now; // Replace with the desired DateTime value
 
-                GlobalClass.LogException(_passDbContext, ex,  nameof(Approved), "Error message");
-                var feature = new Microsoft.AspNetCore.Diagnostics.ExceptionHandlerFeature
-                {
-                    Error = ex,
-
-                };
-                HttpContext.Features.Set(feature);
-                ViewBag.Error = ex;
-                return View("Error");
-            
-            }
-
-        }
-
-        [HttpPost]
-        public IActionResult Rejected(int trackingid)
-        {
-            try
-            {
-                var approv = @"Update bps_request
-set Status_ID = 3
-Where HCPREQID = '" + trackingid + "'";
-                var approvbps = _passDbContext.Database.ExecuteSqlRaw(approv);
-
-                var approved = @"Update hcprequest
-set Status_ID = 3
-Where HCPREQID = '" + trackingid + "'";
-                var approvhcp = _passDbContext.Database.ExecuteSqlRaw(approved);
-
-                return RedirectToAction("PendingView", "ListView");
-            }
-            catch (Exception ex)
-            {
-                DateTime timestampValue = DateTime.Now; // Replace with the desired DateTime value
-
-                GlobalClass.LogException(_passDbContext, ex,  nameof(Rejected), "Error message");
-                var feature = new Microsoft.AspNetCore.Diagnostics.ExceptionHandlerFeature
-                {
-                    Error = ex,
-
-                };
-                HttpContext.Features.Set(feature);
-                ViewBag.Error = ex;
-                return View("Error");
-            
-        }
-
-          
-        }
 
         public IActionResult Objection(int trackingid, string comments)
         {
@@ -3008,168 +2859,7 @@ set Status_ID = 4, Comments = '" + comments + "' Where HCPREQID = '" + trackingi
             public DateTime EndDate { get; set; }
         }
 
-        //============ (Start) Hassam ============
-        public DataSet getHCPDETAILS(string HCPID)
-        {
-            try
-            {
-                DataSet ds = new DataSet();
-                using (MySqlConnection connection = new MySqlConnection(_connectionString))
-                {
-                    connection.Open();
 
-                    using (MySqlCommand command = new MySqlCommand("spViewSubmitedHCPRequestData_Bak", connection))
-                    {
-                        command.CommandType = CommandType.StoredProcedure;
-
-
-                        command.Parameters.AddWithValue("p_HCPREQID", HCPID);
-
-
-                        MySqlDataAdapter adapter = new MySqlDataAdapter(command);
-                        // Execute the stored procedure
-                        adapter.Fill(ds);
-
-                        // Retrieve the output parameter value
-
-                        return ds;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                // Handle exceptions
-                throw ex;
-            }
-        }
-
-        public object GetDoctorHospitals(string HCPID)
-        {
-            try
-            {
-
-                var userdoctor = _passDbContext.Hcpdetails.FromSqlRaw("call spGetDoctorsDetails_Bak('0','" + HCPID + "')").ToList();
-                List<Hospitaldetail> userdoctorHospitalsLST = doctorshospital(HCPID);
-                List<Hcpdetail> doctorterritory = userdoctor;
-                //HCPCreateMasterModel hCPCreateMasterModel = new HCPCreateMasterModel();
-                //hCPCreateMasterModel.listhospital = userdoctorHospitalsLST;  
-
-
-
-                var obj = new
-                {
-
-                    userdoctorHospitalsLST,
-                    doctorterritory
-                };
-                return obj;
-
-            }
-            catch (Exception ex)
-            {
-
-                DateTime timestampValue = DateTime.Now; // Replace with the desired DateTime value
-                GlobalClass.LogException(_passDbContext, ex, nameof(GetDoctorHospitals), "Doctors Hospitals Error message");
-                return View("ErrorView");
-
-                throw;
-            }
-        }
-
-        public List<Hospitaldetail> doctorshospital(string HCPID)
-        {
-            try
-            {
-                var userdoctorHospitals = _passDbContext.Hospitaldetails.FromSqlRaw("call spGetDoctorsHospitals('" + HCPID + "')").ToList();
-                List<Hospitaldetail> userdoctorHospitalsLST = userdoctorHospitals;
-
-                return userdoctorHospitalsLST;
-            }
-            catch (Exception ex)
-            {
-
-
-                throw;
-            }
-        }
-
-        public ActionResult Download(string fileName)
-        {
-            try
-            {
-                string uploads = Path.Combine(_webHostEnvironment.WebRootPath, "uploads");
-                string filePath = Path.Combine(uploads, fileName);
-
-                var fs = System.IO.File.OpenRead(filePath);
-                return File(fs, "application/zip", fileName);
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-        }
-
-        [HttpGet]
-        public object GetTemplateByFileName(string fileName)
-        {
-            try
-            {
-                if (!string.IsNullOrEmpty(fileName))
-                {
-                    var selectedFile = _passDbContext.Pathtables.Where(f => f.FileName == fileName).FirstOrDefault();
-
-                    var fileData = new
-                    {
-                        path = @"/uploads/",
-                        id = selectedFile.Pathid,
-                        name = selectedFile.FileName,
-                    };
-                    return fileData;
-                }
-                else
-                {
-                    return null;
-                }
-
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-        }
-
-        [HttpGet]
-        public object GetTemplateByPathId(int pathId)
-        {
-            try
-            {
-                if (pathId > 0)
-                {
-                    var selectedFile = _passDbContext.Pathtables.Where(f => f.Pathid == pathId).FirstOrDefault();
-                    string uploads = Path.Combine(_webHostEnvironment.WebRootPath, "uploads");
-                    string filePath = Path.Combine(uploads, selectedFile.FileName);
-
-                    var fs = System.IO.File.OpenRead(filePath);
-                    var file = File(fs, "application/zip", selectedFile.FileName);
-                    var fileData = new
-                    {
-                        path = @"/uploads/",
-                        name = file.FileDownloadName,
-                    };
-                    return fileData;
-                }
-                else
-                {
-                    return null;
-                }
-
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-        }
-        //============ (End) Hassam ============
 
 
 
@@ -3264,7 +2954,7 @@ set Status_ID = 4, Comments = '" + comments + "' Where HCPREQID = '" + trackingi
             }catch(Exception ex)
             {
                 DateTime timestampValue = DateTime.Now; // Replace with the desired DateTime value
-                GlobalClass.LogException(_passDbContext, ex, nameof(GetDoctorHospitals), "PO Number Error message");
+                GlobalClass.LogException(_passDbContext, ex, nameof(PONumberActivity), "PO Number Error message");
                 return View("ErrorView");
 
                 throw;

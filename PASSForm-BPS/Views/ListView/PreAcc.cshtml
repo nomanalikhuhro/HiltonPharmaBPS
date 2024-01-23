@@ -165,7 +165,7 @@
                                     var calculatedValues = (decimal)(Convert.ToDouble(column.Value ?? 0) * ViewBag.Contribution);
 
                                     totalCalculatedValues += calculatedValues;
-                                    <td style="text-align:right;" id="value-pre-column-@ViewBag.checkboxindex-@packcodeIndex-@valuecoloumIndex">
+                                    <td class="Comma" style="text-align:right;" id="value-pre-column-@ViewBag.checkboxindex-@packcodeIndex-@valuecoloumIndex">
                                         
                                     @*    @calculatedValues.ToString("N2")*@
                                         @(calculatedValues != 0 ? calculatedValues : column.Value)
@@ -200,7 +200,7 @@
 
 <div style="text-align:right; margin-top:1%;">
     <label>Chemist Total:</label>
-    <input  disabled type="text" id="total-@ViewBag.checkboxindex" value="@totalCalculatedValues.ToString("N2")" style="margin-left: 2%; text-align:right;" />
+    <input class="Comma" disabled type="text" id="total-@ViewBag.checkboxindex" value="@totalCalculatedValues.ToString("N2")" style="margin-left: 2%; text-align:right;" />
 </div>
 <div style="text-align:right; margin-top:2%; margin-bottom:10px;">
 

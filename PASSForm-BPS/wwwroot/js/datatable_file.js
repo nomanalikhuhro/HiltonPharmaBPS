@@ -84,7 +84,7 @@ function SubmittedForm() {
     var HCPREQID = document.getElementById('hcpid').value;
     var startDateInput = document.getElementById('startdatepost-0').value;
     var endDateInput = document.getElementById('enddatepost-0').value;
-    var Comments = document.getElementById('createcomments').value;
+    var Comment = document.getElementById('createcomments').value;
     
     var HeaderData = {
 
@@ -94,7 +94,7 @@ function SubmittedForm() {
         ToDate: endDateInput,
         HCPREQID: HCPREQID,
         trackingid: HCPREQID,
-        Comment: Comments,
+        Comments: Comment,
     };
 
 
@@ -1514,3 +1514,12 @@ $(document).ready(function () {
 $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip();
 });
+
+$(".Comma").each(function () {
+    var amount = parseFloat($(this).val());
+    if (!isNaN(amount)) {
+        var newAmount = amount.toLocaleString('en-US');
+        $(this).val(newAmount);
+    }
+});
+

@@ -205,109 +205,7 @@
             border-radius: 5px;
         }
 
-        /*======== (Start) Hassam ========*/
 
-        .hcp-modal-body {
-            position: relative;
-            padding: 1rem 1rem;
-            height: 550px;
-            overflow-y: scroll;
-        }
-
-
-        .hcp-modal-content {
-            position: relative;
-            background-color: #fefefe;
-            margin: auto;
-            padding: 0;
-            border: 1px solid #888;
-            width: 85%;
-            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
-            -webkit-animation-name: animatetop;
-            -webkit-animation-duration: 0.4s;
-            animation-name: animatetop;
-            animation-duration: 0.4s;
-            border-radius: 10px;
-        }
-
-
-        .hcp-modal {
-            position: fixed;
-            z-index: 1;
-            padding-top: 2%;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgb(0,0,0);
-            background-color: rgba(0,0,0,0.4);
-            display: none
-        }
-
-        .previous-plan-hcp-modal {
-            position: fixed;
-            z-index: 1;
-            padding-top: 6%;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgb(0,0,0);
-            background-color: rgba(0,0,0,0.4);
-            display: none
-        }
-
-        .previous-plan-modal-content {
-            position: relative;
-            background-color: #fefefe;
-            margin: auto;
-            padding: 0;
-            border: 1px solid #888;
-            width: 60%;
-            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
-            -webkit-animation-name: animatetop;
-            -webkit-animation-duration: 0.4s;
-            animation-name: animatetop;
-            animation-duration: 0.4s;
-            border-radius: 10px;
-        }
-
-        .previous-plan-modal-body {
-            position: relative;
-            padding: 1rem 1rem;
-            height: 350px;
-            overflow-y: scroll;
-        }
-
-        .show_previous_plan_btn {
-            background-color: #0074D9;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .section-header {
-            text-align: center;
-            background: rgb(71,154,186);
-            background: linear-gradient(180deg, rgba(71,154,186,1) 15%, rgba(11,86,115,1) 95%, rgba(35,148,191,1) 100%);
-            color: white;
-        }
-
-        .label-heading {
-            font-weight: bold;
-        }
-
-        .section {
-            margin: 0px 10px;
-            padding: 0px;
-            border: 1px solid;
-            border-radius: 5px;
-        }
-        /*======== (Start) Hassam ========*/
     </style>
 </head>
 <body>
@@ -316,7 +214,7 @@
             <div class="modal-content">
 
                 <div class="modal-body">
-                    <p>Action Performed</p>
+                    <p>Action Performed Succesfully!</p>
 
                 </div>
 
@@ -336,273 +234,6 @@
 
                 @foreach (var rec in Model.detailbps)
                 {
-
-                    @*============ (Start) Hassam ============*@
-                    <div id="hcpDetailsModal" class="hcp-modal">
-                        <div class="hcp-modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title">HCP Details</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" id="closeHCPModal" aria-label="Close"></button>
-                            </div>
-                            @foreach (DataRow item in hcpData.Rows)
-                            {
-                                <div class="hcp-modal-body">
-                                    @*========== (Start) HCP Detail Section ==========*@
-                                    <div id="tab-sec-1" class="row section">
-                                        <div class="section-header"><label>HCP Details Section</label></div>
-                                        <div class="p-3">
-                                            <div class="row my-2">
-                                                <div class="col-lg-4 form-group">
-                                                    <label class="label-heading">Team Type:</label>
-                                                    <input value="@item["TeamName"].ToString()" class="form-control" disabled />
-                                                </div>
-                                                <div class="col-lg-4 form-group">
-                                                    <label class="label-heading">ASM Name:</label>
-                                                    <input value="@item["asmName"].ToString()" class="form-control" disabled />
-                                                </div>
-                                                <div class="col-lg-4 form-group">
-                                                    <label class="label-heading">Territory Code:</label>
-                                                    <input value="@item["TMCode"].ToString()" class="form-control" disabled />
-                                                </div>
-                                            </div>
-
-                                            <div class="row my-2">
-                                                <div class="col-lg-4 form-group">
-                                                    <label class="label-heading">Territory Manager Name:</label>
-                                                    <input value="@item["TMName"].ToString()" class="form-control" disabled />
-                                                </div>
-                                                <div class="col-lg-4 form-group">
-                                                    <label class="label-heading">Base Area:</label>
-                                                    <input value="@item["BaseArea"].ToString()" class="form-control" disabled />
-                                                </div>
-                                                <div class="col-lg-4 form-group">
-                                                    <label class="label-heading">TM Employee Code:</label>
-                                                    <input value="@item["TMEmpNo"].ToString()" class="form-control" disabled />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    @*========== (End) HCP Detail Section ==========*@
-
-                                    @*========== (Start) Category Section ==========*@
-                                    <div id="tab-sec-1" class="row section mt-3">
-                                        <div class="section-header"><label>Category Section</label></div>
-                                        <div class="p-3">
-                                            <div class="row">
-                                                <div class="col-lg-3 form-group my-2">
-                                                    <label class="label-heading">Category:</label>
-                                                    <input value="@item["PASSCategoryType"].ToString()" class="form-control" disabled />
-                                                </div>
-                                                @if (!string.IsNullOrEmpty(@item["PASSubCategoryType"].ToString()))
-                                                {
-                                                    <div class="col-lg-3 form-group my-2">
-                                                        <label class="label-heading">Sub Category:</label>
-                                                        <input value="@item["PASSubCategoryType"].ToString()" class="form-control" disabled />
-                                                    </div>
-                                                }
-                                            </div>
-                                            <div>
-                                                <div class="col-lg-12 my-2">
-                                                    <table class="table table-bordered">
-                                                        <thead>
-                                                            <tr>
-                                                                <th class="text-center" scope="col">Name</th>
-                                                                <th class="text-center" scope="col">Action</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            @foreach (DataRow docItem in hcpDocuments.Rows)
-                                                            {
-                                                                <tr>
-                                                                    <td hidden>@docItem["fileid"].ToString()</td>
-                                                                    <td>@docItem["filename"].ToString()</td>
-                                                                    <td class="text-center">
-                                                                        @Html.ActionLink("", "Download", new { fileName = @docItem["filename"].ToString() },
-                                                            new { @class = "btn btn-sm  btn-primary fa fa-download", style = "margin-left:10px;" })
-                                                                    </td>
-                                                                </tr>
-                                                            }
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                    @*========== (End) Category Section ==========*@
-
-                                    @*========== (Start) HCP Particular Section ==========*@
-                                    <div id="tab-sec-1" class="row section mt-3">
-                                        <div class="section-header"><label>HCP Details Section</label></div>
-                                        <div class="p-3">
-                                            <div class="row my-2">
-                                                <div class="col-lg-12">
-                                                    <h5>HCP Particulars</h5>
-                                                </div>
-                                            </div>
-                                            <div class="row my-2">
-                                                <div class="col-lg-4 form-group">
-                                                    <label class="label-heading">HCP Name:</label>
-                                                    <input value="@item["HCPName"].ToString()" class="form-control" disabled />
-                                                </div>
-                                                <div class="col-lg-4 form-group">
-                                                    <label class="label-heading">Speciality:</label>
-                                                    <input value="@item["Speciality"].ToString()" class="form-control" disabled />
-                                                </div>
-                                                <div class="col-lg-4 form-group">
-                                                    <label class="label-heading">PMC/CNIC #:</label>
-                                                    <input value="@item["PMC_CNIC"].ToString()" class="form-control" disabled />
-                                                </div>
-                                            </div>
-
-                                            <div class="row my-2">
-                                                <div class="col-lg-4 form-group">
-                                                    <label class="label-heading">City:</label>
-                                                    <input value="@doctorsData.doctorterritory[0].City" class="form-control" disabled />
-                                                </div>
-                                                <div class="col-lg-4 form-group">
-                                                    <label class="label-heading">Hospital:</label>
-                                                    <input value="@doctorsData.userdoctorHospitalsLST[0].HospitalName" class="form-control" disabled />
-                                                </div>
-                                            </div>
-
-                                            <div class="row my-2">
-                                                <div class="col-lg-12 form-group">
-                                                    <label class="label-heading">Description of Plan: </label>
-                                                    <textarea class="form-control" disabled rows="5">@item["DescriptionOfPlan"]</textarea>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    @*========== (End) HCP Particular Section ==========*@
-
-                                    @*========== (Start) Previous Plan Section ==========*@
-                                    <div id="tab-sec-1" class="row section mt-3">
-                                        <div class="section-header"><label>Previous Plan</label></div>
-                                        <div class="p-3">
-                                            <div class="row my-2">
-                                                <div class="col-lg-12">
-                                                    <h5>Previous Plan</h5>
-                                                </div>
-                                            </div>
-                                            <div class="row my-2">
-                                                <div class="col-lg-4 form-group">
-                                                    <button id="openPreviousPlanModal" class="show_previous_plan_btn">Show Details</button>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    @*========== (End) Previous Plan Section ==========*@
-
-                                    @*========== (Start) Payment Section ==========*@
-                                    <div id="tab-sec-1" class="row section mt-3">
-                                        <div class="section-header"><label>Payment Section</label></div>
-                                        <div class="p-3">
-                                            <div class="row my-2">
-                                                <div class="col-lg-12">
-                                                    <h5>Previous Plan</h5>
-                                                </div>
-                                            </div>
-                                            <div class="row my-2">
-                                                <div class="col-lg-4 form-group">
-                                                    <label class="label-heading">Estimated Support Rs:</label>
-                                                    <input value="@item["EstimatedSupport"].ToString()" class="form-control" disabled />
-                                                </div>
-                                                <div class="col-lg-4 form-group">
-                                                    <label class="label-heading">Vendor Details:</label>
-                                                    <input value="@item["vendordetails"].ToString()" class="form-control" disabled />
-                                                </div>
-                                                <div class="col-lg-4 form-group">
-                                                    <label class="label-heading">Beneficiary Name:</label>
-                                                    <input value="@item["BeneficiaryName"].ToString()" class="form-control" disabled />
-                                                </div>
-                                            </div>
-                                            <div class="row my-2">
-                                                <div class="col-lg-4 form-group">
-                                                    <label class="label-heading">NTN Number:</label>
-                                                    <input value="@item["ntnNumber"].ToString()" class="form-control" disabled />
-                                                </div>
-                                                <div class="col-lg-4 form-group">
-                                                    <label class="label-heading">Payment Mode:</label>
-                                                    <input value="@item["PaymentMode"].ToString()" class="form-control" disabled />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    @*========== (End) Payment Section ==========*@
-
-                                </div>
-                            }
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" id="closeHCPDetailsModal" data-bs-dismiss="modal">Close</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="previousPlanModal" class="previous-plan-hcp-modal">
-                        <div class="previous-plan-modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title">Previous Plan</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" id="closePreviousPlanModal" aria-label="Close"></button>
-                            </div>
-                            @foreach (DataRow item in hcpData.Rows)
-                            {
-                                <div class="previous-plan-modal-body">
-                                    <table border="0" class="table table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th class="text-center">
-                                                    Team
-                                                </th>
-                                                <th class="text-center">
-                                                    Category
-                                                </th>
-
-                                                <th class="text-center">
-                                                    Amount
-                                                </th>
-                                                <th class="text-center">
-                                                    Year
-                                                </th>
-                                            </tr>
-
-                                        </thead>
-                                        <tbody id="details">
-
-                                            @if (previousPlans != null)
-                                            {
-                                                @foreach (var previousPlanItem in previousPlans)
-                                                {
-                                                    <tr>
-                                                        <td>
-                                                            @previousPlanItem.teamName
-                                                        </td>
-                                                        <td>
-                                                            @previousPlanItem.category
-                                                        </td>
-                                                        <td>
-                                                            @previousPlanItem.amount
-                                                        </td>
-                                                        <td>
-                                                            @previousPlanItem.createdOn
-                                                        </td>
-
-                                                    </tr>
-                                                }
-                                            }
-
-                                        </tbody>
-                                    </table>
-                                </div>
-                            }
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" id="closePreviousModal" data-bs-dismiss="modal">Close</button>
-                            </div>
-                        </div>
-                    </div>
-                    @*============ (End) Hassam ============*@
 
                     <div style="padding-top: 15px; padding-left: 20px;">
                         <div class="conatiner">
@@ -975,7 +606,7 @@
 
 
 
-                                                            <td style="text-align:right;">
+                                                            <td class="Comma" style="text-align:right;">
 
                                                                 @valdata1.Value
                                                             </td>
@@ -1001,7 +632,7 @@
                                 {
                                     var predat = group.First(); // Take the first item in each group
 
-                                    <input disabled type="text" value="@(predat.PreTotal != null ? string.Format("{0:yyyy-MM-dd}", predat.PreTotal) : string.Empty)" style="margin-left: 2%; text-align:right;" />
+                                    <input class="Comma" disabled type="text" value="@(predat.PreTotal != null ? string.Format("{0:yyyy-MM-dd}", predat.PreTotal) : string.Empty)" style="margin-left: 2%; text-align:right;" />
                                     @*<input disabled type="text" value="@(int.Parse(predat.PreTotal).ToString("#,##0") != null ? string.Format("{0:yyyy-MM-dd}", int.Parse(predat.PreTotal).ToString("#,##0")) : string.Empty)" style="margin-left: 2%; text-align:right;" />*@
 
                                     @*<input disabled type="text" id="editChemistCode" hidden value="@(predat.PreTotal != null ? string.Format("{0:yyyy-MM-dd}", predat.PreTotal) : string.Empty)" style="margin-left: 2%; text-align:right;" />
@@ -1238,9 +869,9 @@
                                                         else
                                                         {
 
-                                               
 
-                                                            <td style="text-align:right;">
+
+                                                            <td class="Comma" style="text-align:right;">
 
                                                                 @valdata1.Value
                                                             </td>
@@ -1267,7 +898,7 @@
                                         {
 @*                                            <input disabled type="text" value="@(postdat.PostTotal != null ? string.Format("{0:yyyy-MM-dd}", postdat.PostTotal) : string.Empty)" style="margin-left: 2%; text-align:right;" />*@
 
-                                            <input disabled type="text" value="@(postdat.PostTotal != null ? string.Format("{0:yyyy-MM-dd}", postdat.PostTotal) : string.Empty)" style="margin-left: 2%; text-align:right;" />
+                                            <input class="Comma" disabled type="text" value="@(postdat.PostTotal != null ? string.Format("{0:yyyy-MM-dd}", postdat.PostTotal) : string.Empty)" style="margin-left: 2%; text-align:right;" />
                                         }
                                     }
 
@@ -1311,7 +942,7 @@
                             {
 @*                                <input disabled type="text"  value="@(grandtaotal.grandtotal != null ? string.Format("{0:yyyy-MM-dd}", grandtaotal.grandtotal ) : string.Empty)" style="margin-left: 2%; text-align:right;"/>*@
 
-                                <input disabled type="text" value="@(grandtaotal.grandtotal != null ? string.Format("{0:yyyy-MM-dd}", grandtaotal.grandtotal) : string.Empty)" style="margin-left: 2%; text-align:right;" />
+                                <input class="Comma" disabled type="text" value="@(grandtaotal.grandtotal != null ? string.Format("{0:yyyy-MM-dd}", grandtaotal.grandtotal) : string.Empty)" style="margin-left: 2%; text-align:right;" />
                             }
 
                         }
@@ -1588,6 +1219,9 @@
                 }
             });
         }
+
+
+
 
     </script>
 
