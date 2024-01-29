@@ -354,19 +354,28 @@
                             <div class="conatiner">
                                 <div class="row">
                                     <div class="col-4">
-                                        <form asp-controller="ListView" asp-action="Create" style="padding-left:12px;">
-                                            <label style="font-weight:bold;">Tracking ID:</label>
-                                            <div>
-                                                <input readonly style="color:transparent" asp-for="@rec.TrackingId" id="hcpid" value="@rec.TrackingId" type="text" name="inputValue" />
-                                                <span asp-validation-for="@rec.TrackingId" class="text-danger"></span>
-                                                <button class="trackbtn" type="submit">Next</button>
+                                        <div style="padding-left:3%;">
+                                            <label style="font-weight:bold;">Teams:</label>
+
+                                            <div style="padding-top: 5px; display:flex;">
+
+                                                @foreach (var T in Model.teams)
+                                                {
+                                                    <div style="border: 2px solid #d71921 ; width: 35%; border-radius: 15px; text-align: center; color: #d71921 ; font-weight:700">
+
+                                                        <label id="teamNames" value="@T.TeamName">@T.TeamName</label>
+                                                    </div>
+
+                                                }
+
                                             </div>
-                                        </form>
+                                        </div>
+
                                     </div>
                                     <div class="col-4">
 
 
-                                        <label style="font-weight:bold;">Area:</label>
+                                        <label style="font-weight:bold;">Base Area:</label>
                                         <div>
                                             <input readonly value="@rec.BaseArea" type="text" />
                                         </div>
@@ -380,7 +389,7 @@
                                                 @foreach (var item1 in Model.disterMappings)
                                                 {
                                               @*      <option id="distributer" value="@item1">@item1.DistributerCode - @item1.DistrubiterName</option>*@
-                                                <input readonly id="distributer" value="@item1.DistributerCode - @item1.DistrubiterName" style="width:75%" type="text" />
+                                                <input readonly id="distributer" value="@item1.DistributerCode - @item1.DistrubiterName" style="width:85%" type="text" />
                                                 }
                                         @*    </select>*@
                                         </div>
@@ -411,7 +420,7 @@
                                         <div class="col-4">
                                             <label style="font-weight:bold;">MacroBrick:</label>
                                             <div>
-                                                <select   style="width: 75%; height: 30px;"  id="selectedbrick" onchange="getchembybrickcode()">
+                                                <select   style="width: 85%; height: 30px;"  id="selectedbrick" onchange="getchembybrickcode()">
                                                     <option value="Select">Select</option>
                                                     @foreach (var BrckCode in Model.terbrickMappings)
                                                     {
@@ -428,7 +437,7 @@
                                 <div class="container">
                                     <div class="row">
                                         <div class="col-6">
-                                            <div style="padding:10px; ">
+              @*                              <div style="padding:10px; ">
                                                 <label style="font-weight:bold;">Teams:</label>
 
                                                 <div style="padding-top: 5px; display:flex;">
@@ -443,11 +452,21 @@
                                                     }
 
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
+                                            </div>*@
                                             <label style="font-weight:bold;">Comments:</label><br />
                                             <textarea id="createcomments" style="width:85%; height:100px; margin-top:1%;"></textarea>
+
+
+                                        </div>
+                                        <div class="col-6">
+                                            <form asp-controller="ListView" asp-action="Create" style="padding-left:12px; visibility:hidden;">
+                                                <label style="font-weight:bold;">Tracking ID:</label>
+                                                <div>
+                                                    <input readonly style="color:transparent" asp-for="@rec.TrackingId" id="hcpid" value="@rec.TrackingId" type="text" name="inputValue" />
+                                                    <span asp-validation-for="@rec.TrackingId" class="text-danger"></span>
+                                                    <button class="trackbtn" type="submit">Next</button>
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>          
@@ -482,7 +501,7 @@
         <div style="text-align:right; margin-top:2%";>
             <div style="text-align:right;">
                 <label>Grand Total:</label>
-                <input class="Comma" disabled type="text" id="grandtotal" style="margin-left: 2%; text-align:right" value="@ViewBag.GrandTotal" />
+                <input disabled type="text" id="grandtotal" style="margin-left: 2%; text-align:right" value="@ViewBag.GrandTotal" />
             </div>
             <div style="text-align:right; padding-top:2%">
                 <label>BPS Percentage %:</label>

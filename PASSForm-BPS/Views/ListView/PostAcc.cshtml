@@ -14,7 +14,7 @@
     <table id="customers">
         <thead>
 
-            <tr style="font-size:11px;">
+            <tr style="font-size:13px;">
                 <th>Pack Code</th>
                 <th>Product Name</th>
                 <th>Description</th>
@@ -111,7 +111,7 @@
     <table id="customers">
         <thead>
 
-            <tr style="font-size:11px;">
+            <tr style="font-size:13px;">
                 <th>PackCode</th>
                 <th>ProductName</th>
                 <th>Description</th>
@@ -176,7 +176,8 @@
 </div>
 <div style="text-align:right; margin-top:1%;">
     <label>Chemist Total:</label>
-    <input class="Comma" disabled type="text" id="total-post-@ViewBag.postcheckboxindex" style="margin-left: 2%; text-align:right;" />
+@*    <input disabled type="text" id="total-post-@ViewBag.postcheckboxindex" style="margin-left: 2%; text-align:right;"  onchange="calltest()" />*@
+    <input disabled type="text" id="total-post-@ViewBag.postcheckboxindex" style="margin-left: 2%; text-align:right;" />
 </div>
 <div style="text-align:right; margin-top:2%; margin-bottom:10px;">
 
@@ -184,3 +185,4 @@
 
     <input  type="text" id="discountpercentage-post-@ViewBag.postcheckboxindex" style="margin-left: 2%; text-align:right;" value="@ViewBag.DiscountPercentage" />
 </div>
+

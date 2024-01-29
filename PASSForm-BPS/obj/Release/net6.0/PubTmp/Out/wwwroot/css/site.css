@@ -94,6 +94,9 @@ body {
 .userinputfield {
     width: 20%;
 }
-
+.icon-navigation {
+    border: none;
+    background: none;
+}
 
 /*accordioncssend*/

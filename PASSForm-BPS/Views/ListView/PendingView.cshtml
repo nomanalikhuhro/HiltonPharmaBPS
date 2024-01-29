@@ -88,19 +88,57 @@
                             <td>
                                 @item.CreatedOn.Value.ToString("dd-MMM-yyyy")
                             </td>
-                            <td>
+                            
+                            
                                 @if (roleId == "2" || roleId == "3")
                                 {
-                                    <a asp-action="Edit" asp-route-id="@item.TrackingId" asp-route-anotherId="@item.BpsId" asp-controller="ListView"><i class="fa fa-edit" data-toggle="tooltip" data-placement="top" title="Edit" style="color:orange"></i></a>
-                                    <a asp-action="Details" asp-route-id="@item.TrackingId" asp-route-anotherId="@item.BpsId" asp-route-thirdId="@item.WFWorklistId" asp-controller="ListView"><i class="fa fa-eye" data-toggle="tooltip" data-placement="top" title="View"></i></a>
+                                <td class="text-center">
+                                    <table>
+                                        <tr>
+                                            <td style="text-align:center;">
+                                                <form asp-action="Edit" asp-controller="ListView">
+                                                    <input type="hidden" name="id" value="@item.TrackingId">
+                                                    <input type="hidden" name="anotherId" value="@item.BpsId">
+                                                    <input type="hidden" name="thirdId" value="2">
+                                                    <button type="submit" class="icon-navigation" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i></button>
+                                                </form>
+
+                                            </td>
+
+                                            <td>
+                                                <form asp-action="Details" asp-controller="ListView">
+                                                    <input type="hidden" name="id" value="@item.TrackingId">
+                                                    <input type="hidden" name="anotherId" value="@item.BpsId">
+                                                    <input type="hidden" name="thirdId" value="@item.WFWorklistId">
+                                                    <button type="submit" class="icon-navigation" data-toggle="tooltip" data-placement="top" title="View"><i class="fa fa-eye"></i></button>
+                                                </form>
+
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                </td>
+
+                                    
+@*                                    <a asp-action="Edit" asp-route-id="@item.TrackingId" asp-route-anotherId="@item.BpsId" asp-route-thirdId="2" asp-controller="ListView"><i class="fa fa-edit" data-toggle="tooltip" data-placement="top" title="Edit" style="color:orange"></i></a>
+
+                                    
+                                    <a asp-action="Details" asp-route-id="@item.TrackingId" asp-route-anotherId="@item.BpsId" asp-route-thirdId="@item.WFWorklistId" asp-controller="ListView"><i class="fa fa-eye" data-toggle="tooltip" data-placement="top" title="View"></i></a>*@
                                 }
                                 else
                                 {
-
-                                    <a asp-action="Details" asp-route-id="@item.TrackingId" asp-route-anotherId="@item.BpsId" asp-route-thirdId="@item.WFWorklistId" asp-controller="ListView"><i class="fa fa-eye" data-toggle="tooltip" data-placement="top" title="View"></i></a>
+                                <td style="text-align:center;">
+                                    <form asp-action="Details" asp-controller="ListView">
+                                        <input type="hidden" name="id" value="@item.TrackingId">
+                                        <input type="hidden" name="anotherId" value="@item.BpsId">
+                                        <input type="hidden" name="thirdId" value="@item.WFWorklistId">
+                                        <button type="submit" class="icon-navigation" data-toggle="tooltip" data-placement="top" title="View"><i class="fa fa-eye"></i></button>
+                                    </form>
+                                </td>
+@*                                    <a asp-action="Details" asp-route-id="@item.TrackingId" asp-route-anotherId="@item.BpsId" asp-route-thirdId="@item.WFWorklistId" asp-controller="ListView"><i class="fa fa-eye" data-toggle="tooltip" data-placement="top" title="View"></i></a>*@
                                 }
-
-                            </td>
+                            
+                            
                         </tr>
                     }
                 </tbody>

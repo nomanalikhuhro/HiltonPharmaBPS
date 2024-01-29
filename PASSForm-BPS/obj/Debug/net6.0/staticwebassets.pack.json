@@ -1085,6 +1085,14 @@
       "PackagePath": "staticwebassets\\lib\\jquery\\src\\wrap.js"
     },
     {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\sweetalert2\\sweetalert2.all.min.js",
+      "PackagePath": "staticwebassets\\lib\\sweetalert2\\sweetalert2.all.min.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\sweetalert2\\sweetalert2.min.css",
+      "PackagePath": "staticwebassets\\lib\\sweetalert2\\sweetalert2.min.css"
+    },
+    {
       "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\uploads\\Education annexure.docx",
       "PackagePath": "staticwebassets\\uploads\\Education annexure.docx"
     },

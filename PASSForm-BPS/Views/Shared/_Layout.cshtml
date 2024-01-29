@@ -24,6 +24,7 @@
     <link href="~/font-awesome-4.7.0/font-awesome-4.7.0/css/font-awesome.css" rel="stylesheet" />
     <link href="~/font-awesome-4.7.0/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" />
     @*<link rel="stylesheet" href="~/PASSForm_BPS.styles.css" asp-append-version="true" />*@
+    <link href="~/lib/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
     <style>
         body {
             margin: 0;
@@ -291,8 +292,9 @@
                 <div>
 
                     <a asp-area="" asp-controller="ListView" asp-action="Create">Created Request</a>
+                 @*   <a id="BpsReqIDBtn">Created Request</a>*@
                     <a asp-area="" asp-controller="ListView" asp-action="ApprovedView" asp-route-id="1">Submitted Request</a>
-                    <a asp-area="" asp-controller="ListView" asp-action="TrackingIDStatus" asp-route-id="1">TrackingId Status</a>
+                    <a asp-area="" asp-controller="ListView" asp-action="TrackingIDStatus" asp-route-id="1">RequestId Status</a>
                 </div>
             }
             else
@@ -358,6 +360,7 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/datatable_file.js" asp-append-version="true"></script>
+    <script src="~/lib/sweetalert2/sweetalert2.all.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
     <script>
 
@@ -370,6 +373,8 @@
                 }
             }
         });
+
+
     </script>
 </body>
 </html>

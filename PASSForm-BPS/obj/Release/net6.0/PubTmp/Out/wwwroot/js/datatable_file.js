@@ -73,17 +73,20 @@ function getchembybrickcode() {
 }
 
 function SubmittedForm() {
-
-    var Dis = document.getElementById("distributer").innerHTML;
+    debugger;
+    var Dis = document.getElementById("distributer").value;
     var discode = Dis.split('-');
     var DistributorCode = discode.shift();
-    var Brick = document.getElementById("macrobrickcode").innerHTML;
-    var brickcode = Brick.split('-');
+    var Brick = document.getElementById("selectedbrick");
+    var selectedBrickValue = Brick.options[Brick.selectedIndex].value;
+    var brickcode = selectedBrickValue.split('-');
     var MacroBrickCode = brickcode.shift();
 
     var HCPREQID = document.getElementById('hcpid').value;
     var startDateInput = document.getElementById('startdatepost-0').value;
     var endDateInput = document.getElementById('enddatepost-0').value;
+    var Comment = document.getElementById('createcomments').value;
+    
     var HeaderData = {
 
         DistributerCode: DistributorCode,
@@ -92,6 +95,7 @@ function SubmittedForm() {
         ToDate: endDateInput,
         HCPREQID: HCPREQID,
         trackingid: HCPREQID,
+        Comments: Comment,
     };
 
 
@@ -100,6 +104,7 @@ function SubmittedForm() {
     var chemistCount = $("#tableAcc").find("button").length;
     for (var i = 0; i < chemistCount; i++) {
 
+        var preContribution = document.getElementById("Contribution-" + i).value;
         var div = document.getElementById("sku-" + i);
 
         var table = div.querySelector("table");
@@ -164,9 +169,11 @@ function SubmittedForm() {
         var productPostCount = $("#tbl-post-" + i).find("tr").length;
         var pretotal = document.getElementById("total-" + i).value;
         var posttotal = document.getElementById("total-post-" + i).value;
-        var roi = document.getElementById("bpspercentage-post-" + i).value;
-        var discountpercentage = document.getElementById("discountpercentage-post-" + i).value;
-        var totalroipercentage = document.getElementById("totalroipercentage-post-" + i).value;
+        var discountpercentage = document.getElementById("discountpercentage-pre-" + i).value;
+        var discountpostcentage = document.getElementById("discountpercentage-post-" + i).value;
+        var totalroipercentage = document.getElementById("totalroipercentage").value;
+        var bpspercentage = document.getElementById("bpspercentage").value;
+        var grandtotal = document.getElementById("grandtotal").value;
 
         var prdArr = [];
 
@@ -177,7 +184,7 @@ function SubmittedForm() {
             var productCode = document.getElementById("sku-pre-pakcode-" + i + "-" + j).innerHTML;
             var postproductDescription = document.getElementById("sku-pre-description-" + i + "-" + j).innerHTML;
             /*            var preproductActualDiscount = document.getElementById("sku-pre-column-" + i + "-" + j).innerText;*/
-            var preproductContribution = document.getElementById("sku-pre-actdis-" + i + "-" + j).value;
+/*            var preproductContribution = document.getElementById("sku-pre-actdis-" + i + "-" + j).value;*/
 
 
             var salArr = [];
@@ -192,7 +199,7 @@ function SubmittedForm() {
 
                 salArr.push({ skuSales: skuSales, valueSales: valueSales, Year: Year, Month: Month });
             }
-            prdArr.push({ ProductName: productName, productCode: productCode, postproductDescription: postproductDescription, Contribution: preproductContribution, SalesType: "Pre", Sale: salArr, pretotal: pretotal })
+            prdArr.push({ ProductName: productName, productCode: productCode, postproductDescription: postproductDescription, Contribution: preContribution, SalesType: "Pre", Sale: salArr, pretotal: pretotal, discountpercentage: discountpercentage })
         }
         //Products For Post Sales Against Each Chemist
         for (var j = 0; j < productPostCount; j++) {
@@ -223,10 +230,10 @@ function SubmittedForm() {
 
                 salArr.push({ skuSales: skuSales, valueSales: valueSales, Month: PostMonth, Year: PostYear });
             }
-            prdArr.push({ ProductName: productName, productCode: productCode, postproductDescription: postproductDescription, Contribution: preproductContribution, SalesType: "Post", Sale: salArr, posttotal: posttotal, roi: roi, DiscountPercentage: discountpercentage, TotalRoiPercentage: totalroipercentage })
+            prdArr.push({ ProductName: productName, productCode: productCode, postproductDescription: postproductDescription, Contribution: preContribution, SalesType: "Post", Sale: salArr, posttotal: posttotal, discountpostcentage: discountpostcentage })
         }
-        debugger;
-        Salesarr.push({ ChemistCode: ChemistCode, ProductArr: prdArr, postfromDate: postfromDate, posttoDate: posttoDate, prefromDate: prefromDate, pretoDate: pretoDate });
+        ;
+        Salesarr.push({ ChemistCode: ChemistCode, ProductArr: prdArr, postfromDate: postfromDate, posttoDate: posttoDate, prefromDate: prefromDate, pretoDate: pretoDate, grandtotal: grandtotal, bpspercentage: bpspercentage, totalroipercentage: totalroipercentage  });
 
         var salesArrString = JSON.stringify(Salesarr);
 
@@ -243,15 +250,23 @@ function SubmittedForm() {
 
             if (data = true) {
 
-                var modelvisisble = document.getElementById('myModal').style.visibility = 'visible';
+                /*var modelvisisble = document.getElementById('myModal').style.visibility = 'visible';*/
+                Swal.fire({
+                    icon: "success",
+                    title: 'Record Created Successfully!',
+                    showConfirmButton: false,
+                    timer: 3600,
+                    width: 680,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false
+                });
 
             } else {
-                var modelvisisble = document.getElementById('myModal').style.visibility = 'hidden';
 
             }
             setTimeout(function () {
                 window.location.href = "/ListView/ApprovedView/1"; // you can pass true to reload function to ignore the client cache and reload from the server
-            }, 5000);
+            }, 3500);
 
         },
         error: function (xhr, status, error) {
@@ -264,8 +279,8 @@ function SubmittedForm() {
 }
 
 function UpdateSubmittedForm() {
-
-    var trackingid = document.getElementById("tracid").value;
+    ;
+    var trackingid = document.getElementById("hcpid").value;
 
     var Updatearr = [];
     var UpdatechemistCount = $("#UpdateTableAcc").find("button").length;
@@ -299,9 +314,15 @@ function UpdateSubmittedForm() {
         var ChemistCode = chemcodeparts[0].trim();
         var productPostCount = $("#tbl-post-" + i).find("tr").length;
         var posttotal = document.getElementById("total-post-" + i).value;
-        var roi = document.getElementById("edit-roi-post-" + i).value;
-        var disc = document.getElementById("edit-disc-post-" + i).value;
-        var totalroiPercentage = document.getElementById("edit-totalroiPercentage-post-" + i).value;
+/*        var roi = document.getElementById("edit-roi-post-" + i).value;*/
+        //var disc = document.getElementById("edit-disc-post-" + i).value;
+        //var totalroiPercentage = document.getElementById("edit-totalroiPercentage-post-" + i).value;
+
+
+        var discountpostcentage = document.getElementById("discountpercentage-post-" + i).value;
+        var totalroipercentage = document.getElementById("edittotalroipercentage").value;
+        var bpspercentage = document.getElementById("editbpspercentage").value;
+        var grandtotal = document.getElementById("editgrandtotal").value;
 
         var prdArr = [];
 
@@ -329,9 +350,9 @@ function UpdateSubmittedForm() {
                 var valueSales = document.getElementById("value-edit-post-row-" + i + "-" + j + "-" + k).value;
                 salArr.push({ skuSales: skuSales, valueSales: valueSales, Month: PostMonth, Year: PostYear });
             }
-            prdArr.push({ ProductName: productName, productCode: productCode, postproductDescription: postproductDescription, SalesType: "Post", Sale: salArr, posttotal: posttotal, roi: roi, DiscountPercentage: disc, TotalRoiPercentage: totalroiPercentage })
+            prdArr.push({ ProductName: productName, productCode: productCode, postproductDescription: postproductDescription, SalesType: "Post", Sale: salArr, posttotal: posttotal, discountpostcentage: discountpostcentage })
         }
-        Updatearr.push({ ChemistCode: ChemistCode, ProductArr: prdArr, postfromDate: postfromDate, posttoDate: posttoDate, });
+        Updatearr.push({ ChemistCode: ChemistCode, ProductArr: prdArr, postfromDate: postfromDate, posttoDate: posttoDate, grandtotal: grandtotal, bpspercentage: bpspercentage, totalroipercentage: totalroipercentage });
 
     }
 
@@ -342,17 +363,25 @@ function UpdateSubmittedForm() {
 
         data: { Updatedatalist: Updatearr, trackingid: trackingid }, // Convert arr to JSON and send it as "datalist"
         success: function (data) {
-            debugger;
+            
             if (data = true) {
-                var modelvisisble = document.getElementById('myModal').style.visibility = 'visible';
-
+               /* var modelvisisble = document.getElementById('myModal').style.visibility = 'visible';*/
+                Swal.fire({
+                    icon: "success",
+                    title: 'Record Updated Successfully!',
+                    showConfirmButton: false,
+                    timer: 3600,
+                    width: 680,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false
+                });
             } else {
-                var modelvisisble = document.getElementById('myModal').style.visibility = 'hidden';
+       /*         var modelvisisble = document.getElementById('myModal').style.visibility = 'hidden';*/
 
             }
             setTimeout(function () {
                 window.location.href = "/ListView/ApprovedView/1"; // you can pass true to reload function to ignore the client cache and reload from the server
-            }, 5000);
+            }, 3500);
 
         },
         error: function (xhr, status, error) {
@@ -508,14 +537,18 @@ function teamsChange() {
                     </div>
                     <div class="col-3">
                         <label>From:</label>
-                        <input type="date" id="startdatepre-${checkboxindex}" value="" style="margin-left: 2%;" />
+                        <input type="month" id="startdatepre-${checkboxindex}" value="" style="margin-left: 2%;" />
                     </div>
                     <div class="col-3">
                         <label>To:</label>
-                        <input type="date" id="enddatepre-${checkboxindex}" value="" style="margin-left: 2%;" />
+                        <input type="month" id="enddatepre-${checkboxindex}" value="" style="margin-left: 2%;" />
                     </div>
                     <div class="col-3">
-                        <input style="margin-top:2px;" id="search-${checkboxindex}" onclick="PreActivitySales(${checkboxindex})" type="button" class="searchbutton" value="Search"  />               
+                     <label>Contribution % :</label>
+                      <input id="Contribution-${checkboxindex}"  type="number"  Style=" text-align:right;text-align: right; width: 30%; margin-left: 5%;"></br>
+                      <div>
+                         <input style="margin-top:2px;" id="search-${checkboxindex}" onclick="PreActivitySales(${checkboxindex})" type="button" class="searchbutton" value="Search"  />  </div>
+    
                     </div>
                 </div>
             </div>
@@ -604,8 +637,8 @@ function togglePanel(button) {
 
 
 function PreActivitySales(checkboxindex) {
-
-
+    ;
+    var precontribution = document.getElementById("Contribution-" + checkboxindex).value;
     var startdateenable = document.getElementById("startdatepost-" + checkboxindex);
     var enddateenable = document.getElementById("enddatepost-" + checkboxindex);
     if (startdateenable) {
@@ -647,7 +680,7 @@ function PreActivitySales(checkboxindex) {
     $.ajax({
         url: "/ListView/PreAcc", // Replace with your controller and action names
         type: 'POST', // Use GET or POST based on your server's requirements
-        data: { inputParameter: preselectedMonthsAndYear, prefromDate: formattedFromDate, pretoDate: formattedtoDate, BrickValue: BrickValue, TeamName: TeamName, ChemistCode: ChemistCode, checkboxindex: checkboxindex }, // Send data to the controller
+        data: { inputParameter: preselectedMonthsAndYear, prefromDate: formattedFromDate, pretoDate: formattedtoDate, BrickValue: BrickValue, TeamName: TeamName, ChemistCode: ChemistCode, checkboxindex: checkboxindex, precontribution: precontribution }, // Send data to the controller
         success: function (response) {
             // Handle the response from the controller here
 
@@ -770,28 +803,53 @@ function PosttoggleSwitchAction(element, checkboxindex) {
     }
 }
 
+/*1000 seperated function*/
+function formatNumberWithCommas(number) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
 
 function CalculateBPSPercentage(bpspercentagebtnindex) {
 
 
-    var Total = parseFloat(document.getElementById(`total-post-` + bpspercentagebtnindex).value) || 0;
-    var TrackingId = document.getElementById("hcpid").value;
+    var chemistCount = $("#tableAcc").find("button").length;
+    var totalSum = 0;
+    var discountpercentageSum = 0;
+    for (var i = 0; i < chemistCount; i++) {
 
+        var TotalPre = parseFloat(document.getElementById(`total-` + i).value.replace(/,/g, '')) || 0;
+        var TotalPost = parseFloat(document.getElementById(`total-post-` + i).value.replace(/,/g, '')) || 0;
+        var DiscountPercentagePost = parseFloat(document.getElementById(`discountpercentage-post-` + i).value.replace(/,/g, '')) || 0;
+        var DiscountPercentagePre = parseFloat(document.getElementById(`discountpercentage-pre-` + i).value.replace(/,/g, '')) || 0;
+        var GrandTotal = TotalPre + TotalPost;
+        var discountpercentageSum = DiscountPercentagePost + DiscountPercentagePre;
+    /*    totalSum += Total;*/
+     /*   discountpercentageSum += DiscountPercentage*/
+    }
+
+    var roundedTotalSum = Math.round(GrandTotal);
+    var formattedTotalSum = formatNumberWithCommas(roundedTotalSum);
+    var trackingId = document.getElementById("hcpid").value;
+    var TotalValues = document.getElementById("grandtotal");
+    TotalValues.value = formattedTotalSum;
+    
+   
     $.ajax({
         url: "/ListView/CalBPS", // Replace with your controller and action names
         type: 'POST', // Use GET or POST based on your server's requirements
-        data: { TrackingId: TrackingId, Total: Total }, // Send data to the controller
+        data: { TrackingId: trackingId, Total: roundedTotalSum }, // Send data to the controller
         success: function (data) {
 
-            var a = document.getElementById("bpspercentage-post-" + bpspercentagebtnindex);
+            var a = document.getElementById("bpspercentage");
             var bpspercentage = data.bpspercentage;
-            a.value = bpspercentage.toFixed(2); //JSON.stringify(bpspercentage);;
-            var b = document.getElementById("discountpercentage-post-" + bpspercentagebtnindex);
-            var c = document.getElementById("totalroipercentage-post-" + bpspercentagebtnindex);
-            if (b.value == '') {
-                b.value = 0;
-            }
-            c.value = parseFloat(parseFloat(a.value) + parseFloat(b.value)).toFixed(2);
+            a.value = bpspercentage.toFixed(2); 
+
+
+
+            var c = document.getElementById("totalroipercentage");
+            var aValue = parseFloat(a.value) || 0; 
+            var roi = discountpercentageSum + aValue;
+
+            c.value = roi;
         },
         error: function (xhr, status, error) {
             // Handle errors here
@@ -804,25 +862,59 @@ function CalculateBPSPercentage(bpspercentagebtnindex) {
 
 function EditCalculateBPSPercentage(editbpspercentagebtnindex) {
 
+    var chemistCount = $("#UpdateTableAcc").find("button").length;
+    var totalSum = 0;
+    var discountpercentageSum = 0;
+    for (var i = 0; i < chemistCount; i++) {
 
-    var Total = parseFloat(document.getElementById(`total-post-` + editbpspercentagebtnindex).value) || 0;
-    var TrackingId = document.getElementById("tracid").value;
+        var TotalPre = parseFloat(document.getElementById(`total-pre-` + i).value.replace(/,/g, '')) || 0;
+        var TotalPost = parseFloat(document.getElementById(`total-post-` + i).value.replace(/,/g, '')) || 0;
+        var DiscountPercentagePost = parseFloat(document.getElementById(`discountpercentage-post-` + i).value.replace(/,/g, '')) || 0;
+        var DiscountPercentagePre = parseFloat(document.getElementById(`discountpercentage-pre-` + i).value.replace(/,/g, '')) || 0;
+        var GrandTotal = TotalPre + TotalPost;
+        var discountpercentageSum = DiscountPercentagePost + DiscountPercentagePre;
+        /*    totalSum += Total;*/
+        /*   discountpercentageSum += DiscountPercentage*/
+    }
+
+    var roundedTotalSum = Math.round(GrandTotal);
+    var EditformattedTotalSum = formatNumberWithCommas(roundedTotalSum);
+    var trackingId = document.getElementById("hcpid").value;
+    var TotalValues = document.getElementById("editgrandtotal");
+    TotalValues.value = EditformattedTotalSum;
+
+
+    //var Total = parseFloat(document.getElementById(`total-post-` + editbpspercentagebtnindex).value) || 0;
+    //var TrackingId = document.getElementById("tracid").value;
 
     $.ajax({
         url: "/ListView/CalBPS", // Replace with your controller and action names
         type: 'POST', // Use GET or POST based on your server's requirements
-        data: { TrackingId: TrackingId, Total: Total }, // Send data to the controller
+        data: { TrackingId: trackingId, Total: roundedTotalSum }, // Send data to the controller
         success: function (data) {
-            debugger;
-            var a = document.getElementById("edit-roi-post-" + editbpspercentagebtnindex);
+            ;
+            //var a = document.getElementById("edit-roi-post-" + editbpspercentagebtnindex);
+            //var bpspercentage = data.bpspercentage;
+            //a.value = bpspercentage.toFixed(2); //JSON.stringify(bpspercentage);
+            //var b = document.getElementById("edit-disc-post-" + editbpspercentagebtnindex);
+            //var c = document.getElementById("edit-totalroiPercentage-post-" + editbpspercentagebtnindex);
+            //if (b.value == '') {
+            //    b.value = 0;
+            //}
+            //c.value = c.value = parseFloat(parseFloat(a.value) + parseFloat(b.value)).toFixed(2);
+
+
+            var a = document.getElementById("editbpspercentage");
             var bpspercentage = data.bpspercentage;
-            a.value = bpspercentage.toFixed(2); //JSON.stringify(bpspercentage);
-            var b = document.getElementById("edit-disc-post-" + editbpspercentagebtnindex);
-            var c = document.getElementById("edit-totalroiPercentage-post-" + editbpspercentagebtnindex);
-            if (b.value == '') {
-                b.value = 0;
-            }
-            c.value = c.value = parseFloat(parseFloat(a.value) + parseFloat(b.value)).toFixed(2);
+            a.value = bpspercentage.toFixed(2);
+
+
+
+            var c = document.getElementById("edittotalroipercentage");
+            var aValue = parseFloat(a.value) || 0;
+            var roi = discountpercentageSum + aValue;
+
+            c.value = roi;
         },
         error: function (xhr, status, error) {
             // Handle errors here
@@ -834,6 +926,7 @@ function EditCalculateBPSPercentage(editbpspercentagebtnindex) {
 }
 
 function calculateValue(index, row, column) {
+
 
     var inputValue = document.getElementById("sku-post-input-column-" + index + "-" + row + "-" + column).value;
     var unitprice = document.getElementById("post-UnitPrice-" + index + "-" + row).value;
@@ -856,13 +949,14 @@ function calculateValue(index, row, column) {
     var value = document.getElementById("value-post-input-column-" + index + "-" + row + "-" + column).value;
     var totalInput = document.getElementById(`total-post-` + index);
     total = totalInput1 + parseFloat(value);
-    totalInput.value = total.toFixed(2);
+    var formattedTotalValue = formatNumberWithCommas(total);
+    totalInput.value = formattedTotalValue;
 
 }
 
 function EditcalculateValue(index, row, coloum) {
 
-
+    
 
     var inputValueId = 'sku-edit-post-row-' + index + '-' + row + '-' + coloum; // ID of the input field you want to read
     var valueInputId = 'value-edit-post-row-' + index + '-' + row + '-' + coloum; // ID of the input field where you want to display the result
@@ -886,18 +980,20 @@ function EditcalculateValue(index, row, coloum) {
 
     var inputElements = document.querySelectorAll('input[type="number"]');
 
-    var sum = 0;
+    var editsum = 0;
 
     // Iterate through input elements and add their values to the sum
     for (var i = 0; i < inputElements.length; i++) {
         var inputValue = parseFloat(inputElements[i].value) || 0; // Parse the input value as a float
-        sum += inputValue;
+        editsum += inputValue;
     }
+    var EditformattedTotalValue = formatNumberWithCommas(editsum);
 
     // Display the sum
 
     var totalInput = document.getElementById(`total-post-` + index);
-    totalInput.value = sum.toFixed(2);
+
+    totalInput.value = EditformattedTotalValue;
 
 }
 
@@ -910,7 +1006,6 @@ function EditcalculateValue(index, row, coloum) {
 
 function edittoggleSwitchAction(element, toggle) {
 
-    // Toggle the "on" class to change the background color
     element.classList.toggle("on");
 
     // Get the slider element within the clicked toggle-switch div
@@ -1024,7 +1119,7 @@ function getComments(worklistId) {
 
 
 function downloadFile(filePath) {
-    debugger;
+    ;
     var link = document.createElement('a');
     link.href = filePath;
     link.download = filePath.split('\\').pop();
@@ -1090,14 +1185,23 @@ function BpsApproval() {
 
                 if (data = true) {
 
-                    var modelvisisble = document.getElementById('myModalDetails').style.visibility = 'visible';
+                    //var modelvisisble = document.getElementById('myModalDetails').style.visibility = 'visible';
+                    Swal.fire({
+                        icon: "success",
+                        title: 'Approved!',
+                        showConfirmButton: false,
+                        timer: 3600,
+                        width: 680,
+                        allowOutsideClick: false,
+                        allowEscapeKey: false
+                    });
 
                 } else {
-                    var modelvisisble = document.getElementById('myModalDetails').style.visibility = 'hidden';
+  /*                  var modelvisisble = document.getElementById('myModalDetails').style.visibility = 'hidden';*/
                 }
                 setTimeout(function () {
                     window.location.href = "/ListView/PendingView/2"; // you can pass true to reload function to ignore the client cache and reload from the server
-                }, 5000);
+                }, 3500);
             },
             error: function (xhr, status, error) {
                 // Handle errors here
@@ -1136,10 +1240,19 @@ function BpsReject() {
 
             if (data = true) {
 
-                var modelvisisble = document.getElementById('myModal').style.visibility = 'visible';
+                //var modelvisisble = document.getElementById('myModal').style.visibility = 'visible';
+                Swal.fire({
+                    icon: "Error",
+                    title: 'Objection!!',
+                    showConfirmButton: false,
+                    timer: 3600,
+                    width: 680,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false
+                });
 
             } else {
-                var modelvisisble = document.getElementById('myModal').style.visibility = 'hidden';
+              /*  var modelvisisble = document.getElementById('myModal').style.visibility = 'hidden';*/
             }
         },
         error: function (xhr, status, error) {
@@ -1185,15 +1298,24 @@ function BpsObjection() {
 
                 if (data = true) {
 
-                    var modelvisisble = document.getElementById('myModalDetails').style.visibility = 'visible';
+                /*    var modelvisisble = document.getElementById('myModalDetails').style.visibility = 'visible';*/
+                    Swal.fire({
+                        icon: "error",
+                        title: 'Objection!',
+                        showConfirmButton: false,
+                        timer: 3600,
+                        width: 680,
+                        allowOutsideClick: false,
+                        allowEscapeKey: false
+                    });
 
                 } else {
-                    var modelvisisble = document.getElementById('myModalDetails').style.visibility = 'hidden';
+    /*                var modelvisisble = document.getElementById('myModalDetails').style.visibility = 'hidden';*/
                 }
 
                 setTimeout(function () {
                     window.location.href = "/ListView/PendingView/2"; // you can pass true to reload function to ignore the client cache and reload from the server
-                }, 5000);
+                }, 3500);
             },
             error: function (xhr, status, error) {
                 // Handle errors here
@@ -1210,7 +1332,7 @@ var inputTimer;
 
 
 function delayedAction(input, checkboxIndex, packcodeIndex, skucoloumIndex) {
-    //debugger
+    //
     // Clear the previous timer
     clearTimeout(inputTimer);
 
@@ -1222,7 +1344,7 @@ function delayedAction(input, checkboxIndex, packcodeIndex, skucoloumIndex) {
 }
 function updateActualDiscount(input, checkboxIndex, packcodeIndex, skucoloumIndex) {
 
-    //debugger;
+    //;
 
     var inputValue = input.value;
 
@@ -1317,7 +1439,7 @@ function findRowByPackCode(table, packCode) {
 }
 
 function BpsASMActivity() {
-    debugger;
+    ;
     var fileInput = document.getElementById('asmfile');
     var trackingid = document.getElementById("tracid").value;
 
@@ -1341,14 +1463,23 @@ function BpsASMActivity() {
         success: function (response) {
             if (data = true) {
 
-                var modelvisisble = document.getElementById('myModalDetails').style.visibility = 'visible';
+          /*      var modelvisisble = document.getElementById('myModalDetails').style.visibility = 'visible';*/
+                Swal.fire({
+                    icon: "success",
+                    title: 'Activity Performed!',
+                    showConfirmButton: false,
+                    timer: 3600,
+                    width: 680,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false
+                });
 
             } else {
                 var modelvisisble = document.getElementById('myModalDetails').style.visibility = 'hidden';
             }
             setTimeout(function () {
                 window.location.href = "/ListView/ApprovedView/1"; // you can pass true to reload function to ignore the client cache and reload from the server
-            }, 5000);
+            }, 3500);
         },
         error: function (xhr, status, error) {
             // Handle errors here
@@ -1389,7 +1520,7 @@ function displayASMFiles() {
 }
 
 function BpsPoNumber() {
-    debugger;
+    ;
     var ponum = document.getElementById("ponum").value;
     var trackingid = document.getElementById("tracid").value;
     $.ajax({
@@ -1399,14 +1530,23 @@ function BpsPoNumber() {
         success: function (response) {
             if (data = true) {
 
-                var modelvisisble = document.getElementById('myModalDetails').style.visibility = 'visible';
+/*                var modelvisisble = document.getElementById('myModalDetails').style.visibility = 'visible';*/
+                Swal.fire({
+                    icon: "success",
+                    title: 'Activity Performed!',
+                    showConfirmButton: false,
+                    timer: 3600,
+                    width: 680,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false
+                });
 
             } else {
-                var modelvisisble = document.getElementById('myModalDetails').style.visibility = 'hidden';
+           /*     var modelvisisble = document.getElementById('myModalDetails').style.visibility = 'hidden';*/
             }
             setTimeout(function () {
                 window.location.href = "/ListView/PendingView/2"; // you can pass true to reload function to ignore the client cache and reload from the server
-            }, 5000);
+            }, 3500);
         },
         error: function (xhr, status, error) {
             // Handle errors here
@@ -1414,6 +1554,9 @@ function BpsPoNumber() {
         }
     });
 }
+
+
+
 $(document).ready(function () {
     $(document).ajaxStart(function () {
         $('.spinner').show();
@@ -1426,4 +1569,14 @@ $(document).ready(function () {
 
 });
 
+$(document).ready(function () {
+    $('[data-toggle="tooltip"]').tooltip();
+});
 
+$(".Comma").each(function () {
+    var amount = parseFloat($(this).val());
+    if (!isNaN(amount)) {
+        var newAmount = amount.toLocaleString('en-US');
+        $(this).val(newAmount);
+    }
+});

@@ -77,8 +77,9 @@ function SubmittedForm() {
     var Dis = document.getElementById("distributer").value;
     var discode = Dis.split('-');
     var DistributorCode = discode.shift();
-    var Brick = document.getElementById("macrobrickcode").innerHTML;
-    var brickcode = Brick.split('-');
+    var Brick = document.getElementById("selectedbrick");
+    var selectedBrickValue = Brick.options[Brick.selectedIndex].value;
+    var brickcode = selectedBrickValue.split('-');
     var MacroBrickCode = brickcode.shift();
 
     var HCPREQID = document.getElementById('hcpid').value;
@@ -249,15 +250,23 @@ function SubmittedForm() {
 
             if (data = true) {
 
-                var modelvisisble = document.getElementById('myModal').style.visibility = 'visible';
+                /*var modelvisisble = document.getElementById('myModal').style.visibility = 'visible';*/
+                Swal.fire({
+                    icon: "success",
+                    title: 'Record Created Successfully!',
+                    showConfirmButton: false,
+                    timer: 3600,
+                    width: 680,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false
+                });
 
             } else {
-                var modelvisisble = document.getElementById('myModal').style.visibility = 'hidden';
 
             }
             setTimeout(function () {
                 window.location.href = "/ListView/ApprovedView/1"; // you can pass true to reload function to ignore the client cache and reload from the server
-            }, 5000);
+            }, 3500);
 
         },
         error: function (xhr, status, error) {
@@ -354,17 +363,25 @@ function UpdateSubmittedForm() {
 
         data: { Updatedatalist: Updatearr, trackingid: trackingid }, // Convert arr to JSON and send it as "datalist"
         success: function (data) {
-            ;
+            
             if (data = true) {
-                var modelvisisble = document.getElementById('myModal').style.visibility = 'visible';
-
+               /* var modelvisisble = document.getElementById('myModal').style.visibility = 'visible';*/
+                Swal.fire({
+                    icon: "success",
+                    title: 'Record Updated Successfully!',
+                    showConfirmButton: false,
+                    timer: 3600,
+                    width: 680,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false
+                });
             } else {
-                var modelvisisble = document.getElementById('myModal').style.visibility = 'hidden';
+       /*         var modelvisisble = document.getElementById('myModal').style.visibility = 'hidden';*/
 
             }
             setTimeout(function () {
                 window.location.href = "/ListView/ApprovedView/1"; // you can pass true to reload function to ignore the client cache and reload from the server
-            }, 5000);
+            }, 3500);
 
         },
         error: function (xhr, status, error) {
@@ -527,8 +544,11 @@ function teamsChange() {
                         <input type="month" id="enddatepre-${checkboxindex}" value="" style="margin-left: 2%;" />
                     </div>
                     <div class="col-3">
-                      <input id="Contribution-${checkboxindex}"  type="number" placeholder="Contrbituion %:" Style="border-left: none; border-right: none; border-top: none;border-bottom-color: 2px solid; text-align:right;">
-                        <input style="margin-top:2px;" id="search-${checkboxindex}" onclick="PreActivitySales(${checkboxindex})" type="button" class="searchbutton" value="Search"  />               
+                     <label>Contribution % :</label>
+                      <input id="Contribution-${checkboxindex}"  type="number"  Style=" text-align:right;text-align: right; width: 30%; margin-left: 5%;"></br>
+                      <div>
+                         <input style="margin-top:2px;" id="search-${checkboxindex}" onclick="PreActivitySales(${checkboxindex})" type="button" class="searchbutton" value="Search"  />  </div>
+    
                     </div>
                 </div>
             </div>
@@ -783,10 +803,14 @@ function PosttoggleSwitchAction(element, checkboxindex) {
     }
 }
 
+/*1000 seperated function*/
+function formatNumberWithCommas(number) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
 
 function CalculateBPSPercentage(bpspercentagebtnindex) {
 
-    ;
+
     var chemistCount = $("#tableAcc").find("button").length;
     var totalSum = 0;
     var discountpercentageSum = 0;
@@ -803,9 +827,10 @@ function CalculateBPSPercentage(bpspercentagebtnindex) {
     }
 
     var roundedTotalSum = Math.round(GrandTotal);
+    var formattedTotalSum = formatNumberWithCommas(roundedTotalSum);
     var trackingId = document.getElementById("hcpid").value;
     var TotalValues = document.getElementById("grandtotal");
-    TotalValues.value = roundedTotalSum;
+    TotalValues.value = formattedTotalSum;
     
    
     $.ajax({
@@ -853,9 +878,10 @@ function EditCalculateBPSPercentage(editbpspercentagebtnindex) {
     }
 
     var roundedTotalSum = Math.round(GrandTotal);
+    var EditformattedTotalSum = formatNumberWithCommas(roundedTotalSum);
     var trackingId = document.getElementById("hcpid").value;
     var TotalValues = document.getElementById("editgrandtotal");
-    TotalValues.value = roundedTotalSum;
+    TotalValues.value = EditformattedTotalSum;
 
 
     //var Total = parseFloat(document.getElementById(`total-post-` + editbpspercentagebtnindex).value) || 0;
@@ -901,6 +927,7 @@ function EditCalculateBPSPercentage(editbpspercentagebtnindex) {
 
 function calculateValue(index, row, column) {
 
+
     var inputValue = document.getElementById("sku-post-input-column-" + index + "-" + row + "-" + column).value;
     var unitprice = document.getElementById("post-UnitPrice-" + index + "-" + row).value;
     var totalInput1 = parseFloat(document.getElementById(`total-post-` + index).value) || 0;
@@ -922,7 +949,8 @@ function calculateValue(index, row, column) {
     var value = document.getElementById("value-post-input-column-" + index + "-" + row + "-" + column).value;
     var totalInput = document.getElementById(`total-post-` + index);
     total = totalInput1 + parseFloat(value);
-    totalInput.value = total.toFixed(2);
+    var formattedTotalValue = formatNumberWithCommas(total);
+    totalInput.value = formattedTotalValue;
 
 }
 
@@ -959,12 +987,13 @@ function EditcalculateValue(index, row, coloum) {
         var inputValue = parseFloat(inputElements[i].value) || 0; // Parse the input value as a float
         editsum += inputValue;
     }
+    var EditformattedTotalValue = formatNumberWithCommas(editsum);
 
     // Display the sum
 
     var totalInput = document.getElementById(`total-post-` + index);
 
-    totalInput.value = editsum;
+    totalInput.value = EditformattedTotalValue;
 
 }
 
@@ -977,7 +1006,6 @@ function EditcalculateValue(index, row, coloum) {
 
 function edittoggleSwitchAction(element, toggle) {
 
-    // Toggle the "on" class to change the background color
     element.classList.toggle("on");
 
     // Get the slider element within the clicked toggle-switch div
@@ -1157,14 +1185,23 @@ function BpsApproval() {
 
                 if (data = true) {
 
-                    var modelvisisble = document.getElementById('myModalDetails').style.visibility = 'visible';
+                    //var modelvisisble = document.getElementById('myModalDetails').style.visibility = 'visible';
+                    Swal.fire({
+                        icon: "success",
+                        title: 'Approved!',
+                        showConfirmButton: false,
+                        timer: 3600,
+                        width: 680,
+                        allowOutsideClick: false,
+                        allowEscapeKey: false
+                    });
 
                 } else {
-                    var modelvisisble = document.getElementById('myModalDetails').style.visibility = 'hidden';
+  /*                  var modelvisisble = document.getElementById('myModalDetails').style.visibility = 'hidden';*/
                 }
                 setTimeout(function () {
                     window.location.href = "/ListView/PendingView/2"; // you can pass true to reload function to ignore the client cache and reload from the server
-                }, 5000);
+                }, 3500);
             },
             error: function (xhr, status, error) {
                 // Handle errors here
@@ -1203,10 +1240,19 @@ function BpsReject() {
 
             if (data = true) {
 
-                var modelvisisble = document.getElementById('myModal').style.visibility = 'visible';
+                //var modelvisisble = document.getElementById('myModal').style.visibility = 'visible';
+                Swal.fire({
+                    icon: "Error",
+                    title: 'Objection!!',
+                    showConfirmButton: false,
+                    timer: 3600,
+                    width: 680,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false
+                });
 
             } else {
-                var modelvisisble = document.getElementById('myModal').style.visibility = 'hidden';
+              /*  var modelvisisble = document.getElementById('myModal').style.visibility = 'hidden';*/
             }
         },
         error: function (xhr, status, error) {
@@ -1252,15 +1298,24 @@ function BpsObjection() {
 
                 if (data = true) {
 
-                    var modelvisisble = document.getElementById('myModalDetails').style.visibility = 'visible';
+                /*    var modelvisisble = document.getElementById('myModalDetails').style.visibility = 'visible';*/
+                    Swal.fire({
+                        icon: "error",
+                        title: 'Objection!',
+                        showConfirmButton: false,
+                        timer: 3600,
+                        width: 680,
+                        allowOutsideClick: false,
+                        allowEscapeKey: false
+                    });
 
                 } else {
-                    var modelvisisble = document.getElementById('myModalDetails').style.visibility = 'hidden';
+    /*                var modelvisisble = document.getElementById('myModalDetails').style.visibility = 'hidden';*/
                 }
 
                 setTimeout(function () {
                     window.location.href = "/ListView/PendingView/2"; // you can pass true to reload function to ignore the client cache and reload from the server
-                }, 5000);
+                }, 3500);
             },
             error: function (xhr, status, error) {
                 // Handle errors here
@@ -1408,14 +1463,23 @@ function BpsASMActivity() {
         success: function (response) {
             if (data = true) {
 
-                var modelvisisble = document.getElementById('myModalDetails').style.visibility = 'visible';
+          /*      var modelvisisble = document.getElementById('myModalDetails').style.visibility = 'visible';*/
+                Swal.fire({
+                    icon: "success",
+                    title: 'Activity Performed!',
+                    showConfirmButton: false,
+                    timer: 3600,
+                    width: 680,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false
+                });
 
             } else {
                 var modelvisisble = document.getElementById('myModalDetails').style.visibility = 'hidden';
             }
             setTimeout(function () {
                 window.location.href = "/ListView/ApprovedView/1"; // you can pass true to reload function to ignore the client cache and reload from the server
-            }, 5000);
+            }, 3500);
         },
         error: function (xhr, status, error) {
             // Handle errors here
@@ -1466,14 +1530,23 @@ function BpsPoNumber() {
         success: function (response) {
             if (data = true) {
 
-                var modelvisisble = document.getElementById('myModalDetails').style.visibility = 'visible';
+/*                var modelvisisble = document.getElementById('myModalDetails').style.visibility = 'visible';*/
+                Swal.fire({
+                    icon: "success",
+                    title: 'Activity Performed!',
+                    showConfirmButton: false,
+                    timer: 3600,
+                    width: 680,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false
+                });
 
             } else {
-                var modelvisisble = document.getElementById('myModalDetails').style.visibility = 'hidden';
+           /*     var modelvisisble = document.getElementById('myModalDetails').style.visibility = 'hidden';*/
             }
             setTimeout(function () {
                 window.location.href = "/ListView/PendingView/2"; // you can pass true to reload function to ignore the client cache and reload from the server
-            }, 5000);
+            }, 3500);
         },
         error: function (xhr, status, error) {
             // Handle errors here
@@ -1483,22 +1556,7 @@ function BpsPoNumber() {
 }
 
 
-function validateInput(input) {
-    // Remove non-numeric characters and leading zeros
-    let numericValue = input.value.replace(/[^0-9]/g, '').replace(/^0+/, '');
 
-    // Format the number with commas
-    let formattedValue = numberWithCommas(numericValue);
-
-    // Update the input value with the formatted number
-    input.value = formattedValue;
-
-    // Display error message if input is not a valid number
-
-}
-function numberWithCommas(x) {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-}
 $(document).ready(function () {
     $(document).ajaxStart(function () {
         $('.spinner').show();
@@ -1522,4 +1580,3 @@ $(".Comma").each(function () {
         $(this).val(newAmount);
     }
 });
-

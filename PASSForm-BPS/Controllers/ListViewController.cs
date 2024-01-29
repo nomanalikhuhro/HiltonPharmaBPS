@@ -1649,11 +1649,19 @@ where HCPREQID = '" + trackingid + "'";
 
 
         // GET: ListViewController/Edit/5
-        public ActionResult Edit(string id, string anotherId)
+        public ActionResult Edit(string id, string anotherId, string thirdId)
         {
             try
             {
-                ViewBag.RoleId = "1";
+                if (thirdId != null)
+                {
+                    ViewBag.RoleId = thirdId;
+                }
+                else
+                {
+                    ViewBag.RoleId = "1";
+                }
+                
                 var Empid_SessionValue = HttpContext.Session.GetString("EmpIdbps");
                 ViewBag.Products = _passDbContext.Tblproducts.FromSqlRaw("select * from tblproduct").ToList();
                 var bpsrcordquery = @"SELECT bpsreq.*, bpsreq.HCPREQID as User_Name, bpsreq.Status_ID as StatusType, bpsreq.CreatedBy as TMCode FROM pass_db.bps_request bpsreq where TrackingID = '" + id + "'";
@@ -2306,6 +2314,7 @@ set Status_ID = 4, Comments = '" + comments + "' Where HCPREQID = '" + trackingi
                                         item.WFWorklistId = (int)reader["WFWorklistId"];
                                         item.WFActivityInstanceId = reader["WFActivityInstanceId"] as int?;
                                         item.Destination = reader["Destination"] as string;
+                                        item.Designation = reader["Designation"] as string;
                                         item.Action = reader["Action"] as string;
                                         item.ActionBy = reader["ActionBy"] as int?;
                                         item.Status = reader["Status"] as int?;

@@ -1,24 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\devteam\\Downloads\\Project\\PassForm-BPS 19dec2023\\PassForm-BPS\\PASSForm-BPS\\PASSForm-BPS.csproj": {}
+    "D:\\BPSGit\\PASSForm-BPS\\PASSForm-BPS.csproj": {}
   },
   "projects": {
-    "C:\\Users\\devteam\\Downloads\\Project\\PassForm-BPS 19dec2023\\PassForm-BPS\\PASSForm-BPS\\PASSForm-BPS.csproj": {
+    "D:\\BPSGit\\PASSForm-BPS\\PASSForm-BPS.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\devteam\\Downloads\\Project\\PassForm-BPS 19dec2023\\PassForm-BPS\\PASSForm-BPS\\PASSForm-BPS.csproj",
+        "projectUniqueName": "D:\\BPSGit\\PASSForm-BPS\\PASSForm-BPS.csproj",
         "projectName": "PASSForm-BPS",
-        "projectPath": "C:\\Users\\devteam\\Downloads\\Project\\PassForm-BPS 19dec2023\\PassForm-BPS\\PASSForm-BPS\\PASSForm-BPS.csproj",
-        "packagesPath": "C:\\Users\\devteam\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\devteam\\Downloads\\Project\\PassForm-BPS 19dec2023\\PassForm-BPS\\PASSForm-BPS\\obj\\publish\\win-x86\\",
+        "projectPath": "D:\\BPSGit\\PASSForm-BPS\\PASSForm-BPS.csproj",
+        "packagesPath": "C:\\Users\\out.dev1\\.nuget\\packages\\",
+        "outputPath": "D:\\BPSGit\\PASSForm-BPS\\obj\\publish\\win-x86\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\devteam\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\out.dev1\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -26,8 +22,9 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
-          "https://api.nuget.org/v3/index.json": {}
+          "C:\\Program Files\\dotnet\\sdk\\7.0.304\\Sdks\\Microsoft.NET.Sdk.Web\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://nuget.devexpress.com/v1lWyN2CGVB2hq1riCouSaeQhY6KVq9LW2ZVjwWVt4O2EgkDee/api/v3/index.json": {}
         },
         "frameworks": {
           "net6.0": {
@@ -115,7 +112,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.403\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.304\\RuntimeIdentifierGraph.json"
         }
       },
       "runtimes": {

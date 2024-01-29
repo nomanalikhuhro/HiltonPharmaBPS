@@ -12,7 +12,7 @@
     <table id="customers">
         <thead>
 
-            <tr style="font-size:11px;">
+            <tr style="font-size:13px;">
 
                 @foreach (var column in Model.Sku[0] as IDictionary<string, object>)
                 {
@@ -36,7 +36,7 @@
                     @foreach (var item in Model.Sku)
                     {
                         int skucoloumIndex = 0;
-                        <tr style="font-size:11px;">
+                        <tr style="font-size:13px;">
 
 
                             @foreach (var column in item as IDictionary<string, object>)
@@ -118,7 +118,7 @@
 <div id="values-@ViewBag.checkboxindex" class="@ViewBag.TotalCalculatedSkus" style="display:none; overflow:auto;">
     <table id="customers">
         <thead>
-            <tr style="font-size:11px;">
+            <tr style="font-size:13px;">
                 @foreach (var column in Model.Value[0] as IDictionary<string, object>)
                 {
 
@@ -200,7 +200,9 @@
 
 <div style="text-align:right; margin-top:1%;">
     <label>Chemist Total:</label>
-    <input class="Comma" disabled type="text" id="total-@ViewBag.checkboxindex" value="@totalCalculatedValues.ToString("N2")" style="margin-left: 2%; text-align:right;" />
+@*    <input class="Comma" disabled type="text" id="total-@ViewBag.checkboxindex" value="@totalCalculatedValues.ToString("N2")" style="margin-left: 2%; text-align:right;" />*@
+    <input class="Comma" disabled type="text" id="total-@ViewBag.checkboxindex" value="@string.Format("{0:N2}", totalCalculatedValues)" style="margin-left: 2%; text-align:right;" />
+
 </div>
 <div style="text-align:right; margin-top:2%; margin-bottom:10px;">
 

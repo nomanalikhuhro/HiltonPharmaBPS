@@ -222,19 +222,28 @@
                         <div class="conatiner">
                             <div class="row">
                                 <div class="col-4">
-                                    <form asp-controller="ListView" asp-action="Create" style="padding-left:12px;">
-                                        <label style="font-weight:bold;">Tracking ID:</label>
-                                        <div>
-                                            <input readonly style="color:transparent;" asp-for="@rec.TrackingId" id="hcpid" value="@rec.TrackingId" type="text" name="inputValue" />
-                                            <span asp-validation-for="@rec.TrackingId" class="text-danger"></span>
+
+                                    <div style="padding-left:3%">
+                                        <label style="font-weight:bold;">Teams:</label>
+
+                                        <div style="padding-top: 5px; display:flex;">
+
+                                            @foreach (var T in Model.teams)
+                                            {
+                                                <div style="border: 2px solid #d71921 ; width: 35%; border-radius: 15px; text-align: center; color: #d71921 ; font-weight:700">
+
+                                                    <label id="teamNames" value="@T.TeamName">@T.TeamName</label>
+                                                </div>
+
+                                            }
 
                                         </div>
-                                    </form>
+                                    </div>
                                 </div>
                                 <div class="col-4">
 
 
-                                    <label style="font-weight:bold;">Area:</label>
+                                    <label style="font-weight:bold;">Base Area:</label>
                                     <div>
                                         @foreach (var area in Model.requesthcp)
                                         {
@@ -290,22 +299,14 @@
                             </div>
                         </div>
                         <div style="padding-top:10px;">
-                            <div style="padding:10px; ">
-                                <label style="font-weight:bold;">Teams:</label>
-
-                                <div style="padding-top: 5px; display:flex;">
-
-                                    @foreach (var T in Model.teams)
-                                    {
-                                        <div style="border: 2px solid #d71921 ; width: 10%; border-radius: 15px; text-align: center; color: #d71921 ; font-weight:700">
-
-                                            <label id="teamNames" value="@T.TeamName">@T.TeamName</label>
-                                        </div>
-
-                                    }
+                            <form asp-controller="ListView" asp-action="Create" style="padding-left:12px; visibility:hidden;">
+                                <label style="font-weight:bold;">Tracking ID:</label>
+                                <div>
+                                    <input readonly style="color:transparent;" asp-for="@rec.TrackingId" id="hcpid" value="@rec.TrackingId" type="text" name="inputValue" />
+                                    <span asp-validation-for="@rec.TrackingId" class="text-danger"></span>
 
                                 </div>
-                            </div>
+                            </form>
                         </div>
                     </div>
                 }
@@ -429,7 +430,7 @@
 
                                                 @foreach (var skudata in skupre.Value)
                                                 {
-                                                    <tr style="font-size:10px;">
+                                                    <tr style="font-size:13px;">
                                                         @foreach (var skudata1 in skudata)
                                                         {
 
@@ -531,7 +532,7 @@
                                         {
                                             if (predat.Chemist_Code == acc)
                                             {
-                                                <input class="Comma" id="total-pre-@editretotalindex" disabled type="text" value="@(predat.PreTotal != null ? string.Format("{0:yyyy-MM-dd}", predat.PreTotal) : string.Empty)" style="margin-left: 2%; text-align:right;" />
+                                                <input  id="total-pre-@editretotalindex" disabled type="text" value="@(predat.PreTotal != null ? string.Format("{0:yyyy-MM-dd}", predat.PreTotal) : string.Empty)" style="margin-left: 2%; text-align:right;" />
 
                                                 editretotalindex++;
                                             }
@@ -655,7 +656,7 @@
                                     <div id="postsku-@postsku" style="overflow:auto; ">
                                         <table id="customers">
                                             <thead>
-                                                <tr style="font-size:10px;">
+                                                <tr style="font-size:13px;">
                                                     @foreach (var skucoloum in skupost.Value[0] as IDictionary<string, object>)
                                                     {
                                                         if (skucoloum.Key == "PackCode")
@@ -797,7 +798,7 @@
                                         {
                                             if (postdat.Chemist_Code == acc)
                                             {
-                                                <input class="Comma" id="total-post-@editposttotalindex" disabled type="text" value="@(postdat.PostTotal != null ? string.Format("{0:yyyy-MM-dd}", postdat.PostTotal) : string.Empty)" style="margin-left: 2%; text-align:right;" />
+                                                <input id="total-post-@editposttotalindex" disabled type="text" value="@(postdat.PostTotal != null ? string.Format("{0:yyyy-MM-dd}", postdat.PostTotal) : string.Empty)" style="margin-left: 2%; text-align:right;" />
 
                                                 editposttotalindex++;
                                             }
@@ -850,7 +851,7 @@
                         {
                             if (grandtaotal.grandtotal != null)
                             {
-                                <input class="Comma" disabled type="text" id="editgrandtotal" value="@(grandtaotal.grandtotal != null ? string.Format("{0:yyyy-MM-dd}", grandtaotal.grandtotal ) : string.Empty)" style="margin-left: 2%; text-align:right;" />
+                                <input disabled type="text" id="editgrandtotal" value="@(grandtaotal.grandtotal != null ? string.Format("{0:yyyy-MM-dd}", grandtaotal.grandtotal ) : string.Empty)" style="margin-left: 2%; text-align:right;" />
                             }
 
                         }

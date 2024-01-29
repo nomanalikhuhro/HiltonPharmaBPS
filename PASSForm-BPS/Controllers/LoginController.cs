@@ -80,7 +80,7 @@ namespace PASSForm_BPS.Controllers
                         //    HttpContext.Session.SetString("EmpIdbps", user.EmpId.ToString());
                         //    HttpContext.Session.SetString("roleid", user.RoleId.ToString());
                         //    HttpContext.Session.SetString("uname", user.UserName.ToString());
-                  
+
                         //    Response.Cookies.Append("roleid", user.RoleId.ToString(), new CookieOptions
                         //    {
                         //        Expires = DateTime.Now.AddDays(7), // Set the expiration date (optional)
