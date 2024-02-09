@@ -52,6 +52,14 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGlzdFZpZXdcRWRpdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/BPSGit/PASSForm-BPS/Views/ListView/EditPostAcc.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGlzdFZpZXdcRWRpdFBvc3RBY2MuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BPSGit/PASSForm-BPS/Views/ListView/EditPreAcc.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGlzdFZpZXdcRWRpdFByZUFjYy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/BPSGit/PASSForm-BPS/Views/ListView/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGlzdFZpZXdcRXJyb3IuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 

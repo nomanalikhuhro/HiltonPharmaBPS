@@ -5,7 +5,7 @@
 
     <style>
 
-        .dropdown {
+/*        .dropdown {
             position: relative;
             display: inline-block;
         }
@@ -22,7 +22,7 @@
 
             .dropdown-content a {
                 color: black;
-                /* padding: 12px 16px;*/
+               
                 text-decoration: none;
                 display: block;
             }
@@ -33,7 +33,7 @@
 
         .dropdown-content a:hover {
             background-color: #f1f1f1;
-        }
+        }*/
     </style>
 </head>
 <body>
@@ -44,14 +44,12 @@
             <table class="table hide" id="App_DataTable">
                 <thead>
                     <tr class="table table-striped">
-  @*                      <th>Request ID</th>*@
                         <th>Territory Code</th>
-      @*                  <th>Territory Manager Name</th>*@
                         <th>Status</th>
                         <th>Created By</th>
                         <th>Created On</th>
-
                         <th></th>
+                    @*    <th></th>*@
                     </tr>
                 </thead>
                 <tbody>
@@ -60,14 +58,31 @@
                     @foreach (var item in Model)
                     {
                         <tr>
-                          @*  <td>@item.TrackingId</td>*@
-@*                            <td>@($"{item.TrackingId.Substring(0, 3)}-GAD-{item.TrackingId.Substring(item.TrackingId.Length - 4)}")</td>*@
                             <td>@item.TMCode</td>
-                  @*          <td>@item.User_Name</td>*@
                             <td>@item.StatusType</td>
                             <td>@item.CreatedBy - @item.User_Name</td>
                             <td>@item.CreatedOn.Value.ToString("dd-MMM-yyyy")</td>
-                          
+                                <td style="text-align:center;">
+                                    <form asp-action="Details" asp-controller="ListView">
+                                        <input type="hidden" name="id" value="@item.TrackingId">
+                                        <input type="hidden" name="anotherId" value="@item.BpsRecordId">
+                                        <button type="submit" class="icon-navigation" data-toggle="tooltip" data-placement="top" title="View"><i class="fa fa-eye"></i></button>
+                                    </form>
+                                </td>
+                      
+                            @if (@item.StatusType == "Objection")
+                            {
+                     
+                                <td style="text-align:center;">
+                                    <form asp-action="Edit" asp-controller="ListView">
+
+                                        <input type="hidden" name="id" value="@item.TrackingId">
+                                        <input type="hidden" name="anotherId" value="@item.BpsRecordId">
+                                        <button type="submit" class="icon-navigation" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit" style="color:orange"></i></button>
+                                    </form>
+                                </td>
+                            }
+                            @*                          
                                 @if (@item.StatusType != "Objection")
                                 {
                                 <td style="text-align:center;">
@@ -106,7 +121,7 @@
 
                                 </td>
 
-                                }
+                                }*@
                            
                         </tr>
                     }
@@ -143,67 +158,69 @@
 
         });
 
-
         $(document).ready(function () {
-
-            $('#App_DataTable thead tr')
-                .clone(true)
-                .addClass('filters')
-                .appendTo('#App_DataTable thead');
-
-            var table = $('#App_DataTable').DataTable({
-                order: [[4, "desc"]],
-                orderCellsTop: true,
-                fixedHeader: true,
-
-                initComplete: function () {
-                    var api = this.api();
-                    api
-                        .columns()
-                        .eq(0)
-                        .each(function (colIdx) {
-                            if (colIdx <= 5) {
-                                var cell = $('.filters th').eq(
-                                    $(api.column(colIdx).header()).index()
-                                );
-                                var title = $(cell).text();
-
-                                $(cell).html('<input type="text"  style="width: 130px;"  />');
-                                $(
-                                    'input',
-                                    $('.filters th').eq($(api.column(colIdx).header()).index())
-                                )
-                                    .off('keyup change')
-                                    .on('change', function (e) {
-                                        $(this).attr('title', $(this).val());
-                                        var regexr = '({search})';
-
-                                        var cursorPosition = this.selectionStart;
-                                        api
-                                            .column(colIdx)
-                                            .search(
-                                                this.value != ''
-                                                    ? regexr.replace('{search}', '(((' + this.value + ')))')
-                                                    : '',
-                                                this.value != '',
-                                                this.value == ''
-                                            )
-                                            .draw();
-                                    })
-                                    .on('keyup', function (e) {
-                                        e.stopPropagation();
-
-                                        $(this).trigger('change');
-                                        $(this)
-                                            .focus()[0]
-                                            .setSelectionRange(cursorPosition, cursorPosition);
-                                    });
-
-                            }
-                        });
-                },
-            });
+            $('#App_DataTable').DataTable();
         });
+        //$(document).ready(function () {
+
+        //    $('#App_DataTable thead tr')
+        //        .clone(true)
+        //        .addClass('filters')
+        //        .appendTo('#App_DataTable thead');
+
+        //    var table = $('#App_DataTable').DataTable({
+        //        order: [[4, "desc"]],
+        //        orderCellsTop: true,
+        //        fixedHeader: true,
+
+        //        initComplete: function () {
+        //            var api = this.api();
+        //            api
+        //                .columns()
+        //                .eq(0)
+        //                .each(function (colIdx) {
+        //                    if (colIdx <= 5) {
+        //                        var cell = $('.filters th').eq(
+        //                            $(api.column(colIdx).header()).index()
+        //                        );
+        //                        var title = $(cell).text();
+
+        //                        $(cell).html('<input type="text"  style="width: 130px;"  />');
+        //                        $(
+        //                            'input',
+        //                            $('.filters th').eq($(api.column(colIdx).header()).index())
+        //                        )
+        //                            .off('keyup change')
+        //                            .on('change', function (e) {
+        //                                $(this).attr('title', $(this).val());
+        //                                var regexr = '({search})';
+
+        //                                var cursorPosition = this.selectionStart;
+        //                                api
+        //                                    .column(colIdx)
+        //                                    .search(
+        //                                        this.value != ''
+        //                                            ? regexr.replace('{search}', '(((' + this.value + ')))')
+        //                                            : '',
+        //                                        this.value != '',
+        //                                        this.value == ''
+        //                                    )
+        //                                    .draw();
+        //                            })
+        //                            .on('keyup', function (e) {
+        //                                e.stopPropagation();
+
+        //                                $(this).trigger('change');
+        //                                $(this)
+        //                                    .focus()[0]
+        //                                    .setSelectionRange(cursorPosition, cursorPosition);
+        //                            });
+
+        //                    }
+        //                });
+        //        },
+        //    });
+        //});
 
 
     </script>

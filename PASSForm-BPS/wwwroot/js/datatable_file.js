@@ -61,7 +61,7 @@ function getchembybrickcode() {
         data: { brickValue: leftValue }, // Send the unique identifier as data
         success: function (data) {
             document.getElementById('selectedchemist').innerHTML = data.macChemMappings;
-
+            $('#tableAcc').empty();
             // Handle the server's response here
             // $("#tableAcc").html(data);
         },
@@ -74,8 +74,9 @@ function getchembybrickcode() {
 
 function SubmittedForm() {
     debugger;
-    var Dis = document.getElementById("distributer").value;
-    var discode = Dis.split('-');
+    var Dis = document.getElementById("distributer");
+    var selectedDistributorValue = Dis.value || "";
+    var discode = selectedDistributorValue.split('-');
     var DistributorCode = discode.shift();
     var Brick = document.getElementById("selectedbrick");
     var selectedBrickValue = Brick.options[Brick.selectedIndex].value;
@@ -83,16 +84,21 @@ function SubmittedForm() {
     var MacroBrickCode = brickcode.shift();
 
     var HCPREQID = document.getElementById('hcpid').value;
-    var startDateInput = document.getElementById('startdatepost-0').value;
-    var endDateInput = document.getElementById('enddatepost-0').value;
+    //var startDateInput = document.getElementById('startdatepost-0').value;
+    //var endDateInput = document.getElementById('enddatepost-0').value;
     var Comment = document.getElementById('createcomments').value;
-    
+    var currentDate = new Date();
+
+    //if (DistributorCode == "" || DistributorCode = 'Select' || Comment == null) {
+
+    //    document.getElementById('DistributorErrorLabel').classList.remove("hide");
+    //}
     var HeaderData = {
 
         DistributerCode: DistributorCode,
         MacroBrickCode: MacroBrickCode,
-        FromDate: startDateInput,
-        ToDate: endDateInput,
+        FromDate: currentDate,
+        ToDate: currentDate,
         HCPREQID: HCPREQID,
         trackingid: HCPREQID,
         Comments: Comment,
@@ -100,24 +106,256 @@ function SubmittedForm() {
 
 
     var Salesarr = [];
+    var salesArrString;
 
     var chemistCount = $("#tableAcc").find("button").length;
-    for (var i = 0; i < chemistCount; i++) {
+    $("#tableAcc").find("button").each(function (index) {
+        var buttonId = $(this).attr("id");
+        var parts = buttonId.split('-');
 
-        var preContribution = document.getElementById("Contribution-" + i).value;
-        var div = document.getElementById("sku-" + i);
+        var button1rightPart = parts[1];
+
+       /* for (var i = 0; i < chemistCount; i++) {*/
+
+
+            var preContribution = document.getElementById("Contribution-" + button1rightPart).value;
+            var div = document.getElementById("sku-" + button1rightPart);
+
+            var table = div.querySelector("table");
+            var thElements = table.getElementsByTagName("th");
+            var thCount = thElements.length;
+
+            var PreMon = (thCount - 6) / 2;
+
+            var preactualfromDate = new Date($('#startdatepre-' + button1rightPart).val());
+            var prefromDate = preactualfromDate.getFullYear() + '-' +
+                (preactualfromDate.getMonth() + 1).toString().padStart(2, '0') + '-' +
+                preactualfromDate.getDate().toString().padStart(2, '0');
+            var preactualtoDate = new Date($('#enddatepre-' + button1rightPart).val());
+            var pretoDate = preactualtoDate.getFullYear() + '-' +
+                (preactualtoDate.getMonth() + 1).toString().padStart(2, '0') + '-' +
+                preactualtoDate.getDate().toString().padStart(2, '0');
+            var preselectedMonthsAndYear = [];
+            while (preactualfromDate <= preactualtoDate) {
+                preselectedMonthsAndYear.push({
+                    month: preactualfromDate.toLocaleString('default', { month: 'long' }),
+                    year: preactualfromDate.getFullYear()
+                });
+                preactualfromDate.setMonth(preactualfromDate.getMonth() + 1);
+            }
+
+            var numberOfPreMonths = preselectedMonthsAndYear.length;
+            var uniquePreYears = [...new Set(preselectedMonthsAndYear.map(item => item.year))];
+            var numberOfPreYears = uniquePreYears.length;
+
+
+
+            var postactualfromDate = new Date($('#startdatepost-' + button1rightPart).val());
+            var postfromDate = postactualfromDate.getFullYear() + '-' +
+                (postactualfromDate.getMonth() + 1).toString().padStart(2, '0') + '-' +
+                postactualfromDate.getDate().toString().padStart(2, '0');
+            var postactualtoDate = new Date($('#enddatepost-' + button1rightPart).val());
+            var posttoDate = postactualtoDate.getFullYear() + '-' +
+                (postactualtoDate.getMonth() + 1).toString().padStart(2, '0') + '-' +
+                postactualtoDate.getDate().toString().padStart(2, '0');
+
+            ;
+            var postselectedMonthsAndYear = [];
+            while (postactualfromDate <= postactualtoDate) {
+                postselectedMonthsAndYear.push({
+                    month: postactualfromDate.toLocaleString('default', { month: 'long' }),
+                    year: postactualfromDate.getFullYear()
+                });
+                postactualfromDate.setMonth(postactualfromDate.getMonth() + 1);
+            }
+
+            var numberOfPostMonths = postselectedMonthsAndYear.length;
+            var uniquePostYears = [...new Set(postselectedMonthsAndYear.map(item => item.year))];
+            var numberOfPreYears = uniquePostYears.length
+
+
+            //var chemistCode = document.getElementById("C" + i + "-AccText" + i).innerText;
+            var chemist = document.getElementById("chemist-" + button1rightPart).innerText;
+            /*      var Contribution = document.getElementById("contribution-" + i).value;*/
+            var chemcodeparts = chemist.split('-');
+            var ChemistCode = chemcodeparts[0].trim();
+            var productPreSkuCount = $("#tbl-pre-sku-" + button1rightPart).find("tr").length;
+            var productPostCount = $("#tbl-post-" + button1rightPart).find("tr").length;
+            var pretotal = document.getElementById("total-" + button1rightPart).value;
+            var posttotal = document.getElementById("total-post-" + button1rightPart).value;
+            var discountpercentage = document.getElementById("discountpercentage-pre-" + button1rightPart).value;
+            var discountpostcentage = document.getElementById("discountpercentage-post-" + button1rightPart).value;
+            var totalroipercentage = document.getElementById("totalroipercentage").value;
+            var bpspercentage = document.getElementById("bpspercentage").value;
+            var grandtotal = document.getElementById("grandtotal").value;
+
+            var prdArr = [];
+
+            //Products For Pre Sales Against Each Chemist
+            for (var j = 0; j < productPreSkuCount; j++) {
+
+                var productName = document.getElementById("sku-pre-product-" + button1rightPart + "-" + j).innerHTML;
+                var productCode = document.getElementById("sku-pre-pakcode-" + button1rightPart + "-" + j).innerHTML;
+                var postproductDescription = document.getElementById("sku-pre-description-" + button1rightPart + "-" + j).innerHTML;
+                /*            var preproductActualDiscount = document.getElementById("sku-pre-column-" + i + "-" + j).innerText;*/
+                /*            var preproductContribution = document.getElementById("sku-pre-actdis-" + i + "-" + j).value;*/
+
+
+                var salArr = [];
+                for (var k = 0; k < PreMon; k++) {
+                    var monthyearnames = document.getElementById("value-pre-coloum-" + (k + 3)).innerHTML;
+                    var YearPart = monthyearnames.split(' ');
+                    var Year = YearPart[0];
+                    var Month = YearPart[1];
+
+                    var skuSales = document.getElementById("sku-pre-column-" + button1rightPart + "-" + j + "-" + k).innerHTML;
+                    var valueSales = document.getElementById("value-pre-column-" + button1rightPart + "-" + j + "-" + k).innerHTML;
+
+                    salArr.push({ skuSales: skuSales, valueSales: valueSales, Year: Year, Month: Month });
+                }
+                prdArr.push({ ProductName: productName, productCode: productCode, postproductDescription: postproductDescription, Contribution: preContribution, SalesType: "Pre", Sale: salArr, pretotal: pretotal, discountpercentage: discountpercentage })
+            }
+            //Products For Post Sales Against Each Chemist
+            for (var j = 0; j < productPostCount; j++) {
+
+                var productName = document.getElementById("post-product-" + button1rightPart + "-" + j).innerText;
+                var productCode = document.getElementById("post-pakcode-" + button1rightPart + "-" + j).innerText;
+                var postproductDescription = document.getElementById("post-description-" + button1rightPart + "-" + j).innerText;
+                //var postproductContribution = document.getElementById("sku-post-actdis-" + i + "-" + j).value;
+                var salArr = [];
+                for (var k = 0; k < numberOfPostMonths; k++) {
+                    var monthyearnames = document.getElementById("value-post-coloum-" + button1rightPart + "-" + k).innerHTML;
+
+                    // Remove brackets if they exist
+                    monthyearnames = monthyearnames.replace('[', '').replace(']', '');
+
+                    var parts = monthyearnames.split("/"); // Split the string at "/"
+                    if (parts.length === 2) {
+                        var PostMonth = parts[0];
+                        var PostYear = parts[1];
+                    } else {
+                        console.log("Invalid input string format");
+                    }
+
+
+                    var skuSales = document.getElementById("sku-post-input-column-" + button1rightPart + "-" + j + "-" + k).value;
+                    var valueSales = document.getElementById("value-post-input-column-" + button1rightPart + "-" + j + "-" + k).value;
+
+
+                    salArr.push({ skuSales: skuSales, valueSales: valueSales, Month: PostMonth, Year: PostYear });
+                }
+                prdArr.push({ ProductName: productName, productCode: productCode, postproductDescription: postproductDescription, Contribution: preContribution, SalesType: "Post", Sale: salArr, posttotal: posttotal, discountpostcentage: discountpostcentage })
+            }
+            
+            Salesarr.push({ ChemistCode: ChemistCode, ProductArr: prdArr, postfromDate: postfromDate, posttoDate: posttoDate, prefromDate: prefromDate, pretoDate: pretoDate, grandtotal: grandtotal, bpspercentage: bpspercentage, totalroipercentage: totalroipercentage });
+
+
+            
+
+
+
+
+        
+    });
+    var salesArrString = JSON.stringify(Salesarr);
+        $.ajax({
+
+            url: "/ListView/CreateBpsRecord", // Replace with the URL of your controller action
+            method: "POST", // Use POST since you are sending data
+            data: { Salesarr1: salesArrString, HeaderData1: HeaderData },
+            success: function (data) {
+                console.log("Data sent to server:", { Salesarr1: Salesarr, HeaderData1: HeaderData });
+
+                if (data = true) {
+
+                    /*var modelvisisble = document.getElementById('myModal').style.visibility = 'visible';*/
+                    Swal.fire({
+                        icon: "success",
+                        title: 'Record Created Successfully!',
+                        showConfirmButton: false,
+                        timer: 3600,
+                        width: 680,
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        customClass: {
+                            title: 'small-font',
+                            icon: 'small-icon'
+                        }
+                    });
+
+                } else {
+
+                }
+                setTimeout(function () {
+                    window.location.href = "/ListView/ApprovedView/1"; // you can pass true to reload function to ignore the client cache and reload from the server
+                }, 3500);
+
+            },
+            error: function (xhr, status, error) {
+                console.error("Error:", status, error);
+            }
+        });
+
+    
+    
+}
+
+function UpdateSubmittedForm() {
+
+    var Dis = document.getElementById("distributer");
+    var selectedDistributorValue = Dis.value || "";
+    var discode = selectedDistributorValue.split('-');
+    var DistributorCode = discode.shift();
+    var Brick = document.getElementById("selectedbrick").value;
+ 
+    var brickcode = Brick.split('-');
+    var MacroBrickCode = brickcode.shift();
+
+    var HCPREQID = document.getElementById('hcpid').value;
+    //var startDateInput = document.getElementById('startdatepost-0').value;
+    //var endDateInput = document.getElementById('enddatepost-0').value;
+    var Comment = document.getElementById('createcomments').value;
+    var currentDate = new Date();
+    var HeaderData = {
+
+        DistributerCode: DistributorCode,
+        MacroBrickCode: MacroBrickCode,
+        FromDate: currentDate,
+        ToDate: currentDate,
+        HCPREQID: HCPREQID,
+        trackingid: HCPREQID,
+        Comments: Comment,
+    };
+
+
+
+    var Updatearr = [];
+    var UpdatesalesArrString;
+
+    var chemistCount = $("#tableAcc").find("button").length;
+    $("#UpdateTableAcc").find("button").each(function (index) {
+        var buttonId = $(this).attr("id");
+        var parts = buttonId.split('-');
+
+        var button1rightPart = parts[1];
+
+        /* for (var i = 0; i < chemistCount; i++) {*/
+
+
+        var preContribution = document.getElementById("Contribution-" + button1rightPart).value;
+        var div = document.getElementById("sku-" + button1rightPart);
 
         var table = div.querySelector("table");
         var thElements = table.getElementsByTagName("th");
         var thCount = thElements.length;
 
-        var PreMon = (thCount - 8) / 2;
+        var PreMon = (thCount - 3);
 
-        var preactualfromDate = new Date($('#startdatepre-' + i).val());
+        var preactualfromDate = new Date($('#startdatepre-' + button1rightPart).val());
         var prefromDate = preactualfromDate.getFullYear() + '-' +
             (preactualfromDate.getMonth() + 1).toString().padStart(2, '0') + '-' +
             preactualfromDate.getDate().toString().padStart(2, '0');
-        var preactualtoDate = new Date($('#enddatepre-' + i).val());
+        var preactualtoDate = new Date($('#enddatepre-' + button1rightPart).val());
         var pretoDate = preactualtoDate.getFullYear() + '-' +
             (preactualtoDate.getMonth() + 1).toString().padStart(2, '0') + '-' +
             preactualtoDate.getDate().toString().padStart(2, '0');
@@ -136,11 +374,11 @@ function SubmittedForm() {
 
 
 
-        var postactualfromDate = new Date($('#startdatepost-' + i).val());
+        var postactualfromDate = new Date($('#startdatepost-' + button1rightPart).val());
         var postfromDate = postactualfromDate.getFullYear() + '-' +
             (postactualfromDate.getMonth() + 1).toString().padStart(2, '0') + '-' +
             postactualfromDate.getDate().toString().padStart(2, '0');
-        var postactualtoDate = new Date($('#enddatepost-' + i).val());
+        var postactualtoDate = new Date($('#enddatepost-' + button1rightPart).val());
         var posttoDate = postactualtoDate.getFullYear() + '-' +
             (postactualtoDate.getMonth() + 1).toString().padStart(2, '0') + '-' +
             postactualtoDate.getDate().toString().padStart(2, '0');
@@ -161,16 +399,16 @@ function SubmittedForm() {
 
 
         //var chemistCode = document.getElementById("C" + i + "-AccText" + i).innerText;
-        var chemist = document.getElementById("chemist-" + i).innerText;
+        var chemist = document.getElementById("chemist-" + button1rightPart).innerText;
         /*      var Contribution = document.getElementById("contribution-" + i).value;*/
         var chemcodeparts = chemist.split('-');
         var ChemistCode = chemcodeparts[0].trim();
-        var productPreSkuCount = $("#tbl-pre-sku-" + i).find("tr").length;
-        var productPostCount = $("#tbl-post-" + i).find("tr").length;
-        var pretotal = document.getElementById("total-" + i).value;
-        var posttotal = document.getElementById("total-post-" + i).value;
-        var discountpercentage = document.getElementById("discountpercentage-pre-" + i).value;
-        var discountpostcentage = document.getElementById("discountpercentage-post-" + i).value;
+        var productPreSkuCount = $("#tbl-pre-sku-" + button1rightPart).find("tr").length;
+        var productPostCount = $("#tbl-post-" + button1rightPart).find("tr").length;
+        var pretotal = document.getElementById("total-" + button1rightPart).value;
+        var posttotal = document.getElementById("total-post-" + button1rightPart).value;
+        var discountpercentage = document.getElementById("discountpercentage-pre-" + button1rightPart).value;
+        var discountpostcentage = document.getElementById("discountpercentage-post-" + button1rightPart).value;
         var totalroipercentage = document.getElementById("totalroipercentage").value;
         var bpspercentage = document.getElementById("bpspercentage").value;
         var grandtotal = document.getElementById("grandtotal").value;
@@ -180,22 +418,22 @@ function SubmittedForm() {
         //Products For Pre Sales Against Each Chemist
         for (var j = 0; j < productPreSkuCount; j++) {
 
-            var productName = document.getElementById("sku-pre-product-" + i + "-" + j).innerHTML;
-            var productCode = document.getElementById("sku-pre-pakcode-" + i + "-" + j).innerHTML;
-            var postproductDescription = document.getElementById("sku-pre-description-" + i + "-" + j).innerHTML;
+            var productName = document.getElementById("sku-pre-product-" + button1rightPart + "-" + j).innerHTML;
+            var productCode = document.getElementById("sku-pre-pakcode-" + button1rightPart + "-" + j).innerHTML;
+            var postproductDescription = document.getElementById("sku-pre-description-" + button1rightPart + "-" + j).innerHTML;
             /*            var preproductActualDiscount = document.getElementById("sku-pre-column-" + i + "-" + j).innerText;*/
-/*            var preproductContribution = document.getElementById("sku-pre-actdis-" + i + "-" + j).value;*/
+            /*            var preproductContribution = document.getElementById("sku-pre-actdis-" + i + "-" + j).value;*/
 
 
             var salArr = [];
             for (var k = 0; k < PreMon; k++) {
-                var monthyearnames = document.getElementById("value-pre-coloum-" + (k + 4)).innerHTML;
+                var monthyearnames = document.getElementById("value-pre-coloum-" + (k)).innerHTML;
                 var YearPart = monthyearnames.split(' ');
                 var Year = YearPart[0];
                 var Month = YearPart[1];
 
-                var skuSales = document.getElementById("sku-pre-column-" + i + "-" + j + "-" + k).innerHTML;
-                var valueSales = document.getElementById("value-pre-column-" + i + "-" + j + "-" + k).innerHTML;
+                var skuSales = document.getElementById("sku-pre-column-" + button1rightPart + "-" + j + "-" + k).innerHTML;
+                var valueSales = document.getElementById("value-pre-column-" + button1rightPart + "-" + j + "-" + k).innerHTML;
 
                 salArr.push({ skuSales: skuSales, valueSales: valueSales, Year: Year, Month: Month });
             }
@@ -204,164 +442,53 @@ function SubmittedForm() {
         //Products For Post Sales Against Each Chemist
         for (var j = 0; j < productPostCount; j++) {
 
-            var productName = document.getElementById("post-product-" + i + "-" + j).innerText;
-            var productCode = document.getElementById("post-pakcode-" + i + "-" + j).innerText;
-            var postproductDescription = document.getElementById("post-description-" + i + "-" + j).innerText;
+            var productName = document.getElementById("post-product-" + button1rightPart + "-" + j).innerText;
+            var productCode = document.getElementById("post-pakcode-" + button1rightPart + "-" + j).innerText;
+            var postproductDescription = document.getElementById("post-description-" + button1rightPart + "-" + j).innerText;
             //var postproductContribution = document.getElementById("sku-post-actdis-" + i + "-" + j).value;
             var salArr = [];
             for (var k = 0; k < numberOfPostMonths; k++) {
-                var monthyearnames = document.getElementById("value-post-coloum-" + i + "-" + k).innerHTML;
+                var monthyearnames = document.getElementById("value-post-coloum-" + k).innerHTML;
 
+                var YearPart = monthyearnames.split(' ');
+                var PostYear = YearPart[0];
+                var PostMonth = YearPart[1];
                 // Remove brackets if they exist
-                monthyearnames = monthyearnames.replace('[', '').replace(']', '');
+                //monthyearnames = monthyearnames.replace('[', '').replace(']', '');
 
-                var parts = monthyearnames.split("/"); // Split the string at "/"
-                if (parts.length === 2) {
-                    var PostMonth = parts[0];
-                    var PostYear = parts[1];
-                } else {
-                    console.log("Invalid input string format");
-                }
+                //var parts = monthyearnames.split("/"); // Split the string at "/"
+                //if (parts.length === 2) {
+                //    var PostMonth = parts[0];
+                //    var PostYear = parts[1];
+                //} else {
+                //    console.log("Invalid input string format");
+                //}
 
 
-                var skuSales = document.getElementById("sku-post-input-column-" + i + "-" + j + "-" + k).value;
-                var valueSales = document.getElementById("value-post-input-column-" + i + "-" + j + "-" + k).value;
+                var skuSales = document.getElementById("sku-post-input-column-" + button1rightPart + "-" + j + "-" + k).value;
+                var valueSales = document.getElementById("value-post-input-column-" + button1rightPart + "-" + j + "-" + k).value;
 
 
                 salArr.push({ skuSales: skuSales, valueSales: valueSales, Month: PostMonth, Year: PostYear });
             }
             prdArr.push({ ProductName: productName, productCode: productCode, postproductDescription: postproductDescription, Contribution: preContribution, SalesType: "Post", Sale: salArr, posttotal: posttotal, discountpostcentage: discountpostcentage })
         }
-        ;
-        Salesarr.push({ ChemistCode: ChemistCode, ProductArr: prdArr, postfromDate: postfromDate, posttoDate: posttoDate, prefromDate: prefromDate, pretoDate: pretoDate, grandtotal: grandtotal, bpspercentage: bpspercentage, totalroipercentage: totalroipercentage  });
 
-        var salesArrString = JSON.stringify(Salesarr);
+        Updatearr.push({ ChemistCode: ChemistCode, ProductArr: prdArr, postfromDate: postfromDate, posttoDate: posttoDate, prefromDate: prefromDate, pretoDate: pretoDate, grandtotal: grandtotal, bpspercentage: bpspercentage, totalroipercentage: totalroipercentage });
 
 
-    }
 
-    $.ajax({
 
-        url: "/ListView/CreateBpsRecord", // Replace with the URL of your controller action
-        method: "POST", // Use POST since you are sending data
-        data: { Salesarr1: salesArrString, HeaderData1: HeaderData },
-        success: function (data) {
-            console.log("Data sent to server:", { Salesarr1: Salesarr, HeaderData1: HeaderData });
-
-            if (data = true) {
-
-                /*var modelvisisble = document.getElementById('myModal').style.visibility = 'visible';*/
-                Swal.fire({
-                    icon: "success",
-                    title: 'Record Created Successfully!',
-                    showConfirmButton: false,
-                    timer: 3600,
-                    width: 680,
-                    allowOutsideClick: false,
-                    allowEscapeKey: false
-                });
-
-            } else {
-
-            }
-            setTimeout(function () {
-                window.location.href = "/ListView/ApprovedView/1"; // you can pass true to reload function to ignore the client cache and reload from the server
-            }, 3500);
-
-        },
-        error: function (xhr, status, error) {
-            console.error("Error:", status, error);
-        }
     });
 
 
 
-}
-
-function UpdateSubmittedForm() {
-    ;
-    var trackingid = document.getElementById("hcpid").value;
-
-    var Updatearr = [];
-    var UpdatechemistCount = $("#UpdateTableAcc").find("button").length;
-    for (var i = 0; i < UpdatechemistCount; i++) {
-        var postactualfromDate = new Date($('#startdate-post-' + i).val());
-        var postfromDate = postactualfromDate.getFullYear() + '-' +
-            (postactualfromDate.getMonth() + 1).toString().padStart(2, '0') + '-' +
-            postactualfromDate.getDate().toString().padStart(2, '0');
-        var postactualtoDate = new Date($('#enddate-post-' + i).val());
-        var posttoDate = postactualtoDate.getFullYear() + '-' +
-            (postactualtoDate.getMonth() + 1).toString().padStart(2, '0') + '-' +
-            postactualtoDate.getDate().toString().padStart(2, '0');
-
-
-        var postselectedMonthsAndYear = [];
-        while (postactualfromDate <= postactualtoDate) {
-            postselectedMonthsAndYear.push({
-                month: postactualfromDate.toLocaleString('default', { month: 'long' }),
-                year: postactualfromDate.getFullYear()
-            });
-            postactualfromDate.setMonth(postactualfromDate.getMonth() + 1);
-        }
-
-        var numberOfPostMonths = postselectedMonthsAndYear.length;
-        var uniquePostYears = [...new Set(postselectedMonthsAndYear.map(item => item.year))];
-        var numberOfPreYears = uniquePostYears.length
-
-        // var Updatearr = [];
-        var chemist = document.getElementById("chemist-" + i).innerText;
-        var chemcodeparts = chemist.split('-');
-        var ChemistCode = chemcodeparts[0].trim();
-        var productPostCount = $("#tbl-post-" + i).find("tr").length;
-        var posttotal = document.getElementById("total-post-" + i).value;
-/*        var roi = document.getElementById("edit-roi-post-" + i).value;*/
-        //var disc = document.getElementById("edit-disc-post-" + i).value;
-        //var totalroiPercentage = document.getElementById("edit-totalroiPercentage-post-" + i).value;
-
-
-        var discountpostcentage = document.getElementById("discountpercentage-post-" + i).value;
-        var totalroipercentage = document.getElementById("edittotalroipercentage").value;
-        var bpspercentage = document.getElementById("editbpspercentage").value;
-        var grandtotal = document.getElementById("editgrandtotal").value;
-
-        var prdArr = [];
-
-        //Products For Post Sales Against Each Chemist
-        for (var j = 0; j < productPostCount; j++) {
-
-            var productName = document.getElementById("sku-edit-product-post-row-" + i + "-" + j).innerText;
-            var productCode = document.getElementById("sku-edit-packcode-post-row-" + i + "-" + j).innerText;
-            var postproductDescription = document.getElementById("sku-edit-description-post-row-" + i + "-" + j).innerText;
-            var salArr = [];
-            for (var k = 0; k < numberOfPostMonths; k++) {
-                var monthyearnames = document.getElementById("post-edit-sku-coloum-" + (k + 3)).innerHTML;
-
-
-                var parts = monthyearnames.split('_');  // Split the string at "/"
-                if (parts.length === 3) {
-                    var PostYear = parts[0];
-                    var PostMonth = parts[1];
-                } else {
-                    console.log("Invalid input string format");
-                }
-
-
-                var skuSales = document.getElementById("sku-edit-post-row-" + i + "-" + j + "-" + k).value;
-                var valueSales = document.getElementById("value-edit-post-row-" + i + "-" + j + "-" + k).value;
-                salArr.push({ skuSales: skuSales, valueSales: valueSales, Month: PostMonth, Year: PostYear });
-            }
-            prdArr.push({ ProductName: productName, productCode: productCode, postproductDescription: postproductDescription, SalesType: "Post", Sale: salArr, posttotal: posttotal, discountpostcentage: discountpostcentage })
-        }
-        Updatearr.push({ ChemistCode: ChemistCode, ProductArr: prdArr, postfromDate: postfromDate, posttoDate: posttoDate, grandtotal: grandtotal, bpspercentage: bpspercentage, totalroipercentage: totalroipercentage });
-
-    }
-
-
+    var UpdatesalesArrString = JSON.stringify(Updatearr);
     $.ajax({
         url: "/ListView/UpdateBpsRecords",
         method: "POST",
 
-        data: { Updatedatalist: Updatearr, trackingid: trackingid }, // Convert arr to JSON and send it as "datalist"
+        data: { Updatedatalist: UpdatesalesArrString, trackingid: HCPREQID, HeaderData1: HeaderData }, // Convert arr to JSON and send it as "datalist"
         success: function (data) {
             
             if (data = true) {
@@ -373,7 +500,11 @@ function UpdateSubmittedForm() {
                     timer: 3600,
                     width: 680,
                     allowOutsideClick: false,
-                    allowEscapeKey: false
+                    allowEscapeKey: false,
+                    customClass: {
+                        title: 'small-font',
+                        icon: 'small-icon'
+                    }
                 });
             } else {
        /*         var modelvisisble = document.getElementById('myModal').style.visibility = 'hidden';*/
@@ -483,32 +614,44 @@ function PreActivitySales() {
 
 var checkedItems;
 
-function teamsChange() {
+function teamsChange(val) {
 
 
 
-    var checkboxes = document.querySelectorAll(".dropdown-content input[type='checkbox']");
-    checkedItems = [];
-    var checkboxindex = 0;
-    var html = '';
+        var checkboxes = document.querySelectorAll(".dropdown-content input[type='checkbox']");
+        checkedItems = [];
+        var checkboxindex = 0;
+        var html = '';
 
-    checkboxes.forEach(function (checkbox) {
-        if (checkbox.checked) {
-            checkedItems.push(checkbox.value);
-        }
-    });
+        var checkbox = null;
+        var attrid;
+        checkboxes.forEach(function (checkboxS) {
+            if (checkboxS.checked && $('#tableAcc').find('[_id="' + checkboxS.id +'"]').length == 0) {
+
+                checkbox = checkboxS.value
+                attrid = checkboxS.id
+                checkboxindex = checkboxS.id;
+              //  checkedItems.push(checkbox.value);
+               
+            }
+            if (checkboxS.checked) {
+                
+            }
+            else {
+                $('#tableAcc').find('[_id="' + checkboxS.id + '"]').remove();
+                $('#tableAcc').find('[_idbtn="' + checkboxS.id + '"]').remove();
+            }
+           
+        });
 
 
-    checkedItems.forEach(function (checkbox) {
-
-        console.log('dddd', checkbox)
-        /* html += '<label style="border:2px solid #3da3f4; color:#3da3f4; margin:5px;padding:5px; border-radius:15px;">' + checkbox.id + '<img style="margin-left:10px;" src="/images/check.png"/></label>';*/
-
-        html += `
+          //  if (existingHtml.indexOf(`id="chemist-${checkboxindex}"`) === -1) {
+        if (checkbox != null) {
+            html += `
   
  
-    <button style="margin-top:2%;" id="chemist-${checkboxindex}" onclick="togglePanel(this)" class="accordion">${checkbox}</button>
-    <div class="panel" id="ChemistPanelID-${checkboxindex}" style="height:auto;">
+    <button style="margin-top:2%;" id="chemist-${checkboxindex}" onclick="togglePanel(this)" _idbtn=${attrid} class="accordion">${checkbox}</button>
+    <div class="panel" id="ChemistPanelID-${checkboxindex}" _id=${attrid} style="height:auto;">
         <p style="text-align: center; font-weight: bold; font-size: 20px;">Pre-Sales</p>
         <div style="text-align: center;">
             <div class="container">
@@ -597,17 +740,10 @@ function teamsChange() {
         </div>
         <div id="post-${checkboxindex}"></div>
     </div>`;
-        document.getElementById("tableAcc").innerHTML = html;
 
 
-
-
-        checkboxindex++;
-    });
-
-
-
-
+            $('#tableAcc').append(html);
+        }
 
 
 
@@ -615,14 +751,145 @@ function teamsChange() {
 }
 
 
+function editteamsChange(val) {
+
+    var checkboxes = document.querySelectorAll(".dropdown-content input[type='checkbox']");
+    checkedItems = [];
+    var checkboxindex = 0;
+    var html = '';
+
+    var checkbox = null;
+    var attrid;
+    var chkid;
+    checkboxes.forEach(function (checkboxS) {
+        chkid = checkboxS.id.toString().replace("{", "").replace("}", "");
+        if (checkboxS.checked && $('#UpdateTableAcc').find('[_id="' + chkid + '"]').length == 0) {
+
+            checkbox = checkboxS.value
+            attrid = chkid
+            checkboxindex = chkid;
+            //  checkedItems.push(checkbox.value);
+
+        }
+        if (checkboxS.checked) {
+
+        }
+        else {
+            $('#UpdateTableAcc').find('[_id="' + chkid + '"]').remove();
+            $('#UpdateTableAcc').find('[_idbtn="' + chkid + '"]').remove();
+        }
+
+    });
+
+
+    //  if (existingHtml.indexOf(`id="chemist-${checkboxindex}"`) === -1) {
+    if (checkbox != null) {
+        html += `
+  
+ 
+    <button style="margin-top:2%;" id="chemist-${checkboxindex.toString().replace("{", "").replace("}", "")}" onclick="togglePanel(this)" _idbtn=${attrid.toString().replace("{", "").replace("}", "")} class="accordion">${checkbox.toString().replace("{", "").replace("}", "") }</button>
+    <div class="panel" id="ChemistPanelID-${checkboxindex.toString().replace("{", "").replace("}", "")}" _id=${attrid.toString().replace("{", "").replace("}", "") } style="height:auto;">
+        <p style="text-align: center; font-weight: bold; font-size: 20px;">Pre-Sales</p>
+        <div style="text-align: center;">
+            <div class="container">
+              <div class="row">
+                 <div class="col-4">
+                    <p style="text-align:right; color: #d71921;">Sale Units</p>
+                 </div>
+                 <div class="col-4">
+                    <div id="toggle-${checkboxindex.toString().replace("{", "").replace("}", "")}" class="toggle-switch" onclick="toggleSwitchAction(this,${checkboxindex.toString().replace("{", "").replace("}", "") })">
+                      <div class="toggle-slider"></div>
+                     </div>  
+                 </div>
+                 <div class="col-4">
+                    <p style="text-align:left; color: #d71921;">Sale Values</p>
+                 </div>
+              </div>
+            </div>
+     
+        </div>
+
+        <div style="padding-top:15px; padding-left:15px;">
+            <div class="container">
+                <div class="row">
+                    <div class="col-3">
+                        <label style="font-weight:bold">Pre Activity Sales</label>
+                    </div>
+                    <div class="col-3">
+                        <label>From:</label>
+                        <input type="month" id="startdatepre-${checkboxindex.toString().replace("{", "").replace("}", "")}" value="" style="margin-left: 2%;" />
+                    </div>
+                    <div class="col-3">
+                        <label>To:</label>
+                        <input type="month" id="enddatepre-${checkboxindex.toString().replace("{", "").replace("}", "") }" value="" style="margin-left: 2%;" />
+                    </div>
+                    <div class="col-3">
+                     <label>Contribution % :</label>
+                      <input id="Contribution-${checkboxindex.toString().replace("{", "").replace("}", "") }"  type="number"  Style=" text-align:right;text-align: right; width: 30%; margin-left: 5%;"></br>
+                      <div>
+                         <input style="margin-top:2px;" id="search-${checkboxindex.toString().replace("{", "").replace("}", "")}" onclick="EDITPreActivitySales(${checkboxindex.toString().replace("{", "").replace("}", "") })" type="button" class="searchbutton" value="Search"  />  </div>
+    
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="pre-${checkboxindex.toString().replace("{", "").replace("}", "") }"> 
+           
+
+        
+        </div>
+
+        <p style="text-align: center; font-weight: bold; font-size: 20px; margin-top:5%;">Post-Sales</p>
+                <div style="text-align: center;">
+            <div class="container">
+              <div class="row">
+                 <div class="col-4">
+                    <p style="text-align:right; color: #d71921;">Sale Units</p>
+                 </div>
+                 <div class="col-4">
+                    <div id="toggle-${checkboxindex.toString().replace("{", "").replace("}", "")}" class="toggle-switch" onclick="PosttoggleSwitchAction(this,${checkboxindex.toString().replace("{", "").replace("}", "") })">
+                      <div class="toggle-slider"></div>
+                     </div>  
+                 </div>
+                 <div class="col-4">
+                    <p style="text-align:left; color: #d71921;">Sale Values</p>
+                 </div>
+              </div>
+            </div>
+     
+        </div>
+        <div style="padding-top:15px; padding-left:15px;">
+            <div class="container">
+                <div class="row">
+                    <div class="col-3">
+                        <label style="font-weight:bold">Post Activity Sales</label>
+                    </div>
+                    <div class="col-3">
+                        <label>From:</label>
+                        <input disabled type="month" id="startdatepost-${checkboxindex.toString().replace("{", "").replace("}", "") }" value="" style="margin-left: 2%;" />
+                    </div>
+                    <div class="col-3">
+                        <label>To:</label>
+                        <input disabled type="month" id="enddatepost-${checkboxindex.toString().replace("{", "").replace("}", "") }" value="" style="margin-left: 2%;" />
+                    </div>
+                    <div class="col-3">
+                        <input style="" onclick="EditPostActivitySales(${checkboxindex.toString().replace("{", "").replace("}", "") })" type="button" class="searchbutton" value="Search" />
+                                             
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="post-${checkboxindex.toString().replace("{", "").replace("}", "") }"></div>
+    </div>`;
+
+
+        $('#UpdateTableAcc').append(html);
+    }
 
 
 
 
-
-
-
-
+}
 
 function togglePanel(button) {
     button.classList.toggle("active");
@@ -689,7 +956,93 @@ function PreActivitySales(checkboxindex) {
         },
         error: function (xhr, status, error) {
             // Handle errors here
-            console.error("Error:", status, error);
+            /*      console.error("Error:", status, error);*/
+            Swal.fire({
+                icon: "error",
+                title: 'Data Not Found',
+                showConfirmButton: false,
+                timer: 3600,
+                width: 680,
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                customClass: {
+                    title: 'small-font',
+                    icon: 'small-icon'
+                }
+            });
+        }
+    });
+
+
+}
+
+
+function EDITPreActivitySales(checkboxindex) {
+    ;
+    var precontribution = document.getElementById("Contribution-" + checkboxindex).value;
+    var startdateenable = document.getElementById("startdatepost-" + checkboxindex);
+    var enddateenable = document.getElementById("enddatepost-" + checkboxindex);
+    if (startdateenable) {
+        startdateenable.disabled = false;
+        enddateenable.disabled = false;
+    } else {
+        console.error("Element not found: startdatepre-" + checkboxindex);
+    }
+    /*    var inputcontribution = document.getElementById('contribution-' + checkboxindex).value;*/
+    var fromDate = new Date($("#startdatepre-" + checkboxindex).val());
+    var formattedFromDate = fromDate.getFullYear() + '-' +
+        (fromDate.getMonth() + 1).toString().padStart(2, '0') + '-' +
+        fromDate.getDate().toString().padStart(2, '0');
+    var toDate = new Date($("#enddatepre-" + checkboxindex).val());
+    var formattedtoDate = toDate.getFullYear() + '-' +
+        (toDate.getMonth() + 1).toString().padStart(2, '0') + '-' +
+        toDate.getDate().toString().padStart(2, '0');
+
+
+    var selectedbrick = document.getElementById('selectedbrick').value;
+    var parts = selectedbrick.split('-');
+    var BrickValue = parts[0].trim();
+
+    var TeamName = document.getElementById('teamNames').innerText;
+    var chemistName = document.getElementById("chemist-" + checkboxindex).innerText;
+    var Chemistparts = chemistName.split('-');
+    var ChemistCode = Chemistparts[0].trim();
+
+    ;
+    var preselectedMonthsAndYear = [];
+    while (fromDate <= toDate) {
+        preselectedMonthsAndYear.push({
+            month: fromDate.toLocaleString('default', { month: 'long' }),
+            year: fromDate.getFullYear()
+        });
+        fromDate.setMonth(fromDate.getMonth() + 1);
+    }
+
+    $.ajax({
+        url: "/ListView/EditPreAcc", // Replace with your controller and action names
+        type: 'POST', // Use GET or POST based on your server's requirements
+        data: { inputParameter: preselectedMonthsAndYear, prefromDate: formattedFromDate, pretoDate: formattedtoDate, BrickValue: BrickValue, TeamName: TeamName, ChemistCode: ChemistCode, checkboxindex: checkboxindex, precontribution: precontribution }, // Send data to the controller
+        success: function (response) {
+            // Handle the response from the controller here
+
+            $("#pre-" + checkboxindex).html(response);
+
+        },
+        error: function (xhr, status, error) {
+            // Handle errors here
+            Swal.fire({
+                icon: "error",
+                title: 'Data Not Found',
+                showConfirmButton: false,
+                timer: 3600,
+                width: 680,
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                customClass: {
+                    title: 'small-font',
+                    icon: 'small-icon'
+                }
+            });
         }
     });
 
@@ -758,6 +1111,68 @@ function PostActivitySales(checkboxindex) {
         }
     });
 }
+function EditPostActivitySales(checkboxindex) {
+
+
+    var prefromDate = new Date($("#startdatepre-" + checkboxindex).val());
+
+    var preformattedFromDate = prefromDate.getFullYear() + '-' +
+        (prefromDate.getMonth() + 1).toString().padStart(2, '0') + '-' +
+        prefromDate.getDate().toString().padStart(2, '0');
+    var pretoDate = new Date($("#enddatepre-" + checkboxindex).val());
+    var preformattedtoDate = pretoDate.getFullYear() + '-' +
+        (pretoDate.getMonth() + 1).toString().padStart(2, '0') + '-' +
+        pretoDate.getDate().toString().padStart(2, '0');
+
+    var fromDate = new Date($("#startdatepost-" + checkboxindex).val());
+    /*    var formattedFromDate = document.getElementById("startdatepost-" + checkboxindex).value;*/
+    var formattedFromDate = fromDate.getFullYear() + '-' +
+        (fromDate.getMonth()).toString().padStart(2, '0') + '-' +
+        fromDate.getDate().toString().padStart(2, '0');
+    var toDate = new Date($("#enddatepost-" + checkboxindex).val());
+    /*    var formattedtoDate = document.getElementById("enddatepost-" + checkboxindex).value;*/
+    var formattedtoDate = toDate.getFullYear() + '-' +
+        (toDate.getMonth()).toString().padStart(2, '0') + '-' +
+        toDate.getDate().toString().padStart(2, '0');
+
+
+
+    var selectedbrick = document.getElementById('selectedbrick').value;
+    var parts = selectedbrick.split('-');
+    var BrickValue = parts[0].trim();
+
+    var TeamName = document.getElementById('teamNames').innerText;
+
+    var chemistName = document.getElementById("chemist-" + checkboxindex).innerText;
+    var Chemistparts = chemistName.split('-');
+    var ChemistCode = Chemistparts[0].trim();
+
+
+
+    ;
+    var postselectedMonthsAndYear = [];
+    while (fromDate <= toDate) {
+        postselectedMonthsAndYear.push({
+            month: fromDate.toLocaleString('default', { month: 'long' }),
+            year: fromDate.getFullYear()
+        });
+        fromDate.setMonth(fromDate.getMonth() + 1);
+    }
+
+    $.ajax({
+        url: '/ListView/EditPostAcc', // Replace with your controller and action names
+        type: 'POST', // Use GET or POST based on your server's requirements
+        data: { postinputParameter: postselectedMonthsAndYear, postfromDate: formattedFromDate, posttoDate: formattedtoDate, BrickValue: BrickValue, TeamName: TeamName, ChemistCode: ChemistCode, postcheckboxindex: checkboxindex, prefromDate: preformattedFromDate, pretoDate: preformattedtoDate }, // Send data to the controller
+        success: function (response) {
+            // Handle the response from the controller here
+            $("#post-" + checkboxindex).html(response);
+        },
+        error: function (xhr, status, error) {
+            // Handle errors here
+            console.error("Error:", status, error);
+        }
+    });
+}
 function toggleSwitchAction(element, checkboxindex) {
     ;
     // Toggle the "on" class to change the background color
@@ -811,28 +1226,40 @@ function formatNumberWithCommas(number) {
 function CalculateBPSPercentage(bpspercentagebtnindex) {
 
 
-    var chemistCount = $("#tableAcc").find("button").length;
-    var totalSum = 0;
+  /*  var chemistCount = $("#tableAcc").find("button").length;*/
+
+    var totalPreSum = 0;
+    var totalPostSum = 0;
     var discountpercentageSum = 0;
-    for (var i = 0; i < chemistCount; i++) {
+    var discountpostcentageSum = 0;
+    var trackingId = document.getElementById("hcpid").value;
+        $("#tableAcc").find("button").each(function (index) {
+            var buttonId = $(this).attr("id");
+            var parts = buttonId.split('-');
 
-        var TotalPre = parseFloat(document.getElementById(`total-` + i).value.replace(/,/g, '')) || 0;
-        var TotalPost = parseFloat(document.getElementById(`total-post-` + i).value.replace(/,/g, '')) || 0;
-        var DiscountPercentagePost = parseFloat(document.getElementById(`discountpercentage-post-` + i).value.replace(/,/g, '')) || 0;
-        var DiscountPercentagePre = parseFloat(document.getElementById(`discountpercentage-pre-` + i).value.replace(/,/g, '')) || 0;
-        var GrandTotal = TotalPre + TotalPost;
-        var discountpercentageSum = DiscountPercentagePost + DiscountPercentagePre;
-    /*    totalSum += Total;*/
-     /*   discountpercentageSum += DiscountPercentage*/
-    }
+            var button1rightPart = parts[1];
 
+            var TotalPre = parseFloat(document.getElementById(`total-` + button1rightPart).value.replace(/,/g, '')) || 0;
+            var TotalPost = parseFloat(document.getElementById(`total-post-` + button1rightPart).value.replace(/,/g, '')) || 0;
+            var DiscountPercentagePost = parseFloat(document.getElementById(`discountpercentage-post-` + button1rightPart).value.replace(/,/g, '')) || 0;
+            var DiscountPercentagePre = parseFloat(document.getElementById(`discountpercentage-pre-` + button1rightPart).value.replace(/,/g, '')) || 0;
+
+            totalPreSum += TotalPre;
+            totalPostSum += TotalPost;
+
+            discountpercentageSum += DiscountPercentagePost;
+            discountpostcentageSum += DiscountPercentagePre;
+
+
+        });
+
+    var GrandTotal = totalPreSum + totalPostSum;
+    var discountpercentageSum = discountpercentageSum + discountpostcentageSum;
     var roundedTotalSum = Math.round(GrandTotal);
     var formattedTotalSum = formatNumberWithCommas(roundedTotalSum);
-    var trackingId = document.getElementById("hcpid").value;
+
     var TotalValues = document.getElementById("grandtotal");
     TotalValues.value = formattedTotalSum;
-    
-   
     $.ajax({
         url: "/ListView/CalBPS", // Replace with your controller and action names
         type: 'POST', // Use GET or POST based on your server's requirements
@@ -841,12 +1268,9 @@ function CalculateBPSPercentage(bpspercentagebtnindex) {
 
             var a = document.getElementById("bpspercentage");
             var bpspercentage = data.bpspercentage;
-            a.value = bpspercentage.toFixed(2); 
-
-
-
+            a.value = bpspercentage.toFixed(2);
             var c = document.getElementById("totalroipercentage");
-            var aValue = parseFloat(a.value) || 0; 
+            var aValue = parseFloat(a.value) || 0;
             var roi = discountpercentageSum + aValue;
 
             c.value = roi;
@@ -857,60 +1281,54 @@ function CalculateBPSPercentage(bpspercentagebtnindex) {
         }
     });
 
-
 }
 
 function EditCalculateBPSPercentage(editbpspercentagebtnindex) {
 
-    var chemistCount = $("#UpdateTableAcc").find("button").length;
-    var totalSum = 0;
+
+
+    var totalPreSum = 0;
+    var totalPostSum = 0;
     var discountpercentageSum = 0;
-    for (var i = 0; i < chemistCount; i++) {
-
-        var TotalPre = parseFloat(document.getElementById(`total-pre-` + i).value.replace(/,/g, '')) || 0;
-        var TotalPost = parseFloat(document.getElementById(`total-post-` + i).value.replace(/,/g, '')) || 0;
-        var DiscountPercentagePost = parseFloat(document.getElementById(`discountpercentage-post-` + i).value.replace(/,/g, '')) || 0;
-        var DiscountPercentagePre = parseFloat(document.getElementById(`discountpercentage-pre-` + i).value.replace(/,/g, '')) || 0;
-        var GrandTotal = TotalPre + TotalPost;
-        var discountpercentageSum = DiscountPercentagePost + DiscountPercentagePre;
-        /*    totalSum += Total;*/
-        /*   discountpercentageSum += DiscountPercentage*/
-    }
-
-    var roundedTotalSum = Math.round(GrandTotal);
-    var EditformattedTotalSum = formatNumberWithCommas(roundedTotalSum);
+    var discountpostcentageSum = 0;
     var trackingId = document.getElementById("hcpid").value;
-    var TotalValues = document.getElementById("editgrandtotal");
-    TotalValues.value = EditformattedTotalSum;
+    $("#UpdateTableAcc").find("button").each(function (index) {
+        var buttonId = $(this).attr("id");
+        var parts = buttonId.split('-');
+
+        var button1rightPart = parts[1];
+
+        var TotalPre = parseFloat(document.getElementById(`total-` + button1rightPart).value.replace(/,/g, '')) || 0;
+        var TotalPost = parseFloat(document.getElementById(`total-post-` + button1rightPart).value.replace(/,/g, '')) || 0;
+        var DiscountPercentagePost = parseFloat(document.getElementById(`discountpercentage-post-` + button1rightPart).value.replace(/,/g, '')) || 0;
+        var DiscountPercentagePre = parseFloat(document.getElementById(`discountpercentage-pre-` + button1rightPart).value.replace(/,/g, '')) || 0;
+
+        totalPreSum += TotalPre;
+        totalPostSum += TotalPost;
+
+        discountpercentageSum += DiscountPercentagePost;
+        discountpostcentageSum += DiscountPercentagePre;
 
 
-    //var Total = parseFloat(document.getElementById(`total-post-` + editbpspercentagebtnindex).value) || 0;
-    //var TrackingId = document.getElementById("tracid").value;
+    });
+
+    var GrandTotal = totalPreSum + totalPostSum;
+    var discountpercentageSum = discountpercentageSum + discountpostcentageSum;
+    var roundedTotalSum = Math.round(GrandTotal);
+    var formattedTotalSum = formatNumberWithCommas(roundedTotalSum);
+
+    var TotalValues = document.getElementById("grandtotal");
+    TotalValues.value = formattedTotalSum;
 
     $.ajax({
-        url: "/ListView/CalBPS", // Replace with your controller and action names
+        url: "/ListView/EditCalBPS", // Replace with your controller and action names
         type: 'POST', // Use GET or POST based on your server's requirements
         data: { TrackingId: trackingId, Total: roundedTotalSum }, // Send data to the controller
         success: function (data) {
-            ;
-            //var a = document.getElementById("edit-roi-post-" + editbpspercentagebtnindex);
-            //var bpspercentage = data.bpspercentage;
-            //a.value = bpspercentage.toFixed(2); //JSON.stringify(bpspercentage);
-            //var b = document.getElementById("edit-disc-post-" + editbpspercentagebtnindex);
-            //var c = document.getElementById("edit-totalroiPercentage-post-" + editbpspercentagebtnindex);
-            //if (b.value == '') {
-            //    b.value = 0;
-            //}
-            //c.value = c.value = parseFloat(parseFloat(a.value) + parseFloat(b.value)).toFixed(2);
-
-
-            var a = document.getElementById("editbpspercentage");
+            var a = document.getElementById("bpspercentage");
             var bpspercentage = data.bpspercentage;
             a.value = bpspercentage.toFixed(2);
-
-
-
-            var c = document.getElementById("edittotalroipercentage");
+            var c = document.getElementById("totalroipercentage");
             var aValue = parseFloat(a.value) || 0;
             var roi = discountpercentageSum + aValue;
 
@@ -930,7 +1348,7 @@ function calculateValue(index, row, column) {
 
     var inputValue = document.getElementById("sku-post-input-column-" + index + "-" + row + "-" + column).value;
     var unitprice = document.getElementById("post-UnitPrice-" + index + "-" + row).value;
-    var totalInput1 = parseFloat(document.getElementById(`total-post-` + index).value) || 0;
+    var totalInput1 = document.getElementById(`total-post-` + index).value.replace(',', '') || 0;
     var total = 0;
 
 
@@ -939,16 +1357,17 @@ function calculateValue(index, row, column) {
         var valueInputClass = 'value-post-input-column-' + index + "-" + row + "-" + column; // Corresponding "Values" input class
         var valueInput = document.getElementById(valueInputClass); // Find the corresponding "Values" input field
         if (!isNaN(valueInput.value)) {
-            totalInput1 = totalInput1 - valueInput.value;
+            
+            totalInput1 = (parseFloat(totalInput1) - parseFloat(valueInput.value || 0).toFixed(2)).toFixed(2);
         }
         if (valueInput) {
-            var calculatedValue = parseFloat(inputValue * parseFloat(unitprice)).toFixed(2); // Divide by 2
+            var calculatedValue = parseFloat(parseFloat(inputValue || 0).toFixed(2) * parseFloat(unitprice)).toFixed(2); // Divide by 2
             valueInput.value = calculatedValue;
         }
     }
     var value = document.getElementById("value-post-input-column-" + index + "-" + row + "-" + column).value;
     var totalInput = document.getElementById(`total-post-` + index);
-    total = totalInput1 + parseFloat(value);
+    total = parseFloat(parseFloat(totalInput1) + parseFloat(value)).toFixed(2);
     var formattedTotalValue = formatNumberWithCommas(total);
     totalInput.value = formattedTotalValue;
 
@@ -997,13 +1416,6 @@ function EditcalculateValue(index, row, coloum) {
 
 }
 
-
-
-
-
-
-
-
 function edittoggleSwitchAction(element, toggle) {
 
     element.classList.toggle("on");
@@ -1049,9 +1461,6 @@ function editposttoggleSwitchAction(element, toggle) {
 
 }
 
-
-
-
 function TrackingIDDetails() {
 
     var TrackingId = document.getElementById("traciddetail").value;
@@ -1071,7 +1480,6 @@ function TrackingIDDetails() {
 
 
 }
-
 
 function getComments(worklistId) {
 
@@ -1116,8 +1524,6 @@ function getComments(worklistId) {
     });
 }
 
-
-
 function downloadFile(filePath) {
     ;
     var link = document.createElement('a');
@@ -1128,26 +1534,7 @@ function downloadFile(filePath) {
     document.body.removeChild(link);
 }
 
-//=========== (Start) Hassam ===========
-function downloadTemplate(pathId) {
-    
-    $.ajax({
-        url: '/ListView/GetTemplateByPathId',
-        type: 'GET',
-        data: { pathId },
-        success: function (responseData) {
-            $("#showChooseFile").show();
-            let downloadURL = responseData.path + responseData.name
-            let fileDownload = document.createElement("a");
-            fileDownload.download = responseData.name;
-            fileDownload.href = downloadURL;
-            fileDownload.click();
-        }
-    });
-}
 
-
-//=========== (End) Hassam ===========
 
 function BpsApproval() {
 
@@ -1188,12 +1575,16 @@ function BpsApproval() {
                     //var modelvisisble = document.getElementById('myModalDetails').style.visibility = 'visible';
                     Swal.fire({
                         icon: "success",
-                        title: 'Approved!',
+                        title: 'Successfully Approved!',
                         showConfirmButton: false,
                         timer: 3600,
                         width: 680,
                         allowOutsideClick: false,
-                        allowEscapeKey: false
+                        allowEscapeKey: false,
+                        customClass: {
+                            title: 'small-font',
+                            icon: 'small-icon'
+                        }
                     });
 
                 } else {
@@ -1242,13 +1633,17 @@ function BpsReject() {
 
                 //var modelvisisble = document.getElementById('myModal').style.visibility = 'visible';
                 Swal.fire({
-                    icon: "Error",
-                    title: 'Objection!!',
+                    icon: "success",
+                    title: 'Objection Raised Successfully!',
                     showConfirmButton: false,
                     timer: 3600,
                     width: 680,
                     allowOutsideClick: false,
-                    allowEscapeKey: false
+                    allowEscapeKey: ,
+                    customClass: {
+                        title: 'small-font',
+                        icon: 'small-icon'
+                    }
                 });
 
             } else {
@@ -1301,12 +1696,16 @@ function BpsObjection() {
                 /*    var modelvisisble = document.getElementById('myModalDetails').style.visibility = 'visible';*/
                     Swal.fire({
                         icon: "error",
-                        title: 'Objection!',
+                        title: 'Objection Raised Successfully!',
                         showConfirmButton: false,
                         timer: 3600,
                         width: 680,
                         allowOutsideClick: false,
-                        allowEscapeKey: false
+                        allowEscapeKey: false,
+                        customClass: {
+                            title: 'small-font',
+                            icon: 'small-icon'
+                        }
                     });
 
                 } else {
@@ -1466,12 +1865,16 @@ function BpsASMActivity() {
           /*      var modelvisisble = document.getElementById('myModalDetails').style.visibility = 'visible';*/
                 Swal.fire({
                     icon: "success",
-                    title: 'Activity Performed!',
+                    title: 'Activity Performed Successfully!',
                     showConfirmButton: false,
                     timer: 3600,
                     width: 680,
                     allowOutsideClick: false,
-                    allowEscapeKey: false
+                    allowEscapeKey: false,
+                    customClass: {
+                        title: 'small-font',
+                        icon: 'small-icon'
+                    }
                 });
 
             } else {
@@ -1489,35 +1892,35 @@ function BpsASMActivity() {
 
 }
 
-let asmFilesToUpload = [];
-$("#asmfile").on('change', function (event) {
-    document.getElementById("filesList").innerHTML = "";
-    for (let i = 0; i < event.target.files.length; i++) {
+//let asmFilesToUpload = [];
+//$("#asmfile").on('change', function (event) {
+//    document.getElementById("filesList").innerHTML = "";
+//    for (let i = 0; i < event.target.files.length; i++) {
 
-        let file = event.target.files[i];
-        let fileId = "FID" + (1000 + Math.random() * 9000).toFixed(0);
+//        let file = event.target.files[i];
+//        let fileId = "FID" + (1000 + Math.random() * 9000).toFixed(0);
 
-        asmFilesToUpload.push({
-            file: file,
-            FID: fileId
-        });
+//        asmFilesToUpload.push({
+//            file: file,
+//            FID: fileId
+//        });
 
-    }
-    displayASMFiles();
-})
+//    }
+//    displayASMFiles();
+//})
 
 
-function displayASMFiles() {
-    for (let i = 0; i < asmFilesToUpload.length; i++) {
-        document.getElementById("filesList").innerHTML += `
-        <li>
-            <div class="row my-2">
-                <div class="col-lg-9">${asmFilesToUpload[i].file.name}</div>
-            </div>
-        </li>
-        `;
-    }
-}
+//function displayASMFiles() {
+//    for (let i = 0; i < asmFilesToUpload.length; i++) {
+//        document.getElementById("filesList").innerHTML += `
+//        <li>
+//            <div class="row my-2">
+//                <div class="col-lg-9">${asmFilesToUpload[i].file.name}</div>
+//            </div>
+//        </li>
+//        `;
+//    }
+//}
 
 function BpsPoNumber() {
     ;
@@ -1533,12 +1936,16 @@ function BpsPoNumber() {
 /*                var modelvisisble = document.getElementById('myModalDetails').style.visibility = 'visible';*/
                 Swal.fire({
                     icon: "success",
-                    title: 'Activity Performed!',
+                    title: 'Activity Performed Successfully!',
                     showConfirmButton: false,
                     timer: 3600,
                     width: 680,
                     allowOutsideClick: false,
-                    allowEscapeKey: false
+                    allowEscapeKey: false,
+                    customClass: {
+                        title: 'small-font',
+                        icon: 'small-icon'
+                    }
                 });
 
             } else {

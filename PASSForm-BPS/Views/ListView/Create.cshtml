@@ -16,6 +16,7 @@
 <html>
 <head>
     <title>Your View</title>
+    <script src="~/js/datatable_file.js"></script>
     <style>
         .accordion {
             color: black;
@@ -250,6 +251,11 @@
         #customers th{
             width:10%;
         }
+
+
+        .hide {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -361,7 +367,7 @@
 
                                                 @foreach (var T in Model.teams)
                                                 {
-                                                    <div style="border: 2px solid #d71921 ; width: 35%; border-radius: 15px; text-align: center; color: #d71921 ; font-weight:700">
+                                                    <div style="border: 2px solid #d71921 ; width: 50%; border-radius: 15px; text-align: center; color: #d71921 ; font-weight:700">
 
                                                         <label id="teamNames" value="@T.TeamName">@T.TeamName</label>
                                                     </div>
@@ -384,14 +390,15 @@
                                     <div class="col-4">
                                         <label style="font-weight:bold;">Distributor:</label>
                                         <div>
-                                         @*   <select style="width: 70%; height: 30px;">*@
-                                             @*   <option  value="Select">Select</option>*@
+                                            <select style="width: 95%; height: 30px;" id="distributer">
+                                                <option  value="Select">Select</option>
                                                 @foreach (var item1 in Model.disterMappings)
                                                 {
-                                              @*      <option id="distributer" value="@item1">@item1.DistributerCode - @item1.DistrubiterName</option>*@
-                                                <input readonly id="distributer" value="@item1.DistributerCode - @item1.DistrubiterName" style="width:85%" type="text" />
+                                                    <option value="@item1.DistributerCode - @item1.DistrubiterName">@item1.DistributerCode - @item1.DistrubiterName</option>
+@*                                                <input readonly id="distributer" value="@item1.DistributerCode - @item1.DistrubiterName" style="width:85%" type="text" />*@
                                                 }
-                                        @*    </select>*@
+                                            </select>
+                                            <label class="hide" id="DistributorErrorLabel" style="color:red;font-size:10px;">Required! Please Select Distributor</label>
                                         </div>
          
                                     </div>
@@ -477,7 +484,7 @@
                     <div class="dropdown" id="mTeamDropdown">
 
                         <button class="dropdown-toggle">Please Select Chemist</button>
-                        <div class="dropdown-content" id="teamsContent" onchange="teamsChange()">
+                        <div class="dropdown-content" id="teamsContent" >
                             <div id="selectedchemist">
                             </div>
                         </div>
@@ -488,7 +495,6 @@
 
                     }
                 
-
 
             </div>    
         </div>
@@ -550,12 +556,68 @@
             ;
             $("#sku").toggle();
             $("#values").toggle();
+
         }
 
+        $(document).ready(function () {
+
+            $("#selectedchemist").on('change', function () {
+                //debugger;
+                //alert($(this).val());
+                teamsChange();
+            });
+
+           
+
+        //    $('#teamsContent').on('change', function () {
+        //     //   debugger;
+        //        var last_selected;
+        //        debugger;
+        //        if ($(this).is(":selected")) {
+        //            last_selected = $(this).attr('value');
+        //        }
+        //        alert(last_selected);
+        //        teamsChange(last_selected);
+
+        //});
 
 
-      
+          
 
+
+        });
+
+
+        function getchembybrickcode() {
+
+
+            var searchButtons = document.getElementsByClassName('searchbutton');
+            if (searchButtons.length > 0) {
+                var searchbutton = searchButtons[0];
+                searchbutton.removeAttribute('disabled');
+            }
+            var selectedbrick = document.getElementById('selectedbrick').value;
+            var parts = selectedbrick.split('-');
+
+            // Extract the left part (the part before the '-')
+            var leftValue = parts[0].trim();
+
+            $.ajax({
+                url: "/ListView/CreateAccordion", // Replace with your controller and action names
+                method: "GET", // Use GET or POST based on your server's requirements
+                data: { brickValue: leftValue }, // Send the unique identifier as data
+                success: function (data) {
+                    document.getElementById('selectedchemist').innerHTML = data.macChemMappings;
+                    $('#tableAcc').empty();
+                    // Handle the server's response here
+                    // $("#tableAcc").html(data);
+                },
+                error: function (xhr, status, error) {
+                    // Handle errors here
+                    console.error("Error:", status, error);
+                }
+            });
+        }
    
     </script>
     

@@ -247,7 +247,7 @@
 
                                             @foreach (var T in Model.teams)
                                             {
-                                                <div style="border: 2px solid #d71921 ; width: 35%; border-radius: 15px; text-align: center; color: #d71921 ; font-weight:700">
+                                                <div style="border: 2px solid #d71921 ; width: 45%; border-radius: 15px; text-align: center; color: #d71921 ; font-weight:700">
 
                                                     <label id="teamNames" value="@T.TeamName">@T.TeamName</label>
                                                 </div>
@@ -274,7 +274,7 @@
                                     <div>
                                         @foreach (var dis in Model.distributers)
                                         {
-                                            <input style="width:75%" disabled value="@dis.DistributerCode - @dis.DistrubiterName" type="text" />
+                                            <input style="width:95%" disabled value="@dis.DistributerCode - @dis.DistrubiterName" type="text" />
                                         }
                                     </div>
                                 </div>
@@ -307,7 +307,7 @@
                                         <div>
                                             @foreach (var mac in Model.macrobricks)
                                             {
-                                                <input style="width:75%" disabled value="@mac.MacroBrickCode - @mac.MacroBrickName" type="text" />
+                                                <input style="width:95%" disabled value="@mac.MacroBrickCode - @mac.MacroBrickName" type="text" />
                                             }
                                         </div>
 
@@ -323,7 +323,7 @@
                                             <label style="font-weight:bold;">Creater Comments:</label><br />
                                             @foreach (var com in Model.detailbps)
                                             {
-                                                <textarea id="createcomments" style="width:85%; height:100px; margin-top:1%;">@com.Comments</textarea>
+                                                <textarea disabled id="createcomments" style="width:85%; height:100px; margin-top:1%;">@com.Comments</textarea>
 
                                             }
                                         </div>
@@ -636,7 +636,7 @@
                                 {
                                     var predat = group.First(); // Take the first item in each group
 
-                                    <input disabled type="text" value="@(predat.PreTotal != null ? string.Format("{0:yyyy-MM-dd}", predat.PreTotal) : string.Empty)" style="margin-left: 2%; text-align:right;" />
+                                    <input disabled type="text" class="allinput-fields" value="@(predat.PreTotal != null ? string.Format("{0:yyyy-MM-dd}", predat.PreTotal) : string.Empty)" style="margin-left: 2%;" />
                                     @*<input disabled type="text" value="@(int.Parse(predat.PreTotal).ToString("#,##0") != null ? string.Format("{0:yyyy-MM-dd}", int.Parse(predat.PreTotal).ToString("#,##0")) : string.Empty)" style="margin-left: 2%; text-align:right;" />*@
 
                                     @*<input disabled type="text" id="editChemistCode" hidden value="@(predat.PreTotal != null ? string.Format("{0:yyyy-MM-dd}", predat.PreTotal) : string.Empty)" style="margin-left: 2%; text-align:right;" />
@@ -654,7 +654,7 @@
                                 {
                                     var predat = group.First(); // Take the first item in each group
 
-                                    <input disabled type="text" value="@(predat.discountpercentage != null ? string.Format("{0:yyyy-MM-dd}", predat.discountpercentage) : string.Empty)" style="margin-left: 2%; text-align:right;" />
+                                    <input disabled type="text" class="allinput-fields" value="@(predat.discountpercentage != null ? string.Format("{0:yyyy-MM-dd}", predat.discountpercentage) : string.Empty)" style="margin-left: 2%;" />
                                 }
 
                             </div>
@@ -902,7 +902,7 @@
                                         {
 @*                                            <input disabled type="text" value="@(postdat.PostTotal != null ? string.Format("{0:yyyy-MM-dd}", postdat.PostTotal) : string.Empty)" style="margin-left: 2%; text-align:right;" />*@
 
-                                            <input disabled type="text" value="@(postdat.PostTotal != null ? string.Format("{0:yyyy-MM-dd}", postdat.PostTotal) : string.Empty)" style="margin-left: 2%; text-align:right;" />
+                                            <input disabled type="text" class="allinput-fields" value="@(postdat.PostTotal != null ? string.Format("{0:yyyy-MM-dd}", postdat.PostTotal) : string.Empty)" style="margin-left: 2%;" />
                                         }
                                     }
 
@@ -919,7 +919,7 @@
                                     {
                                         if (postdat.Chemist_Code == acc)
                                         {
-                                            <input disabled type="text" value="@(postdat.discountpostcentage != null ? string.Format("{0:yyyy-MM-dd}", postdat.discountpostcentage) : string.Empty)" style="margin-left: 2%; text-align:right;" />
+                                            <input disabled type="text" class="allinput-fields" value="@(postdat.discountpostcentage != null ? string.Format("{0:yyyy-MM-dd}", postdat.discountpostcentage) : string.Empty)" style="margin-left: 2%;" />
                                         }
                                     }
 
@@ -940,16 +940,22 @@
                 <div>
                     <div style="text-align:right; margin-top:3%;">
                         <label>Grand Total:</label>
-                        @foreach (var grandtaotal in Model.customersmodels)
+                        @*@foreach (var grandtaotal in Model.customersmodels)
                         {
                             if (grandtaotal.grandtotal != null)
                             {
-@*                                <input disabled type="text"  value="@(grandtaotal.grandtotal != null ? string.Format("{0:yyyy-MM-dd}", grandtaotal.grandtotal ) : string.Empty)" style="margin-left: 2%; text-align:right;"/>*@
 
-@*                                <input class="Comma" disabled type="text" value="@(grandtaotal.grandtotal != null ? string.Format("{0:yyyy-MM-dd}", grandtaotal.grandtotal) : string.Empty)" style="margin-left: 2%; text-align:right;" />*@
                                 <input  disabled type="text" value="@grandtaotal.grandtotal" style="margin-left: 2%; text-align:right;" />
                             }
 
+                        }*@
+
+                        @foreach (var grandtaotal in Model.customersmodels.Where(grandtaotal => grandtaotal.grandtotal != null)
+                        .GroupBy(grandtaotal => grandtaotal.grandtotal))
+                        {
+                            var predat = grandtaotal.First(); // Take the first item in each group
+
+                            <input disabled type="text" class="allinput-fields" value="@(predat.grandtotal != null ? predat.grandtotal : string.Empty)" style="margin-left: 2%;" />
                         }
 
                     </div>
@@ -958,13 +964,21 @@
                 <div>
                     <div style="text-align:right; margin-top:2%;">
                         <label>BPS Percentage %:</label>
-                        @foreach (var bpsperc in Model.customersmodels)
+@*                        @foreach (var bpsperc in Model.customersmodels)
                         {
                             if (bpsperc.bpspercentage != null)
                             {
                                 <input disabled type="text" value="@(bpsperc.bpspercentage != null ? string.Format("{0:yyyy-MM-dd}", bpsperc.bpspercentage ) : string.Empty)" style="margin-left: 2%; text-align:right;" />
                             }
 
+                        }*@
+
+                        @foreach (var bpsperc in Model.customersmodels.Where(bpsperc => bpsperc.bpspercentage != null)
+                        .GroupBy(bpsperc => bpsperc.bpspercentage))
+                        {
+                            var predat = bpsperc.First(); // Take the first item in each group
+
+                            <input disabled type="text" class="allinput-fields" value="@(predat.bpspercentage != null ? predat.bpspercentage : string.Empty)" style="margin-left: 2%;" />
                         }
 
                     </div>
@@ -973,13 +987,21 @@
                 <div>
                     <div style="text-align:right; margin-top:2%;">
                         <label>Total ROI %:</label>
-                        @foreach (var roi in Model.customersmodels)
+@*                        @foreach (var roi in Model.customersmodels)
                         {
                             if (roi.totalroipercentage != null)
                             {
                                 <input disabled type="text" value="@(roi.totalroipercentage != null ? string.Format("{0:yyyy-MM-dd}", roi.totalroipercentage ) : string.Empty)" style="margin-left: 2%; text-align:right;" />
                             }
 
+                        }*@
+
+                        @foreach (var roi in Model.customersmodels.Where(roi => roi.totalroipercentage != null)
+                        .GroupBy(roi => roi.totalroipercentage))
+                        {
+                            var predat = roi.First(); // Take the first item in each group
+
+                            <input disabled type="text" class="allinput-fields" value="@(predat.totalroipercentage != null ? predat.totalroipercentage : string.Empty)" style="margin-left: 2%;" />
                         }
 
                     </div>

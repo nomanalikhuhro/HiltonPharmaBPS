@@ -40,6 +40,7 @@ using Microsoft.AspNetCore.Hosting;
 using Org.BouncyCastle.Ocsp;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Xml.Linq;
+using Org.BouncyCastle.Math.EC.Multiplier;
 
 namespace PASSForm_BPS.Controllers
 {
@@ -48,9 +49,9 @@ namespace PASSForm_BPS.Controllers
 
         private readonly PassDbContext _passDbContext;
         private readonly TestSalesDbContext _testSalesDbContext;
-        private readonly string _connectionString = "Server=192.168.10.92;Database=pass_db;Uid=newuser1;Pwd=N3u$er123++;";
+        private readonly string _connectionString; /*= "Server=192.168.10.92;Database=pass_db;Uid=newuser1;Pwd=N3u$er123++;";*/
 
-        public string _sqlconnection = "";
+        public string _sqlconnection;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
         DataTable dt_HCPDETAILS = new DataTable();
@@ -61,7 +62,9 @@ namespace PASSForm_BPS.Controllers
             this._passDbContext = passDbContext;
             this._testSalesDbContext = testSalesDbContext;
             _webHostEnvironment = webHostEnvironment;
-            _sqlconnection = "Server=192.168.10.6;Database=TestSalesDB;User ID=test2;Password=abc123+;Integrated Security=False;Trusted_Connection=False;Encrypt=False;";// configuration1.GetConnectionString("SqlConnection"); // configuration1.GetConnectionString["SqlConnection"];
+            _sqlconnection = configuration1.GetConnectionString("SqlConnection");
+            _connectionString = configuration1.GetConnectionString("MySqlServerConnection");
+           /* _sqlconnection = "Server=192.168.10.6;Database=DSRvsMREP;User ID=test2;Password=abc123+;Integrated Security=False;Trusted_Connection=False;Encrypt=False;";*/// configuration1.GetConnectionString("SqlConnection"); // configuration1.GetConnectionString["SqlConnection"];
         }
         // GET: ListViewController
         public ActionResult Index()
@@ -164,7 +167,12 @@ namespace PASSForm_BPS.Controllers
         {
             try
             {
-             
+
+                if (id == null)
+                {
+                    return RedirectToAction("PendingView", "ListView", 2);
+                }
+
                 // string CookieValue = "";
                 // var myCookie = Request.Cookies["roleid"].Value;
                 string empIdCookie = HttpContext.Session.GetString("roleid");  //HttpContext.Request.Cookies["roleid"];
@@ -837,7 +845,7 @@ namespace PASSForm_BPS.Controllers
         {
             try
             {
-                string Tracking_ID = inputValue;
+                string Tracking_ID = inputValue?.Trim();
                 if (Tracking_ID == null)
                 {
 
@@ -852,7 +860,7 @@ namespace PASSForm_BPS.Controllers
                     try
                     {
 
-                        var bpsrcordquery = @"SELECT bpsreq.*, bpsreq.HCPREQID as User_Name, bpsreq.Status_ID as StatusType, bpsreq.CreatedBy as TMCode FROM pass_db.bps_request bpsreq where TrackingID = '" + inputValue + "'";
+                        var bpsrcordquery = @"SELECT bpsreq.*, bpsreq.HCPREQID as User_Name, bpsreq.Status_ID as StatusType, bpsreq.CreatedBy as TMCode FROM pass_db.bps_request bpsreq where TrackingID = '" + Tracking_ID + "'";
                         var bpsrcord = _passDbContext.BpsRequests.FromSqlRaw(bpsrcordquery).ToList();
 
                         if (bpsrcord.Count > 0)
@@ -1067,8 +1075,9 @@ namespace PASSForm_BPS.Controllers
                         {
                             string month = item2.Month;
                             string year = item2.Year;
-                            string sku = item2.skuSales == null ? "0" : item2.skuSales;
-                            Decimal value = Convert.ToDecimal(item2.valueSales) == null ? 0 : Convert.ToDecimal(item2.valueSales);
+                            string sku = item2.skuSales == null || item2.skuSales == "" ? "0" : item2.skuSales;
+                            string valussales = item2.valueSales == null || item2.valueSales == "" ? "0" : item2.valueSales;
+                            Decimal value = Convert.ToDecimal(valussales); // Convert.ToDecimal(item2.valueSales) == null ? 0 : Convert.ToDecimal(item2.valueSales);
 
                             var outputParameter1 = new MySqlParameter
                             {
@@ -1288,51 +1297,51 @@ where HCPREQID = '" + trackingid + "'";
                 ViewBag.checkboxindex = checkboxindex;
                 var Macname = _passDbContext.Macrobricks.FromSqlRaw("select * from macrobricks where macrobrickcode = '" + BrickValue + "' ").FirstOrDefault();
 
-               var skuquery = @"DECLARE @columns AS NVARCHAR(MAX);
-    DECLARE @sql AS NVARCHAR(MAX);
-    DECLARE @startDate AS DATE = '" + prefromDate + "'" +
-       " DECLARE @endDate AS DATE = '" + pretoDate + "'" +
+                var skuquery = @"DECLARE @columns AS NVARCHAR(MAX);
+                DECLARE @sql AS NVARCHAR(MAX);
+                DECLARE @startDate AS DATE = '" + prefromDate + "'" +
+        " DECLARE @endDate AS DATE = '" + pretoDate + "'" +
 
-                        "        SET @columns = STUFF((                                                                         " +
-                        "            SELECT ',' + QUOTENAME(YearMonth)                                                          " +
-                        "                                                                                                       " +
-                        "            FROM(                                                                                      " +
-                        "                SELECT DISTINCT CONCAT(DATENAME(yyyy, Date), ' ', DATENAME(mm, Date)) AS YearMonth, Month(Date) as mon, year(Date) as yea    " +
-                        "                                                                                                       " +
-                        "                FROM [dbo].[DSR_HiltonDailySales_TeamToChemist2022-23]                                " +
-                        "                                                                                                       " +
-                        "                WHERE TeamName = '" + TeamName + "' AND ClientCode = '"+ ChemistCode +"' AND MicroBrickCode in (select distinct MinorBrickCode from MacroMicroBrickMaping where MajorBrickName = '" + Macname.MacroBrickName + "')                   " +
-                        "                                                                                                       " +
-                        "                    AND Date >= @startDate AND Date <= @endDate                                        " +
-                        "            ) OrderedMonths    order by yea, mon                                                                         " +
-                        "                                                                                                       " +
-                        "            FOR XML PATH(''), TYPE                                                                     " +
-                        "        ).value('.', 'NVARCHAR(MAX)'), 1, 1, '');                                                      " +
-                        "                                                                                                       " +
-                        "        SET @sql = N'                                                                                  " +
-                        "    SELECT*                                                                                            " +
-                        "    FROM                                                                                               " +
-                        "    (                                                                                                  " +
-                        "        SELECT                                                                                         " +
-                        "            sal.PackCode,                                                                           " +
-                        "            sal.ProductName,     " +
-                        "          sal.Description,                                                                         " +
-                        "            CONCAT(DATENAME(yyyy, sal.Date), '' '', DATENAME(mm, sal.Date)) AS YearMonth,              " +
-                        "            sal.[Sales-Units]                                                                        " +
-                        "        FROM [dbo].[DSR_HiltonDailySales_TeamToChemist2022-23] sal                                    " +
-                        "        WHERE sal.TeamName = ''" + TeamName + "'' AND sal.ClientCode = ''"+ ChemistCode +"'' AND sal.MicroBrickCode in (select distinct MinorBrickCode from MacroMicroBrickMaping where MajorBrickName = ''" + Macname.MacroBrickName + "'')          " +
-                        "            AND sal.Date >= @startDate AND sal.Date <= @endDate                                        " +
-                        "    ) t                                                                                                " +
-                        "    PIVOT                                                                                              " +
-                        "    (                                                                                                  " +
-                        "        SUM([Sales-Units])                                                                           " +
-                        "        FOR YearMonth IN(' + @columns + ')                                                             " +
-                        "    ) AS pivot_Table;                                                                                  " +
-                        "        ';  " +
+                         "        SET @columns = STUFF((                                                                         " +
+                         "            SELECT ',' + QUOTENAME(YearMonth)                                                          " +
+                         "                                                                                                       " +
+                         "            FROM(                                                                                      " +
+                         "                SELECT DISTINCT CONCAT(DATENAME(yyyy, Date), ' ', DATENAME(mm, Date)) AS YearMonth, Month(Date) as mon, year(Date) as yea    " +
+                         "                                                                                                       " +
+                         "                FROM [dbo].[DSR_HiltonDailySales_TeamToChemist2022-23]                                " +
+                         "                                                                                                       " +
+                         "                WHERE TeamName = '" + TeamName + "' AND ClientCode = '" + ChemistCode + "' AND MicroBrickCode in (select distinct MinorBrickCode from MacroMicroBrickMaping where MajorBrickName = '" + Macname.MacroBrickName + "')                   " +
+                         "                                                                                                       " +
+                         "                    AND Date >= @startDate AND Date <= @endDate                                        " +
+                         "            ) OrderedMonths    order by yea, mon                                                                         " +
+                         "                                                                                                       " +
+                         "            FOR XML PATH(''), TYPE                                                                     " +
+                         "        ).value('.', 'NVARCHAR(MAX)'), 1, 1, '');                                                      " +
+                         "                                                                                                       " +
+                         "        SET @sql = N'                                                                                  " +
+                         "    SELECT*                                                                                            " +
+                         "    FROM                                                                                               " +
+                         "    (                                                                                                  " +
+                         "        SELECT                                                                                         " +
+                         "            sal.PackCode,                                                                           " +
+                         "            sal.ProductName,     " +
+                         "          sal.Description,                                                                         " +
+                         "            CONCAT(DATENAME(yyyy, sal.Date), '' '', DATENAME(mm, sal.Date)) AS YearMonth,              " +
+                         "            sal.[Sales-Units]                                                                        " +
+                         "        FROM [dbo].[DSR_HiltonDailySales_TeamToChemist2022-23] sal                                    " +
+                         "        WHERE sal.TeamName = ''" + TeamName + "'' AND sal.ClientCode = ''" + ChemistCode + "'' AND sal.MicroBrickCode in (select distinct MinorBrickCode from MacroMicroBrickMaping where MajorBrickName = ''" + Macname.MacroBrickName + "'')          " +
+                         "            AND sal.Date >= @startDate AND sal.Date <= @endDate                                        " +
+                         "    ) t                                                                                                " +
+                         "    PIVOT                                                                                              " +
+                         "    (                                                                                                  " +
+                         "        SUM([Sales-Units])                                                                           " +
+                         "        FOR YearMonth IN(' + @columns + ')                                                             " +
+                         "    ) AS pivot_Table;                                                                                  " +
+                         "        ';  " +
 
-                        "                                                                                                       " +
-                        "EXEC sp_executesql @sql, N'@startDate DATE, @endDate DATE', @startDate, @endDate;                      " +
-                        "        ";
+                         "                                                                                                       " +
+                         "EXEC sp_executesql @sql, N'@startDate DATE, @endDate DATE', @startDate, @endDate;                      " +
+                         "        ";
 
 
 
@@ -1347,14 +1356,14 @@ where HCPREQID = '" + trackingid + "'";
 
                     using (var reader = command.ExecuteReader())
                     {
-                        // Check if there are rows to read
+
                         if (reader.HasRows)
                         {
                             while (reader.Read())
                             {
                                 var dataItem = new ExpandoObject() as IDictionary<string, object>;
 
-                                //dataItem.Add("Contribution %", 00);
+
                                 for (int i = 0; i < reader.FieldCount; i++)
                                 {
                                     var columnName = reader.GetName(i);
@@ -1364,7 +1373,7 @@ where HCPREQID = '" + trackingid + "'";
                                     {
                                         if (columnValue is string stringValue)
                                         {
-                                            // Check if the string is empty or contains only {}
+
                                             if (string.IsNullOrEmpty(stringValue) || stringValue == "{}")
                                             {
                                                 dataItem.Add(columnName, "0");
@@ -1384,7 +1393,7 @@ where HCPREQID = '" + trackingid + "'";
                                         dataItem.Add(columnName, null);
                                     }
 
-                                    //dataItem.Add(columnName, columnValue);
+
 
                                 }
 
@@ -1400,7 +1409,79 @@ where HCPREQID = '" + trackingid + "'";
                     }
                 }
 
+                //var results = new List<ExpandoObject>();
+                //using (SqlConnection connection = new SqlConnection(_sqlconnection))
+                //{
+                //    connection.Open();
 
+                //    using (SqlCommand command = new SqlCommand("sp_GetBPSPreSku", connection))
+                //    {
+                //        command.CommandType = CommandType.StoredProcedure;
+
+                //        command.Parameters.AddWithValue("StartDate", prefromDate);
+                //        command.Parameters.AddWithValue("EndDate", pretoDate);
+                //        command.Parameters.AddWithValue("TeamName", TeamName);
+                //        command.Parameters.AddWithValue("ChemistCode", ChemistCode);
+                //        command.Parameters.AddWithValue("MacroBrickName", Macname.MacroBrickName);
+
+
+                //        using (var reader = command.ExecuteReader())
+                //        {
+
+                //            if (reader.HasRows)
+                //            {
+                //                while (reader.Read())
+                //                {
+                //                    var dataItem = new ExpandoObject() as IDictionary<string, object>;
+
+
+                //                    for (int i = 0; i < reader.FieldCount; i++)
+                //                    {
+                //                        var columnName = reader.GetName(i);
+
+                //                        var columnValue = reader[i];
+                //                        if (columnValue != DBNull.Value)
+                //                        {
+                //                            if (columnValue is string stringValue)
+                //                            {
+
+                //                                if (string.IsNullOrEmpty(stringValue) || stringValue == "{}")
+                //                                {
+                //                                    dataItem.Add(columnName, "0");
+                //                                }
+                //                                else
+                //                                {
+                //                                    dataItem.Add(columnName, stringValue);
+                //                                }
+                //                            }
+                //                            else
+                //                            {
+                //                                dataItem.Add(columnName, columnValue);
+                //                            }
+                //                        }
+                //                        else
+                //                        {
+                //                            dataItem.Add(columnName, null);
+                //                        }
+
+
+
+                //                    }
+
+                //                    results.Add((ExpandoObject)dataItem);
+                //                }
+                //            }
+                //            else
+                //            {
+
+                //                return View("NoDataView");
+
+                //            }
+
+                //        }
+                //    }
+
+                //}
 
 
                 var valuequery = @"DECLARE @columns AS NVARCHAR(MAX);
@@ -1543,6 +1624,347 @@ where HCPREQID = '" + trackingid + "'";
 
         }
 
+        [HttpPost]
+        public IActionResult EditPreAcc(List<MonthYearModel> inputParameter, string prefromDate, string pretoDate, string BrickValue, string TeamName, string ChemistCode, string checkboxindex, double precontribution)
+        {
+            try
+            {
+                //codedone forallvaluecontribution
+                double contributionval = (double)precontribution / 100.0;
+                ViewBag.Contribution = contributionval;
+
+                ViewBag.PreMonthYear = inputParameter;
+
+                ViewBag.checkboxindex = checkboxindex;
+                var Macname = _passDbContext.Macrobricks.FromSqlRaw("select * from macrobricks where macrobrickcode = '" + BrickValue + "' ").FirstOrDefault();
+
+                var skuquery = @"DECLARE @columns AS NVARCHAR(MAX);
+                DECLARE @sql AS NVARCHAR(MAX);
+                DECLARE @startDate AS DATE = '" + prefromDate + "'" +
+        " DECLARE @endDate AS DATE = '" + pretoDate + "'" +
+
+                         "        SET @columns = STUFF((                                                                         " +
+                         "            SELECT ',' + QUOTENAME(YearMonth)                                                          " +
+                         "                                                                                                       " +
+                         "            FROM(                                                                                      " +
+                         "                SELECT DISTINCT CONCAT(DATENAME(yyyy, Date), ' ', DATENAME(mm, Date)) AS YearMonth, Month(Date) as mon, year(Date) as yea    " +
+                         "                                                                                                       " +
+                         "                FROM [dbo].[DSR_HiltonDailySales_TeamToChemist2022-23]                                " +
+                         "                                                                                                       " +
+                         "                WHERE TeamName = '" + TeamName + "' AND ClientCode = '" + ChemistCode + "' AND MicroBrickCode in (select distinct MinorBrickCode from MacroMicroBrickMaping where MajorBrickName = '" + Macname.MacroBrickName + "')                   " +
+                         "                                                                                                       " +
+                         "                    AND Date >= @startDate AND Date <= @endDate                                        " +
+                         "            ) OrderedMonths    order by yea, mon                                                                         " +
+                         "                                                                                                       " +
+                         "            FOR XML PATH(''), TYPE                                                                     " +
+                         "        ).value('.', 'NVARCHAR(MAX)'), 1, 1, '');                                                      " +
+                         "                                                                                                       " +
+                         "        SET @sql = N'                                                                                  " +
+                         "    SELECT*                                                                                            " +
+                         "    FROM                                                                                               " +
+                         "    (                                                                                                  " +
+                         "        SELECT                                                                                         " +
+                         "            sal.PackCode,                                                                           " +
+                         "            sal.ProductName,     " +
+                         "          sal.Description,                                                                         " +
+                         "            CONCAT(DATENAME(yyyy, sal.Date), '' '', DATENAME(mm, sal.Date)) AS YearMonth,              " +
+                         "            sal.[Sales-Units]                                                                        " +
+                         "        FROM [dbo].[DSR_HiltonDailySales_TeamToChemist2022-23] sal                                    " +
+                         "        WHERE sal.TeamName = ''" + TeamName + "'' AND sal.ClientCode = ''" + ChemistCode + "'' AND sal.MicroBrickCode in (select distinct MinorBrickCode from MacroMicroBrickMaping where MajorBrickName = ''" + Macname.MacroBrickName + "'')          " +
+                         "            AND sal.Date >= @startDate AND sal.Date <= @endDate                                        " +
+                         "    ) t                                                                                                " +
+                         "    PIVOT                                                                                              " +
+                         "    (                                                                                                  " +
+                         "        SUM([Sales-Units])                                                                           " +
+                         "        FOR YearMonth IN(' + @columns + ')                                                             " +
+                         "    ) AS pivot_Table;                                                                                  " +
+                         "        ';  " +
+
+                         "                                                                                                       " +
+                         "EXEC sp_executesql @sql, N'@startDate DATE, @endDate DATE', @startDate, @endDate;                      " +
+                         "        ";
+
+
+
+
+                var results = new List<ExpandoObject>();
+
+                using (var command = _testSalesDbContext.Database.GetDbConnection().CreateCommand())
+                {
+                    command.CommandText = skuquery;
+
+                    _testSalesDbContext.Database.OpenConnection();
+
+                    using (var reader = command.ExecuteReader())
+                    {
+
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                var dataItem = new ExpandoObject() as IDictionary<string, object>;
+
+
+                                for (int i = 0; i < reader.FieldCount; i++)
+                                {
+                                    var columnName = reader.GetName(i);
+
+                                    var columnValue = reader[i];
+                                    if (columnValue != DBNull.Value)
+                                    {
+                                        if (columnValue is string stringValue)
+                                        {
+
+                                            if (string.IsNullOrEmpty(stringValue) || stringValue == "{}")
+                                            {
+                                                dataItem.Add(columnName, "0");
+                                            }
+                                            else
+                                            {
+                                                dataItem.Add(columnName, stringValue);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            dataItem.Add(columnName, columnValue);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        dataItem.Add(columnName, null);
+                                    }
+
+
+
+                                }
+
+                                results.Add((ExpandoObject)dataItem);
+                            }
+                        }
+                        else
+                        {
+
+                            return View("NoDataView");
+
+                        }
+                    }
+                }
+
+                //var results = new List<ExpandoObject>();
+                //using (SqlConnection connection = new SqlConnection(_sqlconnection))
+                //{
+                //    connection.Open();
+
+                //    using (SqlCommand command = new SqlCommand("sp_GetBPSPreSku", connection))
+                //    {
+                //        command.CommandType = CommandType.StoredProcedure;
+
+                //        command.Parameters.AddWithValue("StartDate", prefromDate);
+                //        command.Parameters.AddWithValue("EndDate", pretoDate);
+                //        command.Parameters.AddWithValue("TeamName", TeamName);
+                //        command.Parameters.AddWithValue("ChemistCode", ChemistCode);
+                //        command.Parameters.AddWithValue("MacroBrickName", Macname.MacroBrickName);
+
+
+                //        using (var reader = command.ExecuteReader())
+                //        {
+
+                //            if (reader.HasRows)
+                //            {
+                //                while (reader.Read())
+                //                {
+                //                    var dataItem = new ExpandoObject() as IDictionary<string, object>;
+
+
+                //                    for (int i = 0; i < reader.FieldCount; i++)
+                //                    {
+                //                        var columnName = reader.GetName(i);
+
+                //                        var columnValue = reader[i];
+                //                        if (columnValue != DBNull.Value)
+                //                        {
+                //                            if (columnValue is string stringValue)
+                //                            {
+
+                //                                if (string.IsNullOrEmpty(stringValue) || stringValue == "{}")
+                //                                {
+                //                                    dataItem.Add(columnName, "0");
+                //                                }
+                //                                else
+                //                                {
+                //                                    dataItem.Add(columnName, stringValue);
+                //                                }
+                //                            }
+                //                            else
+                //                            {
+                //                                dataItem.Add(columnName, columnValue);
+                //                            }
+                //                        }
+                //                        else
+                //                        {
+                //                            dataItem.Add(columnName, null);
+                //                        }
+
+
+
+                //                    }
+
+                //                    results.Add((ExpandoObject)dataItem);
+                //                }
+                //            }
+                //            else
+                //            {
+
+                //                return View("NoDataView");
+
+                //            }
+
+                //        }
+                //    }
+
+                //}
+
+
+                var valuequery = @"DECLARE @columns AS NVARCHAR(MAX);
+    DECLARE @sql AS NVARCHAR(MAX);
+    DECLARE @startDate AS DATE = '" + prefromDate + "'" +
+       " DECLARE @endDate AS DATE = '" + pretoDate + "'" +
+
+                        "        SET @columns = STUFF((                                                                         " +
+                        "            SELECT ',' + QUOTENAME(YearMonth)                                                          " +
+                        "                                                                                                       " +
+                        "            FROM(                                                                                      " +
+                        "                SELECT DISTINCT CONCAT(DATENAME(yyyy, Date), ' ', DATENAME(mm, Date)) AS YearMonth, Month(Date) as mon, year(Date) as yea     " +
+                        "                                                                                                       " +
+                        "                FROM [dbo].[DSR_HiltonDailySales_TeamToChemist2022-23]                                " +
+                        "                                                                                                       " +
+                        "                WHERE TeamName = '" + TeamName + "' AND ClientCode = '" + ChemistCode + "' AND MicroBrickCode in (select distinct MinorBrickCode from MacroMicroBrickMaping where MajorBrickName = '" + Macname.MacroBrickName + "')                  " +
+                        "                                                                                                       " +
+                        "                    AND Date >= @startDate AND Date <= @endDate                                        " +
+                        "            ) OrderedMonths   order by yea, mon                                                                         " +
+                        "                                                                                                       " +
+                        "            FOR XML PATH(''), TYPE                                                                     " +
+                        "        ).value('.', 'NVARCHAR(MAX)'), 1, 1, '');                                                      " +
+                        "                                                                                                       " +
+                        "        SET @sql = N'                                                                                  " +
+                        "    SELECT*                                                                                            " +
+                        "    FROM                                                                                               " +
+                        "    (                                                                                                  " +
+                        "        SELECT                                                                                         " +
+                        "            sal.PackCode,                                                                           " +
+                        "            sal.ProductName,                                                                              " +
+                        "            sal.Description,                                                                              " +
+                        "            CONCAT(DATENAME(yyyy, sal.Date), '' '', DATENAME(mm, sal.Date)) AS YearMonth,              " +
+                        "            sal.[Sales-ValueNP]                                                                        " +
+                        "        FROM [dbo].[DSR_HiltonDailySales_TeamToChemist2022-23] sal                                    " +
+                        "        WHERE sal.TeamName = ''" + TeamName + "'' AND sal.ClientCode = ''" + ChemistCode + "'' AND sal.MicroBrickCode in (select distinct MinorBrickCode from MacroMicroBrickMaping where MajorBrickName = ''" + Macname.MacroBrickName + "'')         " +
+                        "            AND sal.Date >= @startDate AND sal.Date <= @endDate                                        " +
+                        "    ) t                                                                                                " +
+                        "    PIVOT                                                                                              " +
+                        "    (                                                                                                  " +
+                        "        SUM([Sales-ValueNP])                                                                           " +
+                        "        FOR YearMonth IN(' + @columns + ')                                                             " +
+                        "    ) AS pivot_Table;                                                                                  " +
+                        "        ';                                                                                             " +
+                        "                                                                                                       " +
+                        "EXEC sp_executesql @sql, N'@startDate DATE, @endDate DATE', @startDate, @endDate;                      " +
+                        "        ";
+
+
+                var valrestule = new List<ExpandoObject>();
+
+                using (var command = _testSalesDbContext.Database.GetDbConnection().CreateCommand())
+                {
+                    command.CommandText = valuequery;
+
+                    _testSalesDbContext.Database.OpenConnection();
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        // Check if there are rows to read
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                var dataItem = new ExpandoObject() as IDictionary<string, object>;
+                                //dataItem.Add("Contribution %", 00);
+                                for (int i = 0; i < reader.FieldCount; i++)
+                                {
+                                    var columnName = reader.GetName(i);
+                                    var columnValue = reader[i];
+                                    if (columnValue != DBNull.Value)
+                                    {
+                                        if (columnValue is string stringValue)
+                                        {
+                                            // Check if the string is empty or contains only {}
+                                            if (string.IsNullOrEmpty(stringValue) || stringValue == "{}")
+                                            {
+                                                dataItem.Add(columnName, "0");
+                                            }
+                                            else
+                                            {
+                                                dataItem.Add(columnName, stringValue);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            dataItem.Add(columnName, columnValue);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        dataItem.Add(columnName, null);
+                                    }
+
+                                    //dataItem.Add(columnName, columnValue);
+                                }
+
+                                valrestule.Add((ExpandoObject)dataItem);
+                            }
+                            //var totalValue = CalculateTotalValue(valrestule);
+                            //valrestule.Add(CreateTotalValueExpando(totalValue));
+                        }
+                        else
+                        {
+
+                            return View("NoDataView");
+
+                        }
+                    }
+                }
+
+
+
+
+
+
+
+                var dynamicValueModel = new PreeAccordionModel
+                {
+                    Sku = results,
+                    Value = valrestule
+
+                };
+
+                return View("EditPreAcc", dynamicValueModel);
+            }
+            catch (Exception ex)
+            {
+                DateTime timestampValue = DateTime.Now; // Replace with the desired DateTime value
+
+                GlobalClass.LogException(_passDbContext, ex, nameof(PreAcc), "Error message");
+                var feature = new Microsoft.AspNetCore.Diagnostics.ExceptionHandlerFeature
+                {
+                    Error = ex,
+
+                };
+                HttpContext.Features.Set(feature);
+                ViewBag.Error = ex;
+                return View("Error");
+            }
+
+        }
+
 
 
         [HttpPost]
@@ -1581,6 +2003,41 @@ where HCPREQID = '" + trackingid + "'";
 
         }
 
+        [HttpPost]
+        public IActionResult EditPostAcc(List<MonthYearModel> postinputParameter, string postfromDate, string posttoDate, string BrickValue, string TeamName, string ChemistCode, string postcheckboxindex, string prefromDate, string pretoDate)
+        {
+            try
+            {
+                ViewBag.postinputParameters = postinputParameter;
+                ViewBag.postcheckboxindex = postcheckboxindex;
+                //var Macname = _passDbContext.Macrobricks.FromSqlRaw("select * from macrobricks where macrobrickcode = '" + BrickValue + "' ").FirstOrDefault();
+
+                //var postqueru = @"select distinct sal.PackCode, sal.ProductName,  sal.PackCode as id, sal.Description from [dbo].[DSR_HiltonDailySales_TeamToChemist2022-23] sal where sal.Date between '" + prefromDate + "' and '" + pretoDate + "' and TeamName = '" + TeamName + "'  AND sal.ClientCode = '" + ChemistCode + "' AND sal.MicroBrickCode in (select distinct MinorBrickCode from MacroMicroBrickMaping where MajorBrickName = '" + Macname.MacroBrickName + "')";
+
+                //var postsal = _testSalesDbContext.DsrHiltonDailySalesTeamToChemist202223s.FromSqlRaw(postqueru).ToList();
+
+                var postqueru = @"SELECT * FROM pass_db.tblproduct where TeamName = '" + TeamName + "'";
+                var postsal = _passDbContext.Tblproducts.FromSqlRaw(postqueru).ToList();
+                ViewBag.Products = _passDbContext.Tblproducts.FromSqlRaw("select * from tblproduct").ToList();
+
+                return View("EditPostAcc", postsal);
+            }
+            catch (Exception ex)
+            {
+                DateTime timestampValue = DateTime.Now; // Replace with the desired DateTime value
+
+                GlobalClass.LogException(_passDbContext, ex, nameof(PostAcc), "Error message");
+                var feature = new Microsoft.AspNetCore.Diagnostics.ExceptionHandlerFeature
+                {
+                    Error = ex,
+
+                };
+                HttpContext.Features.Set(feature);
+                ViewBag.Error = ex;
+                return View("Error");
+            }
+
+        }
 
         [HttpPost]
         public object CalBPS(string TrackingId, string Total)
@@ -1647,12 +2104,82 @@ where HCPREQID = '" + trackingid + "'";
 
         }
 
+        [HttpPost]
+        public object EditCalBPS(string TrackingId, string Total)
+        {
+            try
+            {
+                ViewBag.GrandTotal = Total;
+                var hcpestimatesupportquery = @"SELECT * FROM pass_db.hcprequest where TrackingID = '" + TrackingId + "'";
+
+                var hcpestimatesupportresult = _passDbContext.Hcprequests.FromSqlRaw(hcpestimatesupportquery).ToList();
+
+                decimal bpspercentage = 0;
+
+                if (hcpestimatesupportresult.Count > 0)
+                {
+                    var firstItem = hcpestimatesupportresult.FirstOrDefault();
+
+                    if (firstItem != null)
+                    {
+                        // Access the property you need
+                        var estimatedSupport = firstItem.EstimatedSupport;
+                        if (decimal.TryParse(estimatedSupport, out decimal estimatedSupportValue) && decimal.TryParse(Total, out decimal totalValue))
+                        {
+                            if (totalValue != 0)
+                            {
+                                bpspercentage = estimatedSupportValue / totalValue * 100;
+
+                                //ViewBag.bpspercentgaes = bpspercentage.ToString("0.00");
+
+                                ViewBag.bpspercentgaes = bpspercentage;
+
+
+                            }
+                            else
+                            {
+
+                            }
+                        }
+                        else
+                        {
+
+                        }
+
+                    }
+                }
+                return Json(new { bpspercentage });
+            }
+            catch (Exception ex)
+            {
+                DateTime timestampValue = DateTime.Now; // Replace with the desired DateTime value
+
+                GlobalClass.LogException(_passDbContext, ex, nameof(CalBPS), "Error message");
+                var feature = new Microsoft.AspNetCore.Diagnostics.ExceptionHandlerFeature
+                {
+                    Error = ex,
+
+                };
+                HttpContext.Features.Set(feature);
+                ViewBag.Error = ex;
+                return View("Error");
+            }
+
+
+
+        }
+
 
         // GET: ListViewController/Edit/5
         public ActionResult Edit(string id, string anotherId, string thirdId)
         {
             try
             {
+                if (id == null)
+                {
+                    return RedirectToAction("PendingView", "ListView", 2);
+                }
+
                 if (thirdId != null)
                 {
                     ViewBag.RoleId = thirdId;
@@ -1667,10 +2194,17 @@ where HCPREQID = '" + trackingid + "'";
                 var bpsrcordquery = @"SELECT bpsreq.*, bpsreq.HCPREQID as User_Name, bpsreq.Status_ID as StatusType, bpsreq.CreatedBy as TMCode FROM pass_db.bps_request bpsreq where TrackingID = '" + id + "'";
                 var bpsrcord = _passDbContext.BpsRequests.FromSqlRaw(bpsrcordquery).ToList();
                 var bpsid = bpsrcord.FirstOrDefault()?.BpsRecordId;
+                var bpsComments = bpsrcord.FirstOrDefault()?.Comments;
 
                 var macroBrickCodes = bpsrcord.FirstOrDefault()?.MacroBrickCode;
                 var macrobridnamequery = @"SELECT * FROM pass_db.macrobricks where MacroBrickCode = '" + macroBrickCodes + "'";
                 var macname = _passDbContext.Macrobricks.FromSqlRaw(macrobridnamequery).ToList();
+
+                var macchemnamequery = @"SELECT mcm.*, che.ChemistName FROM pass_db.mac_chem_mapping mcm
+Inner Join chemist che on
+mcm.Chemist_Code = che.Chemist_Code
+where mcm.MacroBrickCode = '"+ macroBrickCodes + "'";
+                var macchemname = _passDbContext.MacChemMappings.FromSqlRaw(macchemnamequery).ToList();
 
                 var distributerCodes = bpsrcord.FirstOrDefault()?.DistributerCode;
                 var distributernamequery = @"SELECT * FROM pass_db.distributer where DistributerCode = '" + distributerCodes + "'";
@@ -1956,6 +2490,7 @@ where HCPREQID = '" + trackingid + "'";
                         postDateRanges = postDates,
                         chemists = chemistname,
                         customersmodels = totalval,
+                        macChemMappings = macchemname,
 
 
                     };
@@ -1988,179 +2523,411 @@ where HCPREQID = '" + trackingid + "'";
         }
 
         [HttpPost]
-        public IActionResult UpdateBpsRecords(List<CustomModel_UpdateCustomers> Updatedatalist, string trackingid)
+        public IActionResult UpdateBpsRecords( string Updatedatalist, string trackingid, BpsRequest HeaderData1)
         {
    
 
             try
             {
 
-              
+                List<CustomModel_Customers> model = JsonSerializer.Deserialize<List<CustomModel_Customers>>(Updatedatalist);
+
+
+                bool isSuccess = false;
                 var EmpidSessionValue = HttpContext.Session.GetString("EmpIdbps");
-                var bpsrcordquery = @"SELECT bpsreq.*, bpsreq.HCPREQID as User_Name, bpsreq.Status_ID as StatusType, bpsreq.CreatedBy as TMCode FROM pass_db.bps_request bpsreq where TrackingID = '" + trackingid + "'";
-                var bpsrcord = _passDbContext.BpsRequests.FromSqlRaw(bpsrcordquery).FirstOrDefault();
-                var bpsid = bpsrcord?.BpsRecordId;
-                var hcpid = bpsrcord?.Hcpreqid;
-                List<CustomModel_UpdateCustomers> dataList = new List<CustomModel_UpdateCustomers>();
-
-                foreach (var dt in Updatedatalist)
+                try
                 {
-                    string chmeistcode = dt.ChemistCode;
-                    string postfromdate = dt.postfromDate;
-                    string posttodate = dt.posttoDate;
-                    string ROI = dt.totalroipercentage;
-                    string GrandTotal = dt.grandtotal;
-                    string BPSPercentage = dt.bpspercentage;
 
-                    CustomModel_UpdateCustomers updatedData = new CustomModel_UpdateCustomers
+                    string updatedBpsRecordId;
+
+                    var hcpreqid = _passDbContext.Hcprequests.FromSqlRaw("select * from hcprequest where trackingid = '" + HeaderData1.TrackingId + "'").FirstOrDefault().Hcpreqid;
+                    using (var connection = new MySqlConnection(_connectionString))
                     {
-                        ChemistCode = chmeistcode,
-                        postfromDate = postfromdate,
-                        posttoDate = posttodate,
-                        bpspercentage = BPSPercentage,
-                        grandtotal = GrandTotal,
-                        totalroipercentage = ROI,
-                        ProductArr = new List<CustomModel_UpdateProducts>()
-                    };
+                        connection.Open();
 
-                    foreach (var p in dt.ProductArr)
-                    {
-                        string ProdctName = p.ProductName;
-                        string ProdctCode = p.productCode;
-                        string SalesType = p.SalesType;
-                        string PreTotal = p.pretotal;
-                        string PostTotal = p.posttotal;
-
-                        string Discountpercentage = p.discountpercentage;
-                        string Discountpostcentage = p.discountpostcentage;
-                        //string ROI = p.roi;
-                        string PostProductDescription = p.postproductDescription;
-
-                        
-                        //string DiscountPercentage = p.DiscountPercentage == null ? "0" : p.DiscountPercentage;  //p.DiscountPercentage;
-                        //string ROIPercentage = p.TotalRoiPercentage == null ? Convert.ToString(Convert.ToDecimal(ROI) + Convert.ToDecimal(p.DiscountPercentage)) : p.TotalRoiPercentage; //p.TotalRoiPercentage;
-
-                        CustomModel_UpdateProducts productData = new CustomModel_UpdateProducts
+                        using (var command = new MySqlCommand("sp_UpdateBpsHeaderData", connection))
                         {
-                            ProductName = ProdctName,
-                            productCode = ProdctCode,
-                            SalesType = SalesType,
-                            pretotal = PreTotal,
-                            posttotal = PostTotal,
-                            discountpercentage = Discountpercentage,
-                            discountpostcentage = Discountpostcentage,
-                            //roi = ROI,
-                            postproductDescription = PostProductDescription,
-                            Sale = new List<CustomModel_UpdateSales>(),
-                            //DiscountPercentage = DiscountPercentage,
-                            //TotalRoiPercentage = ROIPercentage,
-                        };
+                            command.CommandType = CommandType.StoredProcedure;
 
-                        foreach (var s in p.Sale)
-                        {
-                            string month = s.Month;
-                            string year = s.Year;
-                            string sku = s.skuSales;
-                            string value = s.valueSales;
+                            // Add parameters to the command
+                            command.Parameters.Add(new MySqlParameter("@p_HCPREQID", hcpreqid));
+                            command.Parameters.Add(new MySqlParameter("@p_MacroBrickCode", HeaderData1.MacroBrickCode));
+                            command.Parameters.Add(new MySqlParameter("@p_DistributerCode", HeaderData1.DistributerCode));
+                            command.Parameters.Add(new MySqlParameter("@p_TrackingId", HeaderData1.TrackingId));
+                            command.Parameters.Add(new MySqlParameter("@p_UpdatedBy", EmpidSessionValue));
+                            command.Parameters.Add(new MySqlParameter("@p_Comment", HeaderData1.Comments));
 
-                            CustomModel_UpdateSales saleData = new CustomModel_UpdateSales
-                            {
-                                Month = month,
-                                Year = year,
-                                skuSales = sku,
-                                valueSales = value
-                            };
+                            // Add output parameter
+                            var outputParameter = new MySqlParameter("@p_BpsRecordId", MySqlDbType.Int32);
+                            outputParameter.Direction = ParameterDirection.Output;
+                            command.Parameters.Add(outputParameter);
 
-                            productData.Sale.Add(saleData);
+                            var reader = command.ExecuteReader();
+
+                             updatedBpsRecordId = outputParameter.Value.ToString();
+
                         }
-
-                        updatedData.ProductArr.Add(productData);
                     }
+                    using (var connection = new MySqlConnection(_connectionString))
+                    {
+                        connection.Open();
+                        MySqlTransaction trans = connection.BeginTransaction();
+                        try
+                        {
 
-                    dataList.Add(updatedData);
+                            using (var command = new MySqlCommand("delete from bps_salesrecord where  BPS_Record_ID = " + updatedBpsRecordId + "", connection))
+                            {
+                                command.Transaction = trans;
+                                command.ExecuteNonQuery();
+                            }
+                     
+
+
+                        //var bpsid = _passDbContext.BpsRequests.FromSqlRaw("select * from bps_request where TrackingId = '" + HeaderData1.TrackingId + "'").FirstOrDefault().BpsRecordId;
+
+                        foreach (var item in model)
+                    {
+                        string chmeistcode = item.ChemistCode;
+                        string prefromdate = item.prefromDate;
+                        string pretodate = item.pretoDate;
+                        string postfromdate = item.postfromDate;
+                        string posttodate = item.posttoDate;
+                        string ROI = item.totalroipercentage;
+                        string GrandTotal = item.grandtotal;
+                        string BPSPercentage = item.bpspercentage;
+                        //string Contributer = item;
+
+                        foreach (var item1 in item.ProductArr)
+                        {
+                            string ProdctName = item1.ProductName;
+                            string ProdctCode = item1.productCode;
+                            //string Distributer = item1.DistrubutorSales;
+                            string Contributer = item1.Contribution;
+                            string SalesType = item1.SalesType;
+                            string PreTotal = item1.pretotal;
+                            string PostTotal = item1.posttotal;
+
+                            string Discountpercentage = item1.discountpercentage;
+                            string Discountpostcentage = item1.discountpostcentage;
+                            string PostProductDescription = item1.postproductDescription;
+                            string PreProductActualDiscount = item1.preproductActualDiscount;
+                            //string DiscountPercentage = item1.DiscountPercentage == null ?"0": item1.DiscountPercentage;
+                            //string TotalRoiPercentage = item1.TotalRoiPercentage == null ? Convert.ToString(Convert.ToDecimal(ROI) + Convert.ToDecimal(item1.DiscountPercentage)) : item1.TotalRoiPercentage;
+
+                            foreach (var item2 in item1.Sale)
+                            {
+                                string month = item2.Month;
+                                string year = item2.Year;
+                                string sku = item2.skuSales == null || item2.skuSales == "" ? "0" : item2.skuSales;
+                                string valussales = item2.valueSales == null || item2.valueSales == "" ? "0" : item2.valueSales;
+                                Decimal value = Convert.ToDecimal(valussales); // Convert.ToDecimal(item2.valueSales) == null ? 0 : Convert.ToDecimal(item2.valueSales);
+
+                               
+                                //using (var connection = new MySqlConnection(_connectionString))
+                                //{
+                                //    connection.Open();
+                                //    MySqlTransaction trans = connection.BeginTransaction();
+                                   
+                                                                                                       
+
+
+                                        using (var command = new MySqlCommand("sp_UpdateBpsSalesData", connection))
+                                    {
+                                        command.CommandType = CommandType.StoredProcedure;
+
+                                        // Add parameters to the command
+                                        command.Parameters.Add(new MySqlParameter("@p_BPS_Record_ID", updatedBpsRecordId));
+                                        command.Parameters.Add(new MySqlParameter("@p_Month", month));
+                                        command.Parameters.Add(new MySqlParameter("@p_Chemist_Code", chmeistcode));
+                                        command.Parameters.Add(new MySqlParameter("@p_ProductName", ProdctName));
+                                        command.Parameters.Add(new MySqlParameter("@p_ActualDiscount", PreProductActualDiscount));
+                                        command.Parameters.Add(new MySqlParameter("@p_Contribution", Contributer));
+                                        command.Parameters.Add(new MySqlParameter("@p_SalesType", SalesType));
+                                        command.Parameters.Add(new MySqlParameter("@p_Sales_Sku", sku));
+                                        command.Parameters.Add(new MySqlParameter("@p_UpdatedBy", EmpidSessionValue));
+                                        
+                                        command.Parameters.Add(new MySqlParameter("@p_Sales_Value", value));
+                                        command.Parameters.Add(new MySqlParameter("@p_Pre_Fromdate", prefromdate));
+                                        command.Parameters.Add(new MySqlParameter("@p_Pre_Todate", pretodate));
+                                        command.Parameters.Add(new MySqlParameter("@p_Post_Fromdate", postfromdate));
+                                        command.Parameters.Add(new MySqlParameter("@p_Post_Todate", posttodate));
+                                        command.Parameters.Add(new MySqlParameter("@p_Year", year));
+                                        command.Parameters.Add(new MySqlParameter("@p_PackCode", ProdctCode));
+                                        command.Parameters.Add(new MySqlParameter("@p_PreTotal", PreTotal));
+                                        command.Parameters.Add(new MySqlParameter("@p_PostTotal", PostTotal));
+                                        command.Parameters.Add(new MySqlParameter("@p_Roi", ROI));
+                                        command.Parameters.Add(new MySqlParameter("@p_PostProDesc", PostProductDescription));
+                                        command.Parameters.Add(new MySqlParameter("@p_DiscountPercentagePre", Discountpercentage));
+                                        command.Parameters.Add(new MySqlParameter("@p_DiscountPercentagePost", Discountpostcentage));
+                                        command.Parameters.Add(new MySqlParameter("@p_TotalRoiPercentage", ROI));
+                                        command.Parameters.Add(new MySqlParameter("@p_BPSPercentage", BPSPercentage));
+                                        command.Parameters.Add(new MySqlParameter("@p_GrandTotal", GrandTotal));
+
+                                        //var outputParameter = new MySqlParameter("@p_Out_BPS_Record_ID", MySqlDbType.Int32);
+                                        //outputParameter.Direction = ParameterDirection.Output;
+                                        //command.Parameters.Add(outputParameter);
+                                        command.Transaction = trans;
+                                       // var reader = command.ExecuteReader();
+                                            using (MySqlDataReader reader = command.ExecuteReader())
+                                            {
+                                                while (reader.Read())
+                                                {
+                                                    //do your stuff...
+                                                }
+                                            }
+                                            // var id = outputParameter.Value.ToString();
+                                            //}
+
+
+                                        }
+                                //var outputParameter1 = new MySqlParameter
+                                //{
+                                //    ParameterName = "p_Record_ID",
+                                //    MySqlDbType = MySqlDbType.Int32,
+                                //    Direction = ParameterDirection.Output
+                                //};
+
+                                //var resultsales = _passDbContext.OutputParaMetersSales
+                                //    .FromSqlRaw("CALL sp_InsertBpsSalesData(@p_BPS_Record_ID," +
+                                //    "@p_Month, " +
+                                //    "@p_Chemist_Code," +
+                                //    " @p_ProductName," +
+                                //    " @p_ActualDiscount," +
+                                //    " @p_Contribution," +
+                                //    " @p_SalesType," +
+                                //    "@p_Sales_Sku," +
+                                //    "@p_CreatedBy," +
+                                //    "@p_Sales_Value," +
+                                //    "@p_Pre_Fromdate," +
+                                //    "@p_Pre_Todate," +
+                                //    "@p_Post_Fromdate," +
+                                //    "@p_Post_Todate," +
+                                //    "@p_Year," +
+                                //    " @p_PackCode," +
+                                //    " @p_PreTotal," +
+                                //    " @p_PostTotal," +
+                                //    " @p_Roi," +
+                                //    " @p_PostProDesc," +
+                                //    " @p_DiscountPercentagePre," +
+                                //    " @p_DiscountPercentagePost," +
+                                //    " @p_TotalRoiPercentage," +
+                                //    " @p_BPSPercentage," +
+                                //    " @p_GrandTotal," +
+                                //    " p_Record_ID)",
+                                //    new MySqlParameter("@p_BPS_Record_ID", bpsrecordid),
+                                //    new MySqlParameter("@p_Month", month),
+                                //    new MySqlParameter("@p_Chemist_Code", chmeistcode),
+                                //    new MySqlParameter("@p_ProductName", ProdctName),
+                                //    new MySqlParameter("@p_ActualDiscount", PreProductActualDiscount),
+                                //    new MySqlParameter("@p_Contribution", Contributer),
+                                //    new MySqlParameter("@p_SalesType", SalesType),
+                                //    new MySqlParameter("@p_Sales_Sku", sku),
+                                //    new MySqlParameter("@p_CreatedBy", EmpidSessionValue),
+                                //    new MySqlParameter("@p_Sales_Value", value),
+                                //    new MySqlParameter("@p_Pre_Fromdate", prefromdate),
+                                //    new MySqlParameter("@p_Pre_Todate", pretodate),
+                                //    new MySqlParameter("@p_Post_Fromdate", postfromdate),
+                                //    new MySqlParameter("@p_Post_Todate", posttodate),
+                                //    new MySqlParameter("@p_Year", year),
+                                //    new MySqlParameter("@p_PackCode", ProdctCode),
+                                //    new MySqlParameter("@p_PreTotal", PreTotal),
+                                //    new MySqlParameter("@p_PostTotal", PostTotal),
+                                //    new MySqlParameter("@p_Roi", ROI),
+                                //    new MySqlParameter("@p_PostProDesc", PostProductDescription),
+                                //     new MySqlParameter("@p_DiscountPercentagePre", Discountpercentage),
+                                //      new MySqlParameter("@p_DiscountPercentagePost", Discountpostcentage),
+                                //      new MySqlParameter("@p_TotalRoiPercentage", ROI),
+                                //      new MySqlParameter("@p_BPSPercentage", BPSPercentage),
+                                //      new MySqlParameter("@p_GrandTotal", GrandTotal)
+                                //    ,
+                                //    outputParameter1)
+                                //    .ToList();
+
+                                //int recordId = (int)outputParameter1.Value;
+                            }
+
+                        }
+                    }
+                            trans.Commit();
+
+                        }
+                catch (Exception ex)
+                {
+                    trans.Rollback();
+                    throw;
+                }
+            }
+
+                }
+                catch (Exception ex)
+                {
+
                 }
 
-                //using (var context = new PassDbContext())
-                //{
-                    foreach (var data in dataList)
-                    {
-                        foreach (var product in data.ProductArr)
-                        {
-                            foreach (var sale in product.Sale)
-                            {
-                                var resultsales = _passDbContext.OutputParaMetersSales
-                                           .FromSqlRaw("CALL sp_UpdateSalesRecord(@p_Month, " +
-                                           "@p_Chemist_Code," +
-                                           " @p_ProductName," +
-                                           " @p_SalesType," +
-                                           "@p_Sales_Sku," +
-                                           "@p_UpdatedBy," +
-                                           "@p_Sales_Value," +
-                                           "@p_Post_Fromdate," +
-                                           "@p_Post_Todate," +
-                                           "@p_Year," +
-                                           " @p_PackCode," +
-                                           " @p_PostTotal," +
-                                           " @p_Roi," +
-                                           " @p_DiscountPercentagePre," +
-                                           " @p_DiscountPercentagePost," +
-                                           //" @p_TotalRoiPercentage," +
-                                           //" @p_BPSPercentage," +
-                                           //" @p_GrandTotal," +
-                                           " @p_BPS_Record_ID)",
+                    //var EmpidSessionValue = HttpContext.Session.GetString("EmpIdbps");
+                    //var bpsrcordquery = @"SELECT bpsreq.*, bpsreq.HCPREQID as User_Name, bpsreq.Status_ID as StatusType, bpsreq.CreatedBy as TMCode FROM pass_db.bps_request bpsreq where TrackingID = '" + trackingid + "'";
+                    //var bpsrcord = _passDbContext.BpsRequests.FromSqlRaw(bpsrcordquery).FirstOrDefault();
+                    //var bpsid = bpsrcord?.BpsRecordId;
+                    //var hcpid = bpsrcord?.Hcpreqid;
+                    //List<CustomModel_UpdateCustomers> dataList = new List<CustomModel_UpdateCustomers>();
 
-                                           new MySqlParameter("@p_Month", sale.Month),
-                                           new MySqlParameter("@p_Chemist_Code", data.ChemistCode),
-                                           new MySqlParameter("@p_ProductName", product.ProductName),
-                                           new MySqlParameter("@p_SalesType", product.SalesType),
-                                           new MySqlParameter("@p_Sales_Sku", sale.skuSales),
-                                           new MySqlParameter("@p_UpdatedBy", EmpidSessionValue),
-                                           new MySqlParameter("@p_Sales_Value", Convert.ToDecimal(sale.valueSales)),
-                                           new MySqlParameter("@p_Post_Fromdate", data.postfromDate),
-                                           new MySqlParameter("@p_Post_Todate", data.posttoDate),
-                                           new MySqlParameter("@p_Year", sale.Year),
-                                           new MySqlParameter("@p_PackCode", product.productCode),
-                                           new MySqlParameter("@p_PostTotal", product.posttotal),
-                                           new MySqlParameter("@p_Roi", data.totalroipercentage),
-                                           new MySqlParameter("@p_DiscountPercentagePre", product.discountpercentage),
-                                           new MySqlParameter("@p_DiscountPercentagePost", product.discountpostcentage),
-                                           //new MySqlParameter("@p_TotalRoiPercentage", data.totalroipercentage),
-                                           //new MySqlParameter("@p_BPSPercentage", data.bpspercentage),
-                                           //new MySqlParameter("@p_GrandTotal", data.grandtotal),
-                                             new MySqlParameter("@p_BPS_Record_ID", bpsid)
-                                           )
-                                           .ToList();
+                    //foreach (var dt in Updatedatalist)
+                    //{
+                    //    string chmeistcode = dt.ChemistCode;
+                    //    string postfromdate = dt.postfromDate;
+                    //    string posttodate = dt.posttoDate;
+                    //    string ROI = dt.totalroipercentage;
+                    //    string GrandTotal = dt.grandtotal;
+                    //    string BPSPercentage = dt.bpspercentage;
+
+                    //    CustomModel_UpdateCustomers updatedData = new CustomModel_UpdateCustomers
+                    //    {
+                    //        ChemistCode = chmeistcode,
+                    //        postfromDate = postfromdate,
+                    //        posttoDate = posttodate,
+                    //        bpspercentage = BPSPercentage,
+                    //        grandtotal = GrandTotal,
+                    //        totalroipercentage = ROI,
+                    //        ProductArr = new List<CustomModel_UpdateProducts>()
+                    //    };
+
+                    //    foreach (var p in dt.ProductArr)
+                    //    {
+                    //        string ProdctName = p.ProductName;
+                    //        string ProdctCode = p.productCode;
+                    //        string SalesType = p.SalesType;
+                    //        string PreTotal = p.pretotal;
+                    //        string PostTotal = p.posttotal;
+
+                    //        string Discountpercentage = p.discountpercentage;
+                    //        string Discountpostcentage = p.discountpostcentage;
+                    //        //string ROI = p.roi;
+                    //        string PostProductDescription = p.postproductDescription;
 
 
-                            var updaterec = @"UPDATE pass_db.bps_salesrecord SET  GrandTotal = '" + data.grandtotal + "', BPSPercentage = '" + data.bpspercentage + "', TotalRoiPercentage = '" + data.totalroipercentage + "' WHERE PackCode = '" + product.productCode + "' AND Chemist_Code = '" + data.ChemistCode + "' AND   BPS_Record_ID = '" + bpsid + "' ";
+                    //        //string DiscountPercentage = p.DiscountPercentage == null ? "0" : p.DiscountPercentage;  //p.DiscountPercentage;
+                    //        //string ROIPercentage = p.TotalRoiPercentage == null ? Convert.ToString(Convert.ToDecimal(ROI) + Convert.ToDecimal(p.DiscountPercentage)) : p.TotalRoiPercentage; //p.TotalRoiPercentage;
 
-                                              
-                        }
-                        }
-                        
-                    }
-                //  }
+                    //        CustomModel_UpdateProducts productData = new CustomModel_UpdateProducts
+                    //        {
+                    //            ProductName = ProdctName,
+                    //            productCode = ProdctCode,
+                    //            SalesType = SalesType,
+                    //            pretotal = PreTotal,
+                    //            posttotal = PostTotal,
+                    //            discountpercentage = Discountpercentage,
+                    //            discountpostcentage = Discountpostcentage,
+                    //            //roi = ROI,
+                    //            postproductDescription = PostProductDescription,
+                    //            Sale = new List<CustomModel_UpdateSales>(),
+                    //            //DiscountPercentage = DiscountPercentage,
+                    //            //TotalRoiPercentage = ROIPercentage,
+                    //        };
 
-                //using (MySqlConnection connection = new MySqlConnection(_connectionString))
-                //{
-                //    connection.Open();
+                    //        foreach (var s in p.Sale)
+                    //        {
+                    //            string month = s.Month;
+                    //            string year = s.Year;
+                    //            string sku = s.skuSales;
+                    //            string value = s.valueSales;
 
-                //    using (MySqlCommand command = new MySqlCommand("SpStartWF", connection))
-                //    {
-                //        command.CommandType = CommandType.StoredProcedure;
+                    //            CustomModel_UpdateSales saleData = new CustomModel_UpdateSales
+                    //            {
+                    //                Month = month,
+                    //                Year = year,
+                    //                skuSales = sku,
+                    //                valueSales = value
+                    //            };
 
-                //        command.Parameters.AddWithValue("p_TrackingId", trackingid);
-                //        command.Parameters.AddWithValue("p_HCPReqId", hcpid);
-                //        command.Parameters.AddWithValue("p_BpsId", bpsid);
-                //        command.Parameters.AddWithValue("p_User", EmpidSessionValue);
+                    //            productData.Sale.Add(saleData);
+                    //        }
 
-                //        // Execute the stored procedure
-                //        command.ExecuteNonQuery();
-                //        command.CommandTimeout = 3000;
+                    //        updatedData.ProductArr.Add(productData);
+                    //    }
 
-                //    }
-                //}
-                return Json(new { success = true });
+                    //    dataList.Add(updatedData);
+                    //}
+
+
+                    //    foreach (var data in dataList)
+                    //    {
+                    //        foreach (var product in data.ProductArr)
+                    //        {
+                    //            foreach (var sale in product.Sale)
+                    //            {
+                    //                var resultsales = _passDbContext.OutputParaMetersSales
+                    //                           .FromSqlRaw("CALL sp_UpdateSalesRecord(@p_Month, " +
+                    //                           "@p_Chemist_Code," +
+                    //                           " @p_ProductName," +
+                    //                           " @p_SalesType," +
+                    //                           "@p_Sales_Sku," +
+                    //                           "@p_UpdatedBy," +
+                    //                           "@p_Sales_Value," +
+                    //                           "@p_Post_Fromdate," +
+                    //                           "@p_Post_Todate," +
+                    //                           "@p_Year," +
+                    //                           " @p_PackCode," +
+                    //                           " @p_PostTotal," +
+                    //                           " @p_Roi," +
+                    //                           " @p_DiscountPercentagePre," +
+                    //                           " @p_DiscountPercentagePost," +
+                    //                           //" @p_TotalRoiPercentage," +
+                    //                           //" @p_BPSPercentage," +
+                    //                           //" @p_GrandTotal," +
+                    //                           " @p_BPS_Record_ID)",
+
+                    //                           new MySqlParameter("@p_Month", sale.Month),
+                    //                           new MySqlParameter("@p_Chemist_Code", data.ChemistCode),
+                    //                           new MySqlParameter("@p_ProductName", product.ProductName),
+                    //                           new MySqlParameter("@p_SalesType", product.SalesType),
+                    //                           new MySqlParameter("@p_Sales_Sku", sale.skuSales),
+                    //                           new MySqlParameter("@p_UpdatedBy", EmpidSessionValue),
+                    //                           new MySqlParameter("@p_Sales_Value", Convert.ToDecimal(sale.valueSales)),
+                    //                           new MySqlParameter("@p_Post_Fromdate", data.postfromDate),
+                    //                           new MySqlParameter("@p_Post_Todate", data.posttoDate),
+                    //                           new MySqlParameter("@p_Year", sale.Year),
+                    //                           new MySqlParameter("@p_PackCode", product.productCode),
+                    //                           new MySqlParameter("@p_PostTotal", product.posttotal),
+                    //                           new MySqlParameter("@p_Roi", data.totalroipercentage),
+                    //                           new MySqlParameter("@p_DiscountPercentagePre", product.discountpercentage),
+                    //                           new MySqlParameter("@p_DiscountPercentagePost", product.discountpostcentage),
+                    //                           //new MySqlParameter("@p_TotalRoiPercentage", data.totalroipercentage),
+                    //                           //new MySqlParameter("@p_BPSPercentage", data.bpspercentage),
+                    //                           //new MySqlParameter("@p_GrandTotal", data.grandtotal),
+                    //                             new MySqlParameter("@p_BPS_Record_ID", bpsid)
+                    //                           )
+                    //                           .ToList();
+
+
+                    //            var updaterec = @"UPDATE pass_db.bps_salesrecord SET  GrandTotal = '" + data.grandtotal + "', BPSPercentage = '" + data.bpspercentage + "', TotalRoiPercentage = '" + data.totalroipercentage + "' WHERE PackCode = '" + product.productCode + "' AND Chemist_Code = '" + data.ChemistCode + "' AND   BPS_Record_ID = '" + bpsid + "' ";
+
+
+                    //        }
+                    //        }
+
+                    //    }
+                    //  }
+
+                    //using (MySqlConnection connection = new MySqlConnection(_connectionString))
+                    //{
+                    //    connection.Open();
+
+                    //    using (MySqlCommand command = new MySqlCommand("SpStartWF", connection))
+                    //    {
+                    //        command.CommandType = CommandType.StoredProcedure;
+
+                    //        command.Parameters.AddWithValue("p_TrackingId", trackingid);
+                    //        command.Parameters.AddWithValue("p_HCPReqId", hcpid);
+                    //        command.Parameters.AddWithValue("p_BpsId", bpsid);
+                    //        command.Parameters.AddWithValue("p_User", EmpidSessionValue);
+
+                    //        // Execute the stored procedure
+                    //        command.ExecuteNonQuery();
+                    //        command.CommandTimeout = 3000;
+
+                    //    }
+                    //}
+                    return Json(new { success = true });
             }
             catch (Exception ex)
             {

@@ -100,3 +100,14 @@ body {
 }
 
 /*accordioncssend*/
+
+
+.allinput-fields{
+    text-align:end;
+}
+
+
+.small-font {
+    font-size: 14px; /* Adjust the font size as needed */
+}
+

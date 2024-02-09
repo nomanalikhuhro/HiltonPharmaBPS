@@ -4,6 +4,7 @@
 
 
     var uname = httpContext.HttpContext.Session.GetString("uname");
+    var rolename = httpContext.HttpContext.Session.GetString("rolename");
     var abc = @ViewBag.RoleId;
     //int a = Context.Session.GetInt32("EmpId");
 
@@ -317,7 +318,7 @@
                 <a style="text-decoration-style: solid; font-weight:bold; font-size:20px;" href="#">Business Planning Sheet</a>
                 <div style="display: grid; justify-content:end; align-items: center ; margin-top:auto;">
                     <span style="display: flex; justify-content: center; align-items: center; flex-direction: row; font-size:20px;">
-                        @uname
+                        @uname (@rolename)
                         <span><a style="color: black; font-size:20px;font-weight:bold" asp-controller="Login" asp-action="Logout" class="fa fa-sign-out" data-toggle="tooltip" data-placement="down" title="Logout"></a></span>
                     </span>
 
