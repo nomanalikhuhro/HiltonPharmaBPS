@@ -296,8 +296,17 @@
                  @*   <a id="BpsReqIDBtn">Created Request</a>*@
                     <a asp-area="" asp-controller="ListView" asp-action="ApprovedView" asp-route-id="1">Submitted Request</a>
                     <a asp-area="" asp-controller="ListView" asp-action="TrackingIDStatus" asp-route-id="1">RequestId Status</a>
-                </div>
+                </div >
             }
+@*            else if (@abc == "2" || @abc == "3")
+            {
+                <div>
+                    <a asp-area="" asp-controller="ListView" asp-action="Create" asp-route-id="2">Created Request</a>
+                    <a asp-area="" asp-controller="ListView" asp-action="PendingView" asp-route-id="2">Pending for My Approval</a>
+                    <a asp-area="" asp-controller="ListView" asp-action="TrackingIDStatus" asp-route-id="2">TrackingId Status</a>
+
+                </div>
+            }*@
             else
             {
                 <div>

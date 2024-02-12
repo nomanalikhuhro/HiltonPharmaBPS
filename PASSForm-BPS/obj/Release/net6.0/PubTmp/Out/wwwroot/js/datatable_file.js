@@ -88,6 +88,11 @@ function SubmittedForm() {
     //var endDateInput = document.getElementById('enddatepost-0').value;
     var Comment = document.getElementById('createcomments').value;
     var currentDate = new Date();
+
+    //if (DistributorCode == "" || DistributorCode = 'Select' || Comment == null) {
+
+    //    document.getElementById('DistributorErrorLabel').classList.remove("hide");
+    //}
     var HeaderData = {
 
         DistributerCode: DistributorCode,
@@ -271,7 +276,11 @@ function SubmittedForm() {
                         timer: 3600,
                         width: 680,
                         allowOutsideClick: false,
-                        allowEscapeKey: false
+                        allowEscapeKey: false,
+                        customClass: {
+                            title: 'small-font',
+                            icon: 'small-icon'
+                        }
                     });
 
                 } else {
@@ -305,7 +314,7 @@ function UpdateSubmittedForm() {
     var HCPREQID = document.getElementById('hcpid').value;
     //var startDateInput = document.getElementById('startdatepost-0').value;
     //var endDateInput = document.getElementById('enddatepost-0').value;
-/*    var Comment = document.getElementById('createcomments').value;*/
+    var Comment = document.getElementById('createcomments').value;
     var currentDate = new Date();
     var HeaderData = {
 
@@ -315,7 +324,7 @@ function UpdateSubmittedForm() {
         ToDate: currentDate,
         HCPREQID: HCPREQID,
         trackingid: HCPREQID,
-       /* Comments: Comment,*/
+        Comments: Comment,
     };
 
 
@@ -491,7 +500,11 @@ function UpdateSubmittedForm() {
                     timer: 3600,
                     width: 680,
                     allowOutsideClick: false,
-                    allowEscapeKey: false
+                    allowEscapeKey: false,
+                    customClass: {
+                        title: 'small-font',
+                        icon: 'small-icon'
+                    }
                 });
             } else {
        /*         var modelvisisble = document.getElementById('myModal').style.visibility = 'hidden';*/
@@ -943,7 +956,20 @@ function PreActivitySales(checkboxindex) {
         },
         error: function (xhr, status, error) {
             // Handle errors here
-            console.error("Error:", status, error);
+            /*      console.error("Error:", status, error);*/
+            Swal.fire({
+                icon: "error",
+                title: 'Data Not Found',
+                showConfirmButton: false,
+                timer: 3600,
+                width: 680,
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                customClass: {
+                    title: 'small-font',
+                    icon: 'small-icon'
+                }
+            });
         }
     });
 
@@ -1004,7 +1030,19 @@ function EDITPreActivitySales(checkboxindex) {
         },
         error: function (xhr, status, error) {
             // Handle errors here
-            console.error("Error:", status, error);
+            Swal.fire({
+                icon: "error",
+                title: 'Data Not Found',
+                showConfirmButton: false,
+                timer: 3600,
+                width: 680,
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                customClass: {
+                    title: 'small-font',
+                    icon: 'small-icon'
+                }
+            });
         }
     });
 
@@ -1496,26 +1534,7 @@ function downloadFile(filePath) {
     document.body.removeChild(link);
 }
 
-//=========== (Start) Hassam ===========
-function downloadTemplate(pathId) {
-    
-    $.ajax({
-        url: '/ListView/GetTemplateByPathId',
-        type: 'GET',
-        data: { pathId },
-        success: function (responseData) {
-            $("#showChooseFile").show();
-            let downloadURL = responseData.path + responseData.name
-            let fileDownload = document.createElement("a");
-            fileDownload.download = responseData.name;
-            fileDownload.href = downloadURL;
-            fileDownload.click();
-        }
-    });
-}
 
-
-//=========== (End) Hassam ===========
 
 function BpsApproval() {
 
@@ -1561,7 +1580,11 @@ function BpsApproval() {
                         timer: 3600,
                         width: 680,
                         allowOutsideClick: false,
-                        allowEscapeKey: false
+                        allowEscapeKey: false,
+                        customClass: {
+                            title: 'small-font',
+                            icon: 'small-icon'
+                        }
                     });
 
                 } else {
@@ -1616,7 +1639,11 @@ function BpsReject() {
                     timer: 3600,
                     width: 680,
                     allowOutsideClick: false,
-                    allowEscapeKey: false
+                    allowEscapeKey: false,
+                    customClass: {
+                        title: 'small-font',
+                        icon: 'small-icon'
+                    }
                 });
 
             } else {
@@ -1674,7 +1701,11 @@ function BpsObjection() {
                         timer: 3600,
                         width: 680,
                         allowOutsideClick: false,
-                        allowEscapeKey: false
+                        allowEscapeKey: false,
+                        customClass: {
+                            title: 'small-font',
+                            icon: 'small-icon'
+                        }
                     });
 
                 } else {
@@ -1839,7 +1870,11 @@ function BpsASMActivity() {
                     timer: 3600,
                     width: 680,
                     allowOutsideClick: false,
-                    allowEscapeKey: false
+                    allowEscapeKey: false,
+                    customClass: {
+                        title: 'small-font',
+                        icon: 'small-icon'
+                    }
                 });
 
             } else {
@@ -1906,7 +1941,11 @@ function BpsPoNumber() {
                     timer: 3600,
                     width: 680,
                     allowOutsideClick: false,
-                    allowEscapeKey: false
+                    allowEscapeKey: false,
+                    customClass: {
+                        title: 'small-font',
+                        icon: 'small-icon'
+                    }
                 });
 
             } else {

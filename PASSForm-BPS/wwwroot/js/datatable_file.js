@@ -1639,7 +1639,7 @@ function BpsReject() {
                     timer: 3600,
                     width: 680,
                     allowOutsideClick: false,
-                    allowEscapeKey: ,
+                    allowEscapeKey: false,
                     customClass: {
                         title: 'small-font',
                         icon: 'small-icon'

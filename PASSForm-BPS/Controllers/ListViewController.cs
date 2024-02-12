@@ -163,15 +163,17 @@ namespace PASSForm_BPS.Controllers
         }
 
             // GET: ListViewController/Details/5
-            public ActionResult Details(string id, string anotherid, int thirdId)
+            public ActionResult Details(string id, string anotherid, int thirdId, string statusId)
         {
             try
             {
-
+                
                 if (id == null)
                 {
                     return RedirectToAction("PendingView", "ListView", 2);
                 }
+
+
 
                 // string CookieValue = "";
                 // var myCookie = Request.Cookies["roleid"].Value;
@@ -188,6 +190,11 @@ namespace PASSForm_BPS.Controllers
                     if (empIdCookie == "1")
                     {
                         ViewBag.RoleId = "1";
+                        if (statusId == "InProgress")
+                        {
+
+                            return RedirectToAction("ApprovedView", "ListView");
+                        }
                         var Empid_SessionValue = HttpContext.Session.GetString("EmpIdbps");
 
                         var bpsrcordquery = @"SELECT bpsreq.*, bpsreq.HCPREQID as User_Name, bpsreq.Status_ID as StatusType, bpsreq.CreatedBy as TMCode FROM pass_db.bps_request bpsreq where TrackingID = '" + id + "'";
@@ -512,6 +519,11 @@ namespace PASSForm_BPS.Controllers
                     else
                     {
                         ViewBag.RoleId = "2";
+                        if (statusId == "InProgress")
+                        {
+
+                            return RedirectToAction("PendingView", "ListView", 2);
+                        }
                         ViewBag.WorklistId = thirdId;
                         var Empid_SessionValue = HttpContext.Session.GetString("EmpIdbps");
 
@@ -2171,13 +2183,19 @@ where HCPREQID = '" + trackingid + "'";
 
 
         // GET: ListViewController/Edit/5
-        public ActionResult Edit(string id, string anotherId, string thirdId)
+        public ActionResult Edit(string id, string anotherId, string thirdId, string statusId)
         {
             try
             {
                 if (id == null)
                 {
                     return RedirectToAction("PendingView", "ListView", 2);
+                }
+
+                if (statusId == "InProgress")
+                {
+
+                    return RedirectToAction("ApprovedView", "ListView");
                 }
 
                 if (thirdId != null)

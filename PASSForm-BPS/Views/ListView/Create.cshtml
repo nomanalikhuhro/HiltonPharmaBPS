@@ -7,10 +7,6 @@
     //@model List<PASSForm_BPS.Models.Hcprequest>
 
 
-
-
-
-
 }
 
 <html>
@@ -72,73 +68,6 @@
             }
 
 
-
-
-            
-
-/* The Modal (background) */
-.modal {
-
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
-  padding-top: 100px; /* Location of the box */
-  left: 0;
-  top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-}
-
-/* Modal Content */
-.modal-content {
-            position: relative;
-            background-color: #fefefe;
-            margin: auto;
-            padding: 0;
-            border: 1px solid #888;
-            width: 49%;
-            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
-            -webkit-animation-name: animatetop;
-            -webkit-animation-duration: 0.4s;
-            animation-name: animatetop;
-            animation-duration: 0.4s;
-            height: 208px;
-            border: 3px solid black;
-            border-radius: 10px;
-}
-
-/* Add Animation */
-
-
-/* The Close Button */
-.close {
-  color: white;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-  color: #000;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-
-
-.modal-body {padding: 2px 16px;
-            text-align: center;
-            padding-top: 13%;
-            font-weight: bolder;
-            font-size: 25px;
-            color: #;
-            color: black;
-
-
-}
 
         .searchbutton{
             width: 35%;
@@ -259,7 +188,7 @@
     </style>
 </head>
 <body>
-    <div id="myModal" class="modal" style="display:block; visibility:hidden">
+@*    <div id="myModal" class="modal" style="display:block; visibility:hidden">
         <div style="padding-left: 10%;padding-top: 5%;">
             <div class="modal-content">
 
@@ -273,7 +202,7 @@
         <!-- Modal content -->
 
 
-    </div>
+    </div>*@
     <div style="padding-top: 15px;">
 
         <div style="border: 2px solid; background-color: white; border-radius: 10px; border-color: white; box-shadow: 1px 0px 9px 1px lightgray;">
@@ -539,14 +468,14 @@
     <script src="~/js/datatable_file.js"></script>
     <script>
 
-        document.addEventListener("DOMContentLoaded", function () {
-            var modal = document.getElementById("myModal");
-            window.onclick = function (event) {
-                if (event.target == modal) {
-                    modal.style.display = "none";
-                }
-            }
-        });
+        //document.addEventListener("DOMContentLoaded", function () {
+        //    var modal = document.getElementById("myModal");
+        //    window.onclick = function (event) {
+        //        if (event.target == modal) {
+        //            modal.style.display = "none";
+        //        }
+        //    }
+        //});
 
 
 
