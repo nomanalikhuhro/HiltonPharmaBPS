@@ -19,75 +19,8 @@
 <head>
     <title>Your View</title>
     <style>
-        .accordion {
-            background-color: #eee;
-            color: #444;
-            cursor: pointer;
-            padding: 18px;
-            width: 100%;
-            border: none;
-            text-align: left;
-            outline: none;
-            font-size: 15px;
-            transition: 0.4s;
-            margin-bottom: 20px;
-        }
+        
 
-            .active, .accordion:hover {
-                background-color: #ccc;
-            }
-
-            .accordion:after {
-                content: '\002B';
-                color: #777;
-                font-weight: bold;
-                float: right;
-                margin-left: 5px;
-            }
-
-        .active:after {
-            content: "\2212";
-        }
-
-        .panel {
-            padding: 0 18px;
-            background-color: white;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.2s ease-out;
-        }
-
-
-
-        .searchbutton {
-            border-radius: 5px;
-            height: 35px;
-            color: black;
-            background-color: white;
-            border: 3px solid black;
-        }
-
-        .trackbtn {
-            width: 25%;
-            border-radius: 5px;
-            height: 30px;
-            color: #d71921;
-            background-color: white;
-            border: 3px solid #d71921;
-        }
-
-        .searchbutton[disabled] {
-            background-color: #ccc;
-            color: #888;
-            cursor: not-allowed;
-            background-color: #ccc;
-            border: 3px solid #ccc;
-        }
-
-
-            .searchbutton[disabled].active {
-                background-color: #ccc;
-            }
 
         .createbtn {
             width: 8%;
@@ -100,35 +33,7 @@
         }
         
 
-        /*        toggleswitchcss*/
-        .toggle-switch {
-            display: inline-block;
-            width: 50px;
-            height: 21px;
-            background-color: #ccc;
-            border-radius: 24px;
-            position: relative;
-            transition: background-color 0.4s;
-            cursor: pointer;
-        }
-
-        .toggle-slider {
-            position: absolute;
-            content: "";
-            height: 20px;
-            width: 20px;
-            left: 1px;
-            bottom: 1px;
-            background-color: white;
-            border-radius: 50%;
-            transition: transform 0.4s;
-        }
-
-        /* Toggle switch states */
-        .on {
-            background-color: #2196F3;
-        }
-        
+/*        
         .dropdown {
             position: relative;
             display: inline-block;
@@ -164,7 +69,7 @@
 
         .dropdown:hover .dropdown-content {
             display: block;
-        }
+        }*/
     </style>
 </head>
 <body>
@@ -484,7 +389,7 @@
                                                         {
                                                             
                                                             int editskuindex = 0;
-                                                            <tr style="font-size:13px;">
+                                                            <tr style="font-size:10px;">
                                                                 @foreach (var skudata1 in skudata)
                                                                 {
 
@@ -728,7 +633,7 @@
                                     <div id="postsku-@acc" style="overflow:auto; ">
                                         <table id="customers">
                                             <thead>
-                                                <tr style="font-size:13px;">
+                                                <tr style="font-size:10px;">
                                                     @foreach (var skucoloum in skupost.Value[0] as IDictionary<string, object>)
                                                     {
                                                         if (skucoloum.Key == "PackCode")
@@ -784,7 +689,7 @@
                                                                 else
                                                                 {
                                                                     <td style="text-align:end" >
-                                                                        <input style="width:50%; text-align:right;" id="sku-post-input-column-@acc-@editpackcoderowindex-@editskuindex" value="@Convert.ToInt32(skudata1.Value)" class="numeric" maxlength="5" oninput="EditcalculateValue(@chemindex,@editpackcoderowindex,@editskuindex)">
+                                                                        <input style="width:50%; text-align:right;" id="sku-post-input-column-@acc-@editpackcoderowindex-@editskuindex" value="@Convert.ToInt32(skudata1.Value)" class="numeric" maxlength="5" oninput="EditcalculateValue(@acc,@editpackcoderowindex,@editskuindex)">
      
                                                                     </td>
                                                                     editskuindex++;
@@ -862,8 +767,8 @@
                                                                 }
                                                                 else
                                                                 {
-                                                                    <td style="text-align:end">
-                                                                        <input style="text-align:right; width:50%;" type="number" disabled id="value-post-input-column-@acc-@editpackcoderowindexvalue-@editvalueindex" maxlength="5" value="@Convert.ToInt32(valdata1.Value)">
+                                                                    <td style="text-align :end">
+                                                                        <input style="text-align:right; width:100%;" type="number" disabled id="value-post-input-column-@acc-@editpackcoderowindexvalue-@editvalueindex" maxlength="5" value="@Convert.ToInt32(valdata1.Value)">
                                                                        
                                                                     </td>
                                                                    editvalueindex++;
@@ -940,15 +845,30 @@
             </div>
             <div>
                 <div style="text-align:right; margin-top:3%;">
-                    <label>Grand Total:</label>
+                    <label>Total Without Discount:</label>
 
 
-                    @foreach (var grandtaotal in Model.customersmodels.Where(grandtaotal => grandtaotal.grandtotal != null)
-                    .GroupBy(grandtaotal => grandtaotal.grandtotal))
+                    @foreach (var totalwithoutdiscount in Model.customersmodels.Where(totalwithoutdiscount => totalwithoutdiscount.totalwithoutdiscount != null)
+                    .GroupBy(totalwithoutdiscount => totalwithoutdiscount.totalwithoutdiscount))
                     {
-                        var predat = grandtaotal.First(); // Take the first item in each group
+                        var predat = totalwithoutdiscount.First(); // Take the first item in each group
 
-                        <input disabled class="allinput-fields" id="grandtotal" type="text" value="@(predat.grandtotal != null ? predat.grandtotal : string.Empty)" style="margin-left: 2%;" />
+                        <input disabled class="allinput-fields" id="totalwithoutdis" type="text" value="@(predat.totalwithoutdiscount != null ? predat.totalwithoutdiscount : string.Empty)" style="margin-left: 2%;" />
+                    }
+
+                </div>
+            </div>
+            <div>
+                <div style="text-align:right; margin-top:3%;">
+                    <label>Total With Discount:</label>
+
+
+                    @foreach (var totalwithdiscount in Model.customersmodels.Where(totalwithdiscount => totalwithdiscount.totalwithdiscount != null)
+                    .GroupBy(totalwithdiscount => totalwithdiscount.totalwithdiscount))
+                    {
+                        var predat = totalwithdiscount.First(); // Take the first item in each group
+
+                        <input disabled class="allinput-fields" id="totalwithdis" type="text" value="@(predat.totalwithdiscount != null ? predat.totalwithdiscount : string.Empty)" style="margin-left: 2%;" />
                     }
 
                 </div>
@@ -970,7 +890,7 @@
 
             <div>
                 <div style="text-align:right; margin-top:2%;">
-                    <label>Total ROI %:</label>
+                    <label>NET Percentage %:</label>
 
 
                     @foreach (var roi in Model.customersmodels.Where(roi => roi.totalroipercentage != null)

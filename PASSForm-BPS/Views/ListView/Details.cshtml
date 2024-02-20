@@ -17,146 +17,15 @@
     var previousPlans = ViewBag.PreviousPlans;
     string roleId = httpContext.HttpContext.Session.GetString("roleid");
 
-    @*============ (End) Hassam ============*@
-
-    /*    var empIdCookie = Request.Cookies["roleid"].ToString(); *///ViewBag.roleid;
-                                                                    //var empIdCookie = Context.Request.Cookies["roleid"]?.ToString();
 
 }
 <html>
 <head>
     <title>Your View</title>
     <style>
-        .accordion {
-            background-color: #eee;
-            color: #444;
-            cursor: pointer;
-            padding: 18px;
-            width: 100%;
-            border: none;
-            text-align: left;
-            outline: none;
-            font-size: 15px;
-            transition: 0.4s;
-            margin-bottom: 20px;
-        }
-
-            .active, .accordion:hover {
-                background-color: #ccc;
-            }
-
-            .accordion:after {
-                content: '\002B';
-                color: #777;
-                font-weight: bold;
-                float: right;
-                margin-left: 5px;
-            }
-
-        .active:after {
-            content: "\2212";
-        }
-
-        .panel {
-            padding: 0 18px;
-            background-color: white;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.2s ease-out;
-        }
+        
 
 
-
-        /* The Modal (background) */
-        .modal {
-            position: fixed; /* Stay in place */
-            z-index: 1; /* Sit on top */
-            padding-top: 100px; /* Location of the box */
-            left: 0;
-            top: 0;
-            width: 100%; /* Full width */
-            height: 100%; /* Full height */
-            overflow: auto; /* Enable scroll if needed */
-            background-color: rgb(0,0,0); /* Fallback color */
-            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-        }
-
-        /* Modal Content */
-        .modal-content {
-            position: relative;
-            background-color: #fefefe;
-            margin: auto;
-            padding: 0;
-            border: 1px solid #888;
-            width: 49%;
-            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
-            -webkit-animation-name: animatetop;
-            -webkit-animation-duration: 0.4s;
-            animation-name: animatetop;
-            animation-duration: 0.4s;
-            height: 208px;
-            border: 3px solid black;
-            border-radius: 10px;
-        }
-
-        /* Add Animation */
-
-
-        /* The Close Button */
-        .close {
-            color: white;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-            .close:hover,
-            .close:focus {
-                color: #000;
-                text-decoration: none;
-                cursor: pointer;
-            }
-
-
-
-        .modal-body {
-            padding: 2px 16px;
-            text-align: center;
-            padding-top: 10%;
-            font-weight: bolder;
-            font-size: 25px;
-        }
-
-        .searchbutton {
-            width: 35%;
-            border-radius: 5px;
-            height: 35px;
-            color: #d71921;
-            background-color: white;
-            border: 3px solid #d71921;
-        }
-
-        .trackbtn {
-            width: 25%;
-            border-radius: 5px;
-            height: 30px;
-            color: #d71921;
-            background-color: white;
-            border: 3px solid #d71921;
-        }
-
-        .searchbutton[disabled] {
-            background-color: #ccc;
-            color: #888;
-            cursor: not-allowed;
-            background-color: #ccc;
-            border: 3px solid #ccc;
-        }
-
-
-            .searchbutton[disabled].active {
-                background-color: #ccc;
-            }
 
         .createbtn {
             width: 10%;
@@ -167,34 +36,6 @@
             font-weight: 700;
         }
 
-        /*        toggleswitchcss*/
-        .toggle-switch {
-            display: inline-block;
-            width: 50px;
-            height: 21px;
-            background-color: #ccc;
-            border-radius: 24px;
-            position: relative;
-            transition: background-color 0.4s;
-            cursor: pointer;
-        }
-
-        .toggle-slider {
-            position: absolute;
-            content: "";
-            height: 20px;
-            width: 20px;
-            left: 1px;
-            bottom: 1px;
-            background-color: white;
-            border-radius: 50%;
-            transition: transform 0.4s;
-        }
-
-        /* Toggle switch states */
-        .on {
-            background-color: #2196F3;
-        }
 
         .hide {
             display: none;
@@ -454,7 +295,7 @@
                                 <div id="sku-@presku" style="overflow:auto; ">
                                     <table id="customers">
                                         <thead>
-                                            <tr style="    font-size: 13px; background: #d71921; color: white; font-weight: bold;">
+                                            <tr style="    font-size: 10px; background: #d71921; color: white; font-weight: bold;">
                                                 @foreach (var skucoloum in skupre.Value[0] as IDictionary<string, object>)
                                                 {
                                             @*        <th>@skucoloum.Key</th>*@
@@ -545,7 +386,7 @@
                                 <div id="value-@prevalue" style="overflow:auto; display:none">
                                     <table id="customers">
                                         <thead>
-                                            <tr style="   font-size: 13px; background: #d71921; color: white; font-weight: bold;">
+                                            <tr style="   font-size: 10px; background: #d71921; color: white; font-weight: bold;">
                                                 @foreach (var valuecolumn in valpre.Value[0] as IDictionary<string, object>)
                                                 {
                                                    @* <th>@valuecolumn.Key</th>*@
@@ -739,7 +580,7 @@
                                 <div id="postsku-@postsku" style="overflow:auto; ">
                                     <table id="customers">
                                         <thead>
-                                            <tr style="   font-size: 11px; background: #d71921; color: white; font-weight: bold;">
+                                            <tr style="   font-size: 10px; background: #d71921; color: white; font-weight: bold;">
                                                 @foreach (var skucoloum in skupost.Value[0] as IDictionary<string, object>)
                                                 {
                                                    @* <th>@skucoloum.Key</th>*@
@@ -795,7 +636,7 @@
 
 
 
-                                                            <td style="text-align:right;">
+                                                            <td style="text-align:right; width:10%;">
 
                                                                 @skudata1.Value
                                                             </td>
@@ -818,7 +659,7 @@
                                 <div id="postvalue-@postvalue" style="overflow:auto; display:none">
                                     <table id="customers">
                                         <thead>
-                                            <tr style="   font-size: 11px; background: #d71921; color: white; font-weight: bold;">
+                                            <tr style="   font-size: 10px; background: #d71921; color: white; font-weight: bold;">
                                                 @foreach (var valuecolumn in valpost.Value[0] as IDictionary<string, object>)
                                                 {
                                                    @* <th>@valuecolumn.Key</th>*@
@@ -938,8 +779,8 @@
                     toggle++;
                 }
                 <div>
-                    <div style="text-align:right; margin-top:3%;">
-                        <label>Grand Total:</label>
+                    <div style="text-align:right; margin-top:2%;">
+                        <label>Total Without Discount:</label>
                         @*@foreach (var grandtaotal in Model.customersmodels)
                         {
                             if (grandtaotal.grandtotal != null)
@@ -950,12 +791,36 @@
 
                         }*@
 
-                        @foreach (var grandtaotal in Model.customersmodels.Where(grandtaotal => grandtaotal.grandtotal != null)
-                        .GroupBy(grandtaotal => grandtaotal.grandtotal))
+                        @foreach (var totalwithoutdiscount in Model.customersmodels.Where(totalwithoutdiscount => totalwithoutdiscount.totalwithoutdiscount != null)
+                        .GroupBy(totalwithoutdiscount => totalwithoutdiscount.totalwithoutdiscount))
                         {
-                            var predat = grandtaotal.First(); // Take the first item in each group
+                            var predat = totalwithoutdiscount.First(); // Take the first item in each group
 
-                            <input disabled type="text" class="allinput-fields" value="@(predat.grandtotal != null ? predat.grandtotal : string.Empty)" style="margin-left: 2%;" />
+                            <input disabled type="text" class="allinput-fields" value="@(predat.totalwithoutdiscount != null ? predat.totalwithoutdiscount : string.Empty)" style="margin-left: 2%;" />
+                        }
+
+                    </div>
+                </div>
+
+                <div>
+                    <div style="text-align:right; margin-top:3%;">
+                        <label>Total With Discount:</label>
+                        @*@foreach (var grandtaotal in Model.customersmodels)
+                        {
+                        if (grandtaotal.grandtotal != null)
+                        {
+
+                        <input  disabled type="text" value="@grandtaotal.grandtotal" style="margin-left: 2%; text-align:right;" />
+                        }
+
+                        }*@
+
+                        @foreach (var totalwithdiscount in Model.customersmodels.Where(totalwithdis => totalwithdis.totalwithdiscount != null)
+                        .GroupBy(totalwithdiscount => totalwithdiscount.totalwithdiscount))
+                        {
+                            var predat = totalwithdiscount.First(); // Take the first item in each group
+
+                            <input disabled type="text" class="allinput-fields" value="@(predat.totalwithdiscount != null ? predat.totalwithdiscount : string.Empty)" style="margin-left: 2%;" />
                         }
 
                     </div>
@@ -986,7 +851,7 @@
 
                 <div>
                     <div style="text-align:right; margin-top:2%;">
-                        <label>Total ROI %:</label>
+                        <label>NET Percentage %:</label>
 @*                        @foreach (var roi in Model.customersmodels)
                         {
                             if (roi.totalroipercentage != null)

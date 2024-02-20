@@ -14,45 +14,7 @@
     <title>Your View</title>
     <script src="~/js/datatable_file.js"></script>
     <style>
-        .accordion {
-            color: black;
-            background-color: #D0D3D4;
-            cursor: pointer;
-            padding: 18px;
-            width: 100%;
-            border: none;
-            text-align: left;
-            outline: none;
-            font-size: 15px;
-            transition: 0.4s;
-        }
 
-            .active, .accordion:hover {
-                color: black;
-                background-color: #D0D3D4;
-            }
-
-            .accordion:after {
-                content: '\002B';
-                color: black;
-                font-weight: bold;
-                float: right;
-                margin-left: 5px;
-            }
-
-        .active:after {
-            content: "\2212";
-        }
-
-        .panel {
-            padding: 0 18px;
-            background-color: white;
-   /*         max-height: 0;*/
-            overflow: hidden;
-            transition: max-height 0.2s ease-out;
-            height:auto;
-        }
-        /*accordioncssend*/
 
         .accordion[disabled] {
             background-color: #ccc; /* Change the background color to gray */
@@ -69,38 +31,9 @@
 
 
 
-        .searchbutton{
-            width: 35%;
-            border-radius: 5px;
-            height: 35px;
-            color: black;
-            background-color: white;
-            border: 3px solid black;
-        }
 
-        .trackbtn{
-            width: 25%;
-            border-radius: 5px;
-            height: 30px;
-            color: black;
-            background-color: white;
-            border: 3px solid black;
-        }
 
-        .searchbutton[disabled] {
-            background-color: #ccc; 
-            color: #888; 
-            cursor: not-allowed; 
-            background-color: #ccc;
-            border: 3px solid #ccc;
-      
-        }
 
-        
-            .searchbutton[disabled].active {
-                background-color: #ccc; 
-         
-            }
 
         .createbtn{
             width: 8%;
@@ -112,7 +45,7 @@
             font-weight: 700;
         }
 
-        .dropdown {
+/*        .dropdown {
             position: relative;
             display: inline-block;
         }
@@ -147,36 +80,9 @@
 
         .dropdown:hover .dropdown-content {
             display: block;
-        }
+        }*/
 
-/*        toggleswitchcss*/
-        .toggle-switch {
-            display: inline-block;
-            width: 50px;
-            height: 21px;
-            background-color: #ccc;
-            border-radius: 24px;
-            position: relative;
-            transition: background-color 0.4s;
-            cursor: pointer;
-        }
 
-        .toggle-slider {
-            position: absolute;
-            content: "";
-            height: 20px;
-            width: 20px;
-            left: 1px;
-            bottom: 1px;
-            background-color: white;
-            border-radius: 50%;
-            transition: transform 0.4s;
-        }
-
-        /* Toggle switch states */
-        .on {
-            background-color: #2196F3;
-        }
         #customers th{
             width:10%;
         }
@@ -188,21 +94,7 @@
     </style>
 </head>
 <body>
-@*    <div id="myModal" class="modal" style="display:block; visibility:hidden">
-        <div style="padding-left: 10%;padding-top: 5%;">
-            <div class="modal-content">
 
-                <div class="modal-body">
-                    <p>Record has been added successfully</p>
-                    
-                </div>
-
-            </div>
-        </div>
-        <!-- Modal content -->
-
-
-    </div>*@
     <div style="padding-top: 15px;">
 
         <div style="border: 2px solid; background-color: white; border-radius: 10px; border-color: white; box-shadow: 1px 0px 9px 1px lightgray;">
@@ -319,7 +211,7 @@
                                     <div class="col-4">
                                         <label style="font-weight:bold;">Distributor:</label>
                                         <div>
-                                            <select style="width: 95%; height: 30px;" id="distributer">
+                                            <select style="width: 95%; height: 30px;" id="distributer" onchange="getbrickbydiscode()">
                                                 <option  value="Select">Select</option>
                                                 @foreach (var item1 in Model.disterMappings)
                                                 {
@@ -356,11 +248,11 @@
                                         <div class="col-4">
                                             <label style="font-weight:bold;">MacroBrick:</label>
                                             <div>
-                                                <select   style="width: 85%; height: 30px;"  id="selectedbrick" onchange="getchembybrickcode()">
+                                                <select   style="width: 99%; height: 30px;"  id="selectedbrick" onchange="getchembybrickcode()">
                                                     <option value="Select">Select</option>
                                                     @foreach (var BrckCode in Model.terbrickMappings)
                                                     {
-                                                        <option id="macrobrickcode" value="@BrckCode.MacroBrickCode - @BrckCode.MacroBrickName">@BrckCode.MacroBrickCode - @BrckCode.MacroBrickName</option>
+                                                        <option id="macrobrickcode"></option>
                                                     }
                                                 </select>
                                             </div>
@@ -435,8 +327,12 @@
         </div>
         <div style="text-align:right; margin-top:2%";>
             <div style="text-align:right;">
-                <label>Grand Total:</label>
-                <input disabled type="text" id="grandtotal" style="margin-left: 2%; text-align:right" value="@ViewBag.GrandTotal" />
+                <label>Total Without Discount:</label>
+                <input disabled type="text" id="totalwithoutdis" style="margin-left: 2%; text-align:right" value="@ViewBag.GrandTotal" />
+            </div>
+            <div style="text-align:right; padding-top:2%">
+                <label>Total With Discount:</label>
+                <input disabled type="text" id="totalwithdis" style="margin-left: 2%; text-align:right" value="@ViewBag.GrandTotal" />
             </div>
             <div style="text-align:right; padding-top:2%">
                 <label>BPS Percentage %:</label>
@@ -444,7 +340,7 @@
             </div><br />
 
             <div style="text-align:right;">
-                <label>ROI Percentage %:</label>
+                <label>NET Percentage %:</label>
                 <input disabled type="text" id="totalroipercentage" style="margin-left: 2%; text-align:right;" value="@ViewBag.bpspercentgae" /><br />
                 <input style="margin-top:15px; width:10%;" id="bpspercentagebtn-post-@ViewBag.postcheckboxindex" onclick="CalculateBPSPercentage(@ViewBag.postcheckboxindex)" type="button" class="searchbutton" value="Calculate %" />
              </div>

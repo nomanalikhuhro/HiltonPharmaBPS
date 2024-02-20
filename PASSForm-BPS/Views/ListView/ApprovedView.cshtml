@@ -15,11 +15,12 @@
                 <thead>
                     <tr class="table table-striped">
                         <th>Territory Code</th>
-                        <th>Status</th>
+                        <th>Workflow Status</th>
+                        <th>Activity Status</th>
                         <th>Created By</th>
                         <th>Created On</th>
                         <th></th>
-                        <th></th>
+               @*         <th></th>*@
                     </tr>
                 </thead>
                 <tbody>
@@ -30,19 +31,31 @@
                         <tr>
                             <td>@item.TMCode</td>
                             <td>@item.StatusType</td>
+                            @if(item.ActivityStatus == "8")
+                            {
+                                <td>Activity InProgress</td>
+                            }
+                            else if (item.ActivityStatus == "9")
+                            {
+                                <td>Activity Completed</td>
+                            }
+                            else
+                            {
+                                <td>Activity Not Started</td>
+                            }
+
                             <td>@item.CreatedBy - @item.User_Name</td>
                             <td>@item.CreatedOn.Value.ToString("dd-MMM-yyyy")</td>
-                                <td style="text-align:center;">
+@*                                <td style="text-align:center;">
                                     <form asp-action="Details" asp-controller="ListView">
                                         <input type="hidden" name="id" value="@item.TrackingId">
                                         <input type="hidden" name="anotherId" value="@item.BpsRecordId">
                                     <input type="hidden" name="statusId" value="@item.StatusType">
+                          
                                         <button type="submit" class="icon-navigation" data-toggle="tooltip" data-placement="top" title="View"><i class="fa fa-eye"></i></button>
                                     </form>
                                 </td>
                       
-@*                            @if (@item.StatusType == "Objection")
-                            {*@
                      
                                 <td style="text-align:center;">
                                     <form asp-action="Edit" asp-controller="ListView">
@@ -52,17 +65,35 @@
                                     <input type="hidden" name="statusId" value="@item.StatusType">
                                         <button type="submit" class="icon-navigation" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i></button>
                                     </form>
-                                </td>
-                       @*     }*@
-                            @*                          
-                                @if (@item.StatusType != "Objection")
+                                </td>*@
+                    
+                                                      
+                                @if (@item.StatusId != 4)
                                 {
-                                <td style="text-align:center;">
-                                    <form asp-action="Details" asp-controller="ListView">
-                                        <input type="hidden" name="id" value="@item.TrackingId">
-                                        <input type="hidden" name="anotherId" value="@item.BpsRecordId">
-                                        <button type="submit" class="icon-navigation" data-toggle="tooltip" data-placement="top" title="View"><i class="fa fa-eye"></i></button>
-                                    </form>
+                                <td class="text-center">
+                                    <table>
+                                        <tr>
+                                            <td style="text-align:center;">
+                                                <form hidden asp-action="Edit" asp-controller="ListView">
+
+                                                    <input type="hidden" name="id" value="@item.TrackingId">
+                                                    <input type="hidden" name="anotherId" value="@item.BpsRecordId">
+                                                    <button type="submit" class="icon-navigation" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit" style="color:orange"></i></button>
+                                                </form>
+
+                                            </td>
+
+                                            <td>
+                                                <form  asp-action="Details" asp-controller="ListView">
+                                                    <input type="hidden" name="id" value="@item.TrackingId">
+                                                    <input type="hidden" name="anotherId" value="@item.BpsRecordId">
+                                                    <button type="submit" class="icon-navigation" data-toggle="tooltip" data-placement="top" title="View"><i class="fa fa-eye"></i></button>
+                                                </form>
+
+                                            </td>
+                                        </tr>
+                                    </table>
+
                                 </td>
                                 }
                                 else
@@ -93,7 +124,7 @@
 
                                 </td>
 
-                                }*@
+                                }
                            
                         </tr>
                     }

@@ -8,7 +8,8 @@
         public string? postfromDate { get; set; }
         public string? pretoDate { get; set; }
         public string? prefromDate { get; set; }
-        public string? grandtotal { get; set; }
+        public string? totalwithoutdiscount { get; set; }
+        public string? totalwithdiscount { get; set; }
         public string? bpspercentage { get; set; }
         public string? totalroipercentage { get; set; }
 

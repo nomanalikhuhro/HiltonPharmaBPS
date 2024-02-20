@@ -72,6 +72,43 @@ function getchembybrickcode() {
     });
 }
 
+function getbrickbydiscode() {
+    var selecteddis = document.getElementById('distributer').value;
+    var parts = selecteddis.split('-');
+
+    // Extract the left part (the part before the '-')
+    var leftValue = parts[0].trim();
+
+    $.ajax({
+        url: "/ListView/GetMacrobrick", // Replace with your controller and action names
+        method: "GET", // Use GET or POST based on your server's requirements
+        data: { disValue: leftValue }, // Send the unique identifier as data
+        success: function (data) {
+
+            $('#selectedbrick').empty();
+
+            // Add default option
+            $('#selectedbrick').append($('<option>', {
+                value: 'Select',
+                text: 'Select'
+            }));
+
+            // Populate options with brick code and name
+            $.each(data, function (index, item) {
+                $('#selectedbrick').append($('<option>', {
+                    value: item.macrobrickCode + ' - ' + item.macroBrickName,
+                    text: item.macrobrickCode + ' - ' + item.macroBrickName
+                }));
+            });
+
+        },
+        error: function (xhr, status, error) {
+            // Handle errors here
+            console.error("Error:", status, error);
+        }
+    });
+}
+
 function SubmittedForm() {
     debugger;
     var Dis = document.getElementById("distributer");
@@ -187,7 +224,8 @@ function SubmittedForm() {
             var discountpostcentage = document.getElementById("discountpercentage-post-" + button1rightPart).value;
             var totalroipercentage = document.getElementById("totalroipercentage").value;
             var bpspercentage = document.getElementById("bpspercentage").value;
-            var grandtotal = document.getElementById("grandtotal").value;
+            var totalwithdiscount = document.getElementById("totalwithdis").value;
+            var totalwithoutdiscount = document.getElementById("totalwithoutdis").value;
 
             var prdArr = [];
 
@@ -247,7 +285,7 @@ function SubmittedForm() {
                 prdArr.push({ ProductName: productName, productCode: productCode, postproductDescription: postproductDescription, Contribution: preContribution, SalesType: "Post", Sale: salArr, posttotal: posttotal, discountpostcentage: discountpostcentage })
             }
             
-            Salesarr.push({ ChemistCode: ChemistCode, ProductArr: prdArr, postfromDate: postfromDate, posttoDate: posttoDate, prefromDate: prefromDate, pretoDate: pretoDate, grandtotal: grandtotal, bpspercentage: bpspercentage, totalroipercentage: totalroipercentage });
+        Salesarr.push({ ChemistCode: ChemistCode, ProductArr: prdArr, postfromDate: postfromDate, posttoDate: posttoDate, prefromDate: prefromDate, pretoDate: pretoDate, totalwithoutdiscount: totalwithoutdiscount, totalwithdiscount: totalwithdiscount, bpspercentage: bpspercentage, totalroipercentage: totalroipercentage });
 
 
             
@@ -411,7 +449,8 @@ function UpdateSubmittedForm() {
         var discountpostcentage = document.getElementById("discountpercentage-post-" + button1rightPart).value;
         var totalroipercentage = document.getElementById("totalroipercentage").value;
         var bpspercentage = document.getElementById("bpspercentage").value;
-        var grandtotal = document.getElementById("grandtotal").value;
+        var totalwithoutdiscount = document.getElementById("totalwithoutdis").value;
+        var totalwithdiscount = document.getElementById("totalwithdis").value;
 
         var prdArr = [];
 
@@ -474,7 +513,7 @@ function UpdateSubmittedForm() {
             prdArr.push({ ProductName: productName, productCode: productCode, postproductDescription: postproductDescription, Contribution: preContribution, SalesType: "Post", Sale: salArr, posttotal: posttotal, discountpostcentage: discountpostcentage })
         }
 
-        Updatearr.push({ ChemistCode: ChemistCode, ProductArr: prdArr, postfromDate: postfromDate, posttoDate: posttoDate, prefromDate: prefromDate, pretoDate: pretoDate, grandtotal: grandtotal, bpspercentage: bpspercentage, totalroipercentage: totalroipercentage });
+        Updatearr.push({ ChemistCode: ChemistCode, ProductArr: prdArr, postfromDate: postfromDate, posttoDate: posttoDate, prefromDate: prefromDate, pretoDate: pretoDate, totalwithoutdiscount: totalwithoutdiscount, totalwithdiscount: totalwithdiscount, bpspercentage: bpspercentage, totalroipercentage: totalroipercentage });
 
 
 
@@ -919,10 +958,17 @@ function PreActivitySales(checkboxindex) {
     var formattedFromDate = fromDate.getFullYear() + '-' +
         (fromDate.getMonth() + 1).toString().padStart(2, '0') + '-' +
         fromDate.getDate().toString().padStart(2, '0');
+    //var toDate = new Date($("#enddatepre-" + checkboxindex).val());
+    //var lastDayOfMonth = new Date(toDate.getFullYear(), toDate.getMonth() + 1, 0);
+    //var formattedtoDate = lastDayOfMonth.getFullYear() + '-' +
+    //    (toDate.getMonth() + 1).toString().padStart(2, '0') + '-' +
+    //    toDate.getDate().toString().padStart(2, '0');
+
     var toDate = new Date($("#enddatepre-" + checkboxindex).val());
-    var formattedtoDate = toDate.getFullYear() + '-' +
-        (toDate.getMonth() + 1).toString().padStart(2, '0') + '-' +
-        toDate.getDate().toString().padStart(2, '0');
+    var lastDayOfMonth = new Date(toDate.getFullYear(), toDate.getMonth() + 1, 0); // Get the last day of the month
+    var formattedtoDate = lastDayOfMonth.getFullYear() + '-' +
+        (lastDayOfMonth.getMonth() + 1).toString().padStart(2, '0') + '-' +
+        lastDayOfMonth.getDate().toString().padStart(2, '0');
 
 
     var selectedbrick = document.getElementById('selectedbrick').value;
@@ -993,10 +1039,16 @@ function EDITPreActivitySales(checkboxindex) {
     var formattedFromDate = fromDate.getFullYear() + '-' +
         (fromDate.getMonth() + 1).toString().padStart(2, '0') + '-' +
         fromDate.getDate().toString().padStart(2, '0');
+    //var toDate = new Date($("#enddatepre-" + checkboxindex).val());
+    //var formattedtoDate = toDate.getFullYear() + '-' +
+    //    (toDate.getMonth() + 1).toString().padStart(2, '0') + '-' +
+    //    toDate.getDate().toString().padStart(2, '0');
+
     var toDate = new Date($("#enddatepre-" + checkboxindex).val());
-    var formattedtoDate = toDate.getFullYear() + '-' +
-        (toDate.getMonth() + 1).toString().padStart(2, '0') + '-' +
-        toDate.getDate().toString().padStart(2, '0');
+    var lastDayOfMonth = new Date(toDate.getFullYear(), toDate.getMonth() + 1, 0); // Get the last day of the month
+    var formattedtoDate = lastDayOfMonth.getFullYear() + '-' +
+        (lastDayOfMonth.getMonth() + 1).toString().padStart(2, '0') + '-' +
+        lastDayOfMonth.getDate().toString().padStart(2, '0');
 
 
     var selectedbrick = document.getElementById('selectedbrick').value;
@@ -1226,12 +1278,10 @@ function formatNumberWithCommas(number) {
 function CalculateBPSPercentage(bpspercentagebtnindex) {
 
 
-  /*  var chemistCount = $("#tableAcc").find("button").length;*/
-
-    var totalPreSum = 0;
     var totalPostSum = 0;
     var discountpercentageSum = 0;
     var discountpostcentageSum = 0;
+    var totalwithdisciuntsum = 0;
     var trackingId = document.getElementById("hcpid").value;
         $("#tableAcc").find("button").each(function (index) {
             var buttonId = $(this).attr("id");
@@ -1239,41 +1289,47 @@ function CalculateBPSPercentage(bpspercentagebtnindex) {
 
             var button1rightPart = parts[1];
 
-            var TotalPre = parseFloat(document.getElementById(`total-` + button1rightPart).value.replace(/,/g, '')) || 0;
             var TotalPost = parseFloat(document.getElementById(`total-post-` + button1rightPart).value.replace(/,/g, '')) || 0;
             var DiscountPercentagePost = parseFloat(document.getElementById(`discountpercentage-post-` + button1rightPart).value.replace(/,/g, '')) || 0;
             var DiscountPercentagePre = parseFloat(document.getElementById(`discountpercentage-pre-` + button1rightPart).value.replace(/,/g, '')) || 0;
+            var TotalWithDiscount = (TotalPost / 100) * DiscountPercentagePost;
 
-            totalPreSum += TotalPre;
+
             totalPostSum += TotalPost;
 
-            discountpercentageSum += DiscountPercentagePost;
-            discountpostcentageSum += DiscountPercentagePre;
+            discountpostcentageSum += DiscountPercentagePost;
+            discountpercentageSum += DiscountPercentagePre;
+
+            totalwithdisciuntsum += TotalWithDiscount;
 
 
         });
 
-    var GrandTotal = totalPreSum + totalPostSum;
-    var discountpercentageSum = discountpercentageSum + discountpostcentageSum;
-    var roundedTotalSum = Math.round(GrandTotal);
+    var roundedTotalSum = Math.round(totalPostSum);
     var formattedTotalSum = formatNumberWithCommas(roundedTotalSum);
 
-    var TotalValues = document.getElementById("grandtotal");
+    var TotalValues = document.getElementById("totalwithoutdis");
     TotalValues.value = formattedTotalSum;
+
+
+    var TotalSumWithDiscount = Math.round(totalwithdisciuntsum);
+    var formattedTotalSumWithDiscount = formatNumberWithCommas(TotalSumWithDiscount);
+    var TotalValuesWithDis = document.getElementById("totalwithdis");
+    var totalwithdiscountfinalvalue = parseFloat(formattedTotalSum) - parseFloat(formattedTotalSumWithDiscount);
+    TotalValuesWithDis.value = totalwithdiscountfinalvalue;
     $.ajax({
         url: "/ListView/CalBPS", // Replace with your controller and action names
         type: 'POST', // Use GET or POST based on your server's requirements
-        data: { TrackingId: trackingId, Total: roundedTotalSum }, // Send data to the controller
+        data: { TrackingId: trackingId, Total: formattedTotalSum, discountpostcentageSum: totalwithdiscountfinalvalue }, // Send data to the controller
         success: function (data) {
 
             var a = document.getElementById("bpspercentage");
             var bpspercentage = data.bpspercentage;
             a.value = bpspercentage.toFixed(2);
             var c = document.getElementById("totalroipercentage");
-            var aValue = parseFloat(a.value) || 0;
-            var roi = discountpercentageSum + aValue;
+            var bpsnetpercentage = data.netpercentage;
 
-            c.value = roi;
+            c.value = bpsnetpercentage.toFixed(2);
         },
         error: function (xhr, status, error) {
             // Handle errors here
@@ -1286,11 +1342,10 @@ function CalculateBPSPercentage(bpspercentagebtnindex) {
 function EditCalculateBPSPercentage(editbpspercentagebtnindex) {
 
 
-
-    var totalPreSum = 0;
     var totalPostSum = 0;
     var discountpercentageSum = 0;
     var discountpostcentageSum = 0;
+    var totalwithdisciuntsum = 0;
     var trackingId = document.getElementById("hcpid").value;
     $("#UpdateTableAcc").find("button").each(function (index) {
         var buttonId = $(this).attr("id");
@@ -1298,41 +1353,48 @@ function EditCalculateBPSPercentage(editbpspercentagebtnindex) {
 
         var button1rightPart = parts[1];
 
-        var TotalPre = parseFloat(document.getElementById(`total-` + button1rightPart).value.replace(/,/g, '')) || 0;
+/*        var TotalPre = parseFloat(document.getElementById(`total-` + button1rightPart).value.replace(/,/g, '')) || 0;*/
         var TotalPost = parseFloat(document.getElementById(`total-post-` + button1rightPart).value.replace(/,/g, '')) || 0;
         var DiscountPercentagePost = parseFloat(document.getElementById(`discountpercentage-post-` + button1rightPart).value.replace(/,/g, '')) || 0;
         var DiscountPercentagePre = parseFloat(document.getElementById(`discountpercentage-pre-` + button1rightPart).value.replace(/,/g, '')) || 0;
-
-        totalPreSum += TotalPre;
+        var TotalWithDiscount = (TotalPost / 100) * DiscountPercentagePost;
+/*        totalPreSum += TotalPre;*/
         totalPostSum += TotalPost;
 
-        discountpercentageSum += DiscountPercentagePost;
-        discountpostcentageSum += DiscountPercentagePre;
-
+        discountpostcentageSum += DiscountPercentagePost;
+        discountpercentageSum += DiscountPercentagePre;
+        totalwithdisciuntsum += TotalWithDiscount;
 
     });
 
-    var GrandTotal = totalPreSum + totalPostSum;
+/*    var GrandTotal = totalPreSum + totalPostSum;*/
     var discountpercentageSum = discountpercentageSum + discountpostcentageSum;
-    var roundedTotalSum = Math.round(GrandTotal);
+    var roundedTotalSum = Math.round(totalPostSum);
     var formattedTotalSum = formatNumberWithCommas(roundedTotalSum);
 
-    var TotalValues = document.getElementById("grandtotal");
+    var TotalValues = document.getElementById("totalwithoutdis");
     TotalValues.value = formattedTotalSum;
+
+    var TotalSumWithDiscount = Math.round(totalwithdisciuntsum);
+    var formattedTotalSumWithDiscount = formatNumberWithCommas(TotalSumWithDiscount);
+    var TotalValuesWithDis = document.getElementById("totalwithdis");
+    var totalwithdiscountfinalvalue = parseFloat(formattedTotalSum) - parseFloat(formattedTotalSumWithDiscount);
+    TotalValuesWithDis.value = totalwithdiscountfinalvalue;
 
     $.ajax({
         url: "/ListView/EditCalBPS", // Replace with your controller and action names
         type: 'POST', // Use GET or POST based on your server's requirements
-        data: { TrackingId: trackingId, Total: roundedTotalSum }, // Send data to the controller
+        data: { TrackingId: trackingId, Total: roundedTotalSum, discountpostcentageSum: totalwithdiscountfinalvalue }, // Send data to the controller
         success: function (data) {
+;
+
             var a = document.getElementById("bpspercentage");
             var bpspercentage = data.bpspercentage;
             a.value = bpspercentage.toFixed(2);
             var c = document.getElementById("totalroipercentage");
-            var aValue = parseFloat(a.value) || 0;
-            var roi = discountpercentageSum + aValue;
+            var bpsnetpercentage = data.netpercentage;
 
-            c.value = roi;
+            c.value = bpsnetpercentage.toFixed(2);
         },
         error: function (xhr, status, error) {
             // Handle errors here
@@ -1377,9 +1439,9 @@ function EditcalculateValue(index, row, coloum) {
 
     
 
-    var inputValueId = 'sku-edit-post-row-' + index + '-' + row + '-' + coloum; // ID of the input field you want to read
-    var valueInputId = 'value-edit-post-row-' + index + '-' + row + '-' + coloum; // ID of the input field where you want to display the result
-    var valueUnitPrice = 'sku-edit-UnitPrice-post-row-' + index + '-' + row;
+    var inputValueId = 'sku-post-input-column-' + index + '-' + row + '-' + coloum; // ID of the input field you want to read
+    var valueInputId = 'value-post-input-column-' + index + '-' + row + '-' + coloum; // ID of the input field where you want to display the result
+    var valueUnitPrice = 'sku-edit-UnitPrice-post-row-' + coloum + '-' + row;
     // var unitprice = document.getElementById("post-UnitPrice-" + index + "-" + row).value; 
     var inputValue = document.getElementById(inputValueId);
     var valueInput = document.getElementById(valueInputId);

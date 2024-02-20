@@ -17,11 +17,11 @@
 
         <div style="border:2px solid; background-color: white; border-radius: 10px; border-color: white; box-shadow: 1px 0px 9px 1px lightgray; overflow-x: auto;">
             
-            <table class="table" id="App_DataTable">
+            <table class="table hide" id="App_DataTable">
                 <thead>
                     <tr class="table table-striped">
                         <th>Territory Code</th>
-                        <th>Status</th>
+                        <th>Workflow Status</th>
                         <th>Created By</th>
                         <th>Created On</th>
                         <th></th>
@@ -40,6 +40,8 @@
                             <td>
                                 @item.Statustype
                             </td>
+
+
                             <td>
                                 @item.CreatedBy - @item.User_Name
 
@@ -47,9 +49,18 @@
                             <td>
                                 @item.CreatedOn.Value.ToString("dd-MMM-yyyy")
                             </td>
+                            <td>
+                                <form asp-action="Details" asp-controller="ListView">
+                                    <input type="hidden" name="id" value="@item.TrackingId">
+                                    <input type="hidden" name="anotherId" value="@item.BpsId">
+                                    <input type="hidden" name="thirdId" value="@item.WFWorklistId">
+
+                                    <button type="submit" class="icon-navigation" data-toggle="tooltip" data-placement="top" title="View"><i class="fa fa-eye"></i></button>
+                                </form>
+
+                            </td>
                             
-                            
-                                @if (roleId == "2" || roleId == "3")
+@*                                @if (roleId == "2" || roleId == "3")
                                 {
                                     <td class="text-center">
                                         <table>
@@ -92,7 +103,7 @@
                                     </form>
                                 </td>
 
-                                }
+                                }*@
                             
                             
                         </tr>
@@ -107,11 +118,15 @@
     <script>
 
 
-        $(document).ready(function () {
-            $('#App_DataTable').DataTable({
-                "order": [[4, "desc"]],
-            });
+        //$(document).ready(function () {
+        //    $('#App_DataTable').DataTable({
+        //        "order": [[4, "desc"]],
+        //    });
 
+        //});
+
+        $(document).ready(function () {
+            $('#App_DataTable').DataTable();
         });
 
         //$(document).ready(function () {

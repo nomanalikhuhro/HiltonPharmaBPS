@@ -12,7 +12,7 @@
     <table id="customers">
         <thead>
 
-            <tr style="font-size:13px;">
+            <tr style="font-size:10px;">
 
 @*                @foreach (var column in Model.Sku[0] as IDictionary<string, object>)
                 {
@@ -63,7 +63,7 @@
                     @foreach (var item in Model.Sku)
                     {
                         int skucoloumIndex = 0;
-                        <tr style="font-size:11px;">
+                        <tr style="font-size:10px;">
 
 
                             @foreach (var column in item as IDictionary<string, object>)
@@ -145,7 +145,7 @@
 <div id="values-@ViewBag.checkboxindex" class="@ViewBag.TotalCalculatedSkus" style="display:none; overflow:auto;">
     <table id="customers">
         <thead>
-            <tr style="font-size:13px;">
+            <tr style="font-size:10px;">
 @*                @foreach (var column in Model.Value[0] as IDictionary<string, object>)
                 {
 
@@ -190,7 +190,7 @@
                     @foreach (var item in Model.Value)
                     {
                         int valuecoloumIndex = 0;
-                        <tr style="font-size:11px;">
+                        <tr style="font-size:10px;">
                             @foreach (var column in item as IDictionary<string, object>)
                             {
                                 if (column.Key == "PackCode")

@@ -114,7 +114,7 @@ namespace PASSForm_BPS.Controllers
 
 
 
-        public ActionResult PendingView(int id)
+        public ActionResult PendingView(int id, string thirdId)
         {
             try
             {
@@ -128,6 +128,27 @@ namespace PASSForm_BPS.Controllers
                 {
                     var requests = _passDbContext.Wf_Worklists.FromSqlRaw("call spGetMAActivityValues(" + Empid_SessionValue + ")").ToList();
                     return View(requests);
+                }
+                else if (EmpRoleId == "2" || EmpRoleId == "3")
+                {
+                    var requests = _passDbContext.Wf_Worklists.FromSqlRaw("call GetPendingApprovals(" + Empid_SessionValue + ")").ToList();
+                    var requestss = _passDbContext.BpsRequests.FromSqlRaw("call sp_BPSRecordsList(" + EmpRoleId + "," + Empid_SessionValue + ")").ToList();
+
+                    if (thirdId == "pending")
+                    {
+                        // Return view for 'requests'
+                        return View("PendingView", requests);
+                    }
+                    else if (thirdId == null)
+                    {
+                        return View("PendingView", requests);
+
+                    }
+                    else
+                    {
+                        // Return view for 'requestss'
+                        return View("ApprovedView", requestss);
+                    }
                 }
                 else
                 {
@@ -190,11 +211,11 @@ namespace PASSForm_BPS.Controllers
                     if (empIdCookie == "1")
                     {
                         ViewBag.RoleId = "1";
-                        if (statusId == "InProgress")
-                        {
+                        //if (statusId == "InProgress")
+                        //{
 
-                            return RedirectToAction("ApprovedView", "ListView");
-                        }
+                        //    return RedirectToAction("ApprovedView", "ListView");
+                        //}
                         var Empid_SessionValue = HttpContext.Session.GetString("EmpIdbps");
 
                         var bpsrcordquery = @"SELECT bpsreq.*, bpsreq.HCPREQID as User_Name, bpsreq.Status_ID as StatusType, bpsreq.CreatedBy as TMCode FROM pass_db.bps_request bpsreq where TrackingID = '" + id + "'";
@@ -322,7 +343,9 @@ namespace PASSForm_BPS.Controllers
                                     .Where(record => record.ChemistCode == c && record.BpsRecordId == bpsrcord.FirstOrDefault().BpsRecordId)
                                     .Select(record => new CustomModel_Customers
                                     {
-                                        grandtotal = record.GrandTotal,
+                                        //grandtotal = record.GrandTotal,
+                                        totalwithdiscount = record.TotalWithDiscount,
+                                        totalwithoutdiscount = record.TotalWithoutDiscount,
                                         bpspercentage = record.BPSPercentage,
                                         totalroipercentage = record.TotalRoiPercentage,
                                     })
@@ -519,11 +542,11 @@ namespace PASSForm_BPS.Controllers
                     else
                     {
                         ViewBag.RoleId = "2";
-                        if (statusId == "InProgress")
-                        {
+                        //if (statusId == "InProgress")
+                        //{
 
-                            return RedirectToAction("PendingView", "ListView", 2);
-                        }
+                        //    return RedirectToAction("PendingView", "ListView", 2);
+                        //}
                         ViewBag.WorklistId = thirdId;
                         var Empid_SessionValue = HttpContext.Session.GetString("EmpIdbps");
 
@@ -644,7 +667,8 @@ namespace PASSForm_BPS.Controllers
                                     .Where(record => record.ChemistCode == c && record.BpsRecordId == bpsrcord.FirstOrDefault().BpsRecordId)
                                     .Select(record => new CustomModel_Customers
                                     {
-                                        grandtotal = record.GrandTotal,
+                                        totalwithoutdiscount = record.TotalWithoutDiscount,
+                                        totalwithdiscount = record.TotalWithDiscount,
                                         bpspercentage = record.BPSPercentage,
                                         totalroipercentage = record.TotalRoiPercentage,
                                     })
@@ -853,17 +877,27 @@ namespace PASSForm_BPS.Controllers
         }
 
         // GET: ListViewController/Create
-        public IActionResult Create(string inputValue)
+        public IActionResult Create(string inputValue, int id)
         {
             try
             {
                 string Tracking_ID = inputValue?.Trim();
+                var EmpRoleId = HttpContext.Session.GetString("roleid");
                 if (Tracking_ID == null)
                 {
+                    if (id == 2)
+                    {
+                        ViewBag.RoleId = "2";
+                        // ViewBag.AlertMessage = "Please fill tracking id";
+                        return PartialView("Create_PartialView");
+                    }
+                    else
+                    {
+                        ViewBag.RoleId = "1";
+                        // ViewBag.AlertMessage = "Please fill tracking id";
+                        return PartialView("Create_PartialView");
+                    }
 
-                    ViewBag.RoleId = "1";
-                   // ViewBag.AlertMessage = "Please fill tracking id";
-                    return PartialView("Create_PartialView");
 
 
                 }
@@ -877,7 +911,15 @@ namespace PASSForm_BPS.Controllers
 
                         if (bpsrcord.Count > 0)
                         {
-                            ViewBag.RoleId = "1";
+                            if(EmpRoleId == "1")
+                            {
+                                ViewBag.RoleId = "1";
+                            }
+                            else
+                            {
+                                ViewBag.RoleId = "2";
+                            }
+                            
                             ViewBag.AlertMessage = "Tracking id is already exist record";
                             return PartialView("Create_PartialView");
                         }
@@ -892,7 +934,15 @@ namespace PASSForm_BPS.Controllers
                         }
                         else
                         {
-                            ViewBag.RoleId = "1";
+                            if (EmpRoleId == "1")
+                            {
+                                ViewBag.RoleId = "1";
+                            }
+                            if(EmpRoleId == "2" || EmpRoleId == "3")
+                            {
+                                ViewBag.RoleId = "2";
+                            }
+                            
                             var Empid_SessionValue = HttpContext.Session.GetString("EmpIdbps");
                             string param1 = inputValue;
 
@@ -1027,6 +1077,17 @@ namespace PASSForm_BPS.Controllers
 
         }
 
+        [HttpGet]
+        public object GetMacrobrick(string disValue)
+        {
+            var macrobrickrecords = _passDbContext.DisMacMappings.FromSqlRaw("call sp_GETMacroBrick(@DisCode)"
+, new MySqlParameter("@DisCode", disValue)).ToList();
+
+            return Json(macrobrickrecords);
+
+
+        }
+
         [HttpPost]
         public bool CreateBpsRecord( string Salesarr1,  BpsRequest HeaderData1)
         {
@@ -1062,7 +1123,8 @@ namespace PASSForm_BPS.Controllers
                     string postfromdate = item.postfromDate;
                     string posttodate = item.posttoDate;
                     string ROI = item.totalroipercentage;
-                    string GrandTotal = item.grandtotal;
+                    string TotalWithOutDiscount = item.totalwithoutdiscount;
+                    string TotalWithDiscount = item.totalwithdiscount;
                     string BPSPercentage = item.bpspercentage;
                     //string Contributer = item;
 
@@ -1123,7 +1185,8 @@ namespace PASSForm_BPS.Controllers
                                 " @p_DiscountPercentagePost," +
                                 " @p_TotalRoiPercentage," +
                                 " @p_BPSPercentage," +
-                                " @p_GrandTotal," +
+                                " @p_TotalWithOutDis," +
+                                " @p_TotalWithDis," +
                                 " p_Record_ID)",
                                 new MySqlParameter("@p_BPS_Record_ID", bpsrecordid),
                                 new MySqlParameter("@p_Month", month),
@@ -1149,7 +1212,8 @@ namespace PASSForm_BPS.Controllers
                                   new MySqlParameter("@p_DiscountPercentagePost", Discountpostcentage),
                                   new MySqlParameter("@p_TotalRoiPercentage", ROI),
                                   new MySqlParameter("@p_BPSPercentage", BPSPercentage),
-                                  new MySqlParameter("@p_GrandTotal", GrandTotal)
+                                  new MySqlParameter("@p_TotalWithOutDis", TotalWithOutDiscount),
+                                  new MySqlParameter("@p_TotalWithDis", TotalWithDiscount)
                                 ,
                                 outputParameter1)
                                 .ToList();
@@ -1182,9 +1246,9 @@ namespace PASSForm_BPS.Controllers
                         command.CommandTimeout = 3000;
 
                     }
-                    }
-
                 }
+
+            }
                 catch (Exception ex)
                 {
                     isSuccess = true;
@@ -2052,7 +2116,7 @@ where HCPREQID = '" + trackingid + "'";
         }
 
         [HttpPost]
-        public object CalBPS(string TrackingId, string Total)
+        public object CalBPS(string TrackingId, string Total, decimal discountpostcentageSum)
         {
             try
             {
@@ -2061,8 +2125,12 @@ where HCPREQID = '" + trackingid + "'";
 
                 var hcpestimatesupportresult = _passDbContext.Hcprequests.FromSqlRaw(hcpestimatesupportquery).ToList();
 
+                decimal bpspercentagewithoutpercentage = 0;
+                decimal netpercentagewithoutpercentage = 0;
                 decimal bpspercentage = 0;
-               
+                decimal netpercentage = 0;
+                decimal DiscountpostcentageSum = discountpostcentageSum;
+
                 if (hcpestimatesupportresult.Count > 0)
                 {
                     var firstItem = hcpestimatesupportresult.FirstOrDefault();
@@ -2075,11 +2143,15 @@ where HCPREQID = '" + trackingid + "'";
                         {
                             if (totalValue != 0)
                             {
-                                bpspercentage = estimatedSupportValue / totalValue * 100;
+                                bpspercentagewithoutpercentage = estimatedSupportValue / totalValue;
+                                bpspercentage = bpspercentagewithoutpercentage * 100;
+                                netpercentagewithoutpercentage = (estimatedSupportValue + DiscountpostcentageSum) / totalValue;
+                                netpercentage = netpercentagewithoutpercentage * 100;
 
                                 //ViewBag.bpspercentgaes = bpspercentage.ToString("0.00");
 
                                 ViewBag.bpspercentgaes = bpspercentage;
+                            
 
 
                             }
@@ -2095,7 +2167,7 @@ where HCPREQID = '" + trackingid + "'";
 
                     }
                 }
-                return Json(new { bpspercentage });
+                return Json(new { bpspercentage, netpercentage });
             }
             catch (Exception ex)
             {
@@ -2117,7 +2189,7 @@ where HCPREQID = '" + trackingid + "'";
         }
 
         [HttpPost]
-        public object EditCalBPS(string TrackingId, string Total)
+        public object EditCalBPS(string TrackingId, string Total, decimal discountpostcentageSum)
         {
             try
             {
@@ -2126,7 +2198,11 @@ where HCPREQID = '" + trackingid + "'";
 
                 var hcpestimatesupportresult = _passDbContext.Hcprequests.FromSqlRaw(hcpestimatesupportquery).ToList();
 
+                decimal bpspercentagewithoutpercenatge = 0;
+                decimal netpercentagewithoutpercentage = 0;
                 decimal bpspercentage = 0;
+                decimal netpercentage = 0;
+                decimal DiscountpostcentageSum = discountpostcentageSum;
 
                 if (hcpestimatesupportresult.Count > 0)
                 {
@@ -2140,7 +2216,10 @@ where HCPREQID = '" + trackingid + "'";
                         {
                             if (totalValue != 0)
                             {
-                                bpspercentage = estimatedSupportValue / totalValue * 100;
+                                bpspercentagewithoutpercenatge = estimatedSupportValue / totalValue;
+                                bpspercentage = bpspercentagewithoutpercenatge * 100;
+                                netpercentagewithoutpercentage = (estimatedSupportValue + DiscountpostcentageSum) / totalValue;
+                                netpercentage = netpercentagewithoutpercentage * 100;
 
                                 //ViewBag.bpspercentgaes = bpspercentage.ToString("0.00");
 
@@ -2160,7 +2239,7 @@ where HCPREQID = '" + trackingid + "'";
 
                     }
                 }
-                return Json(new { bpspercentage });
+                return Json(new { bpspercentage, netpercentage });
             }
             catch (Exception ex)
             {
@@ -2187,25 +2266,24 @@ where HCPREQID = '" + trackingid + "'";
         {
             try
             {
+                var EmpRoleId = HttpContext.Session.GetString("roleid");
                 if (id == null)
                 {
                     return RedirectToAction("PendingView", "ListView", 2);
                 }
 
-                if (statusId == "InProgress")
-                {
-
-                    return RedirectToAction("ApprovedView", "ListView");
-                }
-
-                if (thirdId != null)
-                {
-                    ViewBag.RoleId = thirdId;
-                }
-                else
+                if(EmpRoleId == "1")
                 {
                     ViewBag.RoleId = "1";
                 }
+                else
+                {
+                    ViewBag.RoleId = "2";
+                }
+
+
+                  
+                
                 
                 var Empid_SessionValue = HttpContext.Session.GetString("EmpIdbps");
                 ViewBag.Products = _passDbContext.Tblproducts.FromSqlRaw("select * from tblproduct").ToList();
@@ -2331,7 +2409,8 @@ where mcm.MacroBrickCode = '"+ macroBrickCodes + "'";
     .Where(record => record.ChemistCode == c && record.BpsRecordId == bpsrcord.FirstOrDefault().BpsRecordId)
     .Select(record => new CustomModel_Customers
     {
-        grandtotal = record.GrandTotal,
+       totalwithoutdiscount = record.TotalWithoutDiscount,
+        totalwithdiscount = record.TotalWithDiscount,
         bpspercentage = record.BPSPercentage,
         totalroipercentage = record.TotalRoiPercentage,
     })
@@ -2611,8 +2690,9 @@ where mcm.MacroBrickCode = '"+ macroBrickCodes + "'";
                         string postfromdate = item.postfromDate;
                         string posttodate = item.posttoDate;
                         string ROI = item.totalroipercentage;
-                        string GrandTotal = item.grandtotal;
-                        string BPSPercentage = item.bpspercentage;
+                        string TotalWithDiscount = item.totalwithdiscount;
+                        string TotalWithoutDiscount = item.totalwithoutdiscount;
+                                string BPSPercentage = item.bpspercentage;
                         //string Contributer = item;
 
                         foreach (var item1 in item.ProductArr)
@@ -2679,12 +2759,13 @@ where mcm.MacroBrickCode = '"+ macroBrickCodes + "'";
                                         command.Parameters.Add(new MySqlParameter("@p_DiscountPercentagePost", Discountpostcentage));
                                         command.Parameters.Add(new MySqlParameter("@p_TotalRoiPercentage", ROI));
                                         command.Parameters.Add(new MySqlParameter("@p_BPSPercentage", BPSPercentage));
-                                        command.Parameters.Add(new MySqlParameter("@p_GrandTotal", GrandTotal));
+                                            command.Parameters.Add(new MySqlParameter("@p_TotalWithDiscount", TotalWithDiscount));
+                                            command.Parameters.Add(new MySqlParameter("@p_TotalWithoutDiscount", TotalWithoutDiscount));
 
-                                        //var outputParameter = new MySqlParameter("@p_Out_BPS_Record_ID", MySqlDbType.Int32);
-                                        //outputParameter.Direction = ParameterDirection.Output;
-                                        //command.Parameters.Add(outputParameter);
-                                        command.Transaction = trans;
+                                            //var outputParameter = new MySqlParameter("@p_Out_BPS_Record_ID", MySqlDbType.Int32);
+                                            //outputParameter.Direction = ParameterDirection.Output;
+                                            //command.Parameters.Add(outputParameter);
+                                            command.Transaction = trans;
                                        // var reader = command.ExecuteReader();
                                             using (MySqlDataReader reader = command.ExecuteReader())
                                             {
@@ -3032,7 +3113,7 @@ set Status_ID = 4, Comments = '" + comments + "' Where HCPREQID = '" + trackingi
                         ViewBag.RoleId = "1";
                         return View();
                     }
-                    else if (empIdCookie == "2")
+                    else if (empIdCookie == "2" || empIdCookie == "3")
                     {
                         ViewBag.RoleId = "2";
                         return View();
@@ -3062,17 +3143,33 @@ set Status_ID = 4, Comments = '" + comments + "' Where HCPREQID = '" + trackingi
         {
             try
             {
-               
+                var EmpRoleId = HttpContext.Session.GetString("roleid");
                 var TID = @"SELECT * FROM wf_instance where TrackingId = '" + TrackingId + "'";
                 var TIDs = _passDbContext.Wf_Instances.FromSqlRaw(TID).ToList();
                 if (TIDs.Count == 0)
                 {
+                    if (EmpRoleId == "2" || EmpRoleId == "33")
+                    {
+                        ViewBag.RoleId = "2";
+                    }
+                    else
+                    {
+                        ViewBag.RoleId = "1";
+                    }
 
                     ViewBag.AlertMessage = "Tracking ID Not found";
                     return View("TrackingIDStatusDetails");
                 }
                 else
                 {
+                    if (EmpRoleId == "2" || EmpRoleId == "33")
+                    {
+                        ViewBag.RoleId = "2";
+                    }
+                    else
+                    {
+                        ViewBag.RoleId = "1";
+                    }
 
                     using (MySqlConnection connection = new MySqlConnection(_connectionString))
                     {
