@@ -18,20 +18,59 @@
             background-color: white;
             border: 3px solid black;
         }
+
+        /* The Modal (background) */
+        .modal {
+
+        }
+
+        /* Modal Content */
+        .modal-content {
+            width: 55%;
+            border: 2px solid;
+            background-color: white;
+            border-radius: 10px;
+            border-color: white;
+            box-shadow: 1px 0px 9px 1px lightgray;
+            height: 200px;
+        }
+
+
     </style>
 
 </head>
 <body>
-    <div style="padding-top: 15px;">
+    <div style="            padding-left: 30%;
+            padding-top: 12%;">
+        <div class="modal-content">
+          
+            <form asp-controller="ListView" asp-action="Create" style="padding-left:12px;">
+                <div style="padding-top: 75px;">
+                    <label style="font-weight:bold;">Request ID:</label>
 
-        <div style="border: 2px solid; background-color: white; border-radius: 10px; border-color: white; box-shadow: 1px 0px 9px 1px lightgray;">
+                    <input type="text" name="inputValue" />
+                    <span class="text-danger"></span>
+                    <button class="trackbtn" type="submit">Next</button>
+                </div>
+
+
+               
+                @if (@ViewBag.AlertMessage != null)
+                {
+                    <label id="ErrorLabel" style="color:red;font-size:10px;">@ViewBag.AlertMessage</label>
+                }
+            </form>
+        </div>
+
+    </div>
+@*        <div style="border: 2px solid; background-color: white; border-radius: 10px; border-color: white; box-shadow: 1px 0px 9px 1px lightgray;">
  
             <div style="padding-top: 15px; padding-left: 20px;">
                 <div class="conatiner">
                     <div class="row">
                         <div class="col-4">
                             <form asp-controller="ListView" asp-action="Create" style="padding-left:12px;">
-                                <label style="font-weight:bold;">Tracking ID:</label>
+                                <label style="font-weight:bold;">Requist ID:</label>
                                 <div>
                                     <input  type="text" name="inputValue" />
                                     <span  class="text-danger"></span>
@@ -54,9 +93,7 @@
                             <label style="font-weight:bold;">Distributor:</label>
                             <div>
                                 <input type="text" />
-@*                                <select style="width: 70%; height: 30px;">
-                                    <option value="Select">Select</option>
-                                </select>*@
+
                             </div>
                         </div>
                     </div>
@@ -100,7 +137,7 @@
         </div>
 
 
-
+        </div>*@
 
     </div>
     <script>

@@ -25,6 +25,8 @@ public partial class PassDbContext : DbContext
 
     public virtual DbSet<DisterMapping> DisterMappings { get; set; }
 
+    public virtual DbSet<DisMacMapping> DisMacMappings { get; set; }
+
     public virtual DbSet<Distributer> Distributers { get; set; }
 
     public virtual DbSet<Exceptionlog> Exceptionlogs { get; set; }
@@ -328,10 +330,14 @@ public partial class PassDbContext : DbContext
 .HasDefaultValueSql("'NULL'")
 .HasColumnName("DiscountPercentagePost");
 
-            entity.Property(e => e.GrandTotal)
+            entity.Property(e => e.TotalWithoutDiscount)
 .HasMaxLength(200)
 .HasDefaultValueSql("'NULL'")
-.HasColumnName("GrandTotal");
+.HasColumnName("TotalWithoutDiscount");
+            entity.Property(e => e.TotalWithDiscount)
+.HasMaxLength(200)
+.HasDefaultValueSql("'NULL'")
+.HasColumnName("TotalWithDiscount");
 
 
             entity.Property(e => e.TotalRoiPercentage)
@@ -392,6 +398,21 @@ public partial class PassDbContext : DbContext
                 .HasForeignKey(d => d.TerritoryCode)
                 .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName("fk_tercode");
+        });
+
+        modelBuilder.Entity<DisMacMapping>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("dismac_mapping");
+
+            entity.Property(e => e.DistributorCode)
+                .HasMaxLength(45)
+                .HasDefaultValueSql("'NULL'");
+
+            entity.Property(e => e.MacrobrickCode)
+    .HasMaxLength(45)
+    .HasDefaultValueSql("'NULL'");
         });
 
         modelBuilder.Entity<Distributer>(entity =>

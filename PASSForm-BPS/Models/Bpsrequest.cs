@@ -14,9 +14,9 @@ public partial class BpsRequest
     public string? User_Name { get; set; }
     public string? StatusType { get; set; }
 
-    
-        
-        
+    public string? Comments { get; set; }
+
+
 
     public string? DistributerCode { get; set; }
 
@@ -43,7 +43,7 @@ public partial class BpsRequest
     public string? TrackingId { get; set; }
     public string? PONumber { get; set; }
     public string? ActivityStatus { get; set; }
-    public string? Comments { get; set; }
+
 
 
 

@@ -10,77 +10,50 @@
 <head>
     <title>Your View</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-    <style>
-
-        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
-
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            right: 0;
-            background-color: #f9f9f9;
-            min-width: 160px;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-            z-index: 1;
-        }
-
-            .dropdown-content a {
-                color: black;
-                /* padding: 12px 16px;*/
-                text-decoration: none;
-                display: block;
-            }
-
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
-
-        .dropdown-content a:hover {
-            background-color: #f1f1f1;
-        }
-    </style>
 </head>
 <body>
-    <div style="padding-top: 10%;">
+    <div style="padding-top: 5%;">
 
 
         <div style="border:2px solid; background-color: white; border-radius: 10px; border-color: white; box-shadow: 1px 0px 9px 1px lightgray; overflow-x: auto;">
             
-            <table class="table" id="App_DataTable">
+            <table class="table hide" id="App_DataTable">
                 <thead>
                     <tr class="table table-striped">
-        
-               @*         <th>Request ID</th>*@
                         <th>Territory Code</th>
-                @*        <th>Territory Manager Name</th>*@
-                        <th>Status</th>
+                        <th>Workflow Status</th>
+                        <th>Activity Status</th>
                         <th>Created By</th>
                         <th>Created On</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var item in Model)
+                    @foreach (var item in Model.OrderByDescending(x=> x.CreatedOn).ToList())
                     {
                         <tr>
 
-@*                            <td>
-                                @item.TrackingId
-                            </td>*@
-@*                            <td>@($"{item.TrackingId.Substring(0, 3)}-GAD-{item.TrackingId.Substring(item.TrackingId.Length - 4)}")</td>*@
+
                             <td>
                                 @item.TMCode
                             </td>
-@*                            <td>
-                                @item.User_Name
-                            </td>*@
+
                             <td>
                                 @item.Statustype
                             </td>
+                            @if (item.ActivityStatus == "8")
+                            {
+                                <td>Activity InProgress</td>
+                            }
+                            else if (item.ActivityStatus == "9")
+                            {
+                                <td>Activity Completed</td>
+                            }
+                            else
+                            {
+                                <td>Activity Not Started</td>
+                            }
+
                             <td>
                                 @item.CreatedBy - @item.User_Name
 
@@ -89,18 +62,18 @@
                                 @item.CreatedOn.Value.ToString("dd-MMM-yyyy")
                             </td>
                             <td>
-                                @if (roleId == "2" || roleId == "3")
-                                {
-                                    <a asp-action="Edit" asp-route-id="@item.TrackingId" asp-route-anotherId="@item.BpsId" asp-controller="ListView"><i class="fa fa-edit" data-toggle="tooltip" data-placement="top" title="Edit" style="color:orange"></i></a>
-                                    <a asp-action="Details" asp-route-id="@item.TrackingId" asp-route-anotherId="@item.BpsId" asp-route-thirdId="@item.WFWorklistId" asp-controller="ListView"><i class="fa fa-eye" data-toggle="tooltip" data-placement="top" title="View"></i></a>
-                                }
-                                else
-                                {
-
-                                    <a asp-action="Details" asp-route-id="@item.TrackingId" asp-route-anotherId="@item.BpsId" asp-route-thirdId="@item.WFWorklistId" asp-controller="ListView"><i class="fa fa-eye" data-toggle="tooltip" data-placement="top" title="View"></i></a>
-                                }
+                                <form asp-action="Details" asp-controller="ListView">
+                                    <input type="hidden" name="id" value="@item.TrackingId">
+                                    <input type="hidden" name="anotherId" value="@item.BpsId">
+                                    <input type="hidden" name="thirdId" value="@item.WFWorklistId">
+                                    <input type="hidden" name="screenId" value="pendingscreen">
+                                    <button type="submit" class="icon-navigation" data-toggle="tooltip" data-placement="top" title="View"><i class="fa fa-eye"></i></button>
+                                </form>
 
                             </td>
+                            
+
+                            
                         </tr>
                     }
                 </tbody>
@@ -113,66 +86,79 @@
     <script>
 
 
+
         $(document).ready(function () {
+            $('#App_DataTable').DataTable({
+                //"order": [[5, "desc"]],
 
-            $('#App_DataTable thead tr')
-                .clone(true)
-                .addClass('filters')
-                .appendTo('#App_DataTable thead');
-
-            var table = $('#App_DataTable').DataTable({
-                order: [[4, "desc"]],
-                orderCellsTop: true,
-                fixedHeader: true,
-
-                initComplete: function () {
-                    var api = this.api();
-                    api
-                        .columns()
-                        .eq(0)
-                        .each(function (colIdx) {
-                            if (colIdx <= 6) {
-                                var cell = $('.filters th').eq(
-                                    $(api.column(colIdx).header()).index()
-                                );
-                                var title = $(cell).text();
-
-                                $(cell).html('<input type="text"  style="width: 130px;"  />');
-                                $(
-                                    'input',
-                                    $('.filters th').eq($(api.column(colIdx).header()).index())
-                                )
-                                    .off('keyup change')
-                                    .on('change', function (e) {
-                                        $(this).attr('title', $(this).val());
-                                        var regexr = '({search})';
-
-                                        var cursorPosition = this.selectionStart;
-                                        api
-                                            .column(colIdx)
-                                            .search(
-                                                this.value != ''
-                                                    ? regexr.replace('{search}', '(((' + this.value + ')))')
-                                                    : '',
-                                                this.value != '',
-                                                this.value == ''
-                                            )
-                                            .draw();
-                                    })
-                                    .on('keyup', function (e) {
-                                        e.stopPropagation();
-
-                                        $(this).trigger('change');
-                                        $(this)
-                                            .focus()[0]
-                                            .setSelectionRange(cursorPosition, cursorPosition);
-                                    });
-
-                            }
-                        });
-                },
+                order: false,
+                columnDefs: [{
+                    targets: "_all",
+                    orderable: false
+                }],// Order by the first column (index 0) in descending order
             });
         });
+
+        //$(document).ready(function () {
+
+        //    $('#App_DataTable thead tr')
+        //        .clone(true)
+        //        .addClass('filters')
+        //        .appendTo('#App_DataTable thead');
+
+        //    var table = $('#App_DataTable').DataTable({
+        //        order: [[4, "desc"]],
+        //        orderCellsTop: true,
+        //        fixedHeader: true,
+
+        //        initComplete: function () {
+        //            var api = this.api();
+        //            api
+        //                .columns()
+        //                .eq(0)
+        //                .each(function (colIdx) {
+        //                    if (colIdx <= 6) {
+        //                        var cell = $('.filters th').eq(
+        //                            $(api.column(colIdx).header()).index()
+        //                        );
+        //                        var title = $(cell).text();
+
+        //                        $(cell).html('<input type="text"  style="width: 130px;"  />');
+        //                        $(
+        //                            'input',
+        //                            $('.filters th').eq($(api.column(colIdx).header()).index())
+        //                        )
+        //                            .off('keyup change')
+        //                            .on('change', function (e) {
+        //                                $(this).attr('title', $(this).val());
+        //                                var regexr = '({search})';
+
+        //                                var cursorPosition = this.selectionStart;
+        //                                api
+        //                                    .column(colIdx)
+        //                                    .search(
+        //                                        this.value != ''
+        //                                            ? regexr.replace('{search}', '(((' + this.value + ')))')
+        //                                            : '',
+        //                                        this.value != '',
+        //                                        this.value == ''
+        //                                    )
+        //                                    .draw();
+        //                            })
+        //                            .on('keyup', function (e) {
+        //                                e.stopPropagation();
+
+        //                                $(this).trigger('change');
+        //                                $(this)
+        //                                    .focus()[0]
+        //                                    .setSelectionRange(cursorPosition, cursorPosition);
+        //                            });
+
+        //                    }
+        //                });
+        //        },
+        //    });
+        //});
     </script>
 
 </body>

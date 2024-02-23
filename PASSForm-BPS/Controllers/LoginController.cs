@@ -44,6 +44,19 @@ namespace PASSForm_BPS.Controllers
             if (ModelState.IsValid)
             {
                 var user = _passDbContext.Users.FirstOrDefault(u => u.UserEmail == model.UserEmail);
+                var userWithDesignation = _passDbContext.Users
+    .Where(u => u.UserEmail == model.UserEmail)
+    .Join(
+        _passDbContext.Roles,
+        user => user.RoleId,
+        role => role.RoleId,
+        (user, role) => new
+        {
+            User = user,
+            RoleName = role.RoleName
+        }
+    )
+    .FirstOrDefault();
 
                 if (user != null)
                 {
@@ -52,12 +65,13 @@ namespace PASSForm_BPS.Controllers
                         if (user.RoleId! == 1)
                         {
 
-                            HttpContext.Session.SetString("EmpIdbps", user.EmpId.ToString());
-                            HttpContext.Session.SetString("roleid", user.RoleId.ToString());
-                           HttpContext.Session.SetString("uname", user.UserName.ToString());
-                 
-               
-                            Response.Cookies.Append("roleid", user.RoleId.ToString(), new CookieOptions
+                            HttpContext.Session.SetString("EmpIdbps", userWithDesignation.User.EmpId.ToString());
+                            HttpContext.Session.SetString("roleid", userWithDesignation.User.RoleId.ToString());
+                           HttpContext.Session.SetString("uname", userWithDesignation.User.UserName.ToString());
+                            HttpContext.Session.SetString("rolename", userWithDesignation.RoleName.ToString());
+
+
+                            Response.Cookies.Append("roleid", userWithDesignation.User.RoleId.ToString(), new CookieOptions
                             {
                                 Expires = DateTime.Now.AddDays(7), // Set the expiration date (optional)
                                 Path = "/", // Set the cookie path (optional)
@@ -80,7 +94,7 @@ namespace PASSForm_BPS.Controllers
                         //    HttpContext.Session.SetString("EmpIdbps", user.EmpId.ToString());
                         //    HttpContext.Session.SetString("roleid", user.RoleId.ToString());
                         //    HttpContext.Session.SetString("uname", user.UserName.ToString());
-                  
+
                         //    Response.Cookies.Append("roleid", user.RoleId.ToString(), new CookieOptions
                         //    {
                         //        Expires = DateTime.Now.AddDays(7), // Set the expiration date (optional)
@@ -96,34 +110,33 @@ namespace PASSForm_BPS.Controllers
                         //    return RedirectToAction("ApprovedView", "ListView");
 
                         //}
-                        else if (user.RoleId! == 16)
-                        {
-                            HttpContext.Session.SetString("EmpIdbps", user.EmpId.ToString());
-                            HttpContext.Session.SetString("roleid", user.RoleId.ToString());
-                            HttpContext.Session.SetString("uname", user.UserName.ToString());
-                            Response.Cookies.Append("roleid", user.RoleId.ToString(), new CookieOptions
-                            {
-                                Expires = DateTime.Now.AddDays(7), // Set the expiration date (optional)
-                                Path = "/", // Set the cookie path (optional)
-                                Domain = "192.168.10.30", // Set the cookie domain
-                                Secure = true, // Make the cookie secure (optional)
-                                HttpOnly = true // Make the cookie accessible only through HTTP (optional)
-                            });
+                        //else if (user.RoleId! == 16)
+                        //{
+                        //    HttpContext.Session.SetString("EmpIdbps", user.EmpId.ToString());
+                        //    HttpContext.Session.SetString("roleid", user.RoleId.ToString());
+                        //    HttpContext.Session.SetString("uname", user.UserName.ToString());
+                        //    Response.Cookies.Append("roleid", user.RoleId.ToString(), new CookieOptions
+                        //    {
+                        //        Expires = DateTime.Now.AddDays(7), // Set the expiration date (optional)
+                        //        Path = "/", // Set the cookie path (optional)
+                        //        Domain = "192.168.10.30", // Set the cookie domain
+                        //        Secure = true, // Make the cookie secure (optional)
+                        //        HttpOnly = true // Make the cookie accessible only through HTTP (optional)
+                        //    });
 
 
-                            ViewBag.RoleId = "2";
-                            // return View("_RolesBasePartialView");
-                            //return RedirectToAction("ApprovedView", "ListView");
+                        //    ViewBag.RoleId = "2";
 
-                            return RedirectToAction("PendingView", "ListView");
+                        //    return RedirectToAction("PendingView", "ListView");
 
-                        }
+                        //}
                         else
                         {
-                            HttpContext.Session.SetString("EmpIdbps", user.EmpId.ToString());
-                            HttpContext.Session.SetString("roleid", user.RoleId.ToString());
-                            HttpContext.Session.SetString("uname", user.UserName.ToString());
-                            Response.Cookies.Append("roleid", user.RoleId.ToString(), new CookieOptions
+                            HttpContext.Session.SetString("EmpIdbps", userWithDesignation.User.EmpId.ToString());
+                            HttpContext.Session.SetString("roleid", userWithDesignation.User.RoleId.ToString());
+                            HttpContext.Session.SetString("uname", userWithDesignation.User.UserName.ToString());
+                            HttpContext.Session.SetString("rolename", userWithDesignation.RoleName.ToString());
+                            Response.Cookies.Append("roleid", userWithDesignation.User.RoleId.ToString(), new CookieOptions
                             {
                                 Expires = DateTime.Now.AddDays(7), // Set the expiration date (optional)
                                 Path = "/", // Set the cookie path (optional)

@@ -4,7 +4,9 @@
 
 
     var uname = httpContext.HttpContext.Session.GetString("uname");
+    var rolename = httpContext.HttpContext.Session.GetString("rolename");
     var abc = @ViewBag.RoleId;
+    string emproleid = httpContext.HttpContext.Session.GetString("roleid");
     //int a = Context.Session.GetInt32("EmpId");
 
     // var myValue = HttpContext.Session.GetString("EmpId");
@@ -24,6 +26,7 @@
     <link href="~/font-awesome-4.7.0/font-awesome-4.7.0/css/font-awesome.css" rel="stylesheet" />
     <link href="~/font-awesome-4.7.0/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" />
     @*<link rel="stylesheet" href="~/PASSForm_BPS.styles.css" asp-append-version="true" />*@
+    <link href="~/lib/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
     <style>
         body {
             margin: 0;
@@ -285,14 +288,41 @@
                 <img src="~/images/logo.png" height="110px" width="140px" />
 
             </div>
-            @if (@abc == "1")
+            @if (emproleid == "1")
             {
 
                 <div>
 
-                    <a asp-area="" asp-controller="ListView" asp-action="Create">Created Request</a>
+                    <a asp-area="" asp-controller="ListView" asp-action="Create">Create Request</a>
                     <a asp-area="" asp-controller="ListView" asp-action="ApprovedView" asp-route-id="1">Submitted Request</a>
-                    <a asp-area="" asp-controller="ListView" asp-action="TrackingIDStatus" asp-route-id="1">TrackingId Status</a>
+                    <a asp-area="" asp-controller="ListView" asp-action="TrackingIDStatus" asp-route-id="1">Request Status</a>
+                </div >
+            }
+            else if (emproleid == "2" || emproleid == "3")
+            {
+                <div>
+                    <a asp-area="" asp-controller="ListView" asp-action="Create" asp-route-id="2">Create Request</a>
+
+                    <form asp-action="ApprovedView" asp-controller="ListView">
+                        <input type="hidden" name="id" value="2">
+                        <input type="hidden" name="thirdId" value="submitted">
+
+                        <button style="width: 100%;height: 50px;border: none; background: white; text-align:left; padding:15px;">
+                            Submitted Request
+                        </button>
+                    </form>
+
+                    <form asp-action="PendingView" asp-controller="ListView">
+                        <input type="hidden" name="id" value="2">
+                        <input type="hidden" name="thirdId" value="pending">
+
+                        <button style="width: 100%;height: 50px; border-left: none;border-right: none; background: white;  border-top: 1px solid; border-bottom:1px solid; padding:15px; text-align: left;">
+                            Pending for My Approval
+                        </button>
+                    </form>
+
+                    <a asp-area="" asp-controller="ListView" asp-action="TrackingIDStatus" asp-route-id="2">Request Status</a>
+
                 </div>
             }
             else
@@ -300,13 +330,11 @@
                 <div>
 
                     <a asp-area="" asp-controller="ListView" asp-action="PendingView" asp-route-id="2">Pending for My Approval</a>
-                    <a asp-area="" asp-controller="ListView" asp-action="TrackingIDStatus" asp-route-id="2">TrackingId Status</a>
+                    <a asp-area="" asp-controller="ListView" asp-action="TrackingIDStatus" asp-route-id="2">Request ID Status</a>
 
                 </div>
             }
-            @*            <a href="#">My Submitted Request</a>
-            <a href="#">Pending For Approval</a>
-            <a href="#">Pending For My Approval</a>*@
+  
             <!-- Add more menu items as needed -->
         </div>
 
@@ -315,7 +343,7 @@
                 <a style="text-decoration-style: solid; font-weight:bold; font-size:20px;" href="#">Business Planning Sheet</a>
                 <div style="display: grid; justify-content:end; align-items: center ; margin-top:auto;">
                     <span style="display: flex; justify-content: center; align-items: center; flex-direction: row; font-size:20px;">
-                        @uname
+                        @uname (@rolename)
                         <span><a style="color: black; font-size:20px;font-weight:bold" asp-controller="Login" asp-action="Logout" class="fa fa-sign-out" data-toggle="tooltip" data-placement="down" title="Logout"></a></span>
                     </span>
 
@@ -358,6 +386,7 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/datatable_file.js" asp-append-version="true"></script>
+    <script src="~/lib/sweetalert2/sweetalert2.all.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
     <script>
 
@@ -370,6 +399,8 @@
                 }
             }
         });
+
+
     </script>
 </body>
 </html>

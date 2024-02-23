@@ -9,109 +9,117 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = PASSForm_BPS
 build_property.RootNamespace = PASSForm_BPS
-build_property.ProjectDir = D:\Noman\BPSGIT\PASSForm-BPS\
+build_property.ProjectDir = D:\BPSGit\PASSForm-BPS\
 build_property.RazorLangVersion = 6.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = D:\Noman\BPSGIT\PASSForm-BPS
+build_property.MSBuildProjectDirectory = D:\BPSGit\PASSForm-BPS
 build_property._RazorSourceGeneratorDebug = 
 
-[D:/Noman/BPSGIT/PASSForm-BPS/Views/Home/Index.cshtml]
+[D:/BPSGit/PASSForm-BPS/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Noman/BPSGIT/PASSForm-BPS/Views/Home/PartialIndex.cshtml]
+[D:/BPSGit/PASSForm-BPS/Views/Home/PartialIndex.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQYXJ0aWFsSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Noman/BPSGIT/PASSForm-BPS/Views/Home/Privacy.cshtml]
+[D:/BPSGit/PASSForm-BPS/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Noman/BPSGIT/PASSForm-BPS/Views/ListView/ApprovedView.cshtml]
+[D:/BPSGit/PASSForm-BPS/Views/ListView/ApprovedView.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGlzdFZpZXdcQXBwcm92ZWRWaWV3LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Noman/BPSGIT/PASSForm-BPS/Views/ListView/Create.cshtml]
+[D:/BPSGit/PASSForm-BPS/Views/ListView/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGlzdFZpZXdcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Noman/BPSGIT/PASSForm-BPS/Views/ListView/Create_PartialView.cshtml]
+[D:/BPSGit/PASSForm-BPS/Views/ListView/Create_PartialView.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGlzdFZpZXdcQ3JlYXRlX1BhcnRpYWxWaWV3LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Noman/BPSGIT/PASSForm-BPS/Views/ListView/Details.cshtml]
+[D:/BPSGit/PASSForm-BPS/Views/ListView/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGlzdFZpZXdcRGV0YWlscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Noman/BPSGIT/PASSForm-BPS/Views/ListView/DetailView.cshtml]
+[D:/BPSGit/PASSForm-BPS/Views/ListView/DetailView.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGlzdFZpZXdcRGV0YWlsVmlldy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Noman/BPSGIT/PASSForm-BPS/Views/ListView/Edit.cshtml]
+[D:/BPSGit/PASSForm-BPS/Views/ListView/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGlzdFZpZXdcRWRpdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Noman/BPSGIT/PASSForm-BPS/Views/ListView/Error.cshtml]
+[D:/BPSGit/PASSForm-BPS/Views/ListView/EditPostAcc.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGlzdFZpZXdcRWRpdFBvc3RBY2MuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BPSGit/PASSForm-BPS/Views/ListView/EditPreAcc.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGlzdFZpZXdcRWRpdFByZUFjYy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BPSGit/PASSForm-BPS/Views/ListView/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGlzdFZpZXdcRXJyb3IuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Noman/BPSGIT/PASSForm-BPS/Views/ListView/Index.cshtml]
+[D:/BPSGit/PASSForm-BPS/Views/ListView/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGlzdFZpZXdcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Noman/BPSGIT/PASSForm-BPS/Views/ListView/PendingView.cshtml]
+[D:/BPSGit/PASSForm-BPS/Views/ListView/PendingView.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGlzdFZpZXdcUGVuZGluZ1ZpZXcuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Noman/BPSGIT/PASSForm-BPS/Views/ListView/PostAcc.cshtml]
+[D:/BPSGit/PASSForm-BPS/Views/ListView/PostAcc.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGlzdFZpZXdcUG9zdEFjYy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Noman/BPSGIT/PASSForm-BPS/Views/ListView/PreAcc.cshtml]
+[D:/BPSGit/PASSForm-BPS/Views/ListView/PreAcc.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGlzdFZpZXdcUHJlQWNjLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Noman/BPSGIT/PASSForm-BPS/Views/ListView/TrackingIDStatus.cshtml]
+[D:/BPSGit/PASSForm-BPS/Views/ListView/TrackingIDStatus.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGlzdFZpZXdcVHJhY2tpbmdJRFN0YXR1cy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Noman/BPSGIT/PASSForm-BPS/Views/ListView/TrackingIDStatusDetails.cshtml]
+[D:/BPSGit/PASSForm-BPS/Views/ListView/TrackingIDStatusDetails.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGlzdFZpZXdcVHJhY2tpbmdJRFN0YXR1c0RldGFpbHMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Noman/BPSGIT/PASSForm-BPS/Views/ListView/_Accordion_PartialView.cshtml]
+[D:/BPSGit/PASSForm-BPS/Views/ListView/_Accordion_PartialView.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGlzdFZpZXdcX0FjY29yZGlvbl9QYXJ0aWFsVmlldy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Noman/BPSGIT/PASSForm-BPS/Views/ListView/_AlertBox.cshtml]
+[D:/BPSGit/PASSForm-BPS/Views/ListView/_AlertBox.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGlzdFZpZXdcX0FsZXJ0Qm94LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Noman/BPSGIT/PASSForm-BPS/Views/Login/Login.cshtml]
+[D:/BPSGit/PASSForm-BPS/Views/Login/Login.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTG9naW5cTG9naW4uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Noman/BPSGIT/PASSForm-BPS/Views/Shared/Error.cshtml]
+[D:/BPSGit/PASSForm-BPS/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Noman/BPSGIT/PASSForm-BPS/Views/Shared/_RolesBasePartialView.cshtml]
+[D:/BPSGit/PASSForm-BPS/Views/Shared/_RolesBasePartialView.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9Sb2xlc0Jhc2VQYXJ0aWFsVmlldy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Noman/BPSGIT/PASSForm-BPS/Views/Shared/_ValidationScriptsPartial.cshtml]
+[D:/BPSGit/PASSForm-BPS/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Noman/BPSGIT/PASSForm-BPS/Views/_ViewImports.cshtml]
+[D:/BPSGit/PASSForm-BPS/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Noman/BPSGIT/PASSForm-BPS/Views/_ViewStart.cshtml]
+[D:/BPSGit/PASSForm-BPS/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Noman/BPSGIT/PASSForm-BPS/Views/Shared/_Layout.cshtml]
+[D:/BPSGit/PASSForm-BPS/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-4y19ry60bp
