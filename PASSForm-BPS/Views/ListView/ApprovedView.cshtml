@@ -7,13 +7,14 @@
 
 </head>
 <body>
-    <div style="padding-top:90px;">
+    <div style="padding-top:5%;">
 
 
         <div style="overflow-x: auto; border: 2px solid; background-color: white; border-radius: 10px; border-color: white; box-shadow: 1px 0px 9px 1px lightgray;">
             <table class="table hide" id="App_DataTable">
                 <thead>
                     <tr class="table table-striped">
+                        <th>BPS Request Id</th>
                         <th>Territory Code</th>
                         <th>Workflow Status</th>
                         <th>Activity Status</th>
@@ -26,9 +27,10 @@
                 <tbody>
 
 
-                    @foreach (var item in Model)
+                    @foreach (var item in Model.OrderByDescending(x => x.BpsRecordId).ToList())
                     {
                         <tr>
+                            <td>@("00000" + item.BpsRecordId.ToString())</td>
                             <td>@item.TMCode</td>
                             <td>@item.StatusType</td>
                             @if(item.ActivityStatus == "8")
@@ -46,26 +48,7 @@
 
                             <td>@item.CreatedBy - @item.User_Name</td>
                             <td>@item.CreatedOn.Value.ToString("dd-MMM-yyyy")</td>
-@*                                <td style="text-align:center;">
-                                    <form asp-action="Details" asp-controller="ListView">
-                                        <input type="hidden" name="id" value="@item.TrackingId">
-                                        <input type="hidden" name="anotherId" value="@item.BpsRecordId">
-                                    <input type="hidden" name="statusId" value="@item.StatusType">
-                          
-                                        <button type="submit" class="icon-navigation" data-toggle="tooltip" data-placement="top" title="View"><i class="fa fa-eye"></i></button>
-                                    </form>
-                                </td>
-                      
-                     
-                                <td style="text-align:center;">
-                                    <form asp-action="Edit" asp-controller="ListView">
 
-                                        <input type="hidden" name="id" value="@item.TrackingId">
-                                    <input type="hidden" name="anotherId" value="@item.BpsRecordId">
-                                    <input type="hidden" name="statusId" value="@item.StatusType">
-                                        <button type="submit" class="icon-navigation" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i></button>
-                                    </form>
-                                </td>*@
                     
                                                       
                                 @if (@item.StatusId != 4)
@@ -115,6 +98,7 @@
                                                 <form asp-action="Details" asp-controller="ListView">
                                                     <input type="hidden" name="id" value="@item.TrackingId">
                                                     <input type="hidden" name="anotherId" value="@item.BpsRecordId">
+                                                    <input type="hidden" name="screenId" value="submitscreen">
                                                     <button type="submit" class="icon-navigation" data-toggle="tooltip" data-placement="top" title="View"><i class="fa fa-eye"></i></button>
                                                 </form>
 
@@ -162,7 +146,14 @@
         });
 
         $(document).ready(function () {
-            $('#App_DataTable').DataTable();
+            $('#App_DataTable').DataTable({
+                order: false,
+                columnDefs: [{
+                    targets: "_all",
+                    orderable: false
+                }],
+               // "order": [[5, "desc"]], // Order by the first column (index 0) in descending order
+            });
         });
 
 

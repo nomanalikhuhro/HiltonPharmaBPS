@@ -293,15 +293,15 @@
 
                 <div>
 
-                    <a asp-area="" asp-controller="ListView" asp-action="Create">Created Request</a>
+                    <a asp-area="" asp-controller="ListView" asp-action="Create">Create Request</a>
                     <a asp-area="" asp-controller="ListView" asp-action="ApprovedView" asp-route-id="1">Submitted Request</a>
-                    <a asp-area="" asp-controller="ListView" asp-action="TrackingIDStatus" asp-route-id="1">Request Id Status</a>
+                    <a asp-area="" asp-controller="ListView" asp-action="TrackingIDStatus" asp-route-id="1">Request Status</a>
                 </div >
             }
             else if (emproleid == "2" || emproleid == "3")
             {
                 <div>
-                    <a asp-area="" asp-controller="ListView" asp-action="Create" asp-route-id="2">Created Request</a>
+                    <a asp-area="" asp-controller="ListView" asp-action="Create" asp-route-id="2">Create Request</a>
 
                     <form asp-action="ApprovedView" asp-controller="ListView">
                         <input type="hidden" name="id" value="2">
@@ -321,7 +321,7 @@
                         </button>
                     </form>
 
-                    <a asp-area="" asp-controller="ListView" asp-action="TrackingIDStatus" asp-route-id="2">Request ID Status</a>
+                    <a asp-area="" asp-controller="ListView" asp-action="TrackingIDStatus" asp-route-id="2">Request Status</a>
 
                 </div>
             }

@@ -676,7 +676,7 @@
                                                                 if (skudata1.Key == "PackCode")
                                                                 {
                                                                     unitprice = pr.Where(x => x.PackCode == skudata1.Value.ToString().Trim()).FirstOrDefault().UnitPrice;
-                                                                    <input id="sku-edit-UnitPrice-post-row-@chemindex-@editpackcoderowindex" type="hidden" value="@unitprice" />
+                                                                    <input id="sku-edit-UnitPrice-post-row-@acc-@editpackcoderowindex" type="hidden" value="@unitprice" />
                                                                     <td id="post-pakcode-@acc-@editpackcoderowindex">@skudata1.Value</td>
                                                                 }
                                                                 else if (skudata1.Key == "ProductName")
@@ -689,7 +689,7 @@
                                                                 else
                                                                 {
                                                                     <td style="text-align:end" >
-                                                                        <input style="width:50%; text-align:right;" id="sku-post-input-column-@acc-@editpackcoderowindex-@editskuindex" value="@Convert.ToInt32(skudata1.Value)" class="numeric" maxlength="5" oninput="EditcalculateValue(@acc,@editpackcoderowindex,@editskuindex)">
+                                                                        <input  style="width:35px; text-align:right;" id="sku-post-input-column-@acc-@editpackcoderowindex-@editskuindex" value="@Convert.ToInt32(skudata1.Value)" class="numeric" maxlength="5" oninput="EditcalculateValue(@acc,@editpackcoderowindex,@editskuindex)">
      
                                                                     </td>
                                                                     editskuindex++;
@@ -768,7 +768,7 @@
                                                                 else
                                                                 {
                                                                     <td style="text-align :end">
-                                                                        <input style="text-align:right; width:100%;" type="number" disabled id="value-post-input-column-@acc-@editpackcoderowindexvalue-@editvalueindex" maxlength="5" value="@Convert.ToInt32(valdata1.Value)">
+                                                                        <input name="editpostinputValue" style="text-align:right; width:70px;" type="number" disabled id="value-post-input-column-@acc-@editpackcoderowindexvalue-@editvalueindex" maxlength="5" value="@Convert.ToInt32(valdata1.Value)">
                                                                        
                                                                     </td>
                                                                    editvalueindex++;

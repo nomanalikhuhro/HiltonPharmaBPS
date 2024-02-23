@@ -12,7 +12,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <div style="padding-top: 10%;">
+    <div style="padding-top: 5%;">
 
 
         <div style="border:2px solid; background-color: white; border-radius: 10px; border-color: white; box-shadow: 1px 0px 9px 1px lightgray; overflow-x: auto;">
@@ -22,13 +22,14 @@
                     <tr class="table table-striped">
                         <th>Territory Code</th>
                         <th>Workflow Status</th>
+                        <th>Activity Status</th>
                         <th>Created By</th>
                         <th>Created On</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var item in Model)
+                    @foreach (var item in Model.OrderByDescending(x=> x.CreatedOn).ToList())
                     {
                         <tr>
 
@@ -40,7 +41,18 @@
                             <td>
                                 @item.Statustype
                             </td>
-
+                            @if (item.ActivityStatus == "8")
+                            {
+                                <td>Activity InProgress</td>
+                            }
+                            else if (item.ActivityStatus == "9")
+                            {
+                                <td>Activity Completed</td>
+                            }
+                            else
+                            {
+                                <td>Activity Not Started</td>
+                            }
 
                             <td>
                                 @item.CreatedBy - @item.User_Name
@@ -54,57 +66,13 @@
                                     <input type="hidden" name="id" value="@item.TrackingId">
                                     <input type="hidden" name="anotherId" value="@item.BpsId">
                                     <input type="hidden" name="thirdId" value="@item.WFWorklistId">
-
+                                    <input type="hidden" name="screenId" value="pendingscreen">
                                     <button type="submit" class="icon-navigation" data-toggle="tooltip" data-placement="top" title="View"><i class="fa fa-eye"></i></button>
                                 </form>
 
                             </td>
                             
-@*                                @if (roleId == "2" || roleId == "3")
-                                {
-                                    <td class="text-center">
-                                        <table>
-                                            <tr>
-                                                <td style="text-align:center;">
-                                                    <form asp-action="Edit" asp-controller="ListView">
-                                                        <input type="hidden" name="id" value="@item.TrackingId">
-                                                        <input type="hidden" name="anotherId" value="@item.BpsId">
-                                                        <input type="hidden" name="thirdId" value="2">
-                                                 
-                                                        <button type="submit" class="icon-navigation" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i></button>
-                                                    </form>
 
-                                                </td>
-
-                                                <td>
-                                                    <form asp-action="Details" asp-controller="ListView">
-                                                        <input type="hidden" name="id" value="@item.TrackingId">
-                                                        <input type="hidden" name="anotherId" value="@item.BpsId">
-                                                        <input type="hidden" name="thirdId" value="@item.WFWorklistId">
-                                                   
-                                                        <button type="submit" class="icon-navigation" data-toggle="tooltip" data-placement="top" title="View"><i class="fa fa-eye"></i></button>
-                                                    </form>
-
-                                                </td>
-                                            </tr>
-                                        </table>
-
-                                    </td>
-
-                                }
-                                else
-                                {
-                                <td style="text-align:center;">
-                                    <form asp-action="Details" asp-controller="ListView">
-                                        <input type="hidden" name="id" value="@item.TrackingId">
-                                        <input type="hidden" name="anotherId" value="@item.BpsId">
-                                        <input type="hidden" name="thirdId" value="@item.WFWorklistId">
-                                        <button type="submit" class="icon-navigation" data-toggle="tooltip" data-placement="top" title="View"><i class="fa fa-eye"></i></button>
-                                    </form>
-                                </td>
-
-                                }*@
-                            
                             
                         </tr>
                     }
@@ -118,22 +86,18 @@
     <script>
 
 
-        //$(document).ready(function () {
-        //    $('#App_DataTable').DataTable({
-        //        "order": [[4, "desc"]],
-        //    });
-
-        //});
 
         $(document).ready(function () {
-            $('#App_DataTable').DataTable();
-        });
+            $('#App_DataTable').DataTable({
+                //"order": [[5, "desc"]],
 
-        //$(document).ready(function () {
-        //    $('#App_DataTable').DataTable({
-        //        "order": [[7, "desc"]], // Order by the first column (index 0) in descending order
-        //    });
-        //});
+                order: false,
+                columnDefs: [{
+                    targets: "_all",
+                    orderable: false
+                }],// Order by the first column (index 0) in descending order
+            });
+        });
 
         //$(document).ready(function () {
 

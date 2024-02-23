@@ -74,6 +74,7 @@ function getchembybrickcode() {
 
 function getbrickbydiscode() {
     var selecteddis = document.getElementById('distributer').value;
+    var tcode = document.getElementById('TCode').value;
     var parts = selecteddis.split('-');
 
     // Extract the left part (the part before the '-')
@@ -82,7 +83,7 @@ function getbrickbydiscode() {
     $.ajax({
         url: "/ListView/GetMacrobrick", // Replace with your controller and action names
         method: "GET", // Use GET or POST based on your server's requirements
-        data: { disValue: leftValue }, // Send the unique identifier as data
+        data: { disValue: leftValue, territorycode: tcode  }, // Send the unique identifier as data
         success: function (data) {
 
             $('#selectedbrick').empty();
@@ -1313,14 +1314,14 @@ function CalculateBPSPercentage(bpspercentagebtnindex) {
 
 
     var TotalSumWithDiscount = Math.round(totalwithdisciuntsum);
-    var formattedTotalSumWithDiscount = formatNumberWithCommas(TotalSumWithDiscount);
+/*    var formattedTotalSumWithDiscount = formatNumberWithCommas(TotalSumWithDiscount);*/
     var TotalValuesWithDis = document.getElementById("totalwithdis");
-    var totalwithdiscountfinalvalue = parseFloat(formattedTotalSum) - parseFloat(formattedTotalSumWithDiscount);
-    TotalValuesWithDis.value = totalwithdiscountfinalvalue;
+    var totalwithdiscountfinalvalue = parseFloat(roundedTotalSum) - parseFloat(TotalSumWithDiscount);
+    TotalValuesWithDis.value = formatNumberWithCommas(totalwithdiscountfinalvalue);
     $.ajax({
         url: "/ListView/CalBPS", // Replace with your controller and action names
         type: 'POST', // Use GET or POST based on your server's requirements
-        data: { TrackingId: trackingId, Total: formattedTotalSum, discountpostcentageSum: totalwithdiscountfinalvalue }, // Send data to the controller
+        data: { TrackingId: trackingId, Total: formattedTotalSum, discountpostcentageSum: TotalSumWithDiscount }, // Send data to the controller
         success: function (data) {
 
             var a = document.getElementById("bpspercentage");
@@ -1405,43 +1406,37 @@ function EditCalculateBPSPercentage(editbpspercentagebtnindex) {
 
 }
 
-function calculateValue(index, row, column) {
+function calculateValue(index, row, coloum) {
 
 
-    var inputValue = document.getElementById("sku-post-input-column-" + index + "-" + row + "-" + column).value;
-    var unitprice = document.getElementById("post-UnitPrice-" + index + "-" + row).value;
-    var totalInput1 = document.getElementById(`total-post-` + index).value.replace(',', '') || 0;
-    var total = 0;
+    //var inputValue = document.getElementById("sku-post-input-column-" + index + "-" + row + "-" + column).value;
+    //var unitprice = document.getElementById("post-UnitPrice-" + index + "-" + row).value;
+    //var totalInput1 = document.getElementById(`total-post-` + index).value.replace(',', '') || 0;
+    //var total = 0;
 
 
-    if (!isNaN(inputValue)) {
+    //if (!isNaN(inputValue)) {
 
-        var valueInputClass = 'value-post-input-column-' + index + "-" + row + "-" + column; // Corresponding "Values" input class
-        var valueInput = document.getElementById(valueInputClass); // Find the corresponding "Values" input field
-        if (!isNaN(valueInput.value)) {
-            
-            totalInput1 = (parseFloat(totalInput1) - parseFloat(valueInput.value || 0).toFixed(2)).toFixed(2);
-        }
-        if (valueInput) {
-            var calculatedValue = parseFloat(parseFloat(inputValue || 0).toFixed(2) * parseFloat(unitprice)).toFixed(2); // Divide by 2
-            valueInput.value = calculatedValue;
-        }
-    }
-    var value = document.getElementById("value-post-input-column-" + index + "-" + row + "-" + column).value;
-    var totalInput = document.getElementById(`total-post-` + index);
-    total = parseFloat(parseFloat(totalInput1) + parseFloat(value)).toFixed(2);
-    var formattedTotalValue = formatNumberWithCommas(total);
-    totalInput.value = formattedTotalValue;
+    //    var valueInputClass = 'value-post-input-column-' + index + "-" + row + "-" + column; // Corresponding "Values" input class
+    //    var valueInput = document.getElementById(valueInputClass); // Find the corresponding "Values" input field
+    //    if (!isNaN(valueInput.value)) {
 
-}
-
-function EditcalculateValue(index, row, coloum) {
-
-    
+    //        totalInput1 = (parseFloat(totalInput1) - parseFloat(valueInput.value || 0).toFixed(2) - ).toFixed(2);
+    //    }
+    //    if (valueInput) {
+    //        var calculatedValue = parseFloat(parseFloat(inputValue || 0).toFixed(2) * parseFloat(unitprice)).toFixed(2); // Divide by 2
+    //        valueInput.value = calculatedValue;
+    //    }
+    //}
+    //var value = document.getElementById("value-post-input-column-" + index + "-" + row + "-" + column).value;
+    //var totalInput = document.getElementById(`total-post-` + index);
+    //total = parseFloat(parseFloat(totalInput1) + parseFloat(value)).toFixed(2);
+    //var formattedTotalValue = formatNumberWithCommas(total);
+    //totalInput.value = formattedTotalValue;
 
     var inputValueId = 'sku-post-input-column-' + index + '-' + row + '-' + coloum; // ID of the input field you want to read
     var valueInputId = 'value-post-input-column-' + index + '-' + row + '-' + coloum; // ID of the input field where you want to display the result
-    var valueUnitPrice = 'sku-edit-UnitPrice-post-row-' + coloum + '-' + row;
+    var valueUnitPrice = 'post-UnitPrice-' + index + "-" + row;
     // var unitprice = document.getElementById("post-UnitPrice-" + index + "-" + row).value; 
     var inputValue = document.getElementById(inputValueId);
     var valueInput = document.getElementById(valueInputId);
@@ -1450,16 +1445,23 @@ function EditcalculateValue(index, row, coloum) {
 
     var inputValueValue = parseFloat(inputValue.value);
 
-    if (!isNaN(inputValueValue)) {
+    if (isNaN(inputValueValue)) {
         // Perform the calculation, for example, divide by 2
-        var calculatedValue = parseFloat(inputValueValue * parseFloat(unitprice.value)).toFixed(2);  //inputValueValue / 2;
+        /*     var calculatedValue = parseFloat(inputValueValue * parseFloat(unitprice.value)).toFixed(2);*/  //inputValueValue / 2;
+        var calculatedValue = parseFloat(parseFloat(inputValueValue || 0).toFixed(2) * parseFloat(unitprice.value)).toFixed(2);
+
+        var a = calculatedValue;
+
+        valueInput.value = a;
+    } else {
+        var calculatedValue = parseFloat(parseFloat(inputValueValue || 0).toFixed(2) * parseFloat(unitprice.value)).toFixed(2);
 
         var a = calculatedValue;
 
         valueInput.value = a;
     }
 
-    var inputElements = document.querySelectorAll('input[type="number"]');
+    var inputElements = document.querySelectorAll('input[name="postinputValue"]');
 
     var editsum = 0;
 
@@ -1468,6 +1470,114 @@ function EditcalculateValue(index, row, coloum) {
         var inputValue = parseFloat(inputElements[i].value) || 0; // Parse the input value as a float
         editsum += inputValue;
     }
+    editsum = parseFloat(editsum.toFixed(2));
+    var EditformattedTotalValue = formatNumberWithCommas(editsum);
+
+    // Display the sum
+
+    var totalInput = document.getElementById(`total-post-` + index);
+
+    totalInput.value = EditformattedTotalValue;
+/*    var value = parseFloat(document.getElementById("value-post-input-column-" + index + "-" + row + "-" + coloum).value.replace(/,/g, ''));*/
+
+    //var totalInput = document.getElementById(`total-post-` + index);
+    //var totalInputValue = parseFloat(totalInput.value.replace(/,/g, ''));
+
+    //if (isNaN(totalInputValue) || totalInputValue == null || totalInputValue === "") {
+    //    total = value.toFixed(2);
+    //} else {
+    //    total = (totalInputValue + value).toFixed(2);
+    //}
+    //if (isNaN(totalInputValue)) {
+     
+    //    total = parseFloat(value).toFixed(2);
+    //} else {
+    //    total = parseFloat(totalInputValue + parseFloat(value)).toFixed(2);
+    //}
+   
+    //var formattedTotalValue = formatNumberWithCommas(total);
+    //totalInput.value = formattedTotalValue;
+
+}
+
+function EditcalculateValue(index, row, coloum) {
+
+    
+
+    //var inputValueId = 'sku-post-input-column-' + index + '-' + row + '-' + coloum; // ID of the input field you want to read
+    //var valueInputId = 'value-post-input-column-' + index + '-' + row + '-' + coloum; // ID of the input field where you want to display the result
+    //var valueUnitPrice = 'sku-edit-UnitPrice-post-row-' + coloum + '-' + row;
+
+    //var inputValue = document.getElementById(inputValueId);
+    //var valueInput = document.getElementById(valueInputId);
+    //var unitprice = document.getElementById(valueUnitPrice);
+
+
+    //var inputValueValue = parseFloat(inputValue.value);
+
+    //if (!isNaN(inputValueValue)) {
+
+    //    var calculatedValue = parseFloat(inputValueValue * parseFloat(unitprice.value)).toFixed(2);  //inputValueValue / 2;
+
+    //    var a = calculatedValue;
+
+    //    valueInput.value = a;
+    //}
+
+    //var inputElements = document.querySelectorAll('input[name="editpostinputValue"]');
+
+    //var editsum = 0;
+
+
+    //for (var i = 0; i < inputElements.length; i++) {
+    //    var inputValue = parseFloat(inputElements[i].value) || 0; 
+    //    editsum += inputValue;
+    //}
+    //var EditformattedTotalValue = formatNumberWithCommas(editsum);
+
+
+    //var totalInput = document.getElementById(`total-post-` + index);
+
+    //totalInput.value = EditformattedTotalValue;
+
+
+    var inputValueId = 'sku-post-input-column-' + index + '-' + row + '-' + coloum; // ID of the input field you want to read
+    var valueInputId = 'value-post-input-column-' + index + '-' + row + '-' + coloum; // ID of the input field where you want to display the result
+    var valueUnitPrice = 'sku-edit-UnitPrice-post-row-' + index + "-" + row;
+    // var unitprice = document.getElementById("post-UnitPrice-" + index + "-" + row).value; 
+    var inputValue = document.getElementById(inputValueId);
+    var valueInput = document.getElementById(valueInputId);
+    var unitprice = document.getElementById(valueUnitPrice);
+
+
+    var inputValueValue = parseFloat(inputValue.value);
+
+    if (isNaN(inputValueValue)) {
+        // Perform the calculation, for example, divide by 2
+        /*     var calculatedValue = parseFloat(inputValueValue * parseFloat(unitprice.value)).toFixed(2);*/  //inputValueValue / 2;
+        var calculatedValue = parseFloat(parseFloat(inputValueValue || 0).toFixed(2) * parseFloat(unitprice.value)).toFixed(2);
+
+        var a = calculatedValue;
+
+        valueInput.value = a;
+    } else {
+        var calculatedValue = parseFloat(parseFloat(inputValueValue || 0).toFixed(2) * parseFloat(unitprice.value)).toFixed(2);
+
+        var a = calculatedValue;
+
+        valueInput.value = a;
+    }
+
+    var inputElements = document.querySelectorAll('input[name="editpostinputValue"]');
+
+    var editsum = 0;
+
+    // Iterate through input elements and add their values to the sum
+    for (var i = 0; i < inputElements.length; i++) {
+        var inputValue = parseFloat(inputElements[i].value) || 0; // Parse the input value as a float
+        editsum += inputValue;
+    }
+    editsum = parseFloat(editsum.toFixed(2));
     var EditformattedTotalValue = formatNumberWithCommas(editsum);
 
     // Display the sum
@@ -1757,7 +1867,7 @@ function BpsObjection() {
 
                 /*    var modelvisisble = document.getElementById('myModalDetails').style.visibility = 'visible';*/
                     Swal.fire({
-                        icon: "error",
+                        icon: "success",
                         title: 'Objection Raised Successfully!',
                         showConfirmButton: false,
                         timer: 3600,

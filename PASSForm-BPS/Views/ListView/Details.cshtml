@@ -15,6 +15,7 @@
     var hcpDocuments = ViewBag.DOCLIST as System.Data.DataTable;
     var doctorsData = ViewBag.DoctorsData;
     var previousPlans = ViewBag.PreviousPlans;
+    var screentype = ViewBag.Screen;
     string roleId = httpContext.HttpContext.Session.GetString("roleid");
 
 
@@ -942,20 +943,26 @@
             {
 
                 <div style="padding-top:20px;">
-                    <div>
-                        <label style="font-weight:bold; @((roleId == "16" && poNumber != null) ? "display:none;" : "")">Comments:</label><br />
+                    @if (screentype == "pendingscreen")
+                    {
+                        <div>
+                            <label style="font-weight:bold; @((roleId == "16" && poNumber != null) ? "display:none;" : "")">Comments:</label><br />
                         <textarea id="comments" style="width:60%; height:100px; margin-top:1%; @((roleId == "16" && poNumber != null) ? "display:none;" : "")"></textarea><br>
                         <label class="hide" id="CommentsErrorLabel" style="color:red;font-size:10px;">Required! Please Enter Comments</label>
                         <input type="text" style="visibility:hidden;" id="wlstid" value="@ViewBag.WorklistId"></input>
                     </div>
+                    }
 
                     @if (poNumber == null && roleId == "2" || roleId == "3")
                     {
-                    <div style="text-align:center; padding-top:3%;">
-                        <input id="approvebps" type="button" class="btn btn-primary" value="Approve" onclick="BpsApproval()" />
+                        @if (screentype == "pendingscreen")
+                        {
+                            <div style="text-align:center; padding-top:3%;">
+                                <input id="approvebps" type="button" class="btn btn-primary" value="Approve" onclick="BpsApproval()" />
 
-                    @*    <input id="pbjectionbps" type="button" class="createbtn" value="Objection" onclick="BpsObjection()" />*@
+
                         </div>
+                        }
                     }
                     else if (poNumber == null)
                     {

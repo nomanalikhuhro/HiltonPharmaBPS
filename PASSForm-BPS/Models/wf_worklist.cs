@@ -22,6 +22,7 @@
         public string? CreatedBy { get; set; }
 
         public string? ActionByName { get; set; }
+        public string? ActivityStatus { get; set; }
         public string? User_Name { get; set; }
     }
 }

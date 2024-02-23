@@ -79,6 +79,12 @@ namespace PASSForm_BPS.Controllers
             {
                 var Empid_SessionValue = HttpContext.Session.GetString("EmpIdbps");
                 var Roleid = HttpContext.Session.GetString("roleid");
+
+                if (Empid_SessionValue == null)
+                {
+                    return RedirectToAction("Login", "Login");
+                }
+
                 if (Roleid == "1")
                 {
                     ViewBag.RoleId = "1";
@@ -120,6 +126,11 @@ namespace PASSForm_BPS.Controllers
             {
                 var Empid_SessionValue = HttpContext.Session.GetString("EmpIdbps");
                 var EmpRoleId = HttpContext.Session.GetString("roleid");
+
+                if (Empid_SessionValue == null)
+                {
+                    return RedirectToAction("Login", "Login");
+                }
 
                 ViewBag.RoleId = "2";
 
@@ -184,7 +195,7 @@ namespace PASSForm_BPS.Controllers
         }
 
             // GET: ListViewController/Details/5
-            public ActionResult Details(string id, string anotherid, int thirdId, string statusId)
+            public ActionResult Details(string id, string anotherid, int thirdId, string statusId, string screenId)
         {
             try
             {
@@ -211,6 +222,7 @@ namespace PASSForm_BPS.Controllers
                     if (empIdCookie == "1")
                     {
                         ViewBag.RoleId = "1";
+
                         //if (statusId == "InProgress")
                         //{
 
@@ -224,7 +236,7 @@ namespace PASSForm_BPS.Controllers
                         var bpsid = bpsrcord.FirstOrDefault()?.BpsRecordId;
                         var bpsComments = bpsrcord.FirstOrDefault()?.Comments;
                         ViewBag.Status = statusid;
-
+                        ViewBag.Screen = screenId;
                         var macroBrickCodes = bpsrcord.FirstOrDefault()?.MacroBrickCode;
                         var macrobridnamequery = @"SELECT * FROM pass_db.macrobricks where MacroBrickCode = '" + macroBrickCodes + "'";
                         var macname = _passDbContext.Macrobricks.FromSqlRaw(macrobridnamequery).ToList();
@@ -555,7 +567,7 @@ namespace PASSForm_BPS.Controllers
                         var statusid = bpsrcord.FirstOrDefault()?.StatusId;
                         var bpsid = bpsrcord.FirstOrDefault()?.BpsRecordId;
                         ViewBag.Status = statusid;
-
+                        ViewBag.Screen = screenId;
                         var macroBrickCodes = bpsrcord.FirstOrDefault()?.MacroBrickCode;
                         var macrobridnamequery = @"SELECT * FROM pass_db.macrobricks where MacroBrickCode = '" + macroBrickCodes + "'";
                         var macname = _passDbContext.Macrobricks.FromSqlRaw(macrobridnamequery).ToList();
@@ -883,6 +895,11 @@ namespace PASSForm_BPS.Controllers
             {
                 string Tracking_ID = inputValue?.Trim();
                 var EmpRoleId = HttpContext.Session.GetString("roleid");
+
+                if (HttpContext.Session.GetString("EmpIdbps") == null)
+                {
+                    return RedirectToAction("Login", "Login");
+                }
                 if (Tracking_ID == null)
                 {
                     if (id == 2)
@@ -953,7 +970,7 @@ namespace PASSForm_BPS.Controllers
                             var tmcoderec = bpsrecords.Select(record => record.Tmcode).ToList();
 
                             var empidrec = _passDbContext.Tblterritorymappings
-        .Where(otherEntity => tmcoderec.Contains(otherEntity.TerritoryCode))
+        .Where(otherEntity => tmcoderec.Contains(otherEntity.TerritoryCode) && otherEntity.RoleId == 4)
         .ToList();
 
                             var empid = empidrec.Select(record1 => record1.EmpId).ToList();
@@ -1078,13 +1095,23 @@ namespace PASSForm_BPS.Controllers
         }
 
         [HttpGet]
-        public object GetMacrobrick(string disValue)
+        public object GetMacrobrick(string disValue,string territorycode)
         {
-            var macrobrickrecords = _passDbContext.DisMacMappings.FromSqlRaw("call sp_GETMacroBrick(@DisCode)"
-, new MySqlParameter("@DisCode", disValue)).ToList();
+            try
+            {
+
+           
+            var macrobrickrecords = _passDbContext.DisMacMappings.FromSqlRaw("call sp_GETMacroBrick(@DisCode,@TerritoryCode)"
+, new MySqlParameter("@DisCode", disValue)
+, new MySqlParameter("@TerritoryCode", territorycode)).ToList();
 
             return Json(macrobrickrecords);
+            }
+            catch (Exception ex)
+            {
 
+                throw;
+            }
 
         }
 
@@ -1097,6 +1124,8 @@ namespace PASSForm_BPS.Controllers
 
                 bool isSuccess = false;
                 var EmpidSessionValue = HttpContext.Session.GetString("EmpIdbps");
+
+
                 try
                 {
 
@@ -3144,7 +3173,11 @@ set Status_ID = 4, Comments = '" + comments + "' Where HCPREQID = '" + trackingi
             try
             {
                 var EmpRoleId = HttpContext.Session.GetString("roleid");
-                var TID = @"SELECT * FROM wf_instance where TrackingId = '" + TrackingId + "'";
+                var recid = TrackingId.Remove(0, 5);// TrackingId.Substring(5, TrackingId.Length);
+                var bps = _passDbContext.BpsRequests.FromSqlRaw("select bpsreq.*, bpsreq.HCPREQID as User_Name, bpsreq.Status_ID as StatusType, bpsreq.CreatedBy as TMCode from bps_request bpsreq where bps_record_id =" + recid + " ").FirstOrDefault();
+              
+                var TID = @"SELECT * FROM wf_instance where TrackingId = '" + bps.TrackingId + "'";
+
                 var TIDs = _passDbContext.Wf_Instances.FromSqlRaw(TID).ToList();
                 if (TIDs.Count == 0)
                 {
