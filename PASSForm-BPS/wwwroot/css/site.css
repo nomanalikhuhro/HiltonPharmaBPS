@@ -31,6 +31,7 @@ body {
     font-size: 15px;
     transition: 0.4s;
     width: 100%;
+    margin-top:3%;
 }
 
     .active, .accordion:hover {
@@ -48,6 +49,18 @@ body {
 .active:after {
     content: "\2212";
 }
+
+.accordion[disabled] {
+    background-color: #ccc; /* Change the background color to gray */
+    color: #888; /* Change the text color to a lighter gray */
+    cursor: not-allowed; /* Change the cursor to "not-allowed" */
+
+}
+
+    /* Styles for the active state (optional) */
+    .accordion[disabled].active {
+        background-color: #ccc; 
+    }
 
 .panel {
     padding: 0 18px;
@@ -100,3 +113,121 @@ body {
 }
 
 /*accordioncssend*/
+
+
+.allinput-fields{
+    text-align:end;
+}
+
+
+.small-font {
+    font-size: 14px; /* Adjust the font size as needed */
+}
+
+
+/*        toggleswitchcss*/
+.toggle-switch {
+    display: inline-block;
+    width: 50px;
+    height: 21px;
+    background-color: #ccc;
+    border-radius: 24px;
+    position: relative;
+    transition: background-color 0.4s;
+    cursor: pointer;
+}
+
+.toggle-slider {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 1px;
+    bottom: 1px;
+    background-color: white;
+    border-radius: 50%;
+    transition: transform 0.4s;
+}
+
+/* Toggle switch states */
+.on {
+    background-color: #2196F3;
+}
+
+
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-toggle {
+    padding: 5px 10px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/*dropdown*/
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    z-index: 1;
+    WIDTH: 660PX;
+}
+
+    .dropdown-content label {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .dropdown-content input[type="checkbox"] {
+        margin-right: 5px;
+    }
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+/*dropdownends*/
+
+
+/*nextbtn*/
+.trackbtn {
+    width: 25%;
+    border-radius: 5px;
+    height: 30px;
+    color: black;
+    background-color: white;
+    border: 3px solid black;
+}
+
+
+/*searchbtn
+*/
+.searchbutton {
+    border-radius: 5px;
+    height: 35px;
+    color: black;
+    background-color: white;
+    border: 3px solid black;
+}
+
+
+
+    .searchbutton[disabled] {
+        background-color: #ccc;
+        color: #888;
+        cursor: not-allowed;
+        background-color: #ccc;
+        border: 3px solid #ccc;
+    }
+
+
+        .searchbutton[disabled].active {
+            background-color: #ccc;
+        }

@@ -60,7 +60,9 @@ public partial class BpsSalesrecord
 
     public string? DiscountPercentagePre { get; set; }
     public string? TotalRoiPercentage { get; set; }
-    public string? GrandTotal { get; set; }
+    public string? TotalWithoutDiscount { get; set; }
+
+    public string? TotalWithDiscount { get; set; }
     public string? BPSPercentage { get; set; }
     public string? DiscountPercentagePost { get; set; }
 }

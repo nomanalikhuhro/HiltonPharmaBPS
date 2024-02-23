@@ -1,0 +1,188 @@
+﻿@{
+    Layout = null;
+
+    int postskucoloumindex = 0;
+    int postvaluecoloumindex = 0;
+
+    @model List<PASSForm_BPS.Models.tblproduct>
+
+
+}
+
+
+<div id="postsku-@ViewBag.postcheckboxindex" style="overflow:auto;">
+    <table id="customers">
+        <thead>
+
+            <tr style="font-size:10px;">
+                <th>Pack Code</th>
+                <th>Product Name</th>
+                <th>Description</th>
+
+                @if (ViewBag.postinputParameters != null)
+                {
+                    try
+                    {
+                        @foreach (var postmon in ViewBag.postinputParameters)
+                        {
+                            <th style="width:10%;" id="sku-post-coloum-@postskucoloumindex">@postmon.Year @postmon.Month</th>
+
+                            postskucoloumindex++;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+
+                        throw;
+                    }
+
+                }
+                else
+                {
+                    <th></th>
+                }
+                
+
+            </tr>
+        </thead>
+        <tbody id="tbl-post-@ViewBag.postcheckboxindex">
+            @if (Model != null)
+            {
+                int packcodeIndex = 0;
+                int rowIndex = 0;
+                try
+                {
+                    List<tblproduct> pr = new List<tblproduct>(ViewBag.products);
+                    double? unitprice = 0.0;
+                    @foreach (var item in Model)
+                    {
+
+
+                        unitprice = pr.Where(x => x.PackCode == item.PackCode).FirstOrDefault().UnitPrice;
+                        <tr style="font-size:10px;">
+                            <input id="post-UnitPrice-@ViewBag.postcheckboxindex-@packcodeIndex" type="hidden" value="@unitprice" />
+                            <td id="post-pakcode-@ViewBag.postcheckboxindex-@packcodeIndex">
+                                @item.PackCode
+                            </td>
+                            <td id="post-product-@ViewBag.postcheckboxindex-@packcodeIndex">
+                                @item.ProductName
+                            </td>
+                            <td id="post-description-@ViewBag.postcheckboxindex-@packcodeIndex">
+                                @item.Description
+                            </td>
+                            @if (ViewBag.postinputParameters != null)
+                            {
+                                int columnIndex = 0;
+                                foreach (var postmon in ViewBag.postinputParameters)
+                                {
+                                    <td>
+
+                                        <input id="sku-post-input-column-@ViewBag.postcheckboxindex-@packcodeIndex-@columnIndex" type="text" name="inputName" value="" placeholder="0" oninput="calculateValue(@ViewBag.postcheckboxindex,@packcodeIndex,@columnIndex)" style="text-align:right; width:35px;" />
+
+
+                                    </td>
+                                    columnIndex++;
+                                }
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+
+                        </tr>
+                        rowIndex++;
+                        packcodeIndex++;
+                    }
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+
+            }
+        </tbody>
+    </table>
+
+</div>
+
+
+<div id="postvalue-@ViewBag.postcheckboxindex" style="overflow:auto; display:none;">
+    <table id="customers">
+        <thead>
+
+            <tr style="font-size:10px;">
+                <th>PackCode</th>
+                <th>ProductName</th>
+                <th>Description</th>
+                @if (ViewBag.postinputParameters != null)
+                {
+                    @foreach (var postmon in ViewBag.postinputParameters)
+                    {
+                        <th style="width:10%;" id="value-post-coloum-@postvaluecoloumindex">@postmon.Year @postmon.Month</th>
+                        postvaluecoloumindex++;
+                    }
+                }
+                else
+                {
+                    <th></th>
+                }
+
+
+            </tr>
+        </thead>
+        <tbody id="tbl-post-@ViewBag.postcheckboxindex">
+            @if (Model != null)
+            {
+                int packcodeIndex = 0;
+                int rowIndex = 0;
+                @foreach (var item in Model)
+                {
+
+                    <tr style="font-size:10px;">
+                        <td id="post-pakcode-@ViewBag.postcheckboxindex-@packcodeIndex">
+                            @item.PackCode
+                        </td>
+                        <td id="post-product-@ViewBag.postcheckboxindex-@packcodeIndex">
+                            @item.ProductName
+                        </td>
+                        <td id="post-description-@ViewBag.postcheckboxindex-@packcodeIndex">
+                            @item.Description
+                        </td>
+                        @if (ViewBag.postinputParameters != null)
+                        {
+                            int columnIndex = 0;
+                            foreach (var postmon in ViewBag.postinputParameters)
+                            {
+                                <td>
+                                    <input disabled id="value-post-input-column-@ViewBag.postcheckboxindex-@packcodeIndex-@columnIndex" type="text" name="postinputValue" value="" placeholder="0" style="text-align:right; width:70px;" />
+                                </td>
+                                columnIndex++;
+                            }
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+
+                    </tr>
+                    rowIndex++;
+                    packcodeIndex++;
+                }
+            }
+        </tbody>
+    </table>
+
+</div>
+<div style="text-align:right; margin-top:1%;">
+    <label>Chemist Total:</label>
+    @*    <input disabled type="text" id="total-post-@ViewBag.postcheckboxindex" style="margin-left: 2%; text-align:right;"  onchange="calltest()" />*@
+    <input disabled type="text" id="total-post-@ViewBag.postcheckboxindex" style="margin-left: 2%; text-align:right;" />
+</div>
+<div style="text-align:right; margin-top:2%; margin-bottom:10px;">
+
+    <label>Discount Percentage %:</label>
+
+    <input type="text" id="discountpercentage-post-@ViewBag.postcheckboxindex" style="margin-left: 2%; text-align:right;" value="@ViewBag.DiscountPercentage" />
+</div>
+

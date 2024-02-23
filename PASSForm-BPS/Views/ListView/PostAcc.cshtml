@@ -14,7 +14,7 @@
     <table id="customers">
         <thead>
 
-            <tr style="font-size:11px;">
+            <tr style="font-size:10px;">
                 <th>Pack Code</th>
                 <th>Product Name</th>
                 <th>Description</th>
@@ -25,7 +25,7 @@
                     {
                         @foreach (var postmon in ViewBag.postinputParameters)
                         {
-                            <th id="sku-post-coloum-@ViewBag.postcheckboxindex-@postskucoloumindex">@postmon.Month/@postmon.Year</th>
+                            <th style="width:0%;" id="sku-post-coloum-@ViewBag.postcheckboxindex-@postskucoloumindex">@postmon.Month/@postmon.Year</th>
 
                             postskucoloumindex++;
                         }
@@ -59,7 +59,7 @@
 
 
                         unitprice = pr.Where(x => x.PackCode == item.PackCode).FirstOrDefault().UnitPrice;
-                        <tr style="font-size:11px;">
+                        <tr style="font-size:10px;">
                             <input id="post-UnitPrice-@ViewBag.postcheckboxindex-@packcodeIndex" type="hidden" value="@unitprice" />
                             <td id="post-pakcode-@ViewBag.postcheckboxindex-@packcodeIndex">
                                 @item.PackCode
@@ -75,9 +75,9 @@
                                 int columnIndex = 0;
                                 foreach (var postmon in ViewBag.postinputParameters)
                                 {
-                                    <td>
+                                    <td style="text-align:end">
 
-                                        <input id="sku-post-input-column-@ViewBag.postcheckboxindex-@packcodeIndex-@columnIndex" type="text" name="inputName" value="0" oninput="calculateValue(@ViewBag.postcheckboxindex,@packcodeIndex,@columnIndex)" style="text-align:right;" />
+                                        <input  id="sku-post-input-column-@ViewBag.postcheckboxindex-@packcodeIndex-@columnIndex" type="text" name="inputName" value="" placeholder="0" oninput="calculateValue(@ViewBag.postcheckboxindex,@packcodeIndex,@columnIndex)" style="text-align:right; width:35px;" />
                                       
 
                                     </td>
@@ -111,15 +111,15 @@
     <table id="customers">
         <thead>
 
-            <tr style="font-size:11px;">
-                <th>PackCode</th>
-                <th>ProductName</th>
+            <tr style="font-size:10px;">
+                <th>Pack Code</th>
+                <th>Product Name</th>
                 <th>Description</th>
                 @if (ViewBag.postinputParameters != null)
                 {
                     @foreach (var postmon in ViewBag.postinputParameters)
                     {
-                        <th id="value-post-coloum-@ViewBag.postcheckboxindex-@postvaluecoloumindex">@postmon.Month/@postmon.Year</th>
+                        <th style="width:0%;" id="value-post-coloum-@ViewBag.postcheckboxindex-@postvaluecoloumindex">@postmon.Month/@postmon.Year</th>
                         postvaluecoloumindex++;
                     }
                 }
@@ -139,7 +139,7 @@
                 @foreach (var item in Model)
                 {
 
-                    <tr style="font-size:11px;">
+                    <tr style="font-size:10px;">
                         <td id="post-pakcode-@ViewBag.postcheckboxindex-@packcodeIndex">
                             @item.PackCode
                         </td>
@@ -154,8 +154,8 @@
                             int columnIndex = 0;
                             foreach (var postmon in ViewBag.postinputParameters)
                             {
-                                <td>
-                                    <input disabled id="value-post-input-column-@ViewBag.postcheckboxindex-@packcodeIndex-@columnIndex" type="text" name="inputName" value="0" style="text-align:right;" />
+                                <td style="text-align:end;">
+                                    <input disabled id="value-post-input-column-@ViewBag.postcheckboxindex-@packcodeIndex-@columnIndex" type="text" name="postinputValue" value="" placeholder="0" style="text-align:right; width:90px;" />
                                 </td>
                                 columnIndex++;
                             }
@@ -176,6 +176,7 @@
 </div>
 <div style="text-align:right; margin-top:1%;">
     <label>Chemist Total:</label>
+@*    <input disabled type="text" id="total-post-@ViewBag.postcheckboxindex" style="margin-left: 2%; text-align:right;"  onchange="calltest()" />*@
     <input disabled type="text" id="total-post-@ViewBag.postcheckboxindex" style="margin-left: 2%; text-align:right;" />
 </div>
 <div style="text-align:right; margin-top:2%; margin-bottom:10px;">
@@ -184,3 +185,4 @@
 
     <input  type="text" id="discountpercentage-post-@ViewBag.postcheckboxindex" style="margin-left: 2%; text-align:right;" value="@ViewBag.DiscountPercentage" />
 </div>
+
