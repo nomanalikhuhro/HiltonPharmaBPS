@@ -93,7 +93,12 @@ namespace PASSForm_BPS.Controllers
                 {
                     ViewBag.RoleId = "2";
                 }
-             
+
+                if(Roleid == "14" || Roleid == "18" || Roleid == "12" || Roleid == "13" )
+                { ViewBag.IsRoleEdit = false; }
+                else { ViewBag.IsRoleEdit = true; }
+                
+
                 var requests = _passDbContext.BpsRequests.FromSqlRaw("call sp_BPSRecordsList(" + Roleid + "," + Empid_SessionValue + ")").ToList();
                 return View(requests);
 
@@ -1415,7 +1420,7 @@ where HCPREQID = '" + trackingid + "'";
                          "                                                                                                       " +
                          "                FROM [dbo].[DSR_HiltonDailySales_TeamToChemist2022-23]                                " +
                          "                                                                                                       " +
-                         "                WHERE TeamName = '" + TeamName + "' AND ClientCode = '" + ChemistCode + "' AND MicroBrickCode in (select distinct MinorBrickCode from MacroMicroBrickMaping where MajorBrickName = '" + Macname.MacroBrickName + "')                   " +
+                         "                WHERE TeamName = '" + TeamName + "' AND ClientCode = '" + ChemistCode + "' AND MicroBrickCode in (select distinct MinorBrickCode from MacroMicroBrickMaping where MinorBrickName = '" + Macname.MacroBrickName + "')                   " +
                          "                                                                                                       " +
                          "                    AND Date >= @startDate AND Date <= @endDate                                        " +
                          "            ) OrderedMonths    order by yea, mon                                                                         " +
@@ -1434,7 +1439,7 @@ where HCPREQID = '" + trackingid + "'";
                          "            CONCAT(DATENAME(yyyy, sal.Date), '' '', DATENAME(mm, sal.Date)) AS YearMonth,              " +
                          "            sal.[Sales-Units]                                                                        " +
                          "        FROM [dbo].[DSR_HiltonDailySales_TeamToChemist2022-23] sal                                    " +
-                         "        WHERE sal.TeamName = ''" + TeamName + "'' AND sal.ClientCode = ''" + ChemistCode + "'' AND sal.MicroBrickCode in (select distinct MinorBrickCode from MacroMicroBrickMaping where MajorBrickName = ''" + Macname.MacroBrickName + "'')          " +
+                         "        WHERE sal.TeamName = ''" + TeamName + "'' AND sal.ClientCode = ''" + ChemistCode + "'' AND sal.MicroBrickCode in (select distinct MinorBrickCode from MacroMicroBrickMaping where MinorBrickName = ''" + Macname.MacroBrickName + "'')          " +
                          "            AND sal.Date >= @startDate AND sal.Date <= @endDate                                        " +
                          "    ) t                                                                                                " +
                          "    PIVOT                                                                                              " +
@@ -1602,7 +1607,7 @@ where HCPREQID = '" + trackingid + "'";
                         "                                                                                                       " +
                         "                FROM [dbo].[DSR_HiltonDailySales_TeamToChemist2022-23]                                " +
                         "                                                                                                       " +
-                        "                WHERE TeamName = '" + TeamName + "' AND ClientCode = '"+ ChemistCode +"' AND MicroBrickCode in (select distinct MinorBrickCode from MacroMicroBrickMaping where MajorBrickName = '" + Macname.MacroBrickName + "')                  " +
+                        "                WHERE TeamName = '" + TeamName + "' AND ClientCode = '"+ ChemistCode + "' AND MicroBrickCode in (select distinct MinorBrickCode from MacroMicroBrickMaping where MinorBrickName = '" + Macname.MacroBrickName + "')                  " +
                         "                                                                                                       " +
                         "                    AND Date >= @startDate AND Date <= @endDate                                        " +
                         "            ) OrderedMonths   order by yea, mon                                                                         " +
@@ -1621,7 +1626,7 @@ where HCPREQID = '" + trackingid + "'";
                         "            CONCAT(DATENAME(yyyy, sal.Date), '' '', DATENAME(mm, sal.Date)) AS YearMonth,              " +
                         "            sal.[Sales-ValueNP]                                                                        " +
                         "        FROM [dbo].[DSR_HiltonDailySales_TeamToChemist2022-23] sal                                    " +
-                        "        WHERE sal.TeamName = ''" + TeamName + "'' AND sal.ClientCode = ''" + ChemistCode + "'' AND sal.MicroBrickCode in (select distinct MinorBrickCode from MacroMicroBrickMaping where MajorBrickName = ''" + Macname.MacroBrickName + "'')         " +
+                        "        WHERE sal.TeamName = ''" + TeamName + "'' AND sal.ClientCode = ''" + ChemistCode + "'' AND sal.MicroBrickCode in (select distinct MinorBrickCode from MacroMicroBrickMaping where MinorBrickName = ''" + Macname.MacroBrickName + "'')         " +
                         "            AND sal.Date >= @startDate AND sal.Date <= @endDate                                        " +
                         "    ) t                                                                                                " +
                         "    PIVOT                                                                                              " +
@@ -1756,7 +1761,7 @@ where HCPREQID = '" + trackingid + "'";
                          "                                                                                                       " +
                          "                FROM [dbo].[DSR_HiltonDailySales_TeamToChemist2022-23]                                " +
                          "                                                                                                       " +
-                         "                WHERE TeamName = '" + TeamName + "' AND ClientCode = '" + ChemistCode + "' AND MicroBrickCode in (select distinct MinorBrickCode from MacroMicroBrickMaping where MajorBrickName = '" + Macname.MacroBrickName + "')                   " +
+                         "                WHERE TeamName = '" + TeamName + "' AND ClientCode = '" + ChemistCode + "' AND MicroBrickCode in (select distinct MinorBrickCode from MacroMicroBrickMaping where MinorBrickName = '" + Macname.MacroBrickName + "')                   " +
                          "                                                                                                       " +
                          "                    AND Date >= @startDate AND Date <= @endDate                                        " +
                          "            ) OrderedMonths    order by yea, mon                                                                         " +
@@ -1775,7 +1780,7 @@ where HCPREQID = '" + trackingid + "'";
                          "            CONCAT(DATENAME(yyyy, sal.Date), '' '', DATENAME(mm, sal.Date)) AS YearMonth,              " +
                          "            sal.[Sales-Units]                                                                        " +
                          "        FROM [dbo].[DSR_HiltonDailySales_TeamToChemist2022-23] sal                                    " +
-                         "        WHERE sal.TeamName = ''" + TeamName + "'' AND sal.ClientCode = ''" + ChemistCode + "'' AND sal.MicroBrickCode in (select distinct MinorBrickCode from MacroMicroBrickMaping where MajorBrickName = ''" + Macname.MacroBrickName + "'')          " +
+                         "        WHERE sal.TeamName = ''" + TeamName + "'' AND sal.ClientCode = ''" + ChemistCode + "'' AND sal.MicroBrickCode in (select distinct MinorBrickCode from MacroMicroBrickMaping where MinorBrickName = ''" + Macname.MacroBrickName + "'')          " +
                          "            AND sal.Date >= @startDate AND sal.Date <= @endDate                                        " +
                          "    ) t                                                                                                " +
                          "    PIVOT                                                                                              " +
@@ -1943,7 +1948,7 @@ where HCPREQID = '" + trackingid + "'";
                         "                                                                                                       " +
                         "                FROM [dbo].[DSR_HiltonDailySales_TeamToChemist2022-23]                                " +
                         "                                                                                                       " +
-                        "                WHERE TeamName = '" + TeamName + "' AND ClientCode = '" + ChemistCode + "' AND MicroBrickCode in (select distinct MinorBrickCode from MacroMicroBrickMaping where MajorBrickName = '" + Macname.MacroBrickName + "')                  " +
+                        "                WHERE TeamName = '" + TeamName + "' AND ClientCode = '" + ChemistCode + "' AND MicroBrickCode in (select distinct MinorBrickCode from MacroMicroBrickMaping where MinorBrickName = '" + Macname.MacroBrickName + "')                  " +
                         "                                                                                                       " +
                         "                    AND Date >= @startDate AND Date <= @endDate                                        " +
                         "            ) OrderedMonths   order by yea, mon                                                                         " +
@@ -1962,7 +1967,7 @@ where HCPREQID = '" + trackingid + "'";
                         "            CONCAT(DATENAME(yyyy, sal.Date), '' '', DATENAME(mm, sal.Date)) AS YearMonth,              " +
                         "            sal.[Sales-ValueNP]                                                                        " +
                         "        FROM [dbo].[DSR_HiltonDailySales_TeamToChemist2022-23] sal                                    " +
-                        "        WHERE sal.TeamName = ''" + TeamName + "'' AND sal.ClientCode = ''" + ChemistCode + "'' AND sal.MicroBrickCode in (select distinct MinorBrickCode from MacroMicroBrickMaping where MajorBrickName = ''" + Macname.MacroBrickName + "'')         " +
+                        "        WHERE sal.TeamName = ''" + TeamName + "'' AND sal.ClientCode = ''" + ChemistCode + "'' AND sal.MicroBrickCode in (select distinct MinorBrickCode from MacroMicroBrickMaping where MinorBrickName = ''" + Macname.MacroBrickName + "'')         " +
                         "            AND sal.Date >= @startDate AND sal.Date <= @endDate                                        " +
                         "    ) t                                                                                                " +
                         "    PIVOT                                                                                              " +
@@ -2150,7 +2155,7 @@ where HCPREQID = '" + trackingid + "'";
             try
             {
                 ViewBag.GrandTotal = Total;
-                var hcpestimatesupportquery = @"SELECT * FROM pass_db.hcprequest where TrackingID = '" + TrackingId + "'";
+                var hcpestimatesupportquery = @"SELECT * FROM hcprequest where TrackingID = '" + TrackingId + "'";
 
                 var hcpestimatesupportresult = _passDbContext.Hcprequests.FromSqlRaw(hcpestimatesupportquery).ToList();
 

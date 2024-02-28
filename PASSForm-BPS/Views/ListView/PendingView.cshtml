@@ -7,6 +7,7 @@
 }
 
 <html>
+   
 <head>
     <title>Your View</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -59,6 +60,7 @@
 
                             </td>
                             <td>
+                                <span style="display:none;"></span>
                                 @item.CreatedOn.Value.ToString("dd-MMM-yyyy")
                             </td>
                             <td>
@@ -88,17 +90,19 @@
 
 
         $(document).ready(function () {
+          
             $('#App_DataTable').DataTable({
-                //"order": [[5, "desc"]],
-
-                order: false,
-                columnDefs: [{
-                    targets: "_all",
-                    orderable: false
-                }],// Order by the first column (index 0) in descending order
+                //"order": [[4, "desc"]],
+                "order": [[4, "desc"]], //or asc
+                "columnDefs": [{ type: 'date', 'targets': [4] }],
+                //order: false,
+                //columnDefs: [{
+                //    targets: "_all",
+                //    orderable: false
+                //}],// Order by the first column (index 0) in descending order
             });
         });
-
+       
         //$(document).ready(function () {
 
         //    $('#App_DataTable thead tr')

@@ -30,10 +30,12 @@
                     @foreach (var item in Model.OrderByDescending(x => x.BpsRecordId).ToList())
                     {
                         <tr>
-                            <td>@("00000" + item.BpsRecordId.ToString())</td>
+                            <td>@(
+                                "00000" + item.BpsRecordId.ToString()
+                    )</td>
                             <td>@item.TMCode</td>
                             <td>@item.StatusType</td>
-                            @if(item.ActivityStatus == "8")
+                            @if (item.ActivityStatus == "8")
                             {
                                 <td>Activity InProgress</td>
                             }
@@ -49,19 +51,19 @@
                             <td>@item.CreatedBy - @item.User_Name</td>
                             <td>@item.CreatedOn.Value.ToString("dd-MMM-yyyy")</td>
 
-                    
-                                                      
-                                @if (@item.StatusId != 4)
-                                {
+
+
+                            @if (@item.StatusId != 4 || ViewBag.IsRoleEdit == false)
+                                            {
                                 <td class="text-center">
                                     <table>
                                         <tr>
                                             <td style="text-align:center;">
                                                 <form hidden asp-action="Edit" asp-controller="ListView">
 
-                                                    <input type="hidden" name="id" value="@item.TrackingId">
+                                                   @* <input type="hidden" name="id" value="@item.TrackingId">
                                                     <input type="hidden" name="anotherId" value="@item.BpsRecordId">
-                                                    <button type="submit" class="icon-navigation" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit" style="color:orange"></i></button>
+                                                    <button type="submit" class="icon-navigation" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit" style="color:orange"></i></button>*@
                                                 </form>
 
                                             </td>
@@ -147,11 +149,8 @@
 
         $(document).ready(function () {
             $('#App_DataTable').DataTable({
-                order: false,
-                columnDefs: [{
-                    targets: "_all",
-                    orderable: false
-                }],
+                "order": [[5, "desc"]], //or asc
+                "columnDefs": [{ type: 'date', 'targets': [5] }],
                // "order": [[5, "desc"]], // Order by the first column (index 0) in descending order
             });
         });
