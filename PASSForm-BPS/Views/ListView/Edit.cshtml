@@ -203,6 +203,7 @@
                         <button class="dropdown-toggle">Please Select Chemist</button>
                         <div class="dropdown-content" id="teamsContent">
                             @*<input type="text" id="searchBar" placeholder="Search Chemist">*@
+                            <input type="text" id="searchInput" placeholder="Search Chemist" class="form-control">
                             <div id="selectededitchemist">
                                 <option value="Select">Select</option>
                                 @foreach (var macchem in Model.macChemMappings)
@@ -929,6 +930,24 @@
         //    // Initialize select2
         //    $("#selectededitchemist").select2();
         //});
+
+        
+        // jQuery code to filter checkboxes based on user input
+$(document).ready(function() {
+    $('#searchInput').on('input', function() {
+        var searchText = $(this).val().toLowerCase();
+        $('#teamsContent input[type="checkbox"]').each(function() {
+            var optionValue = $(this).val().toLowerCase();
+            var parentDiv = $(this).closest('label');
+            if (optionValue.indexOf(searchText) > -1) {
+                parentDiv.show(); // Show checkbox if it matches the search text
+            } else {
+                parentDiv.hide(); // Hide checkbox if it does not match the search text
+            }
+        });
+    });
+});
+
 
 
         var acc = document.getElementsByClassName("accordion");

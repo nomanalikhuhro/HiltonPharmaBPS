@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
 
     ViewData["Title"] = "Create";
     @model PASSForm_BPS.ViewModel.BPSRequestListViewModel
@@ -35,7 +34,7 @@
 
 
 
-        .createbtn{
+        .createbtn {
             width: 8%;
             border-radius: 5px;
             height: 40px;
@@ -54,46 +53,46 @@
             border-radius: 5px;
         }
 
-/*        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
+        /*        .dropdown {
+                    position: relative;
+                    display: inline-block;
+                }
 
-        .dropdown-toggle {
-            padding: 5px 10px;
-            background-color: #f0f0f0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            cursor: pointer;
-        }
+                .dropdown-toggle {
+                    padding: 5px 10px;
+                    background-color: #f0f0f0;
+                    border: 1px solid #ccc;
+                    border-radius: 4px;
+                    cursor: pointer;
+                }
 
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #fff;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            padding: 10px;
-            z-index: 1;
-            WIDTH: 660PX;
-        }
+                .dropdown-content {
+                    display: none;
+                    position: absolute;
+                    background-color: #fff;
+                    border: 1px solid #ccc;
+                    border-radius: 4px;
+                    padding: 10px;
+                    z-index: 1;
+                    WIDTH: 660PX;
+                }
 
-            .dropdown-content label {
-                display: block;
-                margin-bottom: 5px;
-            }
+                    .dropdown-content label {
+                        display: block;
+                        margin-bottom: 5px;
+                    }
 
-            .dropdown-content input[type="checkbox"] {
-                margin-right: 5px;
-            }
+                    .dropdown-content input[type="checkbox"] {
+                        margin-right: 5px;
+                    }
 
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }*/
+                .dropdown:hover .dropdown-content {
+                    display: block;
+                }*/
 
 
-        #customers th{
-            width:10%;
+        #customers th {
+            width: 10%;
         }
 
 
@@ -110,7 +109,7 @@
             <div style="padding-top: 15px;">
 
 
-                @if(Model == null)
+                @if (Model == null)
                 {
                     <div style="padding-top: 15px; padding-left: 20px;">
                         <div class="conatiner">
@@ -119,7 +118,7 @@
                                     <form asp-controller="ListView" asp-action="Create" style="padding-left:12px;">
                                         <label style="font-weight:bold;">Tracking ID:</label>
                                         <div>
-                                            <input  type="text" name="inputValue" />
+                                            <input type="text" name="inputValue" />
                                             <button class="trackbtn" type="submit">Next</button>
                                         </div>
                                     </form>
@@ -135,9 +134,9 @@
                                     <label style="font-weight:bold;">Distributor:</label>
                                     <div>
 
-                                      @*  <select style="width: 70%; height: 30px;">*@
+                                        @*  <select style="width: 70%; height: 30px;">*@
                                         <input type="text" style="width:90%" />
-                                      @*  </select>*@
+                                        @*  </select>*@
                                     </div>
                                 </div>
                             </div>
@@ -181,7 +180,8 @@
                     </div>
 
                 }
-                else{
+                else
+                {
                     @foreach (var rec in Model.requesthcp)
                     {
 
@@ -221,16 +221,16 @@
                                         <label style="font-weight:bold;">Distributor:</label>
                                         <div>
                                             <select style="width: 95%; height: 30px;" id="distributer" onchange="getbrickbydiscode()">
-                                                <option  value="Select">Select</option>
+                                                <option value="Select">Select</option>
                                                 @foreach (var item1 in Model.disterMappings)
                                                 {
                                                     <option value="@item1.DistributerCode - @item1.DistrubiterName">@item1.DistributerCode - @item1.DistrubiterName</option>
-@*                                                <input readonly id="distributer" value="@item1.DistributerCode - @item1.DistrubiterName" style="width:85%" type="text" />*@
+                                                    @*                                                <input readonly id="distributer" value="@item1.DistributerCode - @item1.DistrubiterName" style="width:85%" type="text" />*@
                                                 }
                                             </select>
                                             <label class="hide" id="DistributorErrorLabel" style="color:red;font-size:10px;">Required! Please Select Distributor</label>
                                         </div>
-         
+
                                     </div>
                                 </div>
                             </div>
@@ -241,7 +241,7 @@
                                             <label style="font-weight:bold;">Territory Code:</label>
                                             <div>
                                                 <input readonly id="TCode" value="@rec.Tmcode" type="text" />
-                                                </div>
+                                            </div>
 
                                         </div>
                                         <div class="col-4">
@@ -249,15 +249,15 @@
                                             <div>
                                                 @foreach (var uname in Model.users)
                                                 {
-                                                     <input readonly value="@uname.UserName" type="text" />
+                                                    <input readonly value="@uname.UserName" type="text" />
                                                 }
-                                               
+
                                             </div>
                                         </div>
                                         <div class="col-4">
                                             <label style="font-weight:bold;">MacroBrick:</label>
                                             <div>
-                                                <select   style="width: 99%; height: 30px;"  id="selectedbrick" onchange="getchembybrickcode()">
+                                                <select style="width: 99%; height: 30px;" id="selectedbrick" onchange="getchembybrickcode()">
                                                     <option value="Select">Select</option>
                                                     @foreach (var BrckCode in Model.terbrickMappings)
                                                     {
@@ -274,22 +274,22 @@
                                 <div class="container">
                                     <div class="row">
                                         <div class="col-6">
-              @*                              <div style="padding:10px; ">
-                                                <label style="font-weight:bold;">Teams:</label>
+                                            @*                              <div style="padding:10px; ">
+                                    <label style="font-weight:bold;">Teams:</label>
 
-                                                <div style="padding-top: 5px; display:flex;">
+                                    <div style="padding-top: 5px; display:flex;">
 
-                                                    @foreach (var T in Model.teams)
-                                                    {
-                                                        <div style="border: 2px solid #d71921 ; width: 25%; border-radius: 15px; text-align: center; color: #d71921 ; font-weight:700">
+                                    @foreach (var T in Model.teams)
+                                    {
+                                    <div style="border: 2px solid #d71921 ; width: 25%; border-radius: 15px; text-align: center; color: #d71921 ; font-weight:700">
 
-                                                            <label id="teamNames" value="@T.TeamName">@T.TeamName</label>
-                                                        </div>
+                                    <label id="teamNames" value="@T.TeamName">@T.TeamName</label>
+                                    </div>
 
-                                                    }
+                                    }
 
-                                                </div>
-                                            </div>*@
+                                    </div>
+                                    </div>*@
                                             <label style="font-weight:bold;">Comments:</label><br />
                                             <textarea id="createcomments" style="width:85%; height:100px; margin-top:1%;"></textarea>
 
@@ -306,43 +306,37 @@
                                             </form>
                                         </div>
                                     </div>
-                                </div>          
+                                </div>
                             </div>
                         </div>
                     }
                     <div style="padding-left:26px;">
-                    <div class="dropdown" id="mTeamDropdown">
+                        <div class="dropdown" id="mTeamDropdown">
 
-                        <button class="dropdown-toggle">Please Select Chemist</button>
-                        <div class="dropdown-content" id="teamsContent" >
-
-                            <div id="selectedchemist">
+                            <div class="dropdown-toggle">Please Select Chemist</div>
+                            <div class="dropdown-content" id="teamsContent">
+                            <input type="text" id="searchInput" placeholder="Search Chemist" class="form-control">
+                                <div id="selectedchemist">
+                                    <!-- Checkboxes will be dynamically added here -->
+                                </div>
                             </div>
                         </div>
-
-                    </div>
-
-                        
-
                     </div>
 
 
-                    }
-                
+                }
 
-            </div>    
+
+            </div>
         </div>
-        
+
         <div id="tableAcc">
-
-
-   
         </div>
-        <div style="text-align:right; margin-top:2%";>
+        <div style="text-align:right; margin-top:2%" ;>
             <div style="text-align:right;">
                 <label>Total Without Discount:</label>
                 <input disabled type="text" id="totalwithoutdis" style="margin-left: 2%; text-align:right" value="@ViewBag.GrandTotal" />
-             
+
             </div>
             <div style="text-align:right; padding-top:2%">
                 <label>Total With Discount:</label>
@@ -352,7 +346,7 @@
             <div style="text-align:right; padding-top:2%">
                 <label>BPS Percentage %:</label>
                 <input disabled type="text" id="bpspercentage" style="margin-left: 2%; text-align:right" value="@ViewBag.bpspercentgae" />
-            
+
             </div><br />
 
             <div style="text-align:right;">
@@ -360,17 +354,17 @@
                 <input disabled type="text" id="totalroipercentage" style="margin-left: 2%; text-align:right;" value="@ViewBag.bpspercentgae" /><br />
                 <label class="hide" id="CommentsErrorLabel" style="color:red;font-size:10px;">All Fields Required!</label> <br />
                 <input style="margin-top:15px; width:10%;" id="bpspercentagebtn-post-@ViewBag.postcheckboxindex" onclick="CalculateBPSPercentage(@ViewBag.postcheckboxindex)" type="button" class="searchbutton" value="Calculate %" />
-             </div>
+            </div>
         </div>
         <div style="padding-top:20px; text-align: center;">
-             <form >
+            <form>
                 <input id="createbps" type="button" class="createbtn" value="Create" onclick="SubmittedForm()" />
-           
+
             </form>
 
         </div>
 
-        
+
 
     </div>
 
@@ -380,12 +374,27 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="~/js/datatable_file.js"></script>
 
-        
+
     <script>
 
+        // jQuery code to filter checkboxes based on user input
+$(document).ready(function() {
+    $('#searchInput').on('input', function() {
+        var searchText = $(this).val().toLowerCase();
+        $('#teamsContent input[type="checkbox"]').each(function() {
+            var optionValue = $(this).val().toLowerCase();
+            var parentDiv = $(this).closest('label');
+            if (optionValue.indexOf(searchText) > -1) {
+                parentDiv.show(); // Show checkbox if it matches the search text
+            } else {
+                parentDiv.hide(); // Hide checkbox if it does not match the search text
+            }
+        });
+    });
+});
 
-       
-        
+
+
 
 
 
@@ -400,21 +409,21 @@
             $("#distributer").select2();
             $("#selectedbrick").select2();
 
-            
-            
+
+
             $("#selectedchemist").on('change', function () {
                 //debugger;
                 //alert($(this).val());
                 teamsChange();
             });
 
-           
 
 
 
 
 
-           
+
+
 
         });
 
@@ -449,9 +458,9 @@
                 }
             });
         }
-        
+
     </script>
-    
+
 </body>
 
 </html>
