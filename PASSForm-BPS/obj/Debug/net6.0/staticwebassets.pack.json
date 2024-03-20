@@ -1085,6 +1085,250 @@
       "PackagePath": "staticwebassets\\lib\\jquery\\src\\wrap.js"
     },
     {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\css\\select2.css",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\css\\select2.css"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\css\\select2.min.css",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\css\\select2.min.css"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\i18n\\af.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\i18n\\af.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\i18n\\ar.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\i18n\\ar.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\i18n\\az.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\i18n\\az.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\i18n\\bg.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\i18n\\bg.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\i18n\\bs.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\i18n\\bs.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\i18n\\ca.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\i18n\\ca.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\i18n\\cs.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\i18n\\cs.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\i18n\\da.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\i18n\\da.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\i18n\\de.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\i18n\\de.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\i18n\\dsb.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\i18n\\dsb.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\i18n\\el.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\i18n\\el.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\i18n\\en.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\i18n\\en.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\i18n\\es.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\i18n\\es.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\i18n\\et.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\i18n\\et.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\i18n\\eu.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\i18n\\eu.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\i18n\\fa.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\i18n\\fa.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\i18n\\fi.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\i18n\\fi.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\i18n\\fr.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\i18n\\fr.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\i18n\\gl.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\i18n\\gl.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\i18n\\he.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\i18n\\he.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\i18n\\hi.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\i18n\\hi.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\i18n\\hr.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\i18n\\hr.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\i18n\\hsb.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\i18n\\hsb.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\i18n\\hu.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\i18n\\hu.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\i18n\\hy.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\i18n\\hy.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\i18n\\id.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\i18n\\id.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\i18n\\is.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\i18n\\is.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\i18n\\it.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\i18n\\it.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\i18n\\ja.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\i18n\\ja.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\i18n\\km.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\i18n\\km.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\i18n\\ko.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\i18n\\ko.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\i18n\\lt.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\i18n\\lt.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\i18n\\lv.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\i18n\\lv.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\i18n\\mk.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\i18n\\mk.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\i18n\\ms.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\i18n\\ms.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\i18n\\nb.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\i18n\\nb.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\i18n\\nl.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\i18n\\nl.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\i18n\\pl.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\i18n\\pl.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\i18n\\ps.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\i18n\\ps.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\i18n\\pt-BR.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\i18n\\pt-BR.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\i18n\\pt.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\i18n\\pt.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\i18n\\ro.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\i18n\\ro.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\i18n\\ru.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\i18n\\ru.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\i18n\\sk.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\i18n\\sk.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\i18n\\sl.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\i18n\\sl.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\i18n\\sr-Cyrl.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\i18n\\sr-Cyrl.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\i18n\\sr.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\i18n\\sr.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\i18n\\sv.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\i18n\\sv.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\i18n\\th.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\i18n\\th.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\i18n\\tr.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\i18n\\tr.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\i18n\\uk.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\i18n\\uk.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\i18n\\vi.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\i18n\\vi.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\i18n\\zh-CN.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\i18n\\zh-CN.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\i18n\\zh-TW.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\i18n\\zh-TW.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\select2.full.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\select2.full.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\select2.full.min.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\select2.full.min.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\select2.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\select2.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\dist\\js\\select2.min.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\dist\\js\\select2.min.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\jquery-3.2.1.min.js",
+      "PackagePath": "staticwebassets\\lib\\select2\\jquery-3.2.1.min.js"
+    },
+    {
       "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\sweetalert2\\sweetalert2.all.min.js",
       "PackagePath": "staticwebassets\\lib\\sweetalert2\\sweetalert2.all.min.js"
     },

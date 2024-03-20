@@ -45,6 +45,15 @@
             font-weight: 700;
         }
 
+        .hide {
+            display: none;
+        }
+
+        .error-field {
+            border: 1px solid red;
+            border-radius: 5px;
+        }
+
 /*        .dropdown {
             position: relative;
             display: inline-block;
@@ -306,11 +315,15 @@
 
                         <button class="dropdown-toggle">Please Select Chemist</button>
                         <div class="dropdown-content" id="teamsContent" >
+
                             <div id="selectedchemist">
                             </div>
                         </div>
 
                     </div>
+
+                        
+
                     </div>
 
 
@@ -329,19 +342,23 @@
             <div style="text-align:right;">
                 <label>Total Without Discount:</label>
                 <input disabled type="text" id="totalwithoutdis" style="margin-left: 2%; text-align:right" value="@ViewBag.GrandTotal" />
+             
             </div>
             <div style="text-align:right; padding-top:2%">
                 <label>Total With Discount:</label>
                 <input disabled type="text" id="totalwithdis" style="margin-left: 2%; text-align:right" value="@ViewBag.GrandTotal" />
+
             </div>
             <div style="text-align:right; padding-top:2%">
                 <label>BPS Percentage %:</label>
                 <input disabled type="text" id="bpspercentage" style="margin-left: 2%; text-align:right" value="@ViewBag.bpspercentgae" />
+            
             </div><br />
 
             <div style="text-align:right;">
                 <label>NET Percentage %:</label>
                 <input disabled type="text" id="totalroipercentage" style="margin-left: 2%; text-align:right;" value="@ViewBag.bpspercentgae" /><br />
+                <label class="hide" id="CommentsErrorLabel" style="color:red;font-size:10px;">All Fields Required!</label> <br />
                 <input style="margin-top:15px; width:10%;" id="bpspercentagebtn-post-@ViewBag.postcheckboxindex" onclick="CalculateBPSPercentage(@ViewBag.postcheckboxindex)" type="button" class="searchbutton" value="Calculate %" />
              </div>
         </div>
@@ -362,18 +379,13 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="~/js/datatable_file.js"></script>
+
+        
     <script>
 
-        //document.addEventListener("DOMContentLoaded", function () {
-        //    var modal = document.getElementById("myModal");
-        //    window.onclick = function (event) {
-        //        if (event.target == modal) {
-        //            modal.style.display = "none";
-        //        }
-        //    }
-        //});
 
-
+       
+        
 
 
 
@@ -385,7 +397,11 @@
         }
 
         $(document).ready(function () {
+            $("#distributer").select2();
+            $("#selectedbrick").select2();
 
+            
+            
             $("#selectedchemist").on('change', function () {
                 //debugger;
                 //alert($(this).val());
@@ -394,21 +410,11 @@
 
            
 
-        //    $('#teamsContent').on('change', function () {
-        //     //   debugger;
-        //        var last_selected;
-        //        debugger;
-        //        if ($(this).is(":selected")) {
-        //            last_selected = $(this).attr('value');
-        //        }
-        //        alert(last_selected);
-        //        teamsChange(last_selected);
-
-        //});
 
 
-          
 
+
+           
 
         });
 
@@ -443,7 +449,7 @@
                 }
             });
         }
-   
+        
     </script>
     
 </body>

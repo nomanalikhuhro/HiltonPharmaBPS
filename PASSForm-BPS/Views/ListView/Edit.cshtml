@@ -19,7 +19,7 @@
 <head>
     <title>Your View</title>
     <style>
-        
+
 
 
         .createbtn {
@@ -31,45 +31,45 @@
             border: 3px solid black;
             font-weight: 700;
         }
-        
 
-/*        
-        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
 
-        .dropdown-toggle {
-            padding: 5px 10px;
-            background-color: #f0f0f0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            cursor: pointer;
-        }
+        /*
+                .dropdown {
+                    position: relative;
+                    display: inline-block;
+                }
 
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #fff;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            padding: 10px;
-            z-index: 1;
-            WIDTH: 660PX;
-        }
+                .dropdown-toggle {
+                    padding: 5px 10px;
+                    background-color: #f0f0f0;
+                    border: 1px solid #ccc;
+                    border-radius: 4px;
+                    cursor: pointer;
+                }
 
-            .dropdown-content label {
-                display: block;
-                margin-bottom: 5px;
-            }
+                .dropdown-content {
+                    display: none;
+                    position: absolute;
+                    background-color: #fff;
+                    border: 1px solid #ccc;
+                    border-radius: 4px;
+                    padding: 10px;
+                    z-index: 1;
+                    WIDTH: 660PX;
+                }
 
-            .dropdown-content input[type="checkbox"] {
-                margin-right: 5px;
-            }
+                    .dropdown-content label {
+                        display: block;
+                        margin-bottom: 5px;
+                    }
 
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }*/
+                    .dropdown-content input[type="checkbox"] {
+                        margin-right: 5px;
+                    }
+
+                .dropdown:hover .dropdown-content {
+                    display: block;
+                }*/
     </style>
 </head>
 <body>
@@ -185,16 +185,16 @@
                                 </div>
                             </div>
                         </div>
-              @*          <div style="padding-top:10px;">
-                            <form asp-controller="ListView" asp-action="Create" style="padding-left:12px; visibility:hidden;">
-                                <label style="font-weight:bold;">Tracking ID:</label>
-                                <div>
-                                    <input readonly style="color:transparent;" asp-for="@rec.TrackingId" id="hcpid" value="@rec.TrackingId" type="text" name="inputValue" />
-                                    <span asp-validation-for="@rec.TrackingId" class="text-danger"></span>
+                        @*          <div style="padding-top:10px;">
+                    <form asp-controller="ListView" asp-action="Create" style="padding-left:12px; visibility:hidden;">
+                    <label style="font-weight:bold;">Tracking ID:</label>
+                    <div>
+                    <input readonly style="color:transparent;" asp-for="@rec.TrackingId" id="hcpid" value="@rec.TrackingId" type="text" name="inputValue" />
+                    <span asp-validation-for="@rec.TrackingId" class="text-danger"></span>
 
-                                </div>
-                            </form>
-                        </div>*@
+                    </div>
+                    </form>
+                    </div>*@
                     </div>
                 }
                 <div style="padding-left:26px;">
@@ -202,12 +202,14 @@
 
                         <button class="dropdown-toggle">Please Select Chemist</button>
                         <div class="dropdown-content" id="teamsContent">
+                            @*<input type="text" id="searchBar" placeholder="Search Chemist">*@
                             <div id="selectededitchemist">
-                                    <option value="Select">Select</option>
+                                <option value="Select">Select</option>
                                 @foreach (var macchem in Model.macChemMappings)
                                 {
                                     var match = Model.ChemistCodes.FirstOrDefault(stringToCheck => stringToCheck.Contains(macchem.ChemistCode));
-                                    if(match == null){
+                                    if (match == null)
+                                    {
                                         <label><input id="{@macchem.ChemistCode}" type="checkbox" value="@macchem.ChemistCode - @macchem.ChemistName">@macchem.ChemistCode - @macchem.ChemistName</label>
                                     }
                                     else
@@ -216,9 +218,9 @@
                                     }
 
                                 }
-                                </div>
+                            </div>
 
-                     
+
                         </div>
 
                     </div>
@@ -227,9 +229,10 @@
         </div>
         <div style="padding-top:20px;">
             <div id="UpdateTableAcc">
-                @if (Model.ChemistCodes != null) {
+                @if (Model.ChemistCodes != null)
+                {
                     int chemindex = 0;
-                    foreach(var acc in Model.ChemistCodes)
+                    foreach (var acc in Model.ChemistCodes)
                     {
 
                         pretskucoloumindexedit = 0;
@@ -273,13 +276,13 @@
                                             <label>From:</label>
 
 
-@*                                            @foreach (var group in Model.preDateRanges.Where(predat => predat.PreTotal != null && predat.Chemist_Code == acc)
-                                           .GroupBy(predat => predat.Chemist_Code))
-                                            {
-                                                var predat = group.First(); // Take the first item in each group
+                                            @*                                            @foreach (var group in Model.preDateRanges.Where(predat => predat.PreTotal != null && predat.Chemist_Code == acc)
+                                    .GroupBy(predat => predat.Chemist_Code))
+                                    {
+                                    var predat = group.First(); // Take the first item in each group
 
-                                                <input disabled type="date" value="@(predat.PreFromDate != null ? string.Format("{0:yyyy-MM-dd}", predat.PreFromDate) : string.Empty)" style="margin-left: 2%;" />
-                                            }*@
+                                    <input disabled type="date" value="@(predat.PreFromDate != null ? string.Format("{0:yyyy-MM-dd}", predat.PreFromDate) : string.Empty)" style="margin-left: 2%;" />
+                                    }*@
                                             @foreach (var group in Model.preDateRanges.Where(predat => predat.PreTotal != null && predat.Chemist_Code == acc)
                                            .GroupBy(predat => predat.Chemist_Code))
                                             {
@@ -291,13 +294,13 @@
                                         <div class="col-3">
                                             <label>To:</label>
 
-@*                                            @foreach (var group in Model.preDateRanges.Where(predat => predat.PreTotal != null && predat.Chemist_Code == acc)
-                                           .GroupBy(predat => predat.Chemist_Code))
-                                            {
-                                                var predat = group.First(); // Take the first item in each group
+                                            @*                                            @foreach (var group in Model.preDateRanges.Where(predat => predat.PreTotal != null && predat.Chemist_Code == acc)
+                                    .GroupBy(predat => predat.Chemist_Code))
+                                    {
+                                    var predat = group.First(); // Take the first item in each group
 
-                                                <input disabled type="date" value="@(predat.PreToDate != null ? string.Format("{0:yyyy-MM-dd}", predat.PreToDate) : string.Empty)" style="margin-left: 2%;" />
-                                            }*@
+                                    <input disabled type="date" value="@(predat.PreToDate != null ? string.Format("{0:yyyy-MM-dd}", predat.PreToDate) : string.Empty)" style="margin-left: 2%;" />
+                                    }*@
 
                                             @foreach (var group in Model.preDateRanges.Where(predat => predat.PreTotal != null && predat.Chemist_Code == acc)
                                            .GroupBy(predat => predat.Chemist_Code))
@@ -310,27 +313,27 @@
                                         <div class="col-3">
                                             @foreach (var predat in Model.preDateRanges)
                                             {
-                                             @*   int editcontributionindex = 0;*@
+                                                @*   int editcontributionindex = 0;*@
                                                 if (predat.PreTotal != null)
                                                 {
                                                     if (predat.Chemist_Code == acc)
                                                     {
-                                                        
 
-                                                            <label>Contribution % :</label>
-                                                              <input disabled id="Contribution-@acc"  type="number" value="@(predat.Contribution != null ? string.Format("{0:yyyy-MM-dd}", predat.Contribution) : string.Empty)"  Style=" text-align:right;text-align: right; width: 30%; margin-left: 5%;">
-                                                              <div>
-                                                                 <input disabled style="margin-top:2px;" id="search-@acc" onclick="EDITPreActivitySales(@acc)" type="button" class="searchbutton" value="Search"  /> 
-                                                               </div>
-                                                         
-    
-                                                           @* <label>Contribution % :</label>
-                                                            <input  id="Contribution-@acc" type="number" value="@(predat.Contribution != null ? string.Format("{0:yyyy-MM-dd}", predat.Contribution) : string.Empty)" style="margin-left: 2%; text-align:right;" />
-                                                            <input style="margin-top:2px;" id="search-@acc" onclick="EDITPreActivitySales()" type="button" class="searchbutton" value="Search" />
-                                                  
-                                                           
+
+                                                        <label>Contribution % :</label>
+                                                        <input disabled id="Contribution-@acc" type="number" value="@(predat.Contribution != null ? string.Format("{0:yyyy-MM-dd}", predat.Contribution) : string.Empty)" Style=" text-align:right;text-align: right; width: 30%; margin-left: 5%;">
+                                                        <div>
+                                                            <input disabled style="margin-top:2px;" id="search-@acc" onclick="EDITPreActivitySales(@acc)" type="button" class="searchbutton" value="Search" />
                                                         </div>
-                                                      @*  editcontributionindex++;*@
+
+
+                                                        @* <label>Contribution % :</label>
+                                    <input  id="Contribution-@acc" type="number" value="@(predat.Contribution != null ? string.Format("{0:yyyy-MM-dd}", predat.Contribution) : string.Empty)" style="margin-left: 2%; text-align:right;" />
+                                    <input style="margin-top:2px;" id="search-@acc" onclick="EDITPreActivitySales()" type="button" class="searchbutton" value="Search" />
+
+
+                                    </div>
+                                    @*  editcontributionindex++;*@
                                                     }
                                                 }
                                             }
@@ -348,28 +351,28 @@
                                             <thead>
                                                 <tr style="font-size:10px;">
                                                     @*@foreach (var skucoloum in skupre.Value[0] as IDictionary<string, object>)
-                                                    {
-                                                        <th id="sku-pre-coloum-@pretskucoloumindexedit">@skucoloum.Key</th>
-                                                        pretskucoloumindexedit++;
+                                    {
+                                    <th id="sku-pre-coloum-@pretskucoloumindexedit">@skucoloum.Key</th>
+                                    pretskucoloumindexedit++;
 
-                                                    }*@
+                                    }*@
 
-                                                   @foreach (var skucoloum in skupre.Value[0] as IDictionary<string, object>)
+                                                    @foreach (var skucoloum in skupre.Value[0] as IDictionary<string, object>)
                                                     {
                                                         if (skucoloum.Key == "PackCode")
                                                         {
                                                             <th>@skucoloum.Key</th>
-                                                       
+
                                                         }
                                                         else if (skucoloum.Key == "ProductName")
                                                         {
                                                             <th>@skucoloum.Key</th>
-                                               
+
                                                         }
                                                         else if (skucoloum.Key == "Description")
                                                         {
                                                             <th>@skucoloum.Key</th>
-                                          
+
                                                         }
                                                         else
                                                         {
@@ -385,45 +388,45 @@
                                                 {
 
                                                     int editprepackcoderowindex = 0;
-                                                        @foreach (var skudata in skupre.Value)
-                                                        {
-                                                            
-                                                            int editskuindex = 0;
-                                                            <tr style="font-size:10px;">
-                                                                @foreach (var skudata1 in skudata)
-                                                                {
+                                                    @foreach (var skudata in skupre.Value)
+                                                    {
 
-                                                                    @* <td style="text-align:right;">@skudata1.Value</td>*@
-                                                                    if (skudata1.Key == "PackCode")
-                                                                    {
+                                                        int editskuindex = 0;
+                                                        <tr style="font-size:10px;">
+                                                            @foreach (var skudata1 in skudata)
+                                                            {
+
+                                                                @* <td style="text-align:right;">@skudata1.Value</td>*@
+                                                                if (skudata1.Key == "PackCode")
+                                                                {
                                                                     <td id="sku-pre-pakcode-@acc-@editprepackcoderowindex">@skudata1.Value</td>
-                                                                       
-                                                                    }
-                                                                    else if (skudata1.Key == "ProductName")
-                                                                    {
-                                                                    <td id="sku-pre-product-@acc-@editprepackcoderowindex">@skudata1.Value</td>
-                                                                       
-                                                                    }
-                                                                    else if (skudata1.Key == "Description")
-                                                                    {
-                                                                    <td id="sku-pre-description-@acc-@editprepackcoderowindex">@skudata1.Value</td>
-                                                                       
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                    <td id="sku-pre-column-@acc-@editprepackcoderowindex-@editskuindex" style="text-align:right;">
-                                                                            @skudata1.Value
-                                                                        </td>
-                                                                      
-                                                                        editskuindex++;
-                                                                    }
 
                                                                 }
-                                                            </tr>
+                                                                else if (skudata1.Key == "ProductName")
+                                                                {
+                                                                    <td id="sku-pre-product-@acc-@editprepackcoderowindex">@skudata1.Value</td>
+
+                                                                }
+                                                                else if (skudata1.Key == "Description")
+                                                                {
+                                                                    <td id="sku-pre-description-@acc-@editprepackcoderowindex">@skudata1.Value</td>
+
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td id="sku-pre-column-@acc-@editprepackcoderowindex-@editskuindex" style="text-align:right;">
+                                                                        @skudata1.Value
+                                                                    </td>
+
+                                                                    editskuindex++;
+                                                                }
+
+                                                            }
+                                                        </tr>
                                                         editprepackcoderowindex++;
-                                                        }
                                                     }
-                                                    </tbody>
+                                                }
+                                            </tbody>
                                         </table>
                                     </div>
                                 }
@@ -436,29 +439,29 @@
                                         <table id="customers">
                                             <thead>
                                                 <tr style="font-size:10px;">
-@*                                                    @foreach (var valuecolumn in valpre.Value[0] as IDictionary<string, object>)
-                                                    {
-                                                        <th id="value-pre-coloum-@pretvaluecoloumindexedit">@valuecolumn.Key</th>
-                                                        pretvaluecoloumindexedit++;
-                                                    }*@
+                                                    @*                                                    @foreach (var valuecolumn in valpre.Value[0] as IDictionary<string, object>)
+                                    {
+                                    <th id="value-pre-coloum-@pretvaluecoloumindexedit">@valuecolumn.Key</th>
+                                    pretvaluecoloumindexedit++;
+                                    }*@
 
-                                                   @foreach (var valuecolumn in valpre.Value[0] as IDictionary<string, object> )
+                                                    @foreach (var valuecolumn in valpre.Value[0] as IDictionary<string, object>)
                                                     {
 
                                                         if (valuecolumn.Key == "PackCode")
                                                         {
                                                             <th>@valuecolumn.Key</th>
-                                                    
+
                                                         }
                                                         else if (valuecolumn.Key == "ProductName")
                                                         {
                                                             <th>@valuecolumn.Key</th>
-                                                         
+
                                                         }
                                                         else if (valuecolumn.Key == "Description")
                                                         {
                                                             <th>@valuecolumn.Key</th>
-                                                    
+
                                                         }
                                                         else
                                                         {
@@ -469,40 +472,41 @@
                                                 </tr>
                                             </thead>
                                             <tbody id="tbl-pre-value-@acc">
-                                                @if(valpre.Value != null){
+                                                @if (valpre.Value != null)
+                                                {
                                                     int editvalprepackcoderowindex = 0;
                                                     @foreach (var valdata in valpre.Value)
-                                                {
+                                                    {
                                                         int editvalindex = 0;
                                                         <tr style="font-size:10px;">
-                                                        @foreach (var valdata1 in valdata)
-                                                        {
-
-                                                        @*    <td style="text-align:right;">@valdata1.Value</td>*@
-                                                            if (valdata1.Key == "PackCode")
+                                                            @foreach (var valdata1 in valdata)
                                                             {
+
+                                                                @*    <td style="text-align:right;">@valdata1.Value</td>*@
+                                                                if (valdata1.Key == "PackCode")
+                                                                {
                                                                     <td id="value-pre-pakcode-@acc-@editvalprepackcoderowindex">@valdata1.Value</td>
 
-                                                            }
-                                                            else if (valdata1.Key == "ProductName")
-                                                            {
+                                                                }
+                                                                else if (valdata1.Key == "ProductName")
+                                                                {
                                                                     <td id="value-pre-product-@acc-@editvalprepackcoderowindex">@valdata1.Value</td>
-                                                            }
-                                                            else if (valdata1.Key == "Description")
-                                                            {
+                                                                }
+                                                                else if (valdata1.Key == "Description")
+                                                                {
                                                                     <td id="value-pre-description-@acc-@editvalprepackcoderowindex">@valdata1.Value</td>
-                                                            }
-                                                            else
-                                                            {
+                                                                }
+                                                                else
+                                                                {
 
                                                                     <td id="value-pre-column-@acc-@editvalprepackcoderowindex-@editvalindex" style="text-align:right;">
 
-                                                                    @valdata1.Value
+                                                                        @valdata1.Value
                                                                     </td>
                                                                     editvalindex++;
                                                                 }
 
-                                                        }
+                                                            }
                                                         </tr>
                                                         editvalprepackcoderowindex++;
                                                     }
@@ -530,14 +534,14 @@
 
                                     }
 
-  @*                                  @foreach (var group in Model.preDateRanges.Where(predat => predat.PreTotal != null && predat.Chemist_Code == acc)
-                                   .GroupBy(predat => predat.Chemist_Code))
-                                    {
-                                      
-                                        var predat = group.First(); 
+                                    @*                                  @foreach (var group in Model.preDateRanges.Where(predat => predat.PreTotal != null && predat.Chemist_Code == acc)
+                            .GroupBy(predat => predat.Chemist_Code))
+                            {
 
-                                        <input disabled id="total-pre-@" type="text" id="" value="@(predat.PreTotal != null ? string.Format("{0:yyyy-MM-dd}", predat.PreTotal) : string.Empty)" style="margin-left: 2%; text-align:right;" />
-                                    }*@
+                            var predat = group.First();
+
+                            <input disabled id="total-pre-@" type="text" id="" value="@(predat.PreTotal != null ? string.Format("{0:yyyy-MM-dd}", predat.PreTotal) : string.Empty)" style="margin-left: 2%; text-align:right;" />
+                            }*@
 
                                 </div>
                                 <div style="text-align:right; margin-top:2%;">
@@ -547,7 +551,7 @@
                                     @foreach (var group in Model.preDateRanges.Where(predat => predat.PreTotal != null && predat.Chemist_Code == acc)
                                    .GroupBy(predat => predat.Chemist_Code))
                                     {
-                                        
+
                                         var predat = group.First(); // Take the first item in each group
 
                                         <input disabled type="text" class="allinput-fields" id="discountpercentage-pre-@acc" value="@(predat.discountpercentage != null ? string.Format("{0:yyyy-MM-dd}", predat.discountpercentage) : string.Empty)" style="margin-left: 2%; text-align:right;" />
@@ -584,17 +588,17 @@
                                         </div>
                                         <div class="col-3">
                                             <label>From:</label>
-@*                                            @foreach (var postdat in Model.postDateRanges)
-                                            {
-                                                if (postdat.PostTotal != null)
-                                                {
-                                                    if (postdat.Chemist_Code == acc)
-                                                    {
-                                                        <input disabled id="startdate-post-@chemindex" type="date" value="@(postdat.PostFromDate != null ? string.Format("{0:yyyy-MM-dd}", postdat.PostFromDate) : string.Empty)" style="margin-left: 2%;" />
-                                                    }
-                                                }
+                                            @*                                            @foreach (var postdat in Model.postDateRanges)
+                                    {
+                                    if (postdat.PostTotal != null)
+                                    {
+                                    if (postdat.Chemist_Code == acc)
+                                    {
+                                    <input disabled id="startdate-post-@chemindex" type="date" value="@(postdat.PostFromDate != null ? string.Format("{0:yyyy-MM-dd}", postdat.PostFromDate) : string.Empty)" style="margin-left: 2%;" />
+                                    }
+                                    }
 
-                                            }*@
+                                    }*@
 
                                             @foreach (var postdat in Model.postDateRanges.Where(postdat => postdat.PostTotal != null && postdat.Chemist_Code == acc))
                                             {
@@ -604,17 +608,17 @@
                                         </div>
                                         <div class="col-3">
                                             <label>To:</label>
-@*                                            @foreach (var postdat in Model.postDateRanges)
-                                            {
-                                                if (postdat.PostTotal != null)
-                                                {
-                                                    if (postdat.Chemist_Code == acc)
-                                                    {
-                                                        <input disabled id="enddate-post-@chemindex" type="date" value="@(postdat.PostToDate != null ? string.Format("{0:yyyy-MM-dd}", postdat.PostToDate) : string.Empty)" style="margin-left: 2%;" />
-                                                    }
-                                                }
+                                            @*                                            @foreach (var postdat in Model.postDateRanges)
+                                    {
+                                    if (postdat.PostTotal != null)
+                                    {
+                                    if (postdat.Chemist_Code == acc)
+                                    {
+                                    <input disabled id="enddate-post-@chemindex" type="date" value="@(postdat.PostToDate != null ? string.Format("{0:yyyy-MM-dd}", postdat.PostToDate) : string.Empty)" style="margin-left: 2%;" />
+                                    }
+                                    }
 
-                                            }*@
+                                    }*@
                                             @foreach (var postdat in Model.postDateRanges.Where(postdat => postdat.PostTotal != null && postdat.Chemist_Code == acc))
                                             {
                                                 <input disabled id="enddatepost-@acc" type="text" value="@(postdat.PostToDate != null ? postdat.PostToDate.Value.ToString("MMM yyyy") : string.Empty)" style="margin-left: 2%;" />
@@ -639,17 +643,17 @@
                                                         if (skucoloum.Key == "PackCode")
                                                         {
                                                             <th>@skucoloum.Key</th>
-                        
+
                                                         }
                                                         else if (skucoloum.Key == "ProductName")
                                                         {
                                                             <th>@skucoloum.Key</th>
-                                
+
                                                         }
                                                         else if (skucoloum.Key == "Description")
                                                         {
                                                             <th>@skucoloum.Key</th>
-                                          
+
                                                         }
                                                         else
                                                         {
@@ -663,8 +667,8 @@
                                             <tbody id="tbl-post-@acc">
                                                 @if (skupost.Value != null)
                                                 {
-                                                      List<tblproduct> pr = new List<tblproduct>(ViewBag.products);
-                                                      double? unitprice = 0.0;
+                                                    List<tblproduct> pr = new List<tblproduct>(ViewBag.products);
+                                                    double? unitprice = 0.0;
                                                     int editpackcoderowindex = 0;
                                                     @foreach (var skudata in skupost.Value)
                                                     {
@@ -682,15 +686,16 @@
                                                                 else if (skudata1.Key == "ProductName")
                                                                 {
                                                                     <td id="post-product-@acc-@editpackcoderowindex">@skudata1.Value</td>
-                                                                } else if (skudata1.Key == "Description")
+                                                                }
+                                                                else if (skudata1.Key == "Description")
                                                                 {
                                                                     <td id="post-description-@acc-@editpackcoderowindex">@skudata1.Value</td>
                                                                 }
                                                                 else
                                                                 {
-                                                                    <td style="text-align:end" >
-                                                                        <input  style="width:35px; text-align:right;" id="sku-post-input-column-@acc-@editpackcoderowindex-@editskuindex" value="@Convert.ToInt32(skudata1.Value)" class="numeric" maxlength="5" oninput="EditcalculateValue(@acc,@editpackcoderowindex,@editskuindex)">
-     
+                                                                    <td style="text-align:end">
+                                                                        <input style="width:35px; text-align:right;" id="sku-post-input-column-@acc-@editpackcoderowindex-@editskuindex" value="@Convert.ToInt32(skudata1.Value)" class="numeric" maxlength="5" oninput="EditcalculateValue(@acc,@editpackcoderowindex,@editskuindex)">
+
                                                                     </td>
                                                                     editskuindex++;
                                                                 }
@@ -704,7 +709,7 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                   @* chemindex++;*@
+                                    @* chemindex++;*@
                                 }
                             }
                             @foreach (var valpost in Model.SalesValuesPost)
@@ -717,8 +722,8 @@
                                                 <tr style="font-size:10px;">
                                                     @foreach (var valuecolumn in valpost.Value[0] as IDictionary<string, object>)
                                                     {
-@*                                                        <th id="value-post-coloum-@postvaluecoloumindexedit">@valuecolumn.Key</th>
-                                                        postvaluecoloumindexedit++;*@
+                                                        @*                                                        <th id="value-post-coloum-@postvaluecoloumindexedit">@valuecolumn.Key</th>
+                                    postvaluecoloumindexedit++;*@
                                                         if (valuecolumn.Key == "PackCode")
                                                         {
                                                             <th>@valuecolumn.Key</th>
@@ -727,7 +732,7 @@
                                                         else if (valuecolumn.Key == "ProductName")
                                                         {
                                                             <th>@valuecolumn.Key</th>
-                                                           @* postvaluecoloumindexedit++;*@
+                                                            @* postvaluecoloumindexedit++;*@
                                                         }
                                                         else if (valuecolumn.Key == "Description")
                                                         {
@@ -769,9 +774,9 @@
                                                                 {
                                                                     <td style="text-align :end">
                                                                         <input name="editpostinputValue" style="text-align:right; width:70px;" type="number" disabled id="value-post-input-column-@acc-@editpackcoderowindexvalue-@editvalueindex" maxlength="5" value="@Convert.ToInt32(valdata1.Value)">
-                                                                       
+
                                                                     </td>
-                                                                   editvalueindex++;
+                                                                    editvalueindex++;
                                                                 }
 
                                                             }
@@ -782,12 +787,12 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                 
+
                                 }
                             }
                             <div>
                                 <div style="text-align:right; margin-top:2%;">
-                                    <label>Chemsit Total:</label>
+                                    <label>Chemist Total:</label>
                                     @foreach (var postdat in Model.postDateRanges)
                                     {
                                         int editposttotalindex = 0;
@@ -805,8 +810,8 @@
 
                                 </div>
                             </div>
-                         
-                                <div style="text-align:right; margin-top:2%; margin-bottom:10px;">
+
+                            <div style="text-align:right; margin-top:2%; margin-bottom:10px;">
                                 <div style="text-align:right; margin-top:2%;">
                                     <label>Discount Percentage %:</label>
                                     @foreach (var postdat in Model.postDateRanges)
@@ -825,11 +830,11 @@
                                     }
 
                                 </div>
-                               
-                                </div>
+
+                            </div>
 
 
-                       
+
 
                         </div>
 
@@ -841,7 +846,7 @@
                         toggle++;
                     }
                 }
-      
+
             </div>
             <div>
                 <div style="text-align:right; margin-top:3%;">
@@ -913,38 +918,49 @@
                 </form>
 
             </div>
-            </div>
-</div>
-            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-            <script src="~/js/datatable_file.js"></script>
-            <script>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="~/js/datatable_file.js"></script>
+   
 
-                var acc = document.getElementsByClassName("accordion");
-                var i;
+    <script>
+        //$(document).ready(function () {
+        //    // Initialize select2
+        //    $("#selectededitchemist").select2();
+        //});
 
-                for (i = 0; i < acc.length; i++) {
-                    acc[i].addEventListener("click", function () {
-                        this.classList.toggle("active");
-                        var panel = this.nextElementSibling;
-                        if (panel.style.maxHeight) {
-                            panel.style.maxHeight = null;
-                        } else {
-                            panel.style.maxHeight = panel.scrollHeight + "px";
-                        }
-                    });
+
+        var acc = document.getElementsByClassName("accordion");
+        var i;
+
+        for (i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function () {
+                this.classList.toggle("active");
+                var panel = this.nextElementSibling;
+                if (panel.style.maxHeight) {
+                    panel.style.maxHeight = null;
+                } else {
+                    panel.style.maxHeight = panel.scrollHeight + "px";
                 }
+            });
+        }
         $(document).ready(function () {
 
             $("#selectededitchemist").on('change', function () {
 
                 editteamsChange();
             });
+
+            // Initialize select2
+           
+
+
         });
-                
+        
 
 
-
-            </script>
+    </script>
 
 </body>
 

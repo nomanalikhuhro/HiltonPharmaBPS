@@ -21,6 +21,7 @@
             <table class="table hide" id="App_DataTable">
                 <thead>
                     <tr class="table table-striped">
+                        <th>BPS Request Id</th>
                         <th>Territory Code</th>
                         <th>Workflow Status</th>
                         <th>Activity Status</th>
@@ -32,8 +33,13 @@
                 <tbody>
                     @foreach (var item in Model.OrderByDescending(x=> x.CreatedOn).ToList())
                     {
+           
                         <tr>
-
+                            <td>
+                                    @(
+                                        "00000" + item.BpsId.ToString()
+                                        )
+                            </td>
 
                             <td>
                                 @item.TMCode

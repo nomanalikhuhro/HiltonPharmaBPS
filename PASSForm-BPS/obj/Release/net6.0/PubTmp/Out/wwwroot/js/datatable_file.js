@@ -112,6 +112,22 @@ function getbrickbydiscode() {
 
 function SubmittedForm() {
     debugger;
+
+    var totalwithoutdisss = document.getElementById("totalwithoutdis").value;
+    var totalwithdisss = document.getElementById("totalwithdis").value;
+    var bpspercentagess = document.getElementById("bpspercentage").value;
+    var totalroipercentagess = document.getElementById("totalroipercentage").value;
+
+    if (totalwithoutdisss == "" || totalwithdisss == "" || bpspercentagess == "" || totalroipercentagess == "" ) {
+        //document.getElementById('totalwithoutdisss').classList.add("error-field");
+        //document.getElementById('totalwithdisss').classList.add("error-field");
+        //document.getElementById('bpspercentagess').classList.add("error-field");
+    /*    document.getElementById('totalroipercentagess').classList.add("error-field");*/
+        document.getElementById('CommentsErrorLabel').classList.remove("hide");
+
+        return;
+    }
+
     var Dis = document.getElementById("distributer");
     var selectedDistributorValue = Dis.value || "";
     var discode = selectedDistributorValue.split('-');
@@ -468,7 +484,7 @@ function UpdateSubmittedForm() {
             var salArr = [];
             for (var k = 0; k < PreMon; k++) {
                 var monthyearnames = document.getElementById("value-pre-coloum-" + (k)).innerHTML;
-                var YearPart = monthyearnames.split(' ');
+                var YearPart = monthyearnames.split('_');
                 var Year = YearPart[0];
                 var Month = YearPart[1];
 
@@ -1354,12 +1370,12 @@ function EditCalculateBPSPercentage(editbpspercentagebtnindex) {
 
         var button1rightPart = parts[1];
 
-/*        var TotalPre = parseFloat(document.getElementById(`total-` + button1rightPart).value.replace(/,/g, '')) || 0;*/
+
         var TotalPost = parseFloat(document.getElementById(`total-post-` + button1rightPart).value.replace(/,/g, '')) || 0;
         var DiscountPercentagePost = parseFloat(document.getElementById(`discountpercentage-post-` + button1rightPart).value.replace(/,/g, '')) || 0;
         var DiscountPercentagePre = parseFloat(document.getElementById(`discountpercentage-pre-` + button1rightPart).value.replace(/,/g, '')) || 0;
         var TotalWithDiscount = (TotalPost / 100) * DiscountPercentagePost;
-/*        totalPreSum += TotalPre;*/
+
         totalPostSum += TotalPost;
 
         discountpostcentageSum += DiscountPercentagePost;
@@ -1368,8 +1384,7 @@ function EditCalculateBPSPercentage(editbpspercentagebtnindex) {
 
     });
 
-/*    var GrandTotal = totalPreSum + totalPostSum;*/
-    var discountpercentageSum = discountpercentageSum + discountpostcentageSum;
+    //var discountpercentageSum = discountpercentageSum + discountpostcentageSum;
     var roundedTotalSum = Math.round(totalPostSum);
     var formattedTotalSum = formatNumberWithCommas(roundedTotalSum);
 
@@ -1377,10 +1392,11 @@ function EditCalculateBPSPercentage(editbpspercentagebtnindex) {
     TotalValues.value = formattedTotalSum;
 
     var TotalSumWithDiscount = Math.round(totalwithdisciuntsum);
-    var formattedTotalSumWithDiscount = formatNumberWithCommas(TotalSumWithDiscount);
+
     var TotalValuesWithDis = document.getElementById("totalwithdis");
-    var totalwithdiscountfinalvalue = parseFloat(formattedTotalSum) - parseFloat(formattedTotalSumWithDiscount);
-    TotalValuesWithDis.value = totalwithdiscountfinalvalue;
+    var totalwithdiscountfinalvalue = parseFloat(roundedTotalSum) - parseFloat(TotalSumWithDiscount);
+    TotalValuesWithDis.value = formatNumberWithCommas(totalwithdiscountfinalvalue);
+
 
     $.ajax({
         url: "/ListView/EditCalBPS", // Replace with your controller and action names

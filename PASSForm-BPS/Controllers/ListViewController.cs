@@ -49,7 +49,7 @@ namespace PASSForm_BPS.Controllers
 
         private readonly PassDbContext _passDbContext;
         private readonly TestSalesDbContext _testSalesDbContext;
-        private readonly string _connectionString; /*= "Server=192.168.10.92;Database=pass_db;Uid=newuser1;Pwd=N3u$er123++;";*/
+        private readonly string _connectionString; 
 
         public string _sqlconnection;
         private readonly IWebHostEnvironment _webHostEnvironment;
@@ -235,7 +235,7 @@ namespace PASSForm_BPS.Controllers
                         //}
                         var Empid_SessionValue = HttpContext.Session.GetString("EmpIdbps");
 
-                        var bpsrcordquery = @"SELECT bpsreq.*, bpsreq.HCPREQID as User_Name, bpsreq.Status_ID as StatusType, bpsreq.CreatedBy as TMCode FROM pass_db.bps_request bpsreq where TrackingID = '" + id + "'";
+                        var bpsrcordquery = @"SELECT bpsreq.*, bpsreq.HCPREQID as User_Name, bpsreq.Status_ID as StatusType, bpsreq.CreatedBy as TMCode FROM bps_request bpsreq where TrackingID = '" + id + "'";
                         var bpsrcord = _passDbContext.BpsRequests.FromSqlRaw(bpsrcordquery).ToList();
                         var statusid = bpsrcord.FirstOrDefault()?.StatusId;
                         var bpsid = bpsrcord.FirstOrDefault()?.BpsRecordId;
@@ -243,14 +243,14 @@ namespace PASSForm_BPS.Controllers
                         ViewBag.Status = statusid;
                         ViewBag.Screen = screenId;
                         var macroBrickCodes = bpsrcord.FirstOrDefault()?.MacroBrickCode;
-                        var macrobridnamequery = @"SELECT * FROM pass_db.macrobricks where MacroBrickCode = '" + macroBrickCodes + "'";
+                        var macrobridnamequery = @"SELECT * FROM macrobricks where MacroBrickCode = '" + macroBrickCodes + "'";
                         var macname = _passDbContext.Macrobricks.FromSqlRaw(macrobridnamequery).ToList();
 
                         var distributerCodes = bpsrcord.FirstOrDefault()?.DistributerCode;
-                        var distributernamequery = @"SELECT * FROM pass_db.distributer where DistributerCode = '" + distributerCodes + "'";
+                        var distributernamequery = @"SELECT * FROM distributer where DistributerCode = '" + distributerCodes + "'";
                         var disname = _passDbContext.Distributers.FromSqlRaw(distributernamequery).ToList();
 
-                        var hcpreqquery = @"SELECT * FROM pass_db.hcprequest where TrackingID = '" + id + "' ";
+                        var hcpreqquery = @"SELECT * FROM hcprequest where TrackingID = '" + id + "' ";
                         var hcpreq = _passDbContext.Hcprequests.FromSqlRaw(hcpreqquery).ToList();
 
                         var tmcode = hcpreq.FirstOrDefault()?.Tmcode;
@@ -259,7 +259,7 @@ namespace PASSForm_BPS.Controllers
                        
 
 
-                        var ternamequery = @"SELECT * FROM pass_db.tblterritorymappings where TerritoryCode = '" + tmcode + "'";
+                        var ternamequery = @"SELECT * FROM tblterritorymappings where TerritoryCode = '" + tmcode + "'";
                         var tername = _passDbContext.Tblterritorymappings.FromSqlRaw(ternamequery).ToList();
                         var terempid = tername.FirstOrDefault()?.EmpId;
 
@@ -275,7 +275,7 @@ namespace PASSForm_BPS.Controllers
                         var tquery = @"Select * from teams where TeamCode = '" + teamcode + "'";
                         var tname = _passDbContext.Teams.FromSqlRaw(tquery).ToList();
 
-                        var File = @"SELECT * FROM pass_db.uploadedfile WHERE TrackingId = '" + id + "' AND BPSID = '" + bpsid + "' AND Filetype = 'File'";
+                        var File = @"SELECT * FROM uploadedfile WHERE TrackingId = '" + id + "' AND BPSID = '" + bpsid + "' AND Filetype = 'File'";
 
                         var FilesNames = _passDbContext.Uploadedfiles.FromSqlRaw(File).ToList();
  
@@ -567,28 +567,28 @@ namespace PASSForm_BPS.Controllers
                         ViewBag.WorklistId = thirdId;
                         var Empid_SessionValue = HttpContext.Session.GetString("EmpIdbps");
 
-                        var bpsrcordquery = @"SELECT bpsreq.*, bpsreq.HCPREQID as User_Name, bpsreq.Status_ID as StatusType, bpsreq.CreatedBy as TMCode FROM pass_db.bps_request bpsreq where TrackingID = '" + id + "'";
+                        var bpsrcordquery = @"SELECT bpsreq.*, bpsreq.HCPREQID as User_Name, bpsreq.Status_ID as StatusType, bpsreq.CreatedBy as TMCode FROM bps_request bpsreq where TrackingID = '" + id + "'";
                         var bpsrcord = _passDbContext.BpsRequests.FromSqlRaw(bpsrcordquery).ToList();
                         var statusid = bpsrcord.FirstOrDefault()?.StatusId;
                         var bpsid = bpsrcord.FirstOrDefault()?.BpsRecordId;
                         ViewBag.Status = statusid;
                         ViewBag.Screen = screenId;
                         var macroBrickCodes = bpsrcord.FirstOrDefault()?.MacroBrickCode;
-                        var macrobridnamequery = @"SELECT * FROM pass_db.macrobricks where MacroBrickCode = '" + macroBrickCodes + "'";
+                        var macrobridnamequery = @"SELECT * FROM macrobricks where MacroBrickCode = '" + macroBrickCodes + "'";
                         var macname = _passDbContext.Macrobricks.FromSqlRaw(macrobridnamequery).ToList();
 
                         var distributerCodes = bpsrcord.FirstOrDefault()?.DistributerCode;
-                        var distributernamequery = @"SELECT * FROM pass_db.distributer where DistributerCode = '" + distributerCodes + "'";
+                        var distributernamequery = @"SELECT * FROM distributer where DistributerCode = '" + distributerCodes + "'";
                         var disname = _passDbContext.Distributers.FromSqlRaw(distributernamequery).ToList();
 
-                        var hcpreqquery = @"SELECT * FROM pass_db.hcprequest where TrackingID = '" + id + "' ";
+                        var hcpreqquery = @"SELECT * FROM hcprequest where TrackingID = '" + id + "' ";
                         var hcpreq = _passDbContext.Hcprequests.FromSqlRaw(hcpreqquery).ToList();
 
                         var tmcode = hcpreq.FirstOrDefault()?.Tmcode;
                         var area = hcpreq.FirstOrDefault()?.BaseArea;
                         var hcpreqid = hcpreq.FirstOrDefault()?.Hcpreqid;
 
-                        var ternamequery = @"SELECT * FROM pass_db.tblterritorymappings where TerritoryCode = '" + tmcode + "'";
+                        var ternamequery = @"SELECT * FROM tblterritorymappings where TerritoryCode = '" + tmcode + "'";
                         var tername = _passDbContext.Tblterritorymappings.FromSqlRaw(ternamequery).ToList();
                         var terempid = tername.FirstOrDefault()?.EmpId;
 
@@ -604,7 +604,7 @@ namespace PASSForm_BPS.Controllers
                         var tquery = @"Select * from teams where TeamCode = '" + teamcode + "'";
                         var tname = _passDbContext.Teams.FromSqlRaw(tquery).ToList();
 
-                        var File = @"SELECT * FROM pass_db.uploadedfile WHERE TrackingId = '" + id + "' AND BPSID = '" + bpsid + "' AND Filetype = 'File'";
+                        var File = @"SELECT * FROM uploadedfile WHERE TrackingId = '" + id + "' AND BPSID = '" + bpsid + "' AND Filetype = 'File'";
 
                         var FilesNames = _passDbContext.Uploadedfiles.FromSqlRaw(File).ToList();
                         //headerdatpostDatesaends
@@ -928,7 +928,7 @@ namespace PASSForm_BPS.Controllers
                     try
                     {
 
-                        var bpsrcordquery = @"SELECT bpsreq.*, bpsreq.HCPREQID as User_Name, bpsreq.Status_ID as StatusType, bpsreq.CreatedBy as TMCode FROM pass_db.bps_request bpsreq where TrackingID = '" + Tracking_ID + "'";
+                        var bpsrcordquery = @"SELECT bpsreq.*, bpsreq.HCPREQID as User_Name, bpsreq.Status_ID as StatusType, bpsreq.CreatedBy as TMCode FROM bps_request bpsreq where TrackingID = '" + Tracking_ID + "'";
                         var bpsrcord = _passDbContext.BpsRequests.FromSqlRaw(bpsrcordquery).ToList();
 
                         if (bpsrcord.Count > 0)
@@ -1064,16 +1064,11 @@ namespace PASSForm_BPS.Controllers
                 string html = "<option value=\"Select\">Select</option>";
                 foreach (var items in chemrecords)
                 {
-                    //var accordionIndex = chemrecords.IndexOf(items);
-                    //var panelDivId = $"Pan{accordionIndex}";
-                    //var accoridonId = $"C{accordionIndex}";
-                    //var Percentage = $"{accoridonId}-Per{accordionIndex}";
-                    //var PercentageBtn = $"{accoridonId}";
-                    //var accordiontext = $"{accoridonId}-AccText{accordionIndex}";
-                    //html += "<input type='number' id=" + Percentage + "> <button disabled id=" + PercentageBtn + " class='accordion' onclick=loadPartial('" + PercentageBtn + "','" + Percentage + "','" + items.ChemistCode + "','" + brickValue + "','" + accoridonId + "')><span id='" + accordiontext + "' >" + items.ChemistCode + "</span>-<span>" + items.ChemistName + "</span></button><div class='panel'><div id = 'abc-" + @PercentageBtn + "'></div></div>";
+
+
                     var optionValue = $"{items.ChemistCode} - {items.ChemistName}";
 
-                    //html += $"<option value=\"{optionValue}\">{optionValue}</option>";
+
                     html += $"<label><input id=\"{items.ChemistCode}\" type=\"checkbox\" value=\"{optionValue}\">{optionValue}</label>";
 
 
@@ -1090,11 +1085,13 @@ namespace PASSForm_BPS.Controllers
             catch (Exception ex)
             {
 
-                DateTime timestampValue = DateTime.Now; // Replace with the desired DateTime value
+                DateTime timestampValue = DateTime.Now;
 
-                GlobalClass.LogException(_passDbContext, ex,  nameof(CreateAccordion), "Error message");
+                GlobalClass.LogException(_passDbContext, ex, nameof(CreateAccordion), "Error message");
                 return View("ErrorView");
             }
+
+
 
 
         }
@@ -1319,7 +1316,7 @@ namespace PASSForm_BPS.Controllers
                 , new MySqlParameter("@Tracking_ID", trackingid)).ToList();
             bpsRecordsViewModel.hcprequests = bpsrecords[0];
 
-            var query2 = @"select chemusr.*, chem.ChemistName from pass_db.mac_chem_mapping chemusr
+            var query2 = @"select chemusr.*, chem.ChemistName from mac_chem_mapping chemusr
 Right Join Chemist chem on chemusr.Chemist_Code = chem.Chemist_Code
  where chemusr.MacroBrickCode = '" + brickValue + "' and chemusr.Chemist_Code = '" + chemistId + "'";
 
@@ -1329,7 +1326,7 @@ Right Join Chemist chem on chemusr.Chemist_Code = chem.Chemist_Code
 
             List<UserChemMapping> lst = new List<UserChemMapping>();
 
-            var query3 = @"SELECT hspT.*, T.TeamName FROM pass_db.hspreqteam hspT
+            var query3 = @"SELECT hspT.*, T.TeamName FROM hspreqteam hspT
 left join teams T on T.TeamCode = hspT.TeamCode
 where HCPREQID = '" + trackingid + "'";
 
@@ -2090,7 +2087,7 @@ where HCPREQID = '" + trackingid + "'";
 
                 //var postsal = _testSalesDbContext.DsrHiltonDailySalesTeamToChemist202223s.FromSqlRaw(postqueru).ToList();
 
-                var postqueru = @"SELECT * FROM pass_db.tblproduct where TeamName = '"+TeamName+"'";
+                var postqueru = @"SELECT * FROM tblproduct where TeamName = '"+TeamName+"'";
                 var postsal = _passDbContext.Tblproducts.FromSqlRaw(postqueru).ToList();
                 ViewBag.Products = _passDbContext.Tblproducts.FromSqlRaw("select * from tblproduct").ToList();
 
@@ -2126,7 +2123,7 @@ where HCPREQID = '" + trackingid + "'";
 
                 //var postsal = _testSalesDbContext.DsrHiltonDailySalesTeamToChemist202223s.FromSqlRaw(postqueru).ToList();
 
-                var postqueru = @"SELECT * FROM pass_db.tblproduct where TeamName = '" + TeamName + "'";
+                var postqueru = @"SELECT * FROM tblproduct where TeamName = '" + TeamName + "'";
                 var postsal = _passDbContext.Tblproducts.FromSqlRaw(postqueru).ToList();
                 ViewBag.Products = _passDbContext.Tblproducts.FromSqlRaw("select * from tblproduct").ToList();
 
@@ -2228,7 +2225,7 @@ where HCPREQID = '" + trackingid + "'";
             try
             {
                 ViewBag.GrandTotal = Total;
-                var hcpestimatesupportquery = @"SELECT * FROM pass_db.hcprequest where TrackingID = '" + TrackingId + "'";
+                var hcpestimatesupportquery = @"SELECT * FROM hcprequest where TrackingID = '" + TrackingId + "'";
 
                 var hcpestimatesupportresult = _passDbContext.Hcprequests.FromSqlRaw(hcpestimatesupportquery).ToList();
 
@@ -2321,33 +2318,33 @@ where HCPREQID = '" + trackingid + "'";
                 
                 var Empid_SessionValue = HttpContext.Session.GetString("EmpIdbps");
                 ViewBag.Products = _passDbContext.Tblproducts.FromSqlRaw("select * from tblproduct").ToList();
-                var bpsrcordquery = @"SELECT bpsreq.*, bpsreq.HCPREQID as User_Name, bpsreq.Status_ID as StatusType, bpsreq.CreatedBy as TMCode FROM pass_db.bps_request bpsreq where TrackingID = '" + id + "'";
+                var bpsrcordquery = @"SELECT bpsreq.*, bpsreq.HCPREQID as User_Name, bpsreq.Status_ID as StatusType, bpsreq.CreatedBy as TMCode FROM bps_request bpsreq where TrackingID = '" + id + "'";
                 var bpsrcord = _passDbContext.BpsRequests.FromSqlRaw(bpsrcordquery).ToList();
                 var bpsid = bpsrcord.FirstOrDefault()?.BpsRecordId;
                 var bpsComments = bpsrcord.FirstOrDefault()?.Comments;
 
                 var macroBrickCodes = bpsrcord.FirstOrDefault()?.MacroBrickCode;
-                var macrobridnamequery = @"SELECT * FROM pass_db.macrobricks where MacroBrickCode = '" + macroBrickCodes + "'";
+                var macrobridnamequery = @"SELECT * FROM macrobricks where MacroBrickCode = '" + macroBrickCodes + "'";
                 var macname = _passDbContext.Macrobricks.FromSqlRaw(macrobridnamequery).ToList();
 
-                var macchemnamequery = @"SELECT mcm.*, che.ChemistName FROM pass_db.mac_chem_mapping mcm
+                var macchemnamequery = @"SELECT mcm.*, che.ChemistName FROM mac_chem_mapping mcm
 Inner Join chemist che on
 mcm.Chemist_Code = che.Chemist_Code
 where mcm.MacroBrickCode = '"+ macroBrickCodes + "'";
                 var macchemname = _passDbContext.MacChemMappings.FromSqlRaw(macchemnamequery).ToList();
 
                 var distributerCodes = bpsrcord.FirstOrDefault()?.DistributerCode;
-                var distributernamequery = @"SELECT * FROM pass_db.distributer where DistributerCode = '" + distributerCodes + "'";
+                var distributernamequery = @"SELECT * FROM distributer where DistributerCode = '" + distributerCodes + "'";
                 var disname = _passDbContext.Distributers.FromSqlRaw(distributernamequery).ToList();
 
-                var hcpreqquery = @"SELECT * FROM pass_db.hcprequest where TrackingID  = '" + id + "' ";
+                var hcpreqquery = @"SELECT * FROM hcprequest where TrackingID  = '" + id + "' ";
                 var hcpreq = _passDbContext.Hcprequests.FromSqlRaw(hcpreqquery).ToList();
 
                 var tmcode = hcpreq.FirstOrDefault()?.Tmcode;
                 var area = hcpreq.FirstOrDefault()?.BaseArea;
                 var hcpreqid = hcpreq.FirstOrDefault()?.Hcpreqid;
 
-                var ternamequery = @"SELECT * FROM pass_db.tblterritorymappings where TerritoryCode = '" + tmcode + "'";
+                var ternamequery = @"SELECT * FROM tblterritorymappings where TerritoryCode = '" + tmcode + "'";
                 var tername = _passDbContext.Tblterritorymappings.FromSqlRaw(ternamequery).ToList();
                 var terempid = tername.FirstOrDefault()?.EmpId;
 
@@ -3799,7 +3796,7 @@ set Status_ID = 4, Comments = '" + comments + "' Where HCPREQID = '" + trackingi
             {
                 var EmpidSessionValue = HttpContext.Session.GetString("EmpIdbps");
 
-                var bpsrcordquery = @"SELECT bpsreq.*, bpsreq.HCPREQID as User_Name, bpsreq.Status_ID as StatusType, bpsreq.CreatedBy as TMCode FROM pass_db.bps_request bpsreq where TrackingID = '" + TrackingId + "'";
+                var bpsrcordquery = @"SELECT bpsreq.*, bpsreq.HCPREQID as User_Name, bpsreq.Status_ID as StatusType, bpsreq.CreatedBy as TMCode FROM bps_request bpsreq where TrackingID = '" + TrackingId + "'";
                 var bpsrcord = _passDbContext.BpsRequests.FromSqlRaw(bpsrcordquery).ToList();
                 var bpsid = bpsrcord.FirstOrDefault()?.BpsRecordId;
                 var hcpid = bpsrcord.FirstOrDefault()?.Hcpreqid;
@@ -3899,7 +3896,7 @@ set Status_ID = 4, Comments = '" + comments + "' Where HCPREQID = '" + trackingi
             {
                 var EmpidSessionValue = HttpContext.Session.GetString("EmpIdbps");
 
-                var bpsrcordquery = @"SELECT bpsreq.*, bpsreq.HCPREQID as User_Name, bpsreq.Status_ID as StatusType, bpsreq.CreatedBy as TMCode FROM pass_db.bps_request bpsreq where TrackingID = '" + TrackingId + "'";
+                var bpsrcordquery = @"SELECT bpsreq.*, bpsreq.HCPREQID as User_Name, bpsreq.Status_ID as StatusType, bpsreq.CreatedBy as TMCode FROM bps_request bpsreq where TrackingID = '" + TrackingId + "'";
                 var bpsrcord = _passDbContext.BpsRequests.FromSqlRaw(bpsrcordquery).ToList();
                 var bpsid = bpsrcord.FirstOrDefault()?.BpsRecordId;
                 var hcpid = bpsrcord.FirstOrDefault()?.Hcpreqid;

@@ -735,7 +735,7 @@
                         }
                         <div>
                             <div style="text-align:right; margin-top:2%;">
-                                <label>Chemsit Total:</label>
+                                <label>Chemist Total:</label>
                                 @foreach (var postdat in Model.postDateRanges)
                                 {
                                     if (postdat.PostTotal != null)
@@ -874,7 +874,7 @@
                 </div>
             </div>
         </div>
-        @if (roleId == "1" && ViewBag.Status == 6)
+@*        @if (roleId == "1" && ViewBag.Status == 6)
         {
 
             @if (Model.uploadedfiles.Count > 0)
@@ -913,27 +913,11 @@
             }
             else
             {
-                <div class="row">
-                    <div class="col-lg-4 form-group" id="showChooseFile" style="display: none;">
-                        <label for="files">Select files:</label>
-                        <input type="file" id="asmfile" class="form-control" name="Files" multiple />
-                    </div>
-                    <div class="col-lg-4 d-flex align-items-end">
-                        <div id="templateFile">
-                        </div>
-                    </div>
-                </div>
-                <div class="row my-3">
-                    <div class="col-lg-6">
-                        <ol id="filesList"></ol>
-                    </div>
-                </div>
-                <div style="text-align:center; padding-top:3%;">
-                    <input id="asmact" type="button" class="createbtn" value="Done" onclick="BpsASMActivity()" />
-                </div>
+                
+
             }
 
-        }
+        }*@
 
         @if (ViewBag.roleid != null)
         {
@@ -953,7 +937,7 @@
                     </div>
                     }
 
-                    @if (poNumber == null && roleId == "2" || roleId == "3" || roleId == "12" || roleId == "13" || roleId == "14" || roleId == "18")
+                    @if (poNumber == null && roleId == "2" || roleId == "3")
                     {
                         @if (screentype == "pendingscreen")
                         {
@@ -962,6 +946,18 @@
 
 
                         </div>
+                        }
+                    }
+                    else if (roleId == "12" || roleId == "13" || roleId == "14" || roleId == "18")
+                    {
+                        @if (screentype == "pendingscreen")
+                        {
+                            <div style="text-align:center; padding-top:3%;">
+                                <input id="approvebps" type="button" class="btn btn-primary" value="Approve" onclick="BpsApproval()" />
+
+                                <input id="pbjectionbps" type="button" class="btn btn-danger" value="Objection" onclick="BpsObjection()" />
+
+                            </div>
                         }
                     }
                     else if (poNumber == null)
