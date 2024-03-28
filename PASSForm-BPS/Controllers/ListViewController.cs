@@ -94,7 +94,7 @@ namespace PASSForm_BPS.Controllers
                     ViewBag.RoleId = "2";
                 }
 
-                if(Roleid == "14" || Roleid == "18" || Roleid == "12" || Roleid == "13" )
+                if(Roleid == "14" || Roleid == "18" || Roleid == "12" || Roleid == "13" || Roleid == "22" || Roleid == "23" )
                 { ViewBag.IsRoleEdit = false; }
                 else { ViewBag.IsRoleEdit = true; }
                 
