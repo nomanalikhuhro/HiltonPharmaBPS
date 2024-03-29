@@ -1,0 +1,56 @@
+﻿
+@{
+    ViewData["Title"] = "Submitted";
+}
+<html>
+<head>
+    <title>Your View</title>
+
+</head>
+<body>
+    <div style="padding-top:5%;">
+
+
+        <div style="overflow-x: auto; border: 2px solid; background-color: white; border-radius: 10px; border-color: white; box-shadow: 1px 0px 9px 1px lightgray;">
+            <table class="table hide" id="App_DataTable">
+                <thead>
+                    <tr class="table table-striped">
+                        <th>BPS Request Id</th>
+                        <th>Territory Code</th>
+                        <th>Workflow Status</th>
+                        <th>Activity Status</th>
+                        <th>Created By</th>
+                        <th>Created On</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+
+        $(document).ready(function () {
+            $('#App_DataTable').DataTable({
+
+            });
+        });
+
+    </script>
+</body>
+
+</html>
+

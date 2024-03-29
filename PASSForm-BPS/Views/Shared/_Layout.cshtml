@@ -86,6 +86,51 @@
                         color: white;
                     }
 
+
+        /* Style the sidenav links and the dropdown button */
+        .sidebar a, .dropdown-btn {
+            padding: 6px 8px 6px 16px;
+            text-decoration: none;
+            font-size: 20px;
+            color: #818181;
+            display: block;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+            outline: none;
+        }
+
+
+
+        /* Main content */
+        .main {
+            margin-left: 200px; /* Same as the width of the sidenav */
+            font-size: 20px; /* Increased text to enable scrolling */
+            padding: 0px 10px;
+        }
+
+        /* Add an active class to the active dropdown button */
+
+
+        /* Dropdown container (hidden by default). Optional: add a lighter background color and some left padding to change the design of the dropdown content */
+        .dropdown-container {
+            display: none;
+            background-color: white;
+
+        }
+
+        /* Optional: Style the caret down icon */
+        .fa-caret-down {
+            float: right;
+            padding-right: 8px;
+        }
+
+        .dropdown-btn{
+            color:white;
+            background: linear-gradient(90deg, rgba(215,25,33,255) 47%, rgba(215,255,0,0.03974089635854339) 100%);
+        }
        
 
         .content {
@@ -308,56 +353,86 @@
         <div class="sidebar">
             <div style="text-align:center;margin-bottom:30px;">
                 <img src="~/images/logo.png" height="110px" width="140px" />
+                 <div>
+                     <div style="padding-top:20%">
+                        <button class="dropdown-btn">
+                            PASS BPS
+                            <i class="fa fa-caret-down"></i>
+                        </button>
+                        <div class="dropdown-container">
+                        @if (emproleid == "1")
+                        {
 
+                            <div>
+
+                                <a class="sidebar-link @(currentAction == "Create" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="Create">Create Request</a>
+                                <a class="sidebar-link @(currentAction == "ApprovedView" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="ApprovedView" asp-route-id="1">Submitted Request</a>
+                                <a class="sidebar-link @(currentAction == "TrackingIDStatus" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="TrackingIDStatus" asp-route-id="1">Request Status</a>
+                            </div>
+                        }
+                        else if (emproleid == "2" || emproleid == "3")
+                        {
+                            <div>
+                                <a class="sidebar-link @(currentAction == "Create" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="Create" asp-route-id="2">Create Request</a>
+                                <a class="sidebar-link @(currentAction == "ApprovedView" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="ApprovedView" asp-route-id="1">Submitted Request</a>
+                                <a class="sidebar-link @(currentAction == "PendingView" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="PendingView" asp-route-id="2">Pending for My Approval</a>
+                                <a class="sidebar-link @(currentAction == "TrackingIDStatus" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="TrackingIDStatus" asp-route-id="2">Request Status</a>
+
+                            </div>
+                        }
+                        else
+                        {
+                            <div>
+
+                                <a class="sidebar-link @(currentAction == "PendingView" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="PendingView" asp-route-id="2">Pending for My Approval</a>
+                                <a class="sidebar-link @(currentAction == "ApprovedView" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="ApprovedView" asp-route-id="1">Submitted Request</a>
+                                <a class="sidebar-link @(currentAction == "TrackingIDStatus" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="TrackingIDStatus" asp-route-id="2">Request Status</a>
+
+                            </div>
+                        }
+                        </div>
+                    </div>
+                    <div style="padding-top:5%">
+                        <button class="dropdown-btn">
+                            PAP BPS
+                            <i class="fa fa-caret-down"></i>
+                        </button>
+                        <div class="dropdown-container">
+                            @if (emproleid == "1")
+                            {
+
+                                <div>
+
+                                    <a class="sidebar-link @(currentAction == "Create" ? "act" : "")" asp-area="" asp-controller="PAPView" asp-action="Create">Create Request</a>
+                                    <a class="sidebar-link @(currentAction == "Submitted" ? "act" : "")" asp-area="" asp-controller="PAPView" asp-action="Submitted" asp-route-id="1">Submitted Request</a>
+                                    <a class="sidebar-link @(currentAction == "TrackingIDStatus" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="TrackingIDStatus" asp-route-id="1">Request Status</a>
+                                </div>
+                            }
+                            else if (emproleid == "2" || emproleid == "3")
+                            {
+                                <div>
+                                    <a class="sidebar-link @(currentAction == "Create" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="Create" asp-route-id="2">Create Request</a>
+                                    <a class="sidebar-link @(currentAction == "ApprovedView" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="ApprovedView" asp-route-id="1">Submitted Request</a>
+                                    <a class="sidebar-link @(currentAction == "PendingView" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="PendingView" asp-route-id="2">Pending for My Approval</a>
+                                    <a class="sidebar-link @(currentAction == "TrackingIDStatus" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="TrackingIDStatus" asp-route-id="2">Request Status</a>
+
+                                </div>
+                            }
+                            else
+                            {
+                                <div>
+
+                                    <a class="sidebar-link @(currentAction == "PendingView" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="PendingView" asp-route-id="2">Pending for My Approval</a>
+                                    <a class="sidebar-link @(currentAction == "ApprovedView" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="ApprovedView" asp-route-id="1">Submitted Request</a>
+                                    <a class="sidebar-link @(currentAction == "TrackingIDStatus" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="TrackingIDStatus" asp-route-id="2">Request Status</a>
+
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
             </div>
-            @if (emproleid == "1")
-            {
 
-                <div>
-
-                    <a class="sidebar-link @(currentAction == "Create" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="Create">Create Request</a>
-                    <a class="sidebar-link @(currentAction == "ApprovedView" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="ApprovedView" asp-route-id="1">Submitted Request</a>
-                    <a class="sidebar-link @(currentAction == "TrackingIDStatus" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="TrackingIDStatus" asp-route-id="1">Request Status</a>
-                </div >
-            }
-            else if (emproleid == "2" || emproleid == "3")
-            {
-                <div>
-                    <a class="sidebar-link @(currentAction == "Create" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="Create" asp-route-id="2">Create Request</a>
-                    <a class="sidebar-link @(currentAction == "ApprovedView" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="ApprovedView" asp-route-id="1">Submitted Request</a>
-                    <a class="sidebar-link @(currentAction == "PendingView" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="PendingView" asp-route-id="2">Pending for My Approval</a>
-                  @*  <form asp-action="ApprovedView" asp-controller="ListView">
-                        <input  type="hidden" name="id" value="2">
-                        <input type="hidden" name="thirdId" value="submitted">
-
-                        <button class="sidebar-link @(currentAction == "ApprovedView" ? "act" : "")" style="width: 100%;height: 50px;border: none; background: white; text-align:left; padding:15px;">
-                            Submitted Request
-                        </button>
-                    </form>*@
-@*
-                    <form asp-action="PendingView" asp-controller="ListView">
-                        <input type="hidden" name="id" value="2">
-                        <input type="hidden" name="thirdId" value="pending">
-
-                        <button class="sidebar-link @(currentAction == "PendingView" ? "act" : "")" style="width: 100%;height: 50px; border-left: none;border-right: none; background: white;  border-top: 1px solid; border-bottom:1px solid; padding:15px; text-align: left;">
-                            Pending for My Approval
-                        </button>
-                    </form>*@
-
-                    <a class="sidebar-link @(currentAction == "TrackingIDStatus" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="TrackingIDStatus" asp-route-id="2">Request Status</a>
-
-                </div>
-            }
-            else
-            {
-                <div>
-
-                    <a class="sidebar-link @(currentAction == "PendingView" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="PendingView" asp-route-id="2">Pending for My Approval</a>
-                    <a class="sidebar-link @(currentAction == "ApprovedView" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="ApprovedView" asp-route-id="1">Submitted Request</a>
-                    <a class="sidebar-link @(currentAction == "TrackingIDStatus" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="TrackingIDStatus" asp-route-id="2">Request Status</a>
-
-                </div>
-            }
   
             <!-- Add more menu items as needed -->
         </div>
@@ -388,11 +463,7 @@
             </div>
         </div>
     </div>
-    @*   @Html.Partial("_RolesBasePartialView");*@
-    @*
-    <main role="main" class="pb-3">
-    @RenderBody()
-    </main>*@
+
     <div class="spinner" style="display:none">
         <div class="center-div">
             <div class="loader"></div>
@@ -403,8 +474,6 @@
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    @*    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    *@
     <script src="~/datatable/jquery.datatables.js"></script>
     <script src="~/datatable/jquery.datatables.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -440,7 +509,20 @@
 
         });
 
+        var dropdown = document.getElementsByClassName("dropdown-btn");
+        var i;
 
+        for (i = 0; i < dropdown.length; i++) {
+            dropdown[i].addEventListener("click", function () {
+                this.classList.toggle("active");
+                var dropdownContent = this.nextElementSibling;
+                if (dropdownContent.style.display === "block") {
+                    dropdownContent.style.display = "none";
+                } else {
+                    dropdownContent.style.display = "block";
+                }
+            });
+        }
 
 
     </script>
