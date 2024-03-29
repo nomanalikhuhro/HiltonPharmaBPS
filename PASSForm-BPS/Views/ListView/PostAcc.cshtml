@@ -155,7 +155,8 @@
                             foreach (var postmon in ViewBag.postinputParameters)
                             {
                                 <td style="text-align:end;">
-                                    <input disabled id="value-post-input-column-@ViewBag.postcheckboxindex-@packcodeIndex-@columnIndex" type="text" name="postinputValue" value="" placeholder="0" style="text-align:right; width:90px;" />
+                                    <input disabled id="value-post-input-column-@ViewBag.postcheckboxindex-@packcodeIndex-@columnIndex" type="text"
+                                    @*name="postinputValue-@ViewBag.postcheckboxinde"*@   data-index="@ViewBag.postcheckboxindex" value="" placeholder="0" style="text-align:right; width:90px;" />
                                 </td>
                                 columnIndex++;
                             }

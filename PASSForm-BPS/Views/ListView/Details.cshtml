@@ -782,15 +782,7 @@
                 <div>
                     <div style="text-align:right; margin-top:2%;">
                         <label>Total Without Discount:</label>
-                        @*@foreach (var grandtaotal in Model.customersmodels)
-                        {
-                            if (grandtaotal.grandtotal != null)
-                            {
 
-                                <input  disabled type="text" value="@grandtaotal.grandtotal" style="margin-left: 2%; text-align:right;" />
-                            }
-
-                        }*@
 
                         @foreach (var totalwithoutdiscount in Model.customersmodels.Where(totalwithoutdiscount => totalwithoutdiscount.totalwithoutdiscount != null)
                         .GroupBy(totalwithoutdiscount => totalwithoutdiscount.totalwithoutdiscount))
@@ -806,15 +798,7 @@
                 <div>
                     <div style="text-align:right; margin-top:3%;">
                         <label>Total With Discount:</label>
-                        @*@foreach (var grandtaotal in Model.customersmodels)
-                        {
-                        if (grandtaotal.grandtotal != null)
-                        {
 
-                        <input  disabled type="text" value="@grandtaotal.grandtotal" style="margin-left: 2%; text-align:right;" />
-                        }
-
-                        }*@
 
                         @foreach (var totalwithdiscount in Model.customersmodels.Where(totalwithdis => totalwithdis.totalwithdiscount != null)
                         .GroupBy(totalwithdiscount => totalwithdiscount.totalwithdiscount))
@@ -830,14 +814,7 @@
                 <div>
                     <div style="text-align:right; margin-top:2%;">
                         <label>BPS Percentage %:</label>
-@*                        @foreach (var bpsperc in Model.customersmodels)
-                        {
-                            if (bpsperc.bpspercentage != null)
-                            {
-                                <input disabled type="text" value="@(bpsperc.bpspercentage != null ? string.Format("{0:yyyy-MM-dd}", bpsperc.bpspercentage ) : string.Empty)" style="margin-left: 2%; text-align:right;" />
-                            }
 
-                        }*@
 
                         @foreach (var bpsperc in Model.customersmodels.Where(bpsperc => bpsperc.bpspercentage != null)
                         .GroupBy(bpsperc => bpsperc.bpspercentage))
@@ -853,14 +830,7 @@
                 <div>
                     <div style="text-align:right; margin-top:2%;">
                         <label>NET Percentage %:</label>
-@*                        @foreach (var roi in Model.customersmodels)
-                        {
-                            if (roi.totalroipercentage != null)
-                            {
-                                <input disabled type="text" value="@(roi.totalroipercentage != null ? string.Format("{0:yyyy-MM-dd}", roi.totalroipercentage ) : string.Empty)" style="margin-left: 2%; text-align:right;" />
-                            }
 
-                        }*@
 
                         @foreach (var roi in Model.customersmodels.Where(roi => roi.totalroipercentage != null)
                         .GroupBy(roi => roi.totalroipercentage))
@@ -874,50 +844,7 @@
                 </div>
             </div>
         </div>
-@*        @if (roleId == "1" && ViewBag.Status == 6)
-        {
 
-            @if (Model.uploadedfiles.Count > 0)
-            {
-                <table id="customers">
-                    <tr>
-                        <th>FileName</th>
-                    </tr>
-
-                    @foreach (var f in Model.uploadedfiles)
-                    {
-
-                        <td>
-                            @{
-
-                                string[] parts = f.filename.Split('_');
-                                if (parts.Length > 1)
-                                {
-                                    string afterUnderscore = parts[1];
-                                    @afterUnderscore
-                                }
-                                else
-                                {
-                                    @f.filename
-                                }
-                            }
-                        </td>
-
-                    }
-
-
-                </table>
-                <div style="text-align:center; padding-top:4%;">
-                    <input disabled id="asmact" type="button" class="createbtn" value="Done" />
-                </div>
-            }
-            else
-            {
-                
-
-            }
-
-        }*@
 
         @if (ViewBag.roleid != null)
         {
@@ -948,7 +875,7 @@
                         </div>
                         }
                     }
-                    else if (roleId == "12" || roleId == "13" || roleId == "14" || roleId == "18")
+                    else if (roleId == "12" || roleId == "13" || roleId == "14" || roleId == "18" || roleId == "22" || roleId == "23")
                     {
                         @if (screentype == "pendingscreen")
                         {

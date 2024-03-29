@@ -774,7 +774,9 @@
                                                                 else
                                                                 {
                                                                     <td style="text-align :end">
-                                                                        <input name="editpostinputValue" style="text-align:right; width:70px;" type="number" disabled id="value-post-input-column-@acc-@editpackcoderowindexvalue-@editvalueindex" maxlength="5" value="@Convert.ToInt32(valdata1.Value)">
+                                                                        <input @*name="editpostinputValue"*@
+                                                                               data-index="@acc"
+                                                                            style="text-align:right; width:70px;" type="number" disabled id="value-post-input-column-@acc-@editpackcoderowindexvalue-@editvalueindex" maxlength="5" value="@Convert.ToInt32(valdata1.Value)">
 
                                                                     </td>
                                                                     editvalueindex++;

@@ -1401,7 +1401,7 @@ function EditCalculateBPSPercentage(editbpspercentagebtnindex) {
     $.ajax({
         url: "/ListView/EditCalBPS", // Replace with your controller and action names
         type: 'POST', // Use GET or POST based on your server's requirements
-        data: { TrackingId: trackingId, Total: roundedTotalSum, discountpostcentageSum: totalwithdiscountfinalvalue }, // Send data to the controller
+        data: { TrackingId: trackingId, Total: formattedTotalSum, discountpostcentageSum: TotalSumWithDiscount }, // Send data to the controller
         success: function (data) {
 ;
 
@@ -1425,31 +1425,7 @@ function EditCalculateBPSPercentage(editbpspercentagebtnindex) {
 function calculateValue(index, row, coloum) {
 
 
-    //var inputValue = document.getElementById("sku-post-input-column-" + index + "-" + row + "-" + column).value;
-    //var unitprice = document.getElementById("post-UnitPrice-" + index + "-" + row).value;
-    //var totalInput1 = document.getElementById(`total-post-` + index).value.replace(',', '') || 0;
-    //var total = 0;
-
-
-    //if (!isNaN(inputValue)) {
-
-    //    var valueInputClass = 'value-post-input-column-' + index + "-" + row + "-" + column; // Corresponding "Values" input class
-    //    var valueInput = document.getElementById(valueInputClass); // Find the corresponding "Values" input field
-    //    if (!isNaN(valueInput.value)) {
-
-    //        totalInput1 = (parseFloat(totalInput1) - parseFloat(valueInput.value || 0).toFixed(2) - ).toFixed(2);
-    //    }
-    //    if (valueInput) {
-    //        var calculatedValue = parseFloat(parseFloat(inputValue || 0).toFixed(2) * parseFloat(unitprice)).toFixed(2); // Divide by 2
-    //        valueInput.value = calculatedValue;
-    //    }
-    //}
-    //var value = document.getElementById("value-post-input-column-" + index + "-" + row + "-" + column).value;
-    //var totalInput = document.getElementById(`total-post-` + index);
-    //total = parseFloat(parseFloat(totalInput1) + parseFloat(value)).toFixed(2);
-    //var formattedTotalValue = formatNumberWithCommas(total);
-    //totalInput.value = formattedTotalValue;
-
+   
     var inputValueId = 'sku-post-input-column-' + index + '-' + row + '-' + coloum; // ID of the input field you want to read
     var valueInputId = 'value-post-input-column-' + index + '-' + row + '-' + coloum; // ID of the input field where you want to display the result
     var valueUnitPrice = 'post-UnitPrice-' + index + "-" + row;
@@ -1477,7 +1453,9 @@ function calculateValue(index, row, coloum) {
         valueInput.value = a;
     }
 
-    var inputElements = document.querySelectorAll('input[name="postinputValue"]');
+/*    var inputElements = document.querySelectorAll('input[name="postinputValue"]');*/
+
+    var inputElements = document.querySelectorAll('input[data-index="' + index + '"]');
 
     var editsum = 0;
 
@@ -1494,25 +1472,7 @@ function calculateValue(index, row, coloum) {
     var totalInput = document.getElementById(`total-post-` + index);
 
     totalInput.value = EditformattedTotalValue;
-/*    var value = parseFloat(document.getElementById("value-post-input-column-" + index + "-" + row + "-" + coloum).value.replace(/,/g, ''));*/
 
-    //var totalInput = document.getElementById(`total-post-` + index);
-    //var totalInputValue = parseFloat(totalInput.value.replace(/,/g, ''));
-
-    //if (isNaN(totalInputValue) || totalInputValue == null || totalInputValue === "") {
-    //    total = value.toFixed(2);
-    //} else {
-    //    total = (totalInputValue + value).toFixed(2);
-    //}
-    //if (isNaN(totalInputValue)) {
-     
-    //    total = parseFloat(value).toFixed(2);
-    //} else {
-    //    total = parseFloat(totalInputValue + parseFloat(value)).toFixed(2);
-    //}
-   
-    //var formattedTotalValue = formatNumberWithCommas(total);
-    //totalInput.value = formattedTotalValue;
 
 }
 
@@ -1584,7 +1544,9 @@ function EditcalculateValue(index, row, coloum) {
         valueInput.value = a;
     }
 
-    var inputElements = document.querySelectorAll('input[name="editpostinputValue"]');
+   /* var inputElements = document.querySelectorAll('input[name="editpostinputValue"]');*/
+
+    var inputElements = document.querySelectorAll('input[data-index="' + index + '"]');
 
     var editsum = 0;
 
