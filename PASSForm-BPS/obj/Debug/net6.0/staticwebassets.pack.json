@@ -361,6 +361,10 @@
       "PackagePath": "staticwebassets\\font-awesome-4.7.0\\font-awesome-4.7.0\\scss\\font-awesome.scss"
     },
     {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\js\\PAPScripts.js",
+      "PackagePath": "staticwebassets\\js\\PAPScripts.js"
+    },
+    {
       "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\js\\datatable_file.js",
       "PackagePath": "staticwebassets\\js\\datatable_file.js"
     },
