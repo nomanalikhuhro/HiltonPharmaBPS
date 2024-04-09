@@ -989,8 +989,8 @@ namespace PASSForm_BPS.Controllers
                             var diskrec = _passDbContext.DisterMappings.FromSqlRaw("call sp_GetDistributerDetails(@Tracking_ID)"
                                 , new MySqlParameter("@Tracking_ID", param1)).ToList();
 
-                            var macrobrickrec = _passDbContext.TerbrickMappings.FromSqlRaw("call sp_GetMacroBrickDetails(@Tracking_ID)"
-                  , new MySqlParameter("@Tracking_ID", param1)).ToList();
+                  //          var macrobrickrec = _passDbContext.TerbrickMappings.FromSqlRaw("call sp_GetMacroBrickDetails(@Tracking_ID)"
+                  //, new MySqlParameter("@Tracking_ID", param1)).ToList();
 
                             var teamname = _passDbContext.Hcprequests.FromSqlRaw("call sp_GetTemDetails(@Tracking_ID)"
             , new MySqlParameter("@Tracking_ID", param1)).ToList();
@@ -1004,7 +1004,7 @@ namespace PASSForm_BPS.Controllers
                             var combinedViewModel = new BPSRequestListViewModel
                             {
                                 requesthcp = bpsrecords,
-                                terbrickMappings = macrobrickrec,
+                                //terbrickMappings = macrobrickrec,
                                 disterMappings = diskrec,
                                 hspreqteams = teamname,
                                 users = tmquery,

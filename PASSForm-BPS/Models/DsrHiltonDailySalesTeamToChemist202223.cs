@@ -30,7 +30,7 @@ public partial class DsrHiltonDailySalesTeamToChemist202223
     //public string? AbbreviatedMonth { get; set; }
     public string? ProductName { get; set; }
 
-    public string? Description { get; set; }
+    //public string? Description { get; set; }
 
     //public string? DistributorCode { get; set; }
 
@@ -50,14 +50,14 @@ public partial class DsrHiltonDailySalesTeamToChemist202223
 
     // public DateTime? Date { get; set; }
 
-    //public decimal SalesUnits { get; set; }
+    public string? SalesUnits { get; set; }
 
 
     //public decimal? SalesValueTp { get; set; }
 
     //public decimal? SalesValueDp { get; set; }
 
-    //public decimal? SalesValueNp { get; set; }
+    public string? SalesValueNp { get; set; }
 
     //public DateTime? LastUpdateDate { get; set; }
 

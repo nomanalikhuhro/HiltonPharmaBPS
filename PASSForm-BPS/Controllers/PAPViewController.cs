@@ -1,9 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using MySql.Data.MySqlClient;
+using Org.BouncyCastle.Ocsp;
 using PASSForm_BPS.Models;
 using PASSForm_BPS.ViewModel;
+using System;
 using System.Data;
+using System.Dynamic;
+using System.Xml.Linq;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace PASSForm_BPS.Controllers
@@ -50,7 +55,7 @@ namespace PASSForm_BPS.Controllers
             {
                 var Empid_SessionValue = HttpContext.Session.GetString("EmpIdbps");
                 ViewBag.PapType = PAPType;
-                var param1 = "44-EQU-2024";
+                var param1 = "750-CME-2024";
 
                 var distributor = _passDbContext.DisterMappings.FromSqlRaw("call sp_GetDistributerDetails(@Tracking_ID)"
                                                 , new MySqlParameter("@Tracking_ID", param1)).ToList();
@@ -125,5 +130,77 @@ namespace PASSForm_BPS.Controllers
             }
 
         }
+
+        //[HttpPost]
+        //public IActionResult PartialAcc([FromBody] PartialAccRequest requestData)
+        //{
+        //    var teamName = requestData.TeamName;
+        //    var chemistCode = requestData.ChemistCode;
+        //    using (SqlConnection connection = new SqlConnection(_sqlconnection))
+        //    {
+        //        connection.Open();
+
+        //        using (SqlCommand command = new SqlCommand("GetSalesDataForLastYear", connection))
+        //        {
+        //            command.CommandType = CommandType.StoredProcedure;
+
+        //            command.Parameters.AddWithValue("@TeamName", teamName);
+        //            command.Parameters.AddWithValue("@ClientCode", chemistCode);
+
+        //            SqlDataAdapter sda = new SqlDataAdapter(command);
+        //            DataTable dt = new DataTable();
+        //            sda.Fill(dt);
+
+        //            var salesData = dt;
+        //            return PartialView("Accordion_PartialView", salesData);
+        //        }
+        //    }
+        //}
+
+        [HttpPost]
+        public IActionResult PartialAcc([FromBody] PartialAccRequest requestData)
+        {
+            var teamName = requestData.TeamName;
+            var chemistCode = requestData.ChemistCode;
+
+            List<DsrHiltonDailySalesTeamToChemist202223> salesData = new List<DsrHiltonDailySalesTeamToChemist202223>();
+
+            using (SqlConnection connection = new SqlConnection(_sqlconnection))
+            {
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand("GetSalesDataForLastYear", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@TeamName", teamName);
+                    command.Parameters.AddWithValue("@ClientCode", chemistCode);
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            DsrHiltonDailySalesTeamToChemist202223 model = new DsrHiltonDailySalesTeamToChemist202223();
+
+                            // Map data from SqlDataReader to model properties
+                            model.PackCode = reader["PackCode"].ToString();
+                            model.ProductName = reader["ProductName"].ToString();
+                            model.SalesUnits = reader["Sales_Units"].ToString();
+                            model.SalesValueNp = reader["Sales_ValueNP"].ToString();
+
+                  
+
+                            salesData.Add(model);
+                        }
+                    }
+                }
+            }
+            ViewBag.PAPProducts = _passDbContext.Tblproducts.FromSqlRaw("select * from tblproduct").ToList();
+
+
+            return PartialView("Accordion_PartialView", salesData);
+        }
+
+
+
     }
 }

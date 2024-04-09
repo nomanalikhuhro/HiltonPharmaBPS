@@ -35,7 +35,7 @@ public partial class TestSalesDbContext : DbContext
             //entity.Property(e => e.ClientCode).HasMaxLength(50);
             //entity.Property(e => e.ClientType).HasMaxLength(50);
             // entity.Property(e => e.Date).HasColumnType("smalldatetime");
-            entity.Property(e => e.Description).HasMaxLength(50);
+            //entity.Property(e => e.Description).HasMaxLength(50);
             //entity.Property(e => e.DistributorCode).HasMaxLength(50);
             //entity.Property(e => e.DistributorName).HasMaxLength(200);
             //entity.Property(e => e.LastUpdateDate)
@@ -47,15 +47,15 @@ public partial class TestSalesDbContext : DbContext
             entity.Property(e => e.ProductName).HasMaxLength(50);
             //entity.Property(e => e.RegionCode).HasMaxLength(50);
             //entity.Property(e => e.RegionName).HasMaxLength(50);
-            //entity.Property(e => e.SalesUnits)
-            //    .HasColumnType("numeric(18, 2)")
-            //    .HasColumnName("Sales-Units");
+            entity.Property(e => e.SalesUnits)
+                .HasColumnType("numeric(18, 2)")
+                .HasColumnName("Sales-Units");
             //entity.Property(e => e.SalesValueDp)
             //    .HasColumnType("numeric(18, 2)")
             //    .HasColumnName("Sales-ValueDP");
-            //entity.Property(e => e.SalesValueNp)
-            //    .HasColumnType("numeric(18, 2)")
-            //    .HasColumnName("Sales-ValueNP");
+            entity.Property(e => e.SalesValueNp)
+                .HasColumnType("numeric(18, 2)")
+                .HasColumnName("Sales-ValueNP");
             //entity.Property(e => e.SalesValueTp)
             //    .HasColumnType("numeric(18, 2)")
             //    .HasColumnName("Sales-ValueTP");

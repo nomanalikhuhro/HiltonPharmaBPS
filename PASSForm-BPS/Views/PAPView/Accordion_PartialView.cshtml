@@ -1,15 +1,68 @@
-﻿
+﻿@model List<DsrHiltonDailySalesTeamToChemist202223>
 <html>
 <head>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            border-style:solid;
+            
+        }
+        table, th{
+            padding:10px;
+        }
+
+    </style>
 </head>
 <body>
 
   
 
-    <button class="accordion">Section 3</button>
-    <div class="panel">
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-    </div>
+    <table>
+        <thead style="height:50px; background: #d71921; color: white;">
+            <tr style="font-size:12px;">
+                <th>Pack Code</th>
+                <th>Product Name</th>
+                <th>LastYear Sales(Units)</th>
+                <th>LastYear Sales(Values)</th>
+                <th>Unit Price</th>
+                <th>Expected Business(Units)</th>
+                <th>Expected Business(Values)</th>
+                <th>Discount % </th>
+ 
+            </tr>
+        </thead>
+        <tbody style="font-size:13px;">
+             @if (Model != null)
+             {
+                List<tblproduct> pr = new List<tblproduct>(ViewBag.PAPProducts);
+                double? unitprice = 0.0;
+                @foreach (var item in Model)
+                {
+                    unitprice = pr.Where(x => x.PackCode == item.PackCode).FirstOrDefault().UnitPrice;
+                    <tr>
+                        <td>@item.PackCode</td>
+                        <td>@item.ProductName</td>
+                        <td style="text-align:end;">@item.SalesUnits</td>
+                        <td style="text-align:end;">@item.SalesValueNp</td>
+                        <td style="text-align:end;">@unitprice</td>
+                        <td>
+                            <input type="text" style="text-align:end; width:40%;">
+                        </td>
+                        <td>
+                            <input disabled type="text" style="text-align:end; width:40%;">
+                        </td>
+                        <td>
+                            <input type="text" style="text-align:end; width:40%;">
+                        </td>
+                    </tr>
+                }
+            }
+
+
+        </tbody>
+    </table>
+
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
