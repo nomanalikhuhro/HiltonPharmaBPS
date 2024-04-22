@@ -1,5 +1,6 @@
 ﻿using PASSForm_BPS.Models;
 using System.ComponentModel.DataAnnotations;
+using System.Dynamic;
 
 namespace PASSForm_BPS.ViewModel
 {
@@ -7,7 +8,8 @@ namespace PASSForm_BPS.ViewModel
     {
 
         public string ChemistName { get; set; }
-   
+
+        public List<string> ChemistCodes { get; set; }
         public List<MacChemMapping> macChemMappings { get; set; }
         public List<Hcprequest>  requesthcp { get; set; }
 
@@ -20,7 +22,19 @@ namespace PASSForm_BPS.ViewModel
         public List<User> users { get; set; }
         public List<Team> teams { get; set; }
 
+        public List<tblproduct> tblproducts { get; set; }
 
+        public List<BPSrequestpap> BPSrequestpaps { get; set; }
+
+        public List<Bpssalesrecordpap> Bpssalesrecordpaps { get; set; }
+
+        public List<Distributer> Distributers { get; set; }
+
+        public List<Macrobrick> Macrobricks { get; set; }
+
+        public List<Chemist> chemists { get; set; }
+
+        public Dictionary<string, List<ExpandoObject>> SalesPAPDataPharmacies { get; set; }
 
 
 

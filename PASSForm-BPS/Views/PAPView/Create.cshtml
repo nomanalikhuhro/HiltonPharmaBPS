@@ -50,19 +50,20 @@
                             <div class="col-4">
                             <label class="label">For:</label>
                                 <div>
-                                <input disabled type="text" value="@ViewBag.PapType" />
+                                <input id="PAPType" disabled type="text" value="@ViewBag.PapType" />
                                 </div>
                             </div>
                             <div class="col-4">
                             <label class="label">Start Date:</label>
                                 <div>
-                                    <input  type="date" />
+                                    <input id="startdate" type="date" />
+                          
                                 </div>
                             </div>
                             <div class="col-4">
                             <label class="label">End Date:</label>
                                 <div>
-                                   <input type="date" />
+                                   <input id="enddate" type="date" />
                                 </div>
                             </div>
                         </div>
@@ -75,7 +76,10 @@
                             <div class="col-4">
                             <label class="label">Teams:</label>
                                 <div class="teamssubdiv">
-                                    <label id="TeamName">AGGRESSIVE</label>
+                                    @foreach (var team in Model.teams)
+                                    {
+                                    <label id="TeamName">@team.TeamName</label>
+                                    }
                                 </div>                           
                             </div>
                             <div class="col-4">
@@ -122,7 +126,7 @@
                             <div class="col-6">
                                 <label>Remarks:</label>
                                 <div>
-                                    <textarea></textarea>
+                                   <textarea id="createcomments"></textarea>
                                 </div>
                             </div>
                             <div class="col-6">
@@ -139,6 +143,9 @@
                     </div>
 
                 </div>
+                <div style="visibility:hidden">
+                <input style="visibility:hidden;" value="@ViewBag.Reqid " id="papareqid" />
+                </div>
             </div>
         </div>
 
@@ -146,12 +153,13 @@
         </div>
 
         <div>
-           <input type="button" value="Create" />
+           <input  type="button" value="Create" onclick="CreatePAPBPS()" />
         </div>
 
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="~/js/PAPScripts.js"></script>
+    <script src="~/js/Validation.js"></script>
         <script>
         $(document).ready(function () {
             $('#searchInput').on('input', function () {
@@ -169,6 +177,7 @@
         });
 
 
+       
 
  
         </script>

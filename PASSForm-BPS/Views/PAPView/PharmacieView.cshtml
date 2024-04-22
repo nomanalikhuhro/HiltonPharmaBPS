@@ -1,0 +1,278 @@
+﻿
+@{
+    ViewData["Title"] = "PharmacieView";
+    @model PASSForm_BPS.ViewModel.BPSRequestListViewModel;
+}
+
+<html>
+<head>
+    <style>
+        .maindiv {
+            height: auto;
+            border: 2px solid white;
+            width: 100%;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 10x 10px 10px 10px;
+            box-shadow: 0 0 0 0 px;
+            box-shadow: 1px 0px 9px 1px lightgray;
+        }
+
+        textarea {
+            width: 85%;
+            HEIGHT: 100px;
+        }
+
+        #selecteddis {
+            width: 30%;
+            height: 30px;
+        }
+
+        .label {
+            font-weight: bold;
+        }
+
+        .teamssubdiv {
+            width: 50%;
+            text-align: center;
+            border-radius: 25px;
+            color: #d71921;
+            border: 2px solid #d71921;
+        }
+
+  
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            border-style: solid;
+        }
+
+        table, th {
+            padding: 10px;
+        }
+
+        .numfield {
+            text-align: end;
+        }
+  
+    </style>
+</head>
+<body>
+    <div style="padding-top:1%;">
+        <div class="maindiv">
+            <div style="padding-top:1%;">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-4">
+                            <label class="label">For:</label>
+                            <div>
+                                <input id="PAPType" disabled type="text" value="@ViewBag.PapType" />
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <label class="label">Start Date:</label>
+                            <div>
+                             @foreach (var disstartdate in Model.BPSrequestpaps)
+                                    {
+                                <input disabled id="startdate" type="text"  value="@disstartdate.DiscountDateFrom"/>
+                                    }
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <label class="label">End Date:</label>
+                            <div>
+                             @foreach (var disenddate in Model.BPSrequestpaps)
+                                    {
+                                <input disabled id="enddate" type="text" value="@disenddate.DiscountDateTo" />
+                                    }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div style="padding-top:1%;">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-4">
+                            <label class="label">Teams:</label>
+                            <div class="teamssubdiv">
+                                @foreach (var team in Model.teams)
+                                {
+                                    <label id="TeamName">@team.TeamName</label>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <label class="label">Distributor:</label>
+                            <div>
+                                @foreach (var item1 in Model.Distributers)
+                                {
+                                    <input width="100" type="text" disabled value="@item1.DistributerCode - @item1.DistrubiterName" />
+                                }
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <label class="label">MacroBrick:</label>
+                            <div>
+                                @foreach (var mac in Model.Macrobricks)
+                                {
+                                    <input width="100" type="text" disabled id="macrobrickcode" value="@mac.MacroBrickCode - @mac.MacroBrickName" />
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div style="padding-top:1%;">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-6">
+                            <label class="label">Remarks:</label>
+                            <div>
+                                @foreach(var com in Model.BPSrequestpaps){
+                                <textarea id="createcomments">@com.Remarks</textarea>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <label class="label">Discount Type::</label>
+                            <div>
+                                @foreach (var dis in Model.BPSrequestpaps)
+                                {
+                                    <input type="text" disabled value="@dis.DiscountType"/>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div style="visibility:hidden">
+                <input style="visibility:hidden;" value="@ViewBag.Reqid " id="papareqid" />
+            </div>
+        </div>
+    </div>
+
+    <div id="tableAcc">
+         @foreach (var acc in Model.ChemistCodes)
+         {
+            @foreach(var bpschempappharmacies in Model.chemists)
+            {
+                if (bpschempappharmacies.ChemistCode == acc)
+                {
+                   <button class="accordion">@bpschempappharmacies.ChemistCode - @bpschempappharmacies.ChemistName</button>
+                }
+             }
+            <div class="panel">
+               @foreach (var salesphapap in Model.SalesPAPDataPharmacies)
+                {
+                    @if (salesphapap.Key == acc)
+                   {
+                        <div style="overflow:auto; padding-top: 5%; padding-bottom: 5%; padding-left: 3%;">
+                            <table>
+                                <thead style="height:50px; background: #d71921; color: white;">
+                                    <tr>
+                                        @foreach (var salesphapapcoloum in salesphapap.Value[0] as IDictionary<string, object>)
+                                        {
+                                            if (salesphapapcoloum.Key == "PackCode")
+                                            {
+                                                <td>Pack Code</td>
+                                            }
+                                            else if (salesphapapcoloum.Key == "ProductName")
+                                            {
+                                                <td>Product Name</td>
+                                            }
+                                            else if (salesphapapcoloum.Key == "LastYearSKU")
+                                            {
+                                                <td>LastYear Sales(Units)</td>
+                                            }
+                                            else if (salesphapapcoloum.Key == "LastYearValue")
+                                            {
+                                                <td>LastYear Sales(Values)</td>
+                                            }
+                                            else if (salesphapapcoloum.Key == "UnitPrice")
+                                            {
+                                                <td>Unit Price</td>
+                                            }
+                                            else if (salesphapapcoloum.Key == "ExpectedBusinessUnit")
+                                            {
+                                                <td>Expected Business(Units</td>
+                                            }
+                                            else if (salesphapapcoloum.Key == "ExpectedBusinessValue")
+                                            {
+                                                <td>Expected Business(Values)</td>
+                                            }
+                                            else if (salesphapapcoloum.Key == "Discount")
+                                            {
+                                                <td>Discount % </td>
+                                            }
+                                           
+                                        }
+                                    </tr>
+                                </thead>
+                                <tbody style="font-size:13px;">
+                                    
+                                    @foreach (var salesphapapdata in salesphapap.Value)
+                                    {
+                                        <tr>
+                                            @foreach (var Salesphapapdata in salesphapapdata)
+                                            {
+
+                                                if (Salesphapapdata.Key == "PackCode")
+                                                {
+                                                    <td>@Salesphapapdata.Value</td>
+                                                }
+                                                else if (Salesphapapdata.Key == "ProductName")
+                                                {
+                                                    <td>@Salesphapapdata.Value</td>
+                                                }
+                                                else if (Salesphapapdata.Key == "LastYearSKU")
+                                                {
+                                                    <td style="text-align:end;">@Salesphapapdata.Value</td>
+                                                }
+                                                else if (Salesphapapdata.Key == "LastYearValue")
+                                                {
+                                                    <td style="text-align:end;">@Salesphapapdata.Value</td>
+                                                }
+                                                else if (Salesphapapdata.Key == "UnitPrice")
+                                                {
+                                                    <td style="text-align:end;">@Salesphapapdata.Value</td>
+                                                }
+                                                else if (Salesphapapdata.Key == "ExpectedBusinessUnit")
+                                                {
+                                                    <td style="text-align:end;">@Salesphapapdata.Value</td>
+                                                }
+                                                else if (Salesphapapdata.Key == "ExpectedBusinessValue")
+                                                {
+                                                    <td style="text-align:end;">@Salesphapapdata.Value</td>
+                                                }
+                                                else if (Salesphapapdata.Key == "Discount")
+                                                {
+                                                    <td style="text-align:end;">@Salesphapapdata.Value</td>
+                                                }
+                                            }
+                                        </tr>
+
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+           
+                   }
+               }
+            </div>
+           }
+    </div>
+
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="~/js/PAPScripts.js"></script>
+    <script src="~/js/Validation.js"></script>
+
+</body>
+</html>
+
+

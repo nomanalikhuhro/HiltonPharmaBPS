@@ -2,12 +2,16 @@
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using MySql.Data.MySqlClient;
+
 using Org.BouncyCastle.Ocsp;
+using Org.BouncyCastle.Utilities.IO;
 using PASSForm_BPS.Models;
 using PASSForm_BPS.ViewModel;
 using System;
 using System.Data;
 using System.Dynamic;
+using System.Globalization;
+using System.Text.Json;
 using System.Xml.Linq;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
@@ -39,37 +43,106 @@ namespace PASSForm_BPS.Controllers
             return View();
         }
 
-        public ActionResult Submitted()
+        public ActionResult PharmaciesSubmitted()
         {
-            return View();
+            var Empid_SessionValue = HttpContext.Session.GetString("EmpIdbps");
+            var BPSlist = _passDbContext.BPSPAPPharmaciesListViewModels.FromSqlRaw("call sp_BPSPAPPharmaciesList(@Empid_SessionValue)"
+                                                    , new MySqlParameter("@Empid_SessionValue", Empid_SessionValue)).ToList();
+
+
+
+
+
+            return View(BPSlist);
+        }
+
+        public ActionResult IVInjectionSubmitted()
+        {
+            var Empid_SessionValue = HttpContext.Session.GetString("EmpIdbps");
+            var BPSlist = _passDbContext.BPSPAPPharmaciesListViewModels.FromSqlRaw("call sp_BPSPAPPharmaciesList(@Empid_SessionValue)"
+                                                    , new MySqlParameter("@Empid_SessionValue", Empid_SessionValue)).ToList();
+
+
+
+
+
+            return View(BPSlist);
         }
 
         [HttpGet]
         public IActionResult Create(string RequestId, string PAPType)
         {
-            if (RequestId == null)
+            if (PAPType == "Hospital Pharmacies")
             {
-                return PartialView("Create_PartialView");
+                if (RequestId == null)
+                {
+                    return PartialView("Create_PartialView");
+                }
+                else
+                {
+                    var Empid_SessionValue = HttpContext.Session.GetString("EmpIdbps");
+                    ViewBag.PapType = PAPType;
+
+                    ViewBag.Reqid = RequestId;
+
+
+
+                    Hcprequest_pap hcprequest = _passDbContext.HcprequestPAPs.FirstOrDefault(h => h.TrackingID == RequestId.Trim());
+
+                    List<Team> teams = _passDbContext.Teams
+    .Where(h => h.TeamCode == hcprequest.TeamId.Trim())
+    .ToList();
+
+
+
+                    var distributor = _passDbContext.DisterMappings.FromSqlRaw("call sp_GetDistributerDetailsPAP(@Tracking_ID)"
+                                                    , new MySqlParameter("@Tracking_ID", RequestId)).ToList();
+
+                    var combinedViewModel = new BPSRequestListViewModel
+                    {
+
+                        disterMappings = distributor,
+                        teams = teams,
+
+                    };
+                    return View(combinedViewModel);
+                }
             }
             else
             {
-                var Empid_SessionValue = HttpContext.Session.GetString("EmpIdbps");
-                ViewBag.PapType = PAPType;
-                var param1 = "750-CME-2024";
-
-                var distributor = _passDbContext.DisterMappings.FromSqlRaw("call sp_GetDistributerDetails(@Tracking_ID)"
-                                                , new MySqlParameter("@Tracking_ID", param1)).ToList();
-
-                var combinedViewModel = new BPSRequestListViewModel
+                if (RequestId == null)
                 {
+                    return PartialView("Create_PartialView");
+                }
+                else
+                {
+                    var Empid_SessionValue = HttpContext.Session.GetString("EmpIdbps");
 
-                    disterMappings = distributor,
+                    ViewBag.ivreqid = RequestId;
 
-                };
-                return View(combinedViewModel);
-             }
+                    Hcprequest_pap hcprequest = _passDbContext.HcprequestPAPs.FirstOrDefault(h => h.TrackingID == RequestId.Trim());
+                    Team team = _passDbContext.Teams.FirstOrDefault(h => h.TeamCode == hcprequest.TeamId);
 
-    }
+                    List<Team> teams = _passDbContext.Teams
+.Where(h => h.TeamCode == hcprequest.TeamId.Trim())
+.ToList();
+
+                    var products = _passDbContext.Tblproducts.FromSqlRaw("call sp_GetTeamProducts(@p_TeamName)"
+                                                    , new MySqlParameter("@p_TeamName", team.TeamName)).ToList();
+
+                    var combinedIvnjectionViewModel = new BPSRequestListViewModel
+                    {
+
+                        tblproducts = products,
+                        teams = teams,
+
+                    };
+
+                    return PartialView("IVINJECTION_CreateView", combinedIvnjectionViewModel);
+                }
+            }
+            return View();
+        }
 
         [HttpGet]
         public object GetMacrobrick(string disValue)
@@ -131,37 +204,12 @@ namespace PASSForm_BPS.Controllers
 
         }
 
-        //[HttpPost]
-        //public IActionResult PartialAcc([FromBody] PartialAccRequest requestData)
-        //{
-        //    var teamName = requestData.TeamName;
-        //    var chemistCode = requestData.ChemistCode;
-        //    using (SqlConnection connection = new SqlConnection(_sqlconnection))
-        //    {
-        //        connection.Open();
-
-        //        using (SqlCommand command = new SqlCommand("GetSalesDataForLastYear", connection))
-        //        {
-        //            command.CommandType = CommandType.StoredProcedure;
-
-        //            command.Parameters.AddWithValue("@TeamName", teamName);
-        //            command.Parameters.AddWithValue("@ClientCode", chemistCode);
-
-        //            SqlDataAdapter sda = new SqlDataAdapter(command);
-        //            DataTable dt = new DataTable();
-        //            sda.Fill(dt);
-
-        //            var salesData = dt;
-        //            return PartialView("Accordion_PartialView", salesData);
-        //        }
-        //    }
-        //}
-
         [HttpPost]
         public IActionResult PartialAcc([FromBody] PartialAccRequest requestData)
         {
             var teamName = requestData.TeamName;
             var chemistCode = requestData.ChemistCode;
+            ViewBag.ChemCode = requestData.ChemistCode;
 
             List<DsrHiltonDailySalesTeamToChemist202223> salesData = new List<DsrHiltonDailySalesTeamToChemist202223>();
 
@@ -180,14 +228,12 @@ namespace PASSForm_BPS.Controllers
                         while (reader.Read())
                         {
                             DsrHiltonDailySalesTeamToChemist202223 model = new DsrHiltonDailySalesTeamToChemist202223();
-
-                            // Map data from SqlDataReader to model properties
                             model.PackCode = reader["PackCode"].ToString();
                             model.ProductName = reader["ProductName"].ToString();
                             model.SalesUnits = reader["Sales_Units"].ToString();
                             model.SalesValueNp = reader["Sales_ValueNP"].ToString();
 
-                  
+
 
                             salesData.Add(model);
                         }
@@ -200,7 +246,301 @@ namespace PASSForm_BPS.Controllers
             return PartialView("Accordion_PartialView", salesData);
         }
 
+        [HttpPost]
+        public object CreatePAPBpsRecord( string PAPSalesarr, BPSrequestpap PAPHeaderData)
+        {
+
+            List<PAPCustomModel_Chemist> model = JsonSerializer.Deserialize<List<PAPCustomModel_Chemist>>(PAPSalesarr);
 
 
+
+            bool isSuccess = false;
+            var EmpidSessionValue = HttpContext.Session.GetString("EmpIdbps");
+            try
+            {
+                var outputParameter = new MySqlParameter
+                {
+                    ParameterName = "p_BPS_Record_ID",
+                    MySqlDbType = MySqlDbType.Int32,
+                    Direction = ParameterDirection.Output
+                };
+
+
+
+                Hcprequest_pap hcprequest = _passDbContext.HcprequestPAPs.FirstOrDefault(h => h.TrackingID == PAPHeaderData.TrackingID.Trim());
+                var result = _passDbContext.OutPutParameters
+                    .FromSqlRaw("CALL sp_InsertPAPBpsHeaderData(" + hcprequest.HCPREQID + ", '" + PAPHeaderData.TrackingID + "', '" + Convert.ToDateTime(PAPHeaderData).ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) + "', '" + Convert.ToDateTime(PAPHeaderData.DiscountDateTo).ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) + "', '" + PAPHeaderData.BrickCode + "', '" + PAPHeaderData.DistributerCode + "', '" + PAPHeaderData.Remarks + "', '" + PAPHeaderData.DiscountType + "', '" + 1 + "','" + EmpidSessionValue + "', p_BPS_Record_ID)", outputParameter)
+                    .ToList();
+
+                var bpsrecordid = outputParameter.Value;
+
+                foreach (var item in model)
+                {
+                    string chmeistcode = item.ChemistCode;
+
+                    foreach (var p in item.ProductArr)
+                    {
+                        string PackCode = p.PackCode;
+                        string Discount = p.Discount;
+                        string LastYearSKU = p.LastYearSKU;
+                        string LastYearValue = p.LastYearValue;
+                        string ExpectedBusinessUnit = p.ExpectedBusinessUnit;
+
+                        string ExpectedBusinessValue = p.ExpectedBusinessValue;
+                        string UnitPrice = p.UnitPrice;
+
+
+                        var outputParameter1 = new MySqlParameter
+                        {
+                            ParameterName = "p_Record_ID",
+                            MySqlDbType = MySqlDbType.Int32,
+                            Direction = ParameterDirection.Output
+                        };
+
+                        var resultsales = _passDbContext.OutputParaMetersSales
+                            .FromSqlRaw("CALL sp_InsertPAPBpsSalesData(@p_BPS_Record_ID," +
+                            "@p_Chemist_Code, " +
+                            "@p_PackCode," +
+                            " @p_LastYearSKU," +
+                            " @p_LastYearValue," +
+                            " @p_Year," +
+                            " @p_Discount," +
+                            "@p_ExpectedBusinessUnit," +
+                            "@p_ExpectedBusinessValue," +
+                            "@p_UnitPrice," +
+                            "@p_CreatedBy," +
+                            " p_Record_ID)",
+                            new MySqlParameter("@p_BPS_Record_ID", bpsrecordid),
+                            new MySqlParameter("@p_Chemist_Code", chmeistcode),
+                            new MySqlParameter("@p_PackCode", PackCode),
+                            new MySqlParameter("@p_LastYearSKU", LastYearSKU),
+                            new MySqlParameter("@p_LastYearValue", LastYearValue),
+                            new MySqlParameter("@p_Year", null),
+                            new MySqlParameter("@p_Discount", Discount),
+                            new MySqlParameter("@p_ExpectedBusinessUnit", ExpectedBusinessUnit),
+                            new MySqlParameter("@p_ExpectedBusinessValue", ExpectedBusinessValue),
+                            new MySqlParameter("@p_UnitPrice", UnitPrice),
+                            new MySqlParameter("@p_CreatedBy", EmpidSessionValue),
+                            outputParameter1)
+                            .ToList();
+
+                        int recordId = (int)outputParameter1.Value;
+                    }
+
+
+                }
+            }
+            catch (Exception ex)
+            {
+                isSuccess = true;
+                return null;
+            }
+
+            isSuccess = true;
+
+            return null;
+
+
+        }
+
+
+        [HttpPost]
+        public object CreatePAPIvInjectionBpsRecord(string PAPIvInjectionSalesarr, BPSrequestpapIvInjection PAPIvInjectionHeaderData)
+        {
+            if (ModelState.IsValid)
+            {
+
+
+                List<PAPIvInjectionCustomModel_Team> model = JsonSerializer.Deserialize<List<PAPIvInjectionCustomModel_Team>>(PAPIvInjectionSalesarr);
+
+
+
+                bool isSuccess = false;
+                var EmpidSessionValue = HttpContext.Session.GetString("EmpIdbps");
+                try
+                {
+                    var outputParameter = new MySqlParameter
+                    {
+                        ParameterName = "p_BPS_Record_ID",
+                        MySqlDbType = MySqlDbType.Int32,
+                        Direction = ParameterDirection.Output
+                    };
+
+                    //var hcpreqid = _passDbContext.Hcprequests.FromSqlRaw("select * from hcprequest where trackingid = '" + PAPIvInjectionHeaderData.TrackingId + "'").FirstOrDefault().Hcpreqid;
+
+                    Hcprequest_pap hcprequest = _passDbContext.HcprequestPAPs.FirstOrDefault(h => h.TrackingID == PAPIvInjectionHeaderData.TrackingId.Trim());
+                    var result = _passDbContext.OutPutParameters
+                        .FromSqlRaw("CALL sp_InsertPAPIvInjectionBPSHeaderData(" + hcprequest.HCPREQID + ", '" + PAPIvInjectionHeaderData.TrackingId + "', '" + Convert.ToDateTime(PAPIvInjectionHeaderData.DiscountFromDate).ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) + "', '" + Convert.ToDateTime(PAPIvInjectionHeaderData.DiscountToDate).ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) + "','" + EmpidSessionValue + "', p_BPS_Record_ID)", outputParameter)
+                        .ToList();
+
+                    var bpsrecordid = outputParameter.Value;
+
+                    foreach (var item in model)
+                    {
+                        string Team = item.Team;
+
+                        foreach (var p in item.ProductArr)
+                        {
+                            string PackCode = p.PackCode;
+                            string Discount = p.Discount;
+
+
+                            var outputParameter1 = new MySqlParameter
+                            {
+                                ParameterName = "p_Record_ID",
+                                MySqlDbType = MySqlDbType.Int32,
+                                Direction = ParameterDirection.Output
+                            };
+
+                            var resultsales = _passDbContext.OutputParaMetersSales
+                                .FromSqlRaw("CALL sp_InsertPAPIvInjectionBPSSalesData(@p_BPS_Record_ID," +
+                                "@p_Team, " +
+                                "@p_PackCode," +
+                                " @p_Discount," +
+                                "@p_CreatedBy," +
+                                " p_Record_ID)",
+                                new MySqlParameter("@p_BPS_Record_ID", bpsrecordid),
+                                new MySqlParameter("@p_Team", Team),
+                                new MySqlParameter("@p_PackCode", PackCode),
+                                new MySqlParameter("@p_Discount", Discount),
+                                new MySqlParameter("@p_CreatedBy", EmpidSessionValue),
+                                outputParameter1)
+                                .ToList();
+
+                            int recordId = (int)outputParameter1.Value;
+                        }
+
+
+                    }
+                }
+                catch (Exception ex)
+                {
+                    isSuccess = true;
+                    return null;
+                }
+
+                isSuccess = true;
+            }
+
+            return null;
+
+
+        }
+
+
+        public ActionResult PharmacieView(int id)
+        {
+            BPSrequestpap bpspaprephar = _passDbContext.BPSrequestpaps.FirstOrDefault(h => h.BPS_Record_Id == id);
+            var bpsreqpappharmacies = _passDbContext.BPSrequestpaps
+ .Where(h => h.BPS_Record_Id == id)
+ .ToList();
+
+            var bpsreqpappharmaciesdis = _passDbContext.Distributers
+.Where(h => h.DistributerCode == bpspaprephar.DistributerCode)
+.ToList();
+            var bpsreqpappharmaciesmac = _passDbContext.Macrobricks
+.Where(h => h.MacroBrickCode == bpspaprephar.BrickCode)
+.ToList();
+
+
+            var bpssalespappharmacies = _passDbContext.Bpssalesrecordpaps
+.Where(h => h.Bps_RecordID == id)
+.ToList();
+
+            Hcprequest_pap hcppharmaciespap = _passDbContext.HcprequestPAPs.FirstOrDefault(h => h.HCPREQID == bpspaprephar.HCPREQID);
+            var Teampharmaciespap = _passDbContext.Teams
+.Where(h => h.TeamCode == hcppharmaciespap.TeamId)
+.ToList();
+
+
+            //headerdatpostDatesaends
+            var chemistname = new List<Chemist>();
+            var resultsByChemistPaPPharmacies = new Dictionary<string, List<ExpandoObject>>();
+
+
+            var chemistCodes = _passDbContext.Bpssalesrecordpaps
+                .Where(record => record.Bps_RecordID == id)
+                .Select(record => record.ChemistCode.ToString()) // Convert int? to string
+                .Distinct()
+                .ToList();
+
+
+
+            foreach (var c in chemistCodes)
+            {
+                var chemistName = _passDbContext.Chemists
+                    .Where(record => record.ChemistCode == c.ToString())
+                  .Select(record => new Chemist
+                  {
+                      ChemistCode = record.ChemistCode,
+                      ChemistName = record.ChemistName
+
+                  })
+                    .Distinct()
+                    .ToList();
+
+                chemistname.AddRange(chemistName);
+
+
+
+
+
+
+
+                var p_BPS_Record_ID_PaPPharmacies = new MySqlParameter("@p_BPS_Record_ID", id);
+                var p_Chemist_Code_PaPPharmacies = new MySqlParameter("@p_ChemistCode", c);
+                var preresults = new List<ExpandoObject>();
+
+                using (var command = _passDbContext.Database.GetDbConnection().CreateCommand())
+                {
+                    command.CommandText = "CALL sp_GenerateTablePharmaciesPAP(@p_Bps_Record_ID,@p_ChemistCode)";
+                    command.Parameters.Add(p_BPS_Record_ID_PaPPharmacies);
+                    command.Parameters.Add(p_Chemist_Code_PaPPharmacies);
+
+                    _passDbContext.Database.OpenConnection();
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            dynamic result = new ExpandoObject();
+                            var expandoDict = result as IDictionary<string, object>;
+
+                            for (int i = 0; i < reader.FieldCount; i++)
+                            {
+                                string columnName = reader.GetName(i);
+                                object columnValue = reader[i];
+
+                                expandoDict.Add(columnName, columnValue);
+                            }
+
+
+                            preresults.Add(result);
+                        }
+                    }
+                }
+
+                resultsByChemistPaPPharmacies[c.ToString()] = preresults;
+            }
+
+
+
+
+            var ViewModelPharmaciesView = new BPSRequestListViewModel
+            {
+                BPSrequestpaps = bpsreqpappharmacies,
+                Bpssalesrecordpaps = bpssalespappharmacies,
+                Distributers = bpsreqpappharmaciesdis,
+                Macrobricks = bpsreqpappharmaciesmac,
+                teams = Teampharmaciespap,
+                chemists = chemistname,
+                SalesPAPDataPharmacies = resultsByChemistPaPPharmacies,
+                ChemistCodes = chemistCodes
+
+                };
+                return View(ViewModelPharmaciesView);
+
+            }
+        
     }
 }

@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "AqYexejseVnxwRROSc4Ug3EiXaGfs3xCQV8qR/0Ta+Q=",
+  "Hash": "++5ap2coZ/oGEl20n+nMVpu6Kc56v/9nQIAdVulh3Zs=",
   "Source": "PASSForm-BPS",
   "BasePath": "_content/PASSForm-BPS",
   "Mode": "Default",
@@ -1630,6 +1630,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\js\\site.js"
+    },
+    {
+      "Identity": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\js\\Validation.js",
+      "SourceId": "PASSForm-BPS",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\",
+      "BasePath": "_content/PASSForm-BPS",
+      "RelativePath": "js/Validation.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\Validation.js"
     },
     {
       "Identity": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css",

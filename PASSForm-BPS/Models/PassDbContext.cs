@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using PASSForm_BPS.ViewModel;
 
 namespace PASSForm_BPS.Models;
 
@@ -19,7 +20,13 @@ public partial class PassDbContext : DbContext
 
     public virtual DbSet<BpsRequest> BpsRequests { get; set; }
 
+    public virtual DbSet<BPSrequestpap> BPSrequestpaps { get; set; }
     public virtual DbSet<BpsSalesrecord> BpsSalesrecords { get; set; }
+
+    public virtual DbSet<BPSrequestpapIvInjection> BPSrequestpapIvInjections { get; set; }
+    public virtual DbSet<Bpssalesrecordpap> Bpssalesrecordpaps { get; set; }
+
+    public virtual DbSet<BpssalesrecordpapIvInjection> BpssalesrecordpapIvInjections { get; set; }
 
     public virtual DbSet<Chemist> Chemists { get; set; }
 
@@ -93,8 +100,11 @@ public partial class PassDbContext : DbContext
     public virtual DbSet<wf_comments> Wf_Comments { get; set; }
     public virtual DbSet<wf_uploadfilespath> Wf_Uploadfilespaths { get; set; }
 
+    public virtual DbSet<Hcprequest_pap> HcprequestPAPs { get; set; }
 
 
+    public DbSet<BPSPAPPharmaciesListViewModel> BPSPAPPharmaciesListViewModels { get; set; }
+    public DbSet<BPSPharmaciesPAPSalesViewModel> BPSPharmaciesPAPSalesViewModels { get; set; }
     //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 
     //    => optionsBuilder.UseMySQL("Server=localhost;port=3307;user=root;Database=pass_db;convert zero datetime=true;");
@@ -220,6 +230,54 @@ public partial class PassDbContext : DbContext
  .HasDefaultValueSql("'NULL'")
     .HasColumnType("LONGTEXT");
 
+        });
+
+        modelBuilder.Entity<BPSrequestpap>(entity =>
+{
+    entity.HasKey(e => e.BPS_Record_Id).HasName("PRIMARY");
+
+    entity.ToTable("bps_request_pap");
+
+    // Configure DateOnly properties
+    entity.Property(e => e.DiscountDateFrom).HasColumnType("datetime");
+    entity.Property(e => e.DiscountDateTo).HasColumnType("datetime");
+    entity.Property(e => e.CreatedOn).HasColumnType("date");
+    entity.Property(e => e.UpdateOn).HasColumnType("date");
+
+    // Configure other properties with their data types and optionality
+    entity.Property(e => e.HCPREQID).IsRequired(false);
+    entity.Property(e => e.TrackingID).HasMaxLength(50);
+    entity.Property(e => e.DistributerCode).HasMaxLength(50);
+    entity.Property(e => e.BrickCode).HasMaxLength(50);
+    entity.Property(e => e.Remarks).HasMaxLength(500);
+    entity.Property(e => e.DiscountType).HasMaxLength(50);
+    entity.Property(e => e.TypeId).IsRequired(false);
+    entity.Property(e => e.CreatedBy).HasMaxLength(50);
+    entity.Property(e => e.UpdatedBy).HasMaxLength(50);
+    entity.Property(e => e.StatusID).IsRequired(false);
+    // Additional configuration can go here, such as relationships and constraints
+});
+        modelBuilder.Entity<BPSrequestpapIvInjection>(entity =>
+        {
+            // Specify the table name if different from the class name
+            entity.ToTable("bps_request_papivinjection");
+
+            // Specify the primary key
+            entity.HasKey(e => e.BpsRecordId);
+
+            // Configure other properties as needed
+            entity.Property(e => e.Hcpreqid).IsRequired(false);
+            entity.Property(e => e.TrackingId).HasMaxLength(50);
+
+            // Configure date and time properties
+            entity.Property(e => e.DiscountFromDate).HasColumnType("datetime");
+            entity.Property(e => e.DiscountToDate).HasColumnType("datetime");
+            entity.Property(e => e.CreatedOn).HasColumnType("date");
+            entity.Property(e => e.UpdatedOn).HasColumnType("date");
+
+            // Configure string properties
+            entity.Property(e => e.CreatedBy).HasMaxLength(50);
+            entity.Property(e => e.UpdatedBy).HasMaxLength(50);
         });
 
         modelBuilder.Entity<BpsSalesrecord>(entity =>
@@ -349,6 +407,58 @@ public partial class PassDbContext : DbContext
 .HasMaxLength(200)
 .HasDefaultValueSql("'NULL'")
 .HasColumnName("BPSPercentage");
+        });
+
+        modelBuilder.Entity<Bpssalesrecordpap>(entity =>
+        {
+            // Specify the table name if different from the class name
+            entity.ToTable("bps_requestsalesrecord_pap");
+
+            // Specify the primary key
+            entity.HasKey(e => e.Record_ID);
+
+            // Configure relationships
+            // Add any relationship configurations here, such as foreign key relationships
+
+            // Configure other properties as needed
+            entity.Property(e => e.Bps_RecordID).IsRequired(false);
+            entity.Property(e => e.ChemistCode).IsRequired(false);
+            entity.Property(e => e.PackCode).IsRequired(false);
+            entity.Property(e => e.LastYearSKU).HasColumnType("decimal(18,2)");
+            entity.Property(e => e.LastYearValue).HasColumnType("decimal(18,2)");
+            entity.Property(e => e.Year).IsRequired(false);
+            entity.Property(e => e.Discount).HasColumnType("decimal(18,2)");
+            entity.Property(e => e.ExpectedBusinessUnit).HasColumnType("decimal(18,2)");
+            entity.Property(e => e.ExpectedBusinessValue).HasColumnType("decimal(18,2)");
+            entity.Property(e => e.UnitPrice).HasColumnType("decimal(18,2)");
+            entity.Property(e => e.CreatedBy).HasMaxLength(50);
+            entity.Property(e => e.UpdatedBy).HasMaxLength(50);
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.UpdateOn).HasColumnType("datetime");
+        });
+        modelBuilder.Entity<BpssalesrecordpapIvInjection>(entity =>
+        {
+            // Specify the table name if different from the class name
+            entity.ToTable("bps_salesrecord_papivinjection");
+
+            // Specify the primary key
+            entity.HasKey(e => e.RecordId);
+
+            // Configure the BPS_Record_ID as a foreign key if necessary
+            // Assuming there is a BpsRequest entity with BPS_Record_ID as its primary key
+            entity.HasOne<BpsRequest>()
+                .WithMany() // Use appropriate relationship method (e.g., WithMany, WithOne)
+                .HasForeignKey(e => e.BPS_Record_ID)
+                .HasConstraintName("FK_BpsSalesRecordPapIvInjection_BpsRequest");
+
+            // Configure other properties as needed
+            entity.Property(e => e.Team).HasMaxLength(50);
+            entity.Property(e => e.PackCode).IsRequired(false);
+            entity.Property(e => e.Discount).HasColumnType("decimal(18,2)");
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.CreatedBy).HasMaxLength(50);
+            entity.Property(e => e.UpdatedBy).HasMaxLength(50);
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
 
         modelBuilder.Entity<Chemist>(entity =>
@@ -630,6 +740,40 @@ public partial class PassDbContext : DbContext
                 .HasMaxLength(200)
                 .HasDefaultValueSql("'NULL'");
         });
+
+        modelBuilder.Entity<Hcprequest_pap>().HasNoKey();
+
+        modelBuilder.Entity<BPSPAPPharmaciesListViewModel>().HasNoKey();
+        modelBuilder.Entity<BPSPharmaciesPAPSalesViewModel>().HasNoKey();
+        //modelBuilder.Entity<Hcprequest_pap>(entity =>
+        //{
+        //    // Specify the table name if different from the class name
+        //    entity.ToTable("hcprequestpaps");
+
+        //    // Specify the primary key
+        //    entity.HasKey(e => e.HCPREQID);
+
+        //    // Configure relationships as needed
+        //    // Add configurations for any relationships that `Hcprequest_pap` may have with other entities.
+
+        //    // Configure other properties as needed
+        //    entity.Property(e => e.TrackingID).HasMaxLength(50);
+        //    entity.Property(e => e.ASMCode).HasMaxLength(50);
+        //    entity.Property(e => e.TMCode).HasMaxLength(50);
+        //    entity.Property(e => e.TMEmpNo).HasMaxLength(50);
+        //    entity.Property(e => e.DescriptionOfPlan).HasMaxLength(500);
+        //    entity.Property(e => e.PendingTo).HasMaxLength(50);
+        //    entity.Property(e => e.Comments).HasMaxLength(500);
+        //    entity.Property(e => e.CreatedBy).HasMaxLength(50);
+        //    entity.Property(e => e.UpdatedBy).HasMaxLength(50);
+        //    entity.Property(e => e.TeamId).HasMaxLength(50);
+        //    entity.Property(e => e.Basearea).HasMaxLength(50);
+
+        //    // Configure DateTime properties
+        //    entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+        //    entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+        //});
+
 
         modelBuilder.Entity<Hospitaldetail>(entity =>
         {
