@@ -23,10 +23,10 @@ public partial class PassDbContext : DbContext
     public virtual DbSet<BPSrequestpap> BPSrequestpaps { get; set; }
     public virtual DbSet<BpsSalesrecord> BpsSalesrecords { get; set; }
 
-    public virtual DbSet<BPSrequestpapIvInjection> BPSrequestpapIvInjections { get; set; }
+    public virtual DbSet<BPSrequestpapIvInjection> bps_request_papivinjection { get; set; }
     public virtual DbSet<Bpssalesrecordpap> Bpssalesrecordpaps { get; set; }
 
-    public virtual DbSet<BpssalesrecordpapIvInjection> BpssalesrecordpapIvInjections { get; set; }
+    public virtual DbSet<BpssalesrecordpapIvInjection> bps_salesrecord_papivinjection { get; set; }
 
     public virtual DbSet<Chemist> Chemists { get; set; }
 
@@ -105,6 +105,7 @@ public partial class PassDbContext : DbContext
 
     public DbSet<BPSPAPPharmaciesListViewModel> BPSPAPPharmaciesListViewModels { get; set; }
     public DbSet<BPSPharmaciesPAPSalesViewModel> BPSPharmaciesPAPSalesViewModels { get; set; }
+    public DbSet<BPSIvInjectionViewViewModel> BPSIvInjectionViewViewModels { get; set; }
     //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 
     //    => optionsBuilder.UseMySQL("Server=localhost;port=3307;user=root;Database=pass_db;convert zero datetime=true;");
@@ -257,28 +258,7 @@ public partial class PassDbContext : DbContext
     entity.Property(e => e.StatusID).IsRequired(false);
     // Additional configuration can go here, such as relationships and constraints
 });
-        modelBuilder.Entity<BPSrequestpapIvInjection>(entity =>
-        {
-            // Specify the table name if different from the class name
-            entity.ToTable("bps_request_papivinjection");
-
-            // Specify the primary key
-            entity.HasKey(e => e.BpsRecordId);
-
-            // Configure other properties as needed
-            entity.Property(e => e.Hcpreqid).IsRequired(false);
-            entity.Property(e => e.TrackingId).HasMaxLength(50);
-
-            // Configure date and time properties
-            entity.Property(e => e.DiscountFromDate).HasColumnType("datetime");
-            entity.Property(e => e.DiscountToDate).HasColumnType("datetime");
-            entity.Property(e => e.CreatedOn).HasColumnType("date");
-            entity.Property(e => e.UpdatedOn).HasColumnType("date");
-
-            // Configure string properties
-            entity.Property(e => e.CreatedBy).HasMaxLength(50);
-            entity.Property(e => e.UpdatedBy).HasMaxLength(50);
-        });
+        modelBuilder.Entity<BPSrequestpapIvInjection>().HasNoKey();
 
         modelBuilder.Entity<BpsSalesrecord>(entity =>
         {
@@ -436,30 +416,7 @@ public partial class PassDbContext : DbContext
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.UpdateOn).HasColumnType("datetime");
         });
-        modelBuilder.Entity<BpssalesrecordpapIvInjection>(entity =>
-        {
-            // Specify the table name if different from the class name
-            entity.ToTable("bps_salesrecord_papivinjection");
-
-            // Specify the primary key
-            entity.HasKey(e => e.RecordId);
-
-            // Configure the BPS_Record_ID as a foreign key if necessary
-            // Assuming there is a BpsRequest entity with BPS_Record_ID as its primary key
-            entity.HasOne<BpsRequest>()
-                .WithMany() // Use appropriate relationship method (e.g., WithMany, WithOne)
-                .HasForeignKey(e => e.BPS_Record_ID)
-                .HasConstraintName("FK_BpsSalesRecordPapIvInjection_BpsRequest");
-
-            // Configure other properties as needed
-            entity.Property(e => e.Team).HasMaxLength(50);
-            entity.Property(e => e.PackCode).IsRequired(false);
-            entity.Property(e => e.Discount).HasColumnType("decimal(18,2)");
-            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
-            entity.Property(e => e.CreatedBy).HasMaxLength(50);
-            entity.Property(e => e.UpdatedBy).HasMaxLength(50);
-            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
-        });
+        modelBuilder.Entity<BpssalesrecordpapIvInjection>().HasNoKey();
 
         modelBuilder.Entity<Chemist>(entity =>
         {
@@ -745,6 +702,7 @@ public partial class PassDbContext : DbContext
 
         modelBuilder.Entity<BPSPAPPharmaciesListViewModel>().HasNoKey();
         modelBuilder.Entity<BPSPharmaciesPAPSalesViewModel>().HasNoKey();
+        modelBuilder.Entity<BPSIvInjectionViewViewModel>().HasNoKey();
         //modelBuilder.Entity<Hcprequest_pap>(entity =>
         //{
         //    // Specify the table name if different from the class name

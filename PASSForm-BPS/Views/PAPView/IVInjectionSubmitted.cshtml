@@ -38,7 +38,7 @@
                             <td>@bpslist.EMP_ID-@bpslist.User_Name</td>
                             <td>@bpslist.CreatedOn.Value.ToString("dd-MMM-yyyy")</td>
                             <td>
-                                <form asp-action="PharmacieView" asp-controller="PAPView">
+                                <form asp-action="IVInjectionView" asp-controller="PAPView">
                                     <input type="hidden" name="Id" value="@bpslist.BPS_Record_Id">
                                     <button type="submit" class="icon-navigation" data-toggle="tooltip" data-placement="top" title="View"><i class="fa fa-eye"></i></button>
                                 </form>

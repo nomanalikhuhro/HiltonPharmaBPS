@@ -59,7 +59,7 @@ namespace PASSForm_BPS.Controllers
         public ActionResult IVInjectionSubmitted()
         {
             var Empid_SessionValue = HttpContext.Session.GetString("EmpIdbps");
-            var BPSlist = _passDbContext.BPSPAPPharmaciesListViewModels.FromSqlRaw("call sp_BPSPAPPharmaciesList(@Empid_SessionValue)"
+            var BPSlist = _passDbContext.BPSPAPPharmaciesListViewModels.FromSqlRaw("call sp_BPSPAPIVInjectionList(@Empid_SessionValue)"
                                                     , new MySqlParameter("@Empid_SessionValue", Empid_SessionValue)).ToList();
 
 
@@ -246,8 +246,51 @@ namespace PASSForm_BPS.Controllers
             return PartialView("Accordion_PartialView", salesData);
         }
 
+
         [HttpPost]
-        public object CreatePAPBpsRecord( string PAPSalesarr, BPSrequestpap PAPHeaderData)
+        public IActionResult EditPartialAcc([FromBody] PartialAccRequest requestData)
+        {
+            var teamName = requestData.TeamName;
+            var chemistCode = requestData.ChemistCode;
+            ViewBag.ChemCode = requestData.ChemistCode;
+
+            List<DsrHiltonDailySalesTeamToChemist202223> salesData = new List<DsrHiltonDailySalesTeamToChemist202223>();
+
+            using (SqlConnection connection = new SqlConnection(_sqlconnection))
+            {
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand("GetSalesDataForLastYear", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@TeamName", teamName);
+                    command.Parameters.AddWithValue("@ClientCode", chemistCode);
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            DsrHiltonDailySalesTeamToChemist202223 model = new DsrHiltonDailySalesTeamToChemist202223();
+                            model.PackCode = reader["PackCode"].ToString();
+                            model.ProductName = reader["ProductName"].ToString();
+                            model.SalesUnits = reader["Sales_Units"].ToString();
+                            model.SalesValueNp = reader["Sales_ValueNP"].ToString();
+
+
+
+                            salesData.Add(model);
+                        }
+                    }
+                }
+            }
+            ViewBag.PAPProducts = _passDbContext.Tblproducts.FromSqlRaw("select * from tblproduct").ToList();
+
+
+            return PartialView("Accordion_PartialView", salesData);
+        }
+
+        [HttpPost]
+        public object CreatePAPBpsRecord(string PAPSalesarr, BPSrequestpap PAPHeaderData)
         {
 
             List<PAPCustomModel_Chemist> model = JsonSerializer.Deserialize<List<PAPCustomModel_Chemist>>(PAPSalesarr);
@@ -269,7 +312,7 @@ namespace PASSForm_BPS.Controllers
 
                 Hcprequest_pap hcprequest = _passDbContext.HcprequestPAPs.FirstOrDefault(h => h.TrackingID == PAPHeaderData.TrackingID.Trim());
                 var result = _passDbContext.OutPutParameters
-                    .FromSqlRaw("CALL sp_InsertPAPBpsHeaderData(" + hcprequest.HCPREQID + ", '" + PAPHeaderData.TrackingID + "', '" + Convert.ToDateTime(PAPHeaderData).ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) + "', '" + Convert.ToDateTime(PAPHeaderData.DiscountDateTo).ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) + "', '" + PAPHeaderData.BrickCode + "', '" + PAPHeaderData.DistributerCode + "', '" + PAPHeaderData.Remarks + "', '" + PAPHeaderData.DiscountType + "', '" + 1 + "','" + EmpidSessionValue + "', p_BPS_Record_ID)", outputParameter)
+                    .FromSqlRaw("CALL sp_InsertPAPBpsHeaderData(" + hcprequest.HCPREQID + ", '" + PAPHeaderData.TrackingID.Trim() + "', '" + Convert.ToDateTime(PAPHeaderData.DiscountDateFrom).ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) + "', '" + Convert.ToDateTime(PAPHeaderData.DiscountDateTo).ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) + "', '" + PAPHeaderData.BrickCode.Trim() + "', '" + PAPHeaderData.DistributerCode.Trim() + "', '" + PAPHeaderData.Remarks + "', '" + PAPHeaderData.DiscountType + "', '" + 1 + "','" + EmpidSessionValue + "', p_BPS_Record_ID)", outputParameter)
                     .ToList();
 
                 var bpsrecordid = outputParameter.Value;
@@ -442,6 +485,21 @@ namespace PASSForm_BPS.Controllers
 .Where(h => h.MacroBrickCode == bpspaprephar.BrickCode)
 .ToList();
 
+            //            var bpsreqpappharmacieschem = _passDbContext.MacChemMappings
+            //.Where(h => h.MacroBrickCode == bpspaprephar.BrickCode)
+            //.ToList();
+
+            var bpsreqpappharmacieschem = _passDbContext.MacChemMappings
+                .Where(mcm => mcm.MacroBrickCode == bpspaprephar.BrickCode)
+                .Join(_passDbContext.Chemists, // Join with the Chemist table
+                      mcm => mcm.ChemistCode, // On MacChemMapping's Chemist_Code
+                      che => che.ChemistCode, // On Chemist's Chemist_Code
+                      (mcm, che) => new { che.ChemistCode, che.ChemistName }) // Select the fields
+                .ToList();
+
+
+
+
 
             var bpssalespappharmacies = _passDbContext.Bpssalesrecordpaps
 .Where(h => h.Bps_RecordID == id)
@@ -537,10 +595,183 @@ namespace PASSForm_BPS.Controllers
                 SalesPAPDataPharmacies = resultsByChemistPaPPharmacies,
                 ChemistCodes = chemistCodes
 
+            };
+            return View(ViewModelPharmaciesView);
+
+        }
+
+        public ActionResult IVInjectionView(int id)
+        {
+            BPSrequestpapIvInjection bpspapreiv = _passDbContext.bps_request_papivinjection.FirstOrDefault(h => h.BPS_Record_ID == id);
+            var bpsreqpapivinjection = _passDbContext.bps_request_papivinjection
+ .Where(h => h.BPS_Record_ID == id)
+ .ToList();
+
+
+            var bpssalespapivinjection = _passDbContext.bps_salesrecord_papivinjection
+.Where(h => h.BPS_Record_ID == id)
+.ToList();
+
+            Hcprequest_pap hcpivinjectionpap = _passDbContext.HcprequestPAPs.FirstOrDefault(h => h.HCPREQID == bpspapreiv.HCPREQID);
+            var Teamivinjectionpap = _passDbContext.Teams
+.Where(h => h.TeamCode == hcpivinjectionpap.TeamId)
+.FirstOrDefault();
+            var TeamivinjectionpapList = _passDbContext.Teams
+.Where(h => h.TeamCode == hcpivinjectionpap.TeamId)
+.ToList();
+
+
+            var products = _passDbContext.BPSIvInjectionViewViewModels.FromSqlRaw("call sp_GenerateTableIVInjectionPAP(@p_Bps_Record_ID, @p_TeamName)",
+                                            new MySqlParameter("@p_Bps_Record_ID", id),
+                                            new MySqlParameter("@p_TeamName", Teamivinjectionpap.TeamName)).ToList();
+
+
+
+
+            var ViewModelPharmaciesView = new BPSRequestListViewModel
+            {
+                BPSIvInjectionViewViewModels = products,
+                teams = TeamivinjectionpapList,
+                BPSrequestpapIvInjections = bpsreqpapivinjection
+
+
+            };
+
+
+            return View(ViewModelPharmaciesView);
+
+        }
+
+        public ActionResult PharmaEdit(int id)
+        {
+            try
+            {
+                BPSrequestpap bpspaprephar = _passDbContext.BPSrequestpaps.FirstOrDefault(h => h.BPS_Record_Id == id);
+                var bpsreqpappharmacies = _passDbContext.BPSrequestpaps
+     .Where(h => h.BPS_Record_Id == id)
+     .ToList();
+
+                var bpsreqpappharmaciesdis = _passDbContext.Distributers
+    .Where(h => h.DistributerCode == bpspaprephar.DistributerCode)
+    .ToList();
+                var bpsreqpappharmaciesmac = _passDbContext.Macrobricks
+    .Where(h => h.MacroBrickCode == bpspaprephar.BrickCode)
+    .ToList();
+
+
+                var bpssalespappharmacies = _passDbContext.Bpssalesrecordpaps
+    .Where(h => h.Bps_RecordID == id)
+    .ToList();
+
+                Hcprequest_pap hcppharmaciespap = _passDbContext.HcprequestPAPs.FirstOrDefault(h => h.HCPREQID == bpspaprephar.HCPREQID);
+                var Teampharmaciespap = _passDbContext.Teams
+    .Where(h => h.TeamCode == hcppharmaciespap.TeamId)
+    .ToList();
+
+
+                var macchemnamequery = @"SELECT mcm.*, che.ChemistName FROM mac_chem_mapping mcm
+Inner Join chemist che on
+mcm.Chemist_Code = che.Chemist_Code
+where mcm.MacroBrickCode = '" + bpspaprephar.BrickCode + "'";
+                var macchemname = _passDbContext.MacChemMappings.FromSqlRaw(macchemnamequery).ToList();
+
+                //headerdatpostDatesaends
+                var chemistname = new List<Chemist>();
+                var resultsByChemistPaPPharmacies = new Dictionary<string, List<ExpandoObject>>();
+
+
+                var chemistCodes = _passDbContext.Bpssalesrecordpaps
+                    .Where(record => record.Bps_RecordID == id)
+                    .Select(record => record.ChemistCode.ToString()) // Convert int? to string
+                    .Distinct()
+                    .ToList();
+
+
+
+                foreach (var c in chemistCodes)
+                {
+                    var chemistName = _passDbContext.Chemists
+                        .Where(record => record.ChemistCode == c.ToString())
+                      .Select(record => new Chemist
+                      {
+                          ChemistCode = record.ChemistCode,
+                          ChemistName = record.ChemistName
+
+                      })
+                        .Distinct()
+                        .ToList();
+
+                    chemistname.AddRange(chemistName);
+
+
+
+
+
+
+
+                    var p_BPS_Record_ID_PaPPharmacies = new MySqlParameter("@p_BPS_Record_ID", id);
+                    var p_Chemist_Code_PaPPharmacies = new MySqlParameter("@p_ChemistCode", c);
+                    var preresults = new List<ExpandoObject>();
+
+                    using (var command = _passDbContext.Database.GetDbConnection().CreateCommand())
+                    {
+                        command.CommandText = "CALL sp_GenerateTablePharmaciesPAP(@p_Bps_Record_ID,@p_ChemistCode)";
+                        command.Parameters.Add(p_BPS_Record_ID_PaPPharmacies);
+                        command.Parameters.Add(p_Chemist_Code_PaPPharmacies);
+
+                        _passDbContext.Database.OpenConnection();
+
+                        using (var reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                dynamic result = new ExpandoObject();
+                                var expandoDict = result as IDictionary<string, object>;
+
+                                for (int i = 0; i < reader.FieldCount; i++)
+                                {
+                                    string columnName = reader.GetName(i);
+                                    object columnValue = reader[i];
+
+                                    expandoDict.Add(columnName, columnValue);
+                                }
+
+
+                                preresults.Add(result);
+                            }
+                        }
+                    }
+
+                    resultsByChemistPaPPharmacies[c.ToString()] = preresults;
+                }
+
+
+
+
+                var ViewModelPharmaciesView = new BPSRequestListViewModel
+                {
+                    BPSrequestpaps = bpsreqpappharmacies,
+                    Bpssalesrecordpaps = bpssalespappharmacies,
+                    Distributers = bpsreqpappharmaciesdis,
+                    Macrobricks = bpsreqpappharmaciesmac,
+                    teams = Teampharmaciespap,
+                    chemists = chemistname,
+                    SalesPAPDataPharmacies = resultsByChemistPaPPharmacies,
+                    macChemMappings = macchemname,
+                    ChemistCodes = chemistCodes,
+
                 };
                 return View(ViewModelPharmaciesView);
-
             }
-        
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
+            //return View();
+
+        }
+
     }
 }

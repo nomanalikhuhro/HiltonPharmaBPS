@@ -234,17 +234,17 @@ function CreatePAPBPS() {
     
 
 
-    var PAPType = document.getElementById("PAPType").value;
+    var PAPType = document.getElementById("PAPType").value.trim();
     var Dis = document.getElementById("distributer");
     var selectedDistributorValue = Dis.value || "";
     var discode = selectedDistributorValue.split('-');
-    var DistributorCode = discode.shift();
+    var DistributorCode = discode.shift().trim();
     var Brick = document.getElementById("selectedbrick");
     var selectedBrickValue = Brick.options[Brick.selectedIndex].value;
     var brickcode = selectedBrickValue.split('-');
-    var MacroBrickCode = brickcode.shift();
+    var MacroBrickCode = brickcode.shift().trim();
 
-    var ReqId = document.getElementById('papareqid').value;
+    var ReqId = document.getElementById('papareqid').value.trim();
     var Comment = document.getElementById('createcomments').value;
     var DiscountType = document.getElementById("selecteddis");
     var selectedDiscountType = DiscountType.value || "";
@@ -449,6 +449,81 @@ function CreatePAPIVInjectionBPS() {
         }
     });
 
+}
+
+function editaccordion(val) {
+
+    var checkboxes = document.querySelectorAll(".dropdown-content input[type='checkbox']");
+    checkedItems = [];
+    var checkboxindex = 0;
+    var html = '';
+
+    var checkbox = null;
+    var attrid;
+    var chkid;
+    checkboxes.forEach(function (checkboxS) {
+        chkid = checkboxS.id.toString().replace("{", "").replace("}", "");
+        if (checkboxS.checked && $('#UpdatePharmaciesTableAcc').find('[_id="' + chkid + '"]').length == 0) {
+
+            checkbox = checkboxS.value
+            attrid = chkid
+            checkboxindex = chkid;
+            //  checkedItems.push(checkbox.value);
+
+        }
+        if (checkboxS.checked) {
+
+        }
+        else {
+            $('#UpdatePharmaciesTableAcc').find('[_id="' + chkid + '"]').remove();
+            $('#UpdatePharmaciesTableAcc').find('[_idbtn="' + chkid + '"]').remove();
+        }
+
+    });
+
+
+    //  if (existingHtml.indexOf(`id="chemist-${checkboxindex}"`) === -1) {
+    if (checkbox != null) {
+        html += `
+    <button style="margin-top:2%;" id="chemist-${checkboxindex}" onclick="togglePanel(this)" _idbtn=${attrid} class="accordion">${checkbox}</button>
+                <div class="panel" id="ChemistPanelID-${checkboxindex}" _id=${attrid} style="height:auto;">
+                    <div style="padding-top: 5%; padding-bottom: 5%; padding-left: 3%;" id="pre-${checkboxindex}"></div>
+                </div>`;
+
+
+        $('#UpdatePharmaciesTableAcc').append(html);
+        EditloadPartialView(checkboxindex);
+    }
+
+
+
+
+}
+function EditloadPartialView(checkboxindex) {
+    var TeamName = document.getElementById('TeamName').innerHTML;
+    var chemistName = document.getElementById("chemist-" + checkboxindex).innerText;
+    var Chemistparts = chemistName.split('-');
+    var ChemistCode = Chemistparts[0].trim();
+
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            document.getElementById(`pre-${checkboxindex}`).innerHTML = xhr.responseText;
+        }
+    };
+
+    var url = "/PAPView/EditPartialAcc"; // URL to the controller action
+
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+
+    // Data to be sent to the server
+    var data = JSON.stringify({
+        TeamName: TeamName,
+        ChemistCode: ChemistCode
+    });
+
+    xhr.send(data);
 }
 
 

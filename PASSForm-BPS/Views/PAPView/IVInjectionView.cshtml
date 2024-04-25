@@ -1,0 +1,159 @@
+﻿
+@{
+    ViewData["Title"] = "IVInjectionView";
+
+    //model PASSForm_BPS.Model.BPSIvInjectionViewViewModels
+
+    @model PASSForm_BPS.ViewModel.BPSRequestListViewModel;
+}
+
+<html>
+<head>
+    <style>
+        .maindiv {
+            height: auto;
+            border: 2px solid white;
+            width: 100%;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 10x 10px 10px 10px;
+            box-shadow: 0 0 0 0 px;
+            box-shadow: 1px 0px 9px 1px lightgray;
+        }
+
+
+        .label {
+            font-weight: bold;
+        }
+
+        .teamssubdiv {
+            width: 50%;
+            text-align: center;
+            border-radius: 25px;
+            color: #d71921;
+            border: 2px solid #d71921;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            border-style: solid;
+        }
+
+        table, th {
+            padding: 10px;
+        }
+
+        .numfield {
+            text-align: end;
+            width: 12%;
+        }
+
+        .maintablediv {
+            padding-left: 8%;
+            padding-top: 5%;
+        }
+    </style>
+</head>
+<body>
+    <div style="padding-top:1%;">
+        <div class="maindiv">
+            <div style="padding-top:1%;">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-4">
+                            <label class="label">For:</label>
+                            <div>
+                                <input id="PAPType" disabled type="text" value="Annexure E" />
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <label class="label">Start Date:</label>
+                            <div>
+                                @foreach (var fdate in Model.BPSrequestpapIvInjections)
+                                {
+                                    <input disabled id="startdate" type="text" value="@GlobalClass.StringDateFormat(@fdate.DiscountFromDate.ToString())" />
+                                }
+
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <label class="label">End Date:</label>
+                            <div>
+                             @foreach (var tdate in Model.BPSrequestpapIvInjections)
+                                {
+                                    <input disabled id="enddate" type="text" value="@DateTime.Parse(@tdate.DiscountToDate.ToString()).ToString("dd-MM-yyyy")" />
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div style="padding-top:1%;">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-4">
+                            <label class="label">Teams:</label>
+                            <div class="teamssubdiv">
+                                @foreach (var team in Model.teams)
+                                {
+                                    <label id="TeamName">@team.TeamName</label>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <input style="visibility:hidden;" value="@ViewBag.ivreqid" id="papivreqid" />
+                        </div>
+                        <div class="col-4">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <div id="tableAcc" class="maintablediv">
+        <table style="width:90%;">
+            <thead style="height:50px; background: #d71921; color: white;">
+                <tr style="font-size:12px;">
+                    <th>Pack Code</th>
+                    <th>Product Name</th>
+                    <th>Description</th>
+                    <th>Discount %</th>
+
+                </tr>
+            </thead>
+            <tbody style="font-size:13px;" id="tableproducts">
+                @if (Model != null)
+                {
+
+                    double? unitprice = 0.0;
+
+                    @foreach (var item in Model.BPSIvInjectionViewViewModels)
+                    {
+
+                        <tr>
+                            <td id="PackCode">@item.PackCode</td>
+                            <td id="ProductName">@item.ProductName</td>
+                            <td id="ProductDiscription">@item.Description</td>
+                            <td style="text-align:end;">
+                                @item.Discount
+                            </td>
+                        </tr>
+                    }
+                }
+
+
+            </tbody>
+        </table>
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="~/js/PAPScripts.js"></script>
+</body>
+</html>
+

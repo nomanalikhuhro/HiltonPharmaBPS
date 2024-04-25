@@ -2,7 +2,7 @@
 {
     public class BpssalesrecordpapIvInjection
     {
-        public int RecordId { get; set; }
+        public int Record_ID { get; set; }
 
         public int? BPS_Record_ID { get; set; }
 

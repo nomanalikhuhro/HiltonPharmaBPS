@@ -28,11 +28,18 @@ namespace PASSForm_BPS.ViewModel
 
         public List<Bpssalesrecordpap> Bpssalesrecordpaps { get; set; }
 
+        public List<BPSrequestpapIvInjection> BPSrequestpapIvInjections { get; set; }
+
+        public List<BpssalesrecordpapIvInjection> bpssalesrecordpapIvInjections { get; set; }
+
         public List<Distributer> Distributers { get; set; }
 
         public List<Macrobrick> Macrobricks { get; set; }
 
         public List<Chemist> chemists { get; set; }
+
+        public List<BPSIvInjectionViewViewModel> BPSIvInjectionViewViewModels { get; set; }
+
 
         public Dictionary<string, List<ExpandoObject>> SalesPAPDataPharmacies { get; set; }
 
