@@ -24,7 +24,7 @@ namespace PASSForm_BPS.Models
 
         public static void LogException(DbContext context, Exception ex,  string actionName, string message)
         {
-            context.Database.ExecuteSqlRaw("CALL InsertExceptionLog(@p_LogEvent, " +
+            context.Database.ExecuteSqlRaw("CALL spInsertExceptionLog(@p_LogEvent, " +
                 "@p_Exception, " +
                 "@p_Message)",
                 new MySqlParameter("@p_LogEvent", actionName),

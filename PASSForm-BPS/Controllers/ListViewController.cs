@@ -115,10 +115,10 @@ namespace PASSForm_BPS.Controllers
                 };
                 HttpContext.Features.Set(feature);
                 ViewBag.Error = ex;
-                return View("Error");
 
+                return RedirectToAction("ErrorView", "Home", new { error = ex.Message});
             }
-            
+          
 
         }
 
@@ -189,7 +189,7 @@ namespace PASSForm_BPS.Controllers
                 };
                 HttpContext.Features.Set(feature);
                 ViewBag.Error = ex;
-                return View("Error");
+                return RedirectToAction("ErrorView", "Home", new { error = ex.Message });
             }
 
         }
@@ -888,7 +888,7 @@ namespace PASSForm_BPS.Controllers
                 };
                 HttpContext.Features.Set(feature);
                 ViewBag.Error = ex;
-                return View("Error");
+                return RedirectToAction("ErrorView", "Home", new { error = ex.Message});
             }
 
         }
@@ -1028,7 +1028,7 @@ namespace PASSForm_BPS.Controllers
                         };
                         HttpContext.Features.Set(feature);
                         ViewBag.Error = ex;
-                        return View("Error");
+                        return RedirectToAction("ErrorView", "Home", new { error = ex.Message});
                     }
 
 
@@ -1046,7 +1046,7 @@ namespace PASSForm_BPS.Controllers
                 };
                 HttpContext.Features.Set(feature);
                 ViewBag.Error = ex;
-                return View("Error");
+                return RedirectToAction("ErrorView", "Home", new { error = ex.Message});
             }
 
   
@@ -1088,7 +1088,7 @@ namespace PASSForm_BPS.Controllers
                 DateTime timestampValue = DateTime.Now;
 
                 GlobalClass.LogException(_passDbContext, ex, nameof(CreateAccordion), "Error message");
-                return View("ErrorView");
+                return RedirectToAction("ErrorView", "Home", new { error = ex.Message});
             }
 
 
@@ -1111,8 +1111,10 @@ namespace PASSForm_BPS.Controllers
             }
             catch (Exception ex)
             {
+                DateTime timestampValue = DateTime.Now;
 
-                throw;
+                GlobalClass.LogException(_passDbContext, ex, nameof(GetMacrobrick), "Error message");
+                return RedirectToAction("ErrorView", "Home", new { error = ex.Message});
             }
 
         }
@@ -1284,7 +1286,8 @@ namespace PASSForm_BPS.Controllers
                 {
                     isSuccess = true;
                     return isSuccess;
-                }
+
+            }
 
                 isSuccess = true;
             
@@ -1726,7 +1729,7 @@ where HCPREQID = '" + trackingid + "'";
                 };
                 HttpContext.Features.Set(feature);
                 ViewBag.Error = ex;
-                return View("Error");
+                return RedirectToAction("ErrorView", "Home", new { error = ex.Message});
             }
 
         }
@@ -2067,7 +2070,7 @@ where HCPREQID = '" + trackingid + "'";
                 };
                 HttpContext.Features.Set(feature);
                 ViewBag.Error = ex;
-                return View("Error");
+                return RedirectToAction("ErrorView", "Home", new { error = ex.Message});
             }
 
         }
@@ -2105,7 +2108,7 @@ where HCPREQID = '" + trackingid + "'";
                 };
                 HttpContext.Features.Set(feature);
                 ViewBag.Error = ex;
-                return View("Error");
+                return RedirectToAction("ErrorView", "Home", new { error = ex.Message});
             }
 
         }
@@ -2141,7 +2144,7 @@ where HCPREQID = '" + trackingid + "'";
                 };
                 HttpContext.Features.Set(feature);
                 ViewBag.Error = ex;
-                return View("Error");
+                return RedirectToAction("ErrorView", "Home", new { error = ex.Message});
             }
 
         }
@@ -2212,7 +2215,7 @@ where HCPREQID = '" + trackingid + "'";
                 };
                 HttpContext.Features.Set(feature);
                 ViewBag.Error = ex;
-                return View("Error");
+                return RedirectToAction("ErrorView", "Home", new { error = ex.Message});
             }
 
 
@@ -2284,7 +2287,7 @@ where HCPREQID = '" + trackingid + "'";
                 };
                 HttpContext.Features.Set(feature);
                 ViewBag.Error = ex;
-                return View("Error");
+                return RedirectToAction("ErrorView", "Home", new { error = ex.Message});
             }
 
 
@@ -2643,7 +2646,7 @@ where mcm.MacroBrickCode = '"+ macroBrickCodes + "'";
                 };
                 HttpContext.Features.Set(feature);
                 ViewBag.Error = ex;
-                return View("Error");
+                return RedirectToAction("ErrorView", "Home", new { error = ex.Message});
             }
 
             return View();
@@ -3124,9 +3127,9 @@ set Status_ID = 4, Comments = '" + comments + "' Where HCPREQID = '" + trackingi
                 };
                 HttpContext.Features.Set(feature);
                 ViewBag.Error = ex;
-                return View("Error");
-            
-        }
+                return RedirectToAction("ErrorView", "Home", new { error = ex.Message});
+
+            }
 
 
         }
@@ -3164,7 +3167,7 @@ set Status_ID = 4, Comments = '" + comments + "' Where HCPREQID = '" + trackingi
                 };
                 HttpContext.Features.Set(feature);
                 ViewBag.Error = ex;
-                return View("Error");
+                return RedirectToAction("ErrorView", "Home", new { error = ex.Message});
             }
       
         }
@@ -3270,7 +3273,7 @@ set Status_ID = 4, Comments = '" + comments + "' Where HCPREQID = '" + trackingi
                 };
                 HttpContext.Features.Set(feature);
                 ViewBag.Error = ex;
-                return View("Error");
+                return RedirectToAction("ErrorView", "Home", new { error = ex.Message});
             }
 
          }
@@ -3311,7 +3314,7 @@ set Status_ID = 4, Comments = '" + comments + "' Where HCPREQID = '" + trackingi
                 };
                 HttpContext.Features.Set(feature);
                 ViewBag.Error = ex;
-                return View("Error");
+                return RedirectToAction("ErrorView", "Home", new { error = ex.Message});
             }
 
 
@@ -3377,7 +3380,7 @@ set Status_ID = 4, Comments = '" + comments + "' Where HCPREQID = '" + trackingi
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
+                return RedirectToAction("ErrorView", "Home", new { error = ex.Message});
             }
         }
 
@@ -3422,7 +3425,7 @@ set Status_ID = 4, Comments = '" + comments + "' Where HCPREQID = '" + trackingi
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
+                return RedirectToAction("ErrorView", "Home", new { error = ex.Message});
             }
         }
 
@@ -3480,7 +3483,7 @@ set Status_ID = 4, Comments = '" + comments + "' Where HCPREQID = '" + trackingi
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
+                return RedirectToAction("ErrorView", "Home", new { error = ex.Message});
             }
         }
 
@@ -3684,7 +3687,7 @@ set Status_ID = 4, Comments = '" + comments + "' Where HCPREQID = '" + trackingi
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
+                return RedirectToAction("ErrorView", "Home", new { error = ex.Message});
             }
         }
 
@@ -3773,7 +3776,7 @@ set Status_ID = 4, Comments = '" + comments + "' Where HCPREQID = '" + trackingi
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
+                return RedirectToAction("ErrorView", "Home", new { error = ex.Message});
             }
         }
 
@@ -3859,7 +3862,7 @@ set Status_ID = 4, Comments = '" + comments + "' Where HCPREQID = '" + trackingi
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
+                return RedirectToAction("ErrorView", "Home", new { error = ex.Message});
             }
         }
 
@@ -3881,7 +3884,7 @@ set Status_ID = 4, Comments = '" + comments + "' Where HCPREQID = '" + trackingi
             {
                 DateTime timestampValue = DateTime.Now; // Replace with the desired DateTime value
                 GlobalClass.LogException(_passDbContext, ex, nameof(PONumberActivity), "PO Number Error message");
-                return View("ErrorView");
+                return RedirectToAction("ErrorView", "Home", new { error = ex.Message});
 
                 throw;
             }
@@ -3951,7 +3954,7 @@ set Status_ID = 4, Comments = '" + comments + "' Where HCPREQID = '" + trackingi
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
+                return RedirectToAction("ErrorView", "Home", new { error = ex.Message});
             }
         }
 
