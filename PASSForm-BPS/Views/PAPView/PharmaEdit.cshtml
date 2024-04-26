@@ -2,7 +2,7 @@
 @{
     ViewData["Title"] = "PharmaEdit";
     @model PASSForm_BPS.ViewModel.BPSRequestListViewModel
-
+    //int editproductindex = 0;
 }
 
 <html>
@@ -39,6 +39,20 @@
             border-radius: 25px;
             color: #d71921;
             border: 2px solid #d71921;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            border-style: solid;
+        }
+
+        table, th {
+            padding: 10px;
+        }
+
+        .numfield {
+            text-align: end;
         }
     </style>
 </head>
@@ -175,15 +189,15 @@
                 {
                     if (bpschempappharmacies.ChemistCode == acc)
                     {
-                        <button class="accordion">@bpschempappharmacies.ChemistCode - @bpschempappharmacies.ChemistName</button>
+                        <button  style="margin-top:2%;" id="chemist-@acc" onclick="togglePanel(this)" _idbtn="@acc" class="accordion">@bpschempappharmacies.ChemistCode - @bpschempappharmacies.ChemistName</button>
                     }
                 }
-                <div class="panel">
+                <div class="panel" id="ChemistPanelID-@acc" _id="@acc" style="height:auto;" >
                     @foreach (var salesphapap in Model.SalesPAPDataPharmacies)
                     {
                         @if (salesphapap.Key == acc)
                         {
-                            <div style="overflow:auto; padding-top: 5%; padding-bottom: 5%; padding-left: 3%;">
+                            <div style="overflow:auto; padding-top: 5%; padding-bottom: 5%; padding-left: 3%;" id="pre-@acc">
                                 <table>
                                     <thead style="height:50px; background: #d71921; color: white;">
                                         <tr>
@@ -225,49 +239,60 @@
                                             }
                                         </tr>
                                     </thead>
-                                    <tbody style="font-size:13px;">
-
-                                        @foreach (var salesphapapdata in salesphapap.Value)
+                                    <tbody style="font-size:13px;" id="tbl-product-@acc">
+                                        @if (salesphapap.Value != null)
                                         {
-                                            <tr>
-                                                @foreach (var Salesphapapdata in salesphapapdata)
-                                                {
+                                            int editproductindex = 0;
+                                            @foreach (var salesphapapdata in salesphapap.Value)
+                                            {
+                                                <tr>
+                                                    @foreach (var Salesphapapdata in salesphapapdata)
+                                                    {
 
-                                                    if (Salesphapapdata.Key == "PackCode")
-                                                    {
-                                                        <td>@Salesphapapdata.Value</td>
-                                                    }
-                                                    else if (Salesphapapdata.Key == "ProductName")
-                                                    {
-                                                        <td>@Salesphapapdata.Value</td>
-                                                    }
-                                                    else if (Salesphapapdata.Key == "LastYearSKU")
-                                                    {
-                                                        <td style="text-align:end;">@Salesphapapdata.Value</td>
-                                                    }
-                                                    else if (Salesphapapdata.Key == "LastYearValue")
-                                                    {
-                                                        <td style="text-align:end;">@Salesphapapdata.Value</td>
-                                                    }
-                                                    else if (Salesphapapdata.Key == "UnitPrice")
-                                                    {
-                                                        <td style="text-align:end;">@Salesphapapdata.Value</td>
-                                                    }
-                                                    else if (Salesphapapdata.Key == "ExpectedBusinessUnit")
-                                                    {
-                                                        <td style="text-align:end;">@Salesphapapdata.Value</td>
-                                                    }
-                                                    else if (Salesphapapdata.Key == "ExpectedBusinessValue")
-                                                    {
-                                                        <td style="text-align:end;">@Salesphapapdata.Value</td>
-                                                    }
-                                                    else if (Salesphapapdata.Key == "Discount")
-                                                    {
-                                                        <td style="text-align:end;">@Salesphapapdata.Value</td>
-                                                    }
-                                                }
-                                            </tr>
+                                                        if (Salesphapapdata.Key == "PackCode")
+                                                        {
+                                                            <td id="PackCode-@acc-@editproductindex">@Salesphapapdata.Value</td>
+                                                        }
+                                                        else if (Salesphapapdata.Key == "ProductName")
+                                                        {
+                                                            <td id="ProductName-@acc-@editproductindex">@Salesphapapdata.Value</td>
+                                                        }
+                                                        else if (Salesphapapdata.Key == "LastYearSKU")
+                                                        {
+                                                            <td id="PreEditUnits-@acc-@editproductindex" class="numfield;">@Salesphapapdata.Value</td>
+                                                        }
+                                                        else if (Salesphapapdata.Key == "LastYearValue")
+                                                        {
+                                                            <td id="PreEditValue-@acc-@editproductindex" class="numfield">@Salesphapapdata.Value</td>
+                                                        }
+                                                        else if (Salesphapapdata.Key == "UnitPrice")
+                                                        {
+                                                            <td id="EditUnitPrice-@acc-@editproductindex" class="numfield">@Salesphapapdata.Value</td>
+                                                        }
+                                                        else if (Salesphapapdata.Key == "ExpectedBusinessUnit")
+                                                        {
+                                                            <td class="numfield">
 
+                                                                <input type="text" class="numfield" style="width:40%" value="@Salesphapapdata.Value" id="PostEditUnits-@acc-@editproductindex" oninput="EditPAPcalculateValue(@acc,@editproductindex)">
+                                                            </td>
+                                                        }
+                                                        else if (Salesphapapdata.Key == "ExpectedBusinessValue")
+                                                        {
+                                                            <td class="numfield">
+
+                                                                <input disabled type="text" class="numfield" style="width:40%" value="@Salesphapapdata.Value" id="PostEditValue-@acc-@editproductindex">
+                                                            </td>
+                                                        }
+                                                        else if (Salesphapapdata.Key == "Discount")
+                                                        {
+                                                            <td class="numfield">
+                                                                <input type="text" class="numfield" style="width:40%" value="@Salesphapapdata.Value" id="EditDiscount-@acc-@editproductindex">
+                                                            </td>
+                                                        }
+                                                    }
+                                                </tr>
+                                                editproductindex++;
+                                            }
                                         }
                                     </tbody>
                                 </table>
@@ -278,7 +303,9 @@
                 </div>
             }
         </div>
-
+        <div>
+            <input type="submit" value="Update" onclick="EditPAPPharmaciesBPS()" />
+        </div>
 
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -298,7 +325,23 @@
 
 
             });
+            var acc = document.getElementsByClassName("accordion");
+            var i;
 
+            for (i = 0; i < acc.length; i++) {
+                acc[i].addEventListener("click", function () {
+                    this.classList.toggle("active");
+                    var panel = this.nextElementSibling;
+                    if (panel.style.maxHeight) {
+                        panel.style.maxHeight = null;
+                    } else {
+                        panel.style.maxHeight = panel.scrollHeight + "px";
+
+
+
+                    }
+                });
+            }
 
 
     </script>

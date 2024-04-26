@@ -100,6 +100,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTG9naW5cTG9naW4uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/BPSGit/PASSForm-BPS/Views/PAPView/Accordion_EditPartialView.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUEFQVmlld1xBY2NvcmRpb25fRWRpdFBhcnRpYWxWaWV3LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/BPSGit/PASSForm-BPS/Views/PAPView/Accordion_PartialView.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUEFQVmlld1xBY2NvcmRpb25fUGFydGlhbFZpZXcuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
@@ -112,8 +116,28 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUEFQVmlld1xDcmVhdGVfUGFydGlhbFZpZXcuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BPSGit/PASSForm-BPS/Views/PAPView/Submitted.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUEFQVmlld1xTdWJtaXR0ZWQuY3NodG1s
+[D:/BPSGit/PASSForm-BPS/Views/PAPView/IVInjectionSubmitted.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUEFQVmlld1xJVkluamVjdGlvblN1Ym1pdHRlZC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BPSGit/PASSForm-BPS/Views/PAPView/IVInjectionView.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUEFQVmlld1xJVkluamVjdGlvblZpZXcuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BPSGit/PASSForm-BPS/Views/PAPView/IVINJECTION_CreateView.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUEFQVmlld1xJVklOSkVDVElPTl9DcmVhdGVWaWV3LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BPSGit/PASSForm-BPS/Views/PAPView/PharmaciesSubmitted.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUEFQVmlld1xQaGFybWFjaWVzU3VibWl0dGVkLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BPSGit/PASSForm-BPS/Views/PAPView/PharmacieView.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUEFQVmlld1xQaGFybWFjaWVWaWV3LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BPSGit/PASSForm-BPS/Views/PAPView/PharmaEdit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUEFQVmlld1xQaGFybWFFZGl0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/BPSGit/PASSForm-BPS/Views/Shared/Error.cshtml]

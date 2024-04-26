@@ -485,7 +485,9 @@ function editaccordion(val) {
     //  if (existingHtml.indexOf(`id="chemist-${checkboxindex}"`) === -1) {
     if (checkbox != null) {
         html += `
-    <button style="margin-top:2%;" id="chemist-${checkboxindex}" onclick="togglePanel(this)" _idbtn=${attrid} class="accordion">${checkbox}</button>
+  
+ 
+  <button style="margin-top:2%;" id="chemist-${checkboxindex}" onclick="togglePanel(this)" _idbtn=${attrid} class="accordion">${checkbox}</button>
                 <div class="panel" id="ChemistPanelID-${checkboxindex}" _id=${attrid} style="height:auto;">
                     <div style="padding-top: 5%; padding-bottom: 5%; padding-left: 3%;" id="pre-${checkboxindex}"></div>
                 </div>`;
@@ -494,6 +496,8 @@ function editaccordion(val) {
         $('#UpdatePharmaciesTableAcc').append(html);
         EditloadPartialView(checkboxindex);
     }
+
+
 
 
 
@@ -525,6 +529,157 @@ function EditloadPartialView(checkboxindex) {
 
     xhr.send(data);
 }
+
+function EditPAPcalculateValue(chemcode, proindex) {
+
+    var inputValueId = 'PostEditUnits-' + chemcode + '-' + proindex; // ID of the input field you want to read
+    var valueInputId = 'PostEditValue-' + chemcode + '-' + proindex; // ID of the input field where you want to display the result
+    var valueUnitPrice = 'EditUnitPrice-' + chemcode + '-' + proindex;
+
+    var inputValue = document.getElementById(inputValueId);
+    var valueInput = document.getElementById(valueInputId);
+    var unitprice = document.getElementById(valueUnitPrice);
+
+
+    var inputValueValue = parseFloat(inputValue.value);
+
+    if (isNaN(inputValueValue)) {
+        var calculatedValue = parseFloat(parseFloat(inputValueValue || 0).toFixed(2) * parseFloat(unitprice.innerHTML)).toFixed(2);
+
+        var a = calculatedValue;
+
+        valueInput.value = a;
+    } else {
+        var calculatedValue = parseFloat(parseFloat(inputValueValue || 0).toFixed(2) * parseFloat(unitprice.innerHTML)).toFixed(2);
+
+        var a = calculatedValue;
+
+        valueInput.value = a;
+    }
+
+   
+}
+
+function EditPAPPharmaciesBPS() {
+    debugger;
+    var PAPType = document.getElementById("PAPType").value.trim();
+    var Dis = document.getElementById("distributer");
+    var selectedDistributorValue = Dis.value || "";
+    var discode = selectedDistributorValue.split('-');
+    var DistributorCode = discode.shift().trim();
+    var Brick = document.getElementById("selectedbrick");
+    var selectedBrickValue = Brick.options[Brick.selectedIndex].value;
+    var brickcode = selectedBrickValue.split('-');
+    var MacroBrickCode = brickcode.shift().trim();
+
+    var ReqId = document.getElementById('papareqid').value.trim();
+    var Comment = document.getElementById('createcomments').value;
+    var DiscountType = document.getElementById("selecteddis");
+    var selectedDiscountType = DiscountType.value || "";
+
+    var preactualfromDate = new Date($('#startdate').val());
+    var prefromDate = preactualfromDate.getFullYear() + '-' +
+        (preactualfromDate.getMonth() + 1).toString().padStart(2, '0') + '-' +
+        preactualfromDate.getDate().toString().padStart(2, '0');
+    var preactualtoDate = new Date($('#enddate').val());
+    var pretoDate = preactualtoDate.getFullYear() + '-' +
+        (preactualtoDate.getMonth() + 1).toString().padStart(2, '0') + '-' +
+        preactualtoDate.getDate().toString().padStart(2, '0');
+    var currentDate = new Date();
+    var PAPHeaderData = {
+
+        DistributerCode: DistributorCode,
+        BrickCode: MacroBrickCode,
+        DiscountDateFrom: prefromDate,
+        DiscountDateTo: pretoDate,
+        TrackingId: ReqId,
+        DiscountType: selectedDiscountType,
+        Remarks: Comment,
+        CurrentDate: currentDate,
+
+    }
+
+    var PAPSalesarr = [];
+    var salesArrString;
+
+    var chemistCount = $("#tableAcc").find("button").length;
+    $("#tableAcc").find("button").each(function (index) {
+
+        var buttonId = $(this).attr("id");
+        var parts = buttonId.split('-');
+        var button1rightPart = parts[1];
+
+        var chemist = document.getElementById("chemist-" + button1rightPart).innerText;
+        var chemcodeparts = chemist.split('-');
+        var ChemistCode = chemcodeparts[0].trim();
+        var productPreSkuCount = $("#tbl-product-" + button1rightPart).find("tr").length;
+
+        var prdArr = [];
+        for (var j = 0; j < productPreSkuCount; j++) {
+            var productName = document.getElementById("EditProductName-" + button1rightPart + "-" + j).innerHTML;
+            var productCode = document.getElementById("EditPackCode-" + button1rightPart + "-" + j).innerHTML
+            var PreUnit = document.getElementById("PreEditUnits-" + button1rightPart + "-" + j).innerHTML;
+            var PreValue = document.getElementById("PreEditValue-" + button1rightPart + "-" + j).innerHTML;
+            var UnitPrice = document.getElementById("UnitEditPrice-" + button1rightPart + "-" + j).innerHTML;
+            var EstimatedUnit = document.getElementById("PostEditUnits-" + button1rightPart + "-" + j).value;
+            var EstimatedValue = document.getElementById("PostEditValue-" + button1rightPart + "-" + j).value;
+            var Discount = document.getElementById("EditDiscount-" + button1rightPart + "-" + j).value;
+
+
+            prdArr.push({
+                PackCode: productCode,
+                LastYearSKU: PreUnit, LastYearValue: PreValue,
+                Discount: Discount,
+                ExpectedBusinessUnit: EstimatedUnit, ExpectedBusinessValue: EstimatedValue,
+                UnitPrice: UnitPrice
+            })
+        }
+
+        PAPSalesarr.push({ ChemistCode: ChemistCode, ProductArr: prdArr });
+    });
+
+    var PAPsalesArrString = JSON.stringify(PAPSalesarr);
+
+    $.ajax({
+
+        url: "/PAPView/CreatePAPBpsRecord", // Replace with the URL of your controller action
+        method: "POST", // Use POST since you are sending data
+        data: { PAPSalesarr: PAPsalesArrString, PAPHeaderData: PAPHeaderData },
+
+        success: function (data) {
+
+
+            if (data = true) {
+
+                Swal.fire({
+                    icon: "success",
+                    title: 'Record Created Successfully!',
+                    showConfirmButton: false,
+                    timer: 3600,
+                    width: 680,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    customClass: {
+                        title: 'small-font',
+                        icon: 'small-icon'
+                    }
+                });
+
+            } else {
+
+            }
+            setTimeout(function () {
+                window.location.href = "/ListView/ApprovedView/1"; // you can pass true to reload function to ignore the client cache and reload from the server
+            }, 3500);
+
+        },
+        error: function (xhr, status, error) {
+            console.error("Error:", status, error);
+        }
+    });
+
+}
+
 
 
 

@@ -247,47 +247,7 @@ namespace PASSForm_BPS.Controllers
         }
 
 
-        [HttpPost]
-        public IActionResult EditPartialAcc([FromBody] PartialAccRequest requestData)
-        {
-            var teamName = requestData.TeamName;
-            var chemistCode = requestData.ChemistCode;
-            ViewBag.ChemCode = requestData.ChemistCode;
 
-            List<DsrHiltonDailySalesTeamToChemist202223> salesData = new List<DsrHiltonDailySalesTeamToChemist202223>();
-
-            using (SqlConnection connection = new SqlConnection(_sqlconnection))
-            {
-                connection.Open();
-
-                using (SqlCommand command = new SqlCommand("GetSalesDataForLastYear", connection))
-                {
-                    command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.AddWithValue("@TeamName", teamName);
-                    command.Parameters.AddWithValue("@ClientCode", chemistCode);
-
-                    using (SqlDataReader reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            DsrHiltonDailySalesTeamToChemist202223 model = new DsrHiltonDailySalesTeamToChemist202223();
-                            model.PackCode = reader["PackCode"].ToString();
-                            model.ProductName = reader["ProductName"].ToString();
-                            model.SalesUnits = reader["Sales_Units"].ToString();
-                            model.SalesValueNp = reader["Sales_ValueNP"].ToString();
-
-
-
-                            salesData.Add(model);
-                        }
-                    }
-                }
-            }
-            ViewBag.PAPProducts = _passDbContext.Tblproducts.FromSqlRaw("select * from tblproduct").ToList();
-
-
-            return PartialView("Accordion_PartialView", salesData);
-        }
 
         [HttpPost]
         public object CreatePAPBpsRecord(string PAPSalesarr, BPSrequestpap PAPHeaderData)
@@ -771,6 +731,48 @@ where mcm.MacroBrickCode = '" + bpspaprephar.BrickCode + "'";
 
             //return View();
 
+        }
+
+        [HttpPost]
+        public IActionResult EditPartialAcc([FromBody] PartialAccRequest requestData)
+        {
+            var teamName = requestData.TeamName;
+            var chemistCode = requestData.ChemistCode;
+            ViewBag.ChemCode = requestData.ChemistCode;
+
+            List<DsrHiltonDailySalesTeamToChemist202223> salesData = new List<DsrHiltonDailySalesTeamToChemist202223>();
+
+            using (SqlConnection connection = new SqlConnection(_sqlconnection))
+            {
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand("GetSalesDataForLastYear", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@TeamName", teamName);
+                    command.Parameters.AddWithValue("@ClientCode", chemistCode);
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            DsrHiltonDailySalesTeamToChemist202223 model = new DsrHiltonDailySalesTeamToChemist202223();
+                            model.PackCode = reader["PackCode"].ToString();
+                            model.ProductName = reader["ProductName"].ToString();
+                            model.SalesUnits = reader["Sales_Units"].ToString();
+                            model.SalesValueNp = reader["Sales_ValueNP"].ToString();
+
+
+
+                            salesData.Add(model);
+                        }
+                    }
+                }
+            }
+            ViewBag.PAPProducts = _passDbContext.Tblproducts.FromSqlRaw("select * from tblproduct").ToList();
+
+
+            return PartialView("Accordion_PartialView", salesData);
         }
 
     }

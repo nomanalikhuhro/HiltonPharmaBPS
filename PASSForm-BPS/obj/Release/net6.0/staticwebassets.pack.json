@@ -365,6 +365,10 @@
       "PackagePath": "staticwebassets\\js\\PAPScripts.js"
     },
     {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\js\\Validation.js",
+      "PackagePath": "staticwebassets\\js\\Validation.js"
+    },
+    {
       "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\js\\datatable_file.js",
       "PackagePath": "staticwebassets\\js\\datatable_file.js"
     },
