@@ -2810,70 +2810,7 @@ where mcm.MacroBrickCode = '"+ macroBrickCodes + "'";
 
 
                                         }
-                                //var outputParameter1 = new MySqlParameter
-                                //{
-                                //    ParameterName = "p_Record_ID",
-                                //    MySqlDbType = MySqlDbType.Int32,
-                                //    Direction = ParameterDirection.Output
-                                //};
 
-                                //var resultsales = _passDbContext.OutputParaMetersSales
-                                //    .FromSqlRaw("CALL sp_InsertBpsSalesData(@p_BPS_Record_ID," +
-                                //    "@p_Month, " +
-                                //    "@p_Chemist_Code," +
-                                //    " @p_ProductName," +
-                                //    " @p_ActualDiscount," +
-                                //    " @p_Contribution," +
-                                //    " @p_SalesType," +
-                                //    "@p_Sales_Sku," +
-                                //    "@p_CreatedBy," +
-                                //    "@p_Sales_Value," +
-                                //    "@p_Pre_Fromdate," +
-                                //    "@p_Pre_Todate," +
-                                //    "@p_Post_Fromdate," +
-                                //    "@p_Post_Todate," +
-                                //    "@p_Year," +
-                                //    " @p_PackCode," +
-                                //    " @p_PreTotal," +
-                                //    " @p_PostTotal," +
-                                //    " @p_Roi," +
-                                //    " @p_PostProDesc," +
-                                //    " @p_DiscountPercentagePre," +
-                                //    " @p_DiscountPercentagePost," +
-                                //    " @p_TotalRoiPercentage," +
-                                //    " @p_BPSPercentage," +
-                                //    " @p_GrandTotal," +
-                                //    " p_Record_ID)",
-                                //    new MySqlParameter("@p_BPS_Record_ID", bpsrecordid),
-                                //    new MySqlParameter("@p_Month", month),
-                                //    new MySqlParameter("@p_Chemist_Code", chmeistcode),
-                                //    new MySqlParameter("@p_ProductName", ProdctName),
-                                //    new MySqlParameter("@p_ActualDiscount", PreProductActualDiscount),
-                                //    new MySqlParameter("@p_Contribution", Contributer),
-                                //    new MySqlParameter("@p_SalesType", SalesType),
-                                //    new MySqlParameter("@p_Sales_Sku", sku),
-                                //    new MySqlParameter("@p_CreatedBy", EmpidSessionValue),
-                                //    new MySqlParameter("@p_Sales_Value", value),
-                                //    new MySqlParameter("@p_Pre_Fromdate", prefromdate),
-                                //    new MySqlParameter("@p_Pre_Todate", pretodate),
-                                //    new MySqlParameter("@p_Post_Fromdate", postfromdate),
-                                //    new MySqlParameter("@p_Post_Todate", posttodate),
-                                //    new MySqlParameter("@p_Year", year),
-                                //    new MySqlParameter("@p_PackCode", ProdctCode),
-                                //    new MySqlParameter("@p_PreTotal", PreTotal),
-                                //    new MySqlParameter("@p_PostTotal", PostTotal),
-                                //    new MySqlParameter("@p_Roi", ROI),
-                                //    new MySqlParameter("@p_PostProDesc", PostProductDescription),
-                                //     new MySqlParameter("@p_DiscountPercentagePre", Discountpercentage),
-                                //      new MySqlParameter("@p_DiscountPercentagePost", Discountpostcentage),
-                                //      new MySqlParameter("@p_TotalRoiPercentage", ROI),
-                                //      new MySqlParameter("@p_BPSPercentage", BPSPercentage),
-                                //      new MySqlParameter("@p_GrandTotal", GrandTotal)
-                                //    ,
-                                //    outputParameter1)
-                                //    .ToList();
-
-                                //int recordId = (int)outputParameter1.Value;
                             }
 
                         }

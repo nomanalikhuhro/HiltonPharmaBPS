@@ -105,7 +105,7 @@
                             <div>
                              @foreach (var item1 in Model.Distributers)
                               {
-                                    <input style="width:100%" disabled type="text" value="@item1.DistributerCode - @item1.DistrubiterName" />
+                                    <input id="distributer" style="width:100%" disabled type="text" value="@item1.DistributerCode - @item1.DistrubiterName" />
                               }
                             </div>
                         </div>
@@ -114,7 +114,7 @@
                             <div>
                                 @foreach (var item1 in Model.Macrobricks)
                                 {
-                                    <input style="width:100%" disabled type="text" value="@item1.MacroBrickCode - @item1.MacroBrickName" />
+                                    <input id="selectedbrick" style="width:100%" disabled type="text" value="@item1.MacroBrickCode - @item1.MacroBrickName" />
                                 }
                             </div>
                         </div>
@@ -164,7 +164,7 @@
                             <div>
                                 @foreach(var dist in Model.BPSrequestpaps)
                                 {
-                                    <input disabled type="text" value="@dist.DiscountType" />
+                                        <input id="selecteddis" disabled type="text" value="@dist.DiscountType" />
                                 }
                             </div>
                         </div>
@@ -251,11 +251,11 @@
 
                                                         if (Salesphapapdata.Key == "PackCode")
                                                         {
-                                                            <td id="PackCode-@acc-@editproductindex">@Salesphapapdata.Value</td>
+                                                            <td id="EditPackCode-@acc-@editproductindex">@Salesphapapdata.Value</td>
                                                         }
                                                         else if (Salesphapapdata.Key == "ProductName")
                                                         {
-                                                            <td id="ProductName-@acc-@editproductindex">@Salesphapapdata.Value</td>
+                                                            <td id="EditProductName-@acc-@editproductindex">@Salesphapapdata.Value</td>
                                                         }
                                                         else if (Salesphapapdata.Key == "LastYearSKU")
                                                         {

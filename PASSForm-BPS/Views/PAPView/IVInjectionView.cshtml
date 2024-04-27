@@ -82,7 +82,7 @@
                             <div>
                              @foreach (var tdate in Model.BPSrequestpapIvInjections)
                                 {
-                                    <input disabled id="enddate" type="text" value="@DateTime.Parse(@tdate.DiscountToDate.ToString()).ToString("dd-MM-yyyy")" />
+                                    <input disabled id="enddate" type="text" value="@GlobalClass.StringDateFormat(@tdate.DiscountToDate.ToString())" />
                                 }
                             </div>
                         </div>

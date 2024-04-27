@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using MySql.Data.MySqlClient;
 
 using Org.BouncyCastle.Ocsp;
@@ -9,6 +10,7 @@ using PASSForm_BPS.Models;
 using PASSForm_BPS.ViewModel;
 using System;
 using System.Data;
+using System.Drawing;
 using System.Dynamic;
 using System.Globalization;
 using System.Text.Json;
@@ -772,8 +774,274 @@ where mcm.MacroBrickCode = '" + bpspaprephar.BrickCode + "'";
             ViewBag.PAPProducts = _passDbContext.Tblproducts.FromSqlRaw("select * from tblproduct").ToList();
 
 
-            return PartialView("Accordion_PartialView", salesData);
+            return PartialView("Accordion_EditPartialView", salesData);
         }
+
+        [HttpPost]
+        public object EditPAPBpsRecord(string EditPAPSalesarr, BPSrequestpap EditPAPHeaderData)
+        {
+
+            List<PAPCustomModel_Chemist> model = JsonSerializer.Deserialize<List<PAPCustomModel_Chemist>>(EditPAPSalesarr)
+;
+
+
+
+            bool isSuccess = false;
+            var EmpidSessionValue = HttpContext.Session.GetString("EmpIdbps");
+            BPSrequestpap bpspappharequest = _passDbContext.BPSrequestpaps.FirstOrDefault(h => h.TrackingID == EditPAPHeaderData.TrackingID.Trim());
+            try
+            {
+                using (var connection = new MySqlConnection(_connectionString))
+                {
+                    connection.Open();
+                    using (var command = new MySqlCommand("sp_UpdateBpsPAPPharmaciesHeaderData", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+
+                        // Add parameters
+                        command.Parameters.AddWithValue("@p_DiscountDateFrom", EditPAPHeaderData.DiscountDateFrom);
+                        command.Parameters.AddWithValue("@p_DiscountDateTo", EditPAPHeaderData.DiscountDateTo);
+                        command.Parameters.AddWithValue("@p_TrackingId", EditPAPHeaderData.TrackingID);
+                        command.Parameters.AddWithValue("@p_UpdatedBy", EmpidSessionValue);
+                        command.Parameters.AddWithValue("@p_Remarks", EditPAPHeaderData.Remarks);
+                        command.Parameters.AddWithValue("@p_DiscountType", EditPAPHeaderData.DiscountType);
+                        command.ExecuteNonQuery();
+
+                    }
+                }
+
+
+
+                using (var connection = new MySqlConnection(_connectionString))
+                {
+                    connection.Open();
+                    MySqlTransaction trans = connection.BeginTransaction();
+                    try
+                    {
+
+                        using (var command = new MySqlCommand("delete from bps_requestsalesrecord_pap where  Bps_RecordID = " + bpspappharequest.BPS_Record_Id + "", connection))
+                        {
+                            command.Transaction = trans;
+                            command.ExecuteNonQuery();
+                        }
+                        foreach (var item in model)
+                        {
+                            string chmeistcode = item.ChemistCode;
+    
+
+                            foreach (var p in item.ProductArr)
+                            {
+                                string PackCode = p.PackCode;
+                                string Discount = p.Discount;
+                                string LastYearSKU = p.LastYearSKU;
+                                string LastYearValue = p.LastYearValue;
+                                string ExpectedBusinessUnit = p.ExpectedBusinessUnit;
+
+                                string ExpectedBusinessValue = p.ExpectedBusinessValue;
+                                string UnitPrice = p.UnitPrice;
+
+                                using (var command = new MySqlCommand("sp_UpdateBpsPAPPharmaciesSalesData", connection))
+                                {
+                                    command.CommandType = CommandType.StoredProcedure;
+                                    command.Parameters.Add(new MySqlParameter("@p_Bps_RecordID", bpspappharequest.BPS_Record_Id));
+                                    command.Parameters.Add(new MySqlParameter("@p_ChemistCode", chmeistcode));
+                                    command.Parameters.Add(new MySqlParameter("@p_PackCode", PackCode));
+                                    command.Parameters.Add(new MySqlParameter("@p_LastYearSKU", LastYearSKU));
+                                    command.Parameters.Add(new MySqlParameter("@p_LastYearValue", LastYearValue));
+                                    command.Parameters.Add(new MySqlParameter("@p_Year", null));
+                                    command.Parameters.Add(new MySqlParameter("@p_Discount", Discount));
+                                    command.Parameters.Add(new MySqlParameter("@p_ExpectedBusinessUnit", ExpectedBusinessUnit));
+                                    command.Parameters.Add(new MySqlParameter("@p_ExpectedBusinessValue", ExpectedBusinessValue));
+                                    command.Parameters.Add(new MySqlParameter("@p_UnitPrice", UnitPrice));
+                                    command.Parameters.Add(new MySqlParameter("@p_UpdatedBy", EmpidSessionValue));
+                                    
+                                    command.Transaction = trans;
+                                        using (MySqlDataReader reader = command.ExecuteReader())
+                                        {
+                                            while (reader.Read())
+                                            {
+                                            }
+                                        }
+                                    }
+
+                                }
+
+                            }
+                        
+                        trans.Commit();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        trans.Rollback();
+                        throw;
+                    }
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            // Get the output parameter value
+            //var updatedBpsRecordId = (int)outputParameter.Value;
+
+            return null;
+
+
+        }
+
+        public ActionResult IVInjectionEdit(int id)
+        {
+            try
+            {
+                BPSrequestpapIvInjection bpspapreiv = _passDbContext.bps_request_papivinjection.FirstOrDefault(h => h.BPS_Record_ID == id);
+                var bpsreqpapivinjection = _passDbContext.bps_request_papivinjection
+     .Where(h => h.BPS_Record_ID == id)
+     .ToList();
+
+
+                var bpssalespapivinjection = _passDbContext.bps_salesrecord_papivinjection
+    .Where(h => h.BPS_Record_ID == id)
+    .ToList();
+
+                Hcprequest_pap hcpivinjectionpap = _passDbContext.HcprequestPAPs.FirstOrDefault(h => h.HCPREQID == bpspapreiv.HCPREQID);
+                var Teamivinjectionpap = _passDbContext.Teams
+    .Where(h => h.TeamCode == hcpivinjectionpap.TeamId)
+    .FirstOrDefault();
+                var TeamivinjectionpapList = _passDbContext.Teams
+    .Where(h => h.TeamCode == hcpivinjectionpap.TeamId)
+    .ToList();
+
+
+                var products = _passDbContext.BPSIvInjectionViewViewModels.FromSqlRaw("call sp_GenerateTableIVInjectionPAP(@p_Bps_Record_ID, @p_TeamName)",
+                                                new MySqlParameter("@p_Bps_Record_ID", id),
+                                                new MySqlParameter("@p_TeamName", Teamivinjectionpap.TeamName)).ToList();
+
+
+
+
+                var ViewModelPharmaciesView = new BPSRequestListViewModel
+                {
+                    BPSIvInjectionViewViewModels = products,
+                    teams = TeamivinjectionpapList,
+                    BPSrequestpapIvInjections = bpsreqpapivinjection
+
+
+                };
+
+
+                return View(ViewModelPharmaciesView);
+            }
+            catch(Exception ex)
+            {
+                return View();
+            }
+
+        }
+
+        [HttpPost]
+        public object EditPAPIvInjectionBpsRecord(string EditPAPIvInjectionSalesarr, BPSrequestpapIvInjection EditPAPIvInjectionHeaderData)
+        {
+            if (ModelState.IsValid)
+            {
+
+
+                List<PAPIvInjectionCustomModel_Team> model = JsonSerializer.Deserialize<List<PAPIvInjectionCustomModel_Team>>(EditPAPIvInjectionSalesarr);
+
+
+
+                bool isSuccess = false;
+                var EmpidSessionValue = HttpContext.Session.GetString("EmpIdbps");
+                BPSrequestpapIvInjection bpspapIVrequest = _passDbContext.bps_request_papivinjection.FirstOrDefault(h => h.TrackingId == EditPAPIvInjectionHeaderData.TrackingId.Trim());
+                try
+                {
+                    using (var connection = new MySqlConnection(_connectionString))
+                    {
+                        connection.Open();
+                        using (var command = new MySqlCommand("sp_UpdateBpsPAPIVInjectionHeaderData", connection))
+                        {
+                            command.CommandType = CommandType.StoredProcedure;
+
+                            // Add parameters
+                            command.Parameters.AddWithValue("@p_TrackingId", EditPAPIvInjectionHeaderData.TrackingId);
+                            command.Parameters.AddWithValue("@p_DiscountFromDate", EditPAPIvInjectionHeaderData.DiscountFromDate);
+                            command.Parameters.AddWithValue("@p_DiscountToDate", EditPAPIvInjectionHeaderData.DiscountToDate);
+                            command.Parameters.AddWithValue("@p_UpdatedBy", EmpidSessionValue);
+                            command.ExecuteNonQuery();
+
+                        }
+                    }
+
+                    using (var connection = new MySqlConnection(_connectionString))
+                    {
+                        connection.Open();
+                        MySqlTransaction trans = connection.BeginTransaction();
+                        try
+                        {
+
+                            using (var command = new MySqlCommand("delete from bps_salesrecord_papivinjection where  Bps_RecordID = " + bpspapIVrequest.BPS_Record_ID + "", connection))
+                            {
+                                command.Transaction = trans;
+                                command.ExecuteNonQuery();
+                            }
+                            foreach (var item in model)
+                            {
+                                string Team = item.Team;
+
+
+                                foreach (var p in item.ProductArr)
+                                {
+                                    string PackCode = p.PackCode;
+                                    string Discount = p.Discount;
+
+                                    using (var command = new MySqlCommand("sp_UpdateBpsIVInjectionSalesData", connection))
+                                    {
+                                        command.CommandType = CommandType.StoredProcedure;
+                                        command.Parameters.Add(new MySqlParameter("@p_BPS_Record_ID", bpspapIVrequest.BPS_Record_ID));
+                                        command.Parameters.Add(new MySqlParameter("@p_Team", Team));
+                                        command.Parameters.Add(new MySqlParameter("@p_PackCode", PackCode));
+                                        command.Parameters.Add(new MySqlParameter("@p_Discount", Discount));
+                                        command.Parameters.Add(new MySqlParameter("@p_UpdatedBy", EmpidSessionValue));
+
+                                        command.Transaction = trans;
+                                        using (MySqlDataReader reader = command.ExecuteReader())
+                                        {
+                                            while (reader.Read())
+                                            {
+                                            }
+                                        }
+                                    }
+
+                                }
+
+                            }
+
+                            trans.Commit();
+
+                        }
+                        catch (Exception ex)
+                        {
+                            trans.Rollback();
+                            throw;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                }
+
+                isSuccess = true;
+            }
+
+            return null;
+
+
+        }
+
+
 
     }
 }

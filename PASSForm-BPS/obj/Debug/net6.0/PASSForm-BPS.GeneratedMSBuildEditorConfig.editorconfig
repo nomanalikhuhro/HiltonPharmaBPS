@@ -116,6 +116,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUEFQVmlld1xDcmVhdGVfUGFydGlhbFZpZXcuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/BPSGit/PASSForm-BPS/Views/PAPView/IVInjectionEdit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUEFQVmlld1xJVkluamVjdGlvbkVkaXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/BPSGit/PASSForm-BPS/Views/PAPView/IVInjectionSubmitted.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUEFQVmlld1xJVkluamVjdGlvblN1Ym1pdHRlZC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 

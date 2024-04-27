@@ -568,7 +568,7 @@ function EditPAPPharmaciesBPS() {
     var discode = selectedDistributorValue.split('-');
     var DistributorCode = discode.shift().trim();
     var Brick = document.getElementById("selectedbrick");
-    var selectedBrickValue = Brick.options[Brick.selectedIndex].value;
+    var selectedBrickValue = Brick.value || "";
     var brickcode = selectedBrickValue.split('-');
     var MacroBrickCode = brickcode.shift().trim();
 
@@ -602,8 +602,8 @@ function EditPAPPharmaciesBPS() {
     var PAPSalesarr = [];
     var salesArrString;
 
-    var chemistCount = $("#tableAcc").find("button").length;
-    $("#tableAcc").find("button").each(function (index) {
+    var chemistCount = $("#UpdatePharmaciesTableAcc").find("button").length;
+    $("#UpdatePharmaciesTableAcc").find("button").each(function (index) {
 
         var buttonId = $(this).attr("id");
         var parts = buttonId.split('-');
@@ -620,7 +620,7 @@ function EditPAPPharmaciesBPS() {
             var productCode = document.getElementById("EditPackCode-" + button1rightPart + "-" + j).innerHTML
             var PreUnit = document.getElementById("PreEditUnits-" + button1rightPart + "-" + j).innerHTML;
             var PreValue = document.getElementById("PreEditValue-" + button1rightPart + "-" + j).innerHTML;
-            var UnitPrice = document.getElementById("UnitEditPrice-" + button1rightPart + "-" + j).innerHTML;
+            var UnitPrice = document.getElementById("EditUnitPrice-" + button1rightPart + "-" + j).innerHTML;
             var EstimatedUnit = document.getElementById("PostEditUnits-" + button1rightPart + "-" + j).value;
             var EstimatedValue = document.getElementById("PostEditValue-" + button1rightPart + "-" + j).value;
             var Discount = document.getElementById("EditDiscount-" + button1rightPart + "-" + j).value;
@@ -642,9 +642,9 @@ function EditPAPPharmaciesBPS() {
 
     $.ajax({
 
-        url: "/PAPView/CreatePAPBpsRecord", // Replace with the URL of your controller action
+        url: "/PAPView/EditPAPBpsRecord", // Replace with the URL of your controller action
         method: "POST", // Use POST since you are sending data
-        data: { PAPSalesarr: PAPsalesArrString, PAPHeaderData: PAPHeaderData },
+        data: { EditPAPSalesarr: PAPsalesArrString, EditPAPHeaderData: PAPHeaderData },
 
         success: function (data) {
 
@@ -678,6 +678,98 @@ function EditPAPPharmaciesBPS() {
         }
     });
 
+}
+
+
+function EditPAPIvinjectionBPS() {
+
+    var ReqId = document.getElementById('papivreqid').value;
+    var Team = document.getElementById('TeamName').innerHTML;
+    var preactualfromDate = new Date($('#startdate').val());
+    var prefromDate = preactualfromDate.getFullYear() + '-' +
+        (preactualfromDate.getMonth() + 1).toString().padStart(2, '0') + '-' +
+        preactualfromDate.getDate().toString().padStart(2, '0');
+    var preactualtoDate = new Date($('#enddate').val());
+    var pretoDate = preactualtoDate.getFullYear() + '-' +
+        (preactualtoDate.getMonth() + 1).toString().padStart(2, '0') + '-' +
+        preactualtoDate.getDate().toString().padStart(2, '0');
+    var currentDate = new Date();
+    var PAPHeaderData = {
+
+
+        DiscountFromDate: prefromDate,
+        DiscountToDate: pretoDate,
+        TrackingId: ReqId,
+        CurrentDate: currentDate,
+
+    }
+
+    var PAPSalesarr = [];
+    var salesArrString;
+
+    var chemistCount = $("#UpdatetableAcc").find("button").length;
+
+
+    var productPreSkuCount = $("#updatetableproducts").find("tr").length;
+
+    var prdArr = [];
+    for (var j = 0; j < productPreSkuCount; j++) {
+        var productName = document.getElementById("EditProductName-" + j).innerHTML;
+        var productCode = document.getElementById("EditPackCode-" + j).innerHTML;
+
+        var Discount = document.getElementById("EditDiscount-" + j).value;
+
+
+        prdArr.push({
+            PackCode: productCode,
+
+            Discount: Discount,
+
+        })
+    }
+
+    PAPSalesarr.push({ Team: Team, ProductArr: prdArr });
+
+
+    var PAPsalesArrString = JSON.stringify(PAPSalesarr);
+
+    $.ajax({
+
+        url: "/PAPView/EditPAPIvInjectionBpsRecord",
+        method: "POST",
+        data: { EditPAPIvInjectionSalesarr: PAPsalesArrString, EditPAPIvInjectionHeaderData: PAPHeaderData },
+
+        success: function (data) {
+
+
+            if (data = true) {
+
+                Swal.fire({
+                    icon: "success",
+                    title: 'Record Created Successfully!',
+                    showConfirmButton: false,
+                    timer: 3600,
+                    width: 680,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    customClass: {
+                        title: 'small-font',
+                        icon: 'small-icon'
+                    }
+                });
+
+            } else {
+
+            }
+            setTimeout(function () {
+                window.location.href = "/ListView/ApprovedView/1"; // you can pass true to reload function to ignore the client cache and reload from the server
+            }, 3500);
+
+        },
+        error: function (xhr, status, error) {
+            console.error("Error:", status, error);
+        }
+    });
 }
 
 
