@@ -55,7 +55,7 @@
                         <td id="PreValue-@ViewBag.ChemCode-@productindex" class="numfield">@item.SalesValueNp</td>
                         <td id="UnitPrice-@ViewBag.ChemCode-@productindex" class="numfield">@unitprice</td>
                         <td class="numfield">
-                            <input type="text" class="numfield" style="width:40%" value="0" id="PostUnits-@ViewBag.ChemCode-@productindex" oninput="PostValCalculation(@ViewBag.ChemCode,@productindex)">
+                            <input  type="text" class="numfield" style="width:40%" value="0" id="PostUnits-@ViewBag.ChemCode-@productindex" oninput="PostValCalculation(@ViewBag.ChemCode,@productindex)">
                             
                         </td>
                         <td class="numfield">
@@ -63,7 +63,7 @@
                             
                         </td>
                         <td class="numfield">
-                            <input type="text" class="numfield" style="width:40%" value="0" id="Discount-@ViewBag.ChemCode-@productindex">
+                            <input  type="text" class="numfield" style="width:40%" value="0" id="Discount-@ViewBag.ChemCode-@productindex">
                             
                         </td>
                   
@@ -77,6 +77,11 @@
 
         </tbody>
     </table>
+
+    <div style="padding-top: 2%; text-align: end; margin-right: 4%;">
+        <label>Capping:</label>
+        <input class="numfield" type="text" id="Capping-@ViewBag.ChemCode" style="width: 5%;" />
+    </div>
 
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

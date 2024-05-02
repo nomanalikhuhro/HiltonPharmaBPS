@@ -239,3 +239,18 @@ body {
 .is-invalid {
     border-color: red;
 }
+
+
+.PAPbutton {
+    width: 10%;
+    /* width: 25%; */
+    border-radius: 5px;
+    height: 30px;
+    color: black;
+    background-color: white;
+    border: 3px solid black;
+}
+.PAPbuttonmaindiv{
+    text-align: center;
+    padding-top:5%;
+}

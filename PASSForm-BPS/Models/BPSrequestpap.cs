@@ -12,11 +12,12 @@ namespace PASSForm_BPS.Models
         public int BPS_Record_Id { get; set; }
         public int? HCPREQID { get; set; }
         public string? TrackingID { get; set; }
-       
-        public DateTime? DiscountDateFrom { get; set; }
+
+
+        public DateTime DiscountDateFrom { get; set; }
       
 
-        public DateTime? DiscountDateTo { get; set; }
+        public DateTime DiscountDateTo { get; set; }
         public string? DistributerCode { get; set; }
         public string? BrickCode { get; set; }
         public string? Remarks { get; set; }
@@ -28,6 +29,6 @@ namespace PASSForm_BPS.Models
         public string? UpdatedBy { get; set; }
 
         public int? StatusID { get; set; }
-
+        
     }
 }

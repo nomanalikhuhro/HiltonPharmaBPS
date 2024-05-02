@@ -6,6 +6,8 @@
 
 //});
 
+
+
 function nextButtonClick() {
    
 
@@ -230,8 +232,13 @@ function PostValCalculation(chemcode, proindex) {
 }
 
 function CreatePAPBPS() {
-    debugger; 
-    
+    debugger;
+
+    var isValid = validateForm(); // Validate the form
+
+    if (!isValid) {
+        return; // Stop further processing if form is invalid
+    }
 
 
     var PAPType = document.getElementById("PAPType").value.trim();
@@ -280,7 +287,7 @@ function CreatePAPBPS() {
         var buttonId = $(this).attr("id");
         var parts = buttonId.split('-');
         var button1rightPart = parts[1];
-
+        
         var chemist = document.getElementById("chemist-" + button1rightPart).innerText;
         var chemcodeparts = chemist.split('-');
         var ChemistCode = chemcodeparts[0].trim();
@@ -296,14 +303,14 @@ function CreatePAPBPS() {
             var EstimatedUnit = document.getElementById("PostUnits-" + button1rightPart + "-" + j).value;
             var EstimatedValue = document.getElementById("PostValue-" + button1rightPart + "-" + j).value;
             var Discount = document.getElementById("Discount-" + button1rightPart + "-" + j).value;
-
+            var capp = document.getElementById("Capping-" + button1rightPart).value;
 
             prdArr.push({
                  PackCode: productCode,
                 LastYearSKU: PreUnit, LastYearValue: PreValue,
                 Discount: Discount, 
                 ExpectedBusinessUnit: EstimatedUnit, ExpectedBusinessValue: EstimatedValue,
-                UnitPrice: UnitPrice
+                UnitPrice: UnitPrice, Capping : capp
             })
         }
 
@@ -341,7 +348,7 @@ function CreatePAPBPS() {
 
             }
             setTimeout(function () {
-                window.location.href = "/ListView/ApprovedView/1"; // you can pass true to reload function to ignore the client cache and reload from the server
+                window.location.href = "/PAPView/PharmaciesSubmitted"; // you can pass true to reload function to ignore the client cache and reload from the server
             }, 3500);
 
         },
@@ -354,6 +361,11 @@ function CreatePAPBPS() {
 
 function CreatePAPIVInjectionBPS() {
     debugger;
+    var isValid = validateFormIvInjection(); // Validate the form
+
+    if (!isValid) {
+        return; // Stop further processing if form is invalid
+    }
  
 
     var PAPType = document.getElementById("PAPType").value;
@@ -440,7 +452,7 @@ function CreatePAPIVInjectionBPS() {
 
             }
             setTimeout(function () {
-                window.location.href = "/ListView/ApprovedView/1"; // you can pass true to reload function to ignore the client cache and reload from the server
+                window.location.href = "/PAPView/IVInjectionSubmitted"; // you can pass true to reload function to ignore the client cache and reload from the server
             }, 3500);
 
         },
@@ -624,6 +636,8 @@ function EditPAPPharmaciesBPS() {
             var EstimatedUnit = document.getElementById("PostEditUnits-" + button1rightPart + "-" + j).value;
             var EstimatedValue = document.getElementById("PostEditValue-" + button1rightPart + "-" + j).value;
             var Discount = document.getElementById("EditDiscount-" + button1rightPart + "-" + j).value;
+            var Capp = document.getElementById("EditCapping-" + button1rightPart).value;
+
 
 
             prdArr.push({
@@ -631,7 +645,7 @@ function EditPAPPharmaciesBPS() {
                 LastYearSKU: PreUnit, LastYearValue: PreValue,
                 Discount: Discount,
                 ExpectedBusinessUnit: EstimatedUnit, ExpectedBusinessValue: EstimatedValue,
-                UnitPrice: UnitPrice
+                UnitPrice: UnitPrice, Capping: Capp
             })
         }
 
@@ -669,7 +683,7 @@ function EditPAPPharmaciesBPS() {
 
             }
             setTimeout(function () {
-                window.location.href = "/ListView/ApprovedView/1"; // you can pass true to reload function to ignore the client cache and reload from the server
+                window.location.href = "/PAPView/PharmaciesSubmitted"; // you can pass true to reload function to ignore the client cache and reload from the server
             }, 3500);
 
         },
@@ -762,7 +776,7 @@ function EditPAPIvinjectionBPS() {
 
             }
             setTimeout(function () {
-                window.location.href = "/ListView/ApprovedView/1"; // you can pass true to reload function to ignore the client cache and reload from the server
+                window.location.href = "/PAPView/IVInjectionSubmitted"; // you can pass true to reload function to ignore the client cache and reload from the server
             }, 3500);
 
         },

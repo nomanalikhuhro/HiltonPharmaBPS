@@ -31,6 +31,7 @@
     public string? UpdatedBy { get; set; }
 
     public DateTime? UpdateOn { get; set; }
+    public decimal? Capping { get; set; }
 
-}
+    }
 }

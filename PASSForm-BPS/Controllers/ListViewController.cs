@@ -1046,7 +1046,7 @@ namespace PASSForm_BPS.Controllers
                 };
                 HttpContext.Features.Set(feature);
                 ViewBag.Error = ex;
-                return View("Error");
+                return View("ErrorView");
             }
 
   

@@ -9,5 +9,7 @@
         public string? ExpectedBusinessUnit { get; set; }
         public string? ExpectedBusinessValue { get; set; }
         public string? UnitPrice { get; set; }
+
+        public string? Capping { get; set; }
     }
 }

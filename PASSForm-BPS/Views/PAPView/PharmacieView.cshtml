@@ -66,7 +66,7 @@
                         <div class="col-4">
                             <label class="label">For:</label>
                             <div>
-                                <input id="PAPType" disabled type="text" value="@ViewBag.PapType" />
+                                <input id="PAPType" disabled type="text" value="Annexure D" />
                             </div>
                         </div>
                         <div class="col-4">
@@ -74,7 +74,7 @@
                             <div>
                              @foreach (var disstartdate in Model.BPSrequestpaps)
                                     {
-                                <input disabled id="startdate" type="text"  value="@disstartdate.DiscountDateFrom"/>
+                                    <input disabled id="startdate" type="text" value="@GlobalClass.StringDateFormat(@disstartdate.DiscountDateFrom.ToString())" />
                                     }
                             </div>
                         </div>
@@ -83,7 +83,7 @@
                             <div>
                              @foreach (var disenddate in Model.BPSrequestpaps)
                                     {
-                                <input disabled id="enddate" type="text" value="@disenddate.DiscountDateTo" />
+                                <input disabled id="enddate" type="text" value="@GlobalClass.StringDateFormat(@disenddate.DiscountDateTo.ToString())"  />
                                     }
                             </div>
                         </div>
@@ -108,7 +108,7 @@
                             <div>
                                 @foreach (var item1 in Model.Distributers)
                                 {
-                                    <input width="100" type="text" disabled value="@item1.DistributerCode - @item1.DistrubiterName" />
+                                    <input style="width:100%" type="text" disabled value="@item1.DistributerCode - @item1.DistrubiterName" />
                                 }
                             </div>
                         </div>
@@ -117,7 +117,7 @@
                             <div>
                                 @foreach (var mac in Model.Macrobricks)
                                 {
-                                    <input width="100" type="text" disabled id="macrobrickcode" value="@mac.MacroBrickCode - @mac.MacroBrickName" />
+                                    <input style="width:100%" type="text" disabled id="macrobrickcode" value="@mac.MacroBrickCode - @mac.MacroBrickName" />
                                 }
                             </div>
                         </div>
@@ -132,7 +132,7 @@
                             <label class="label">Remarks:</label>
                             <div>
                                 @foreach(var com in Model.BPSrequestpaps){
-                                <textarea id="createcomments">@com.Remarks</textarea>
+                                <textarea disabled id="createcomments">@com.Remarks</textarea>
                                 }
                             </div>
                         </div>
@@ -259,10 +259,18 @@
                                 </tbody>
                             </table>
                         </div>
+                        <div style="padding-top: 2%; text-align: end; margin-right: 4%;">
+                            <label>Capping:</label>
+
+                            <input disabled class="numfield" type="text" style="width: 5%;" value="@Model.Bpssalesrecordpaps.FirstOrDefault()?.Capping"/>
+                        </div>
            
                    }
+
                }
             </div>
+
+
            }
     </div>
 

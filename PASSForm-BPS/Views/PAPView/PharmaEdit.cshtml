@@ -65,7 +65,7 @@
                         <div class="col-4">
                             <label class="label">For:</label>
                             <div>
-                                <input id="PAPType" disabled type="text" value="@ViewBag.PapType" />
+                                <input id="PAPType" disabled type="text" value="Annexure D" />
                             </div>
                         </div>
                         <div class="col-4">
@@ -300,11 +300,16 @@
 
                         }
                     }
+
+                    <div style="padding-top: 2%; text-align: end; margin-right: 4%;">
+                        <label>Capping:</label>
+                        <input class="numfield" type="text" id="EditCapping-@acc" style="width: 5%;" value="@Model.Bpssalesrecordpaps.FirstOrDefault()?.Capping" />
+                    </div>
                 </div>
             }
         </div>
-        <div>
-            <input type="submit" value="Update" onclick="EditPAPPharmaciesBPS()" />
+        <div class="PAPbuttonmaindiv">
+            <input class="PAPbutton" type="submit" value="Update" onclick="EditPAPPharmaciesBPS()" />
         </div>
 
 
@@ -319,11 +324,6 @@
 
                     editaccordion();
                 });
-
-                // Initialize select2
-
-
-
             });
             var acc = document.getElementsByClassName("accordion");
             var i;

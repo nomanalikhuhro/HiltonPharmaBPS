@@ -404,7 +404,7 @@
 
                                 <div>
 
-                                    <a class="sidebar-link @(currentAction == "Create" ? "act" : "")" asp-area="" asp-controller="PAPView" asp-action="Create">Create Request</a>
+                                    <a class="sidebar-link @(currentAction == "Index" ? "act" : "")" asp-area="" asp-controller="PAPView" asp-action="Index">Create Request</a>
                                     <a class="sidebar-link @(currentAction == "PharmaciesSubmitted" ? "act" : "")" asp-area="" asp-controller="PAPView" asp-action="PharmaciesSubmitted" asp-route-id="1">Pharmacies Request</a>
                                     <a class="sidebar-link @(currentAction == "IVInjectionSubmitted" ? "act" : "")" asp-area="" asp-controller="PAPView" asp-action="IVInjectionSubmitted" asp-route-id="1">IVInjection Request</a>
                                     <a class="sidebar-link @(currentAction == "TrackingIDStatus" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="TrackingIDStatus" asp-route-id="1">Request Status</a>
@@ -413,7 +413,7 @@
                             else if (emproleid == "2" || emproleid == "3")
                             {
                                 <div>
-                                    <a class="sidebar-link @(currentAction == "Create" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="Create" asp-route-id="2">Create Request</a>
+                                    <a class="sidebar-link @(currentAction == "Index" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="Index" asp-route-id="2">Create Request</a>
                                     <a class="sidebar-link @(currentAction == "ApprovedView" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="ApprovedView" asp-route-id="1">Submitted Request</a>
                                     <a class="sidebar-link @(currentAction == "PendingView" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="PendingView" asp-route-id="2">Pending for My Approval</a>
                                     <a class="sidebar-link @(currentAction == "TrackingIDStatus" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="TrackingIDStatus" asp-route-id="2">Request Status</a>
@@ -443,7 +443,7 @@
             <div class="topnav">
                 <a style="text-decoration-style: solid; font-weight:bold; font-size:20px;" href="#">Business Planning Sheet</a>
                 <div style="display: grid; justify-content:end; align-items: center ; margin-top:auto;">
-                    <span style="display: flex; justify-content: center; align-items: center; flex-direction: row; font-size:20px;">
+                    <span style="display: flex; justify-content: center; align-items: center; flex-direction: row; font-size:20px; padding:6px;">
                         @uname (@rolename)
                         <span><a style="color: black; font-size:20px;font-weight:bold" asp-controller="Login" asp-action="Logout" class="fa fa-sign-out" data-toggle="tooltip" data-placement="down" title="Logout"></a></span>
                     </span>

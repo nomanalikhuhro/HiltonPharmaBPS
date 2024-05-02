@@ -256,6 +256,7 @@ public partial class PassDbContext : DbContext
     entity.Property(e => e.CreatedBy).HasMaxLength(50);
     entity.Property(e => e.UpdatedBy).HasMaxLength(50);
     entity.Property(e => e.StatusID).IsRequired(false);
+    
     // Additional configuration can go here, such as relationships and constraints
 });
         modelBuilder.Entity<BPSrequestpapIvInjection>().HasNoKey();
@@ -415,6 +416,7 @@ public partial class PassDbContext : DbContext
             entity.Property(e => e.UpdatedBy).HasMaxLength(50);
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.UpdateOn).HasColumnType("datetime");
+            entity.Property(e => e.Capping).HasColumnType("decimal(18,2)");
         });
         modelBuilder.Entity<BpssalesrecordpapIvInjection>().HasNoKey();
 
