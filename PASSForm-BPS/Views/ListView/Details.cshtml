@@ -470,7 +470,7 @@
                         }
                         <div>
                             <div style="text-align:right; margin-top:2%;">
-                                <label>Chemist Total:</label>
+                                <label>Chemist Total(Rs):</label>
 
 
                                 @foreach (var group in Model.preDateRanges.Where(predat => predat.PreTotal != null && predat.Chemist_Code == acc)
@@ -487,7 +487,7 @@
                                 }
 
                             </div>
-                            <div style="text-align:right; margin-top:2%;">
+                            <div style="text-align:right; margin-top:2%;  visibility:hidden" >
                                 <label>Discount Percentage %:</label>
 
 
@@ -496,7 +496,7 @@
                                 {
                                     var predat = group.First(); // Take the first item in each group
 
-                                    <input disabled type="text" class="allinput-fields" value="@(predat.discountpercentage != null ? string.Format("{0:yyyy-MM-dd}", predat.discountpercentage) : string.Empty)" style="margin-left: 2%;" />
+                                    <input disabled type="text" class="allinput-fields" value="@(predat.discountpercentage != null ? string.Format("{0:yyyy-MM-dd}", predat.discountpercentage) : string.Empty)" style="margin-left: 2%; visibility:hidden" />
                                 }
 
                             </div>
