@@ -41,7 +41,7 @@
         }
 
   
-        table, th, td {
+/*        table, th, td {
             border: 1px solid black;
             border-collapse: collapse;
             border-style: solid;
@@ -49,10 +49,31 @@
 
         table, th {
             padding: 10px;
-        }
+        }*/
 
         .numfield {
             text-align: end;
+        }
+
+        table {
+            font-family: Arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #dddddd;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #d71921; /* Red background color */
+            color: white; /* White text color */
+            font-size: 12px;
+        }
+
+        td {
+            font-size: 10px;
         }
   
     </style>
@@ -125,7 +146,7 @@
                 </div>
 
             </div>
-            <div style="padding-top:1%;">
+            <div style="padding-top:3%;">
                 <div class="container">
                     <div class="row">
                         <div class="col-6">
@@ -172,41 +193,41 @@
                    {
                         <div style="overflow:auto; padding-top: 5%; padding-bottom: 5%; padding-left: 3%;">
                             <table>
-                                <thead style="height:50px; background: #d71921; color: white;">
+                                <thead>
                                     <tr>
                                         @foreach (var salesphapapcoloum in salesphapap.Value[0] as IDictionary<string, object>)
                                         {
                                             if (salesphapapcoloum.Key == "PackCode")
                                             {
-                                                <td>Pack Code</td>
+                                                <th>Pack Code</th>
                                             }
                                             else if (salesphapapcoloum.Key == "ProductName")
                                             {
-                                                <td>Product Name</td>
+                                                <th>Product Name</th>
                                             }
                                             else if (salesphapapcoloum.Key == "LastYearSKU")
                                             {
-                                                <td>LastYear Sales(Units)</td>
+                                                <th>LastYear Sales(Units)</th>
                                             }
                                             else if (salesphapapcoloum.Key == "LastYearValue")
                                             {
-                                                <td>LastYear Sales(Values)</td>
+                                                <th>LastYear Sales(Values)</th>
                                             }
                                             else if (salesphapapcoloum.Key == "UnitPrice")
                                             {
-                                                <td>Unit Price</td>
+                                                <th>Unit Price</th>
                                             }
                                             else if (salesphapapcoloum.Key == "ExpectedBusinessUnit")
                                             {
-                                                <td>Expected Business(Units</td>
+                                                <th>Expected Business(Units</th>
                                             }
                                             else if (salesphapapcoloum.Key == "ExpectedBusinessValue")
                                             {
-                                                <td>Expected Business(Values)</td>
+                                                <th>Expected Business(Values)</th>
                                             }
                                             else if (salesphapapcoloum.Key == "Discount")
                                             {
-                                                <td>Discount % </td>
+                                                <th>Discount % </th>
                                             }
                                            
                                         }
@@ -234,7 +255,7 @@
                                                 }
                                                 else if (Salesphapapdata.Key == "LastYearValue")
                                                 {
-                                                    <td style="text-align:end;">@Salesphapapdata.Value</td>
+                                                    <td style="text-align:end;">@string.Format("{0:#,0}", Salesphapapdata.Value)</td>
                                                 }
                                                 else if (Salesphapapdata.Key == "UnitPrice")
                                                 {
@@ -242,15 +263,21 @@
                                                 }
                                                 else if (Salesphapapdata.Key == "ExpectedBusinessUnit")
                                                 {
-                                                    <td style="text-align:end;">@Salesphapapdata.Value</td>
+                                                    <td style="text-align:end;">
+                                                        <input disabled type="text" class="numfield" style="width:40%" value="@Salesphapapdata.Value">
+                                                        </td>
                                                 }
                                                 else if (Salesphapapdata.Key == "ExpectedBusinessValue")
                                                 {
-                                                    <td style="text-align:end;">@Salesphapapdata.Value</td>
+                                                    <td style="text-align:end;">
+                                                        <input disabled type="text" class="numfield" style="width:40%" value="@string.Format("{0:#,0}", Salesphapapdata.Value)">
+                                                     </td>
                                                 }
                                                 else if (Salesphapapdata.Key == "Discount")
                                                 {
-                                                    <td style="text-align:end;">@Salesphapapdata.Value</td>
+                                                    <td style="text-align:end;">
+                                                        <input disabled type="text" class="numfield" style="width:40%" value="@Salesphapapdata.Value">
+                                                       </td>
                                                 }
                                             }
                                         </tr>
@@ -259,10 +286,10 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div style="padding-top: 2%; text-align: end; margin-right: 4%;">
+                        <div style="text-align: end;">
                             <label>Capping:</label>
 
-                            <input disabled class="numfield" type="text" style="width: 5%;" value="@Model.Bpssalesrecordpaps.FirstOrDefault()?.Capping"/>
+                            <input disabled class="numfield" type="text" style="width: 7%;" value="@Model.Bpssalesrecordpaps.FirstOrDefault()?.Capping"/>
                         </div>
            
                    }

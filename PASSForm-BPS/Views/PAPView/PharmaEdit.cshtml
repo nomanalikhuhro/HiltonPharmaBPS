@@ -41,14 +41,25 @@
             border: 2px solid #d71921;
         }
 
-        table, th, td {
-            border: 1px solid black;
+        table {
+            font-family: Arial, sans-serif;
             border-collapse: collapse;
-            border-style: solid;
+            width: 100%;
         }
 
-        table, th {
-            padding: 10px;
+        th, td {
+            border: 1px solid #dddddd;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #d71921; /* Red background color */
+            color: white; /* White text color */
+            font-size: 12px;
+        }
+
+        td {
+            font-size: 10px;
         }
 
         .numfield {
@@ -151,7 +162,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-6">
-                            <label>Remarks:</label>
+                                <label class="label">Remarks:</label>
                             <div>
                                 @foreach(var com in Model.BPSrequestpaps)
                                 {
@@ -160,7 +171,7 @@
                             </div>
                         </div>
                         <div class="col-6">
-                            <label>Discount Type::</label>
+                                <label class="label"> Discount Type::</label>
                             <div>
                                 @foreach(var dist in Model.BPSrequestpaps)
                                 {
@@ -205,35 +216,35 @@
                                             {
                                                 if (salesphapapcoloum.Key == "PackCode")
                                                 {
-                                                    <td>Pack Code</td>
+                                                    <th>Pack Code</th>
                                                 }
                                                 else if (salesphapapcoloum.Key == "ProductName")
                                                 {
-                                                    <td>Product Name</td>
+                                                    <th>Product Name</th>
                                                 }
                                                 else if (salesphapapcoloum.Key == "LastYearSKU")
                                                 {
-                                                    <td>LastYear Sales(Units)</td>
+                                                    <th>LastYear Sales(Units)</th>
                                                 }
                                                 else if (salesphapapcoloum.Key == "LastYearValue")
                                                 {
-                                                    <td>LastYear Sales(Values)</td>
+                                                    <th>LastYear Sales(Values)</th>
                                                 }
                                                 else if (salesphapapcoloum.Key == "UnitPrice")
                                                 {
-                                                    <td>Unit Price</td>
+                                                    <th>Unit Price</th>
                                                 }
                                                 else if (salesphapapcoloum.Key == "ExpectedBusinessUnit")
                                                 {
-                                                    <td>Expected Business(Units</td>
+                                                    <th>Expected Business(Units</th>
                                                 }
                                                 else if (salesphapapcoloum.Key == "ExpectedBusinessValue")
                                                 {
-                                                    <td>Expected Business(Values)</td>
+                                                    <th>Expected Business(Values)</th>
                                                 }
                                                 else if (salesphapapcoloum.Key == "Discount")
                                                 {
-                                                    <td>Discount % </td>
+                                                    <th>Discount % </th>
                                                 }
 
                                             }
@@ -263,7 +274,7 @@
                                                         }
                                                         else if (Salesphapapdata.Key == "LastYearValue")
                                                         {
-                                                            <td id="PreEditValue-@acc-@editproductindex" class="numfield">@Salesphapapdata.Value</td>
+                                                            <td id="PreEditValue-@acc-@editproductindex" class="numfield">@string.Format("{0:#,0}", Salesphapapdata.Value)</td>
                                                         }
                                                         else if (Salesphapapdata.Key == "UnitPrice")
                                                         {
@@ -280,7 +291,7 @@
                                                         {
                                                             <td class="numfield">
 
-                                                                <input disabled type="text" class="numfield" style="width:40%" value="@Salesphapapdata.Value" id="PostEditValue-@acc-@editproductindex">
+                                                                <input disabled type="text" class="numfield" style="width:40%" value="@string.Format("{0:#,0}", Salesphapapdata.Value)" id="PostEditValue-@acc-@editproductindex">
                                                             </td>
                                                         }
                                                         else if (Salesphapapdata.Key == "Discount")
@@ -301,9 +312,9 @@
                         }
                     }
 
-                    <div style="padding-top: 2%; text-align: end; margin-right: 4%;">
+                    <div style="text-align: end;">
                         <label>Capping:</label>
-                        <input class="numfield" type="text" id="EditCapping-@acc" style="width: 5%;" value="@Model.Bpssalesrecordpaps.FirstOrDefault()?.Capping" />
+                        <input class="numfield" type="text" id="EditCapping-@acc" style="width: 7%;" value="@Model.Bpssalesrecordpaps.FirstOrDefault()?.Capping" />
                     </div>
                 </div>
             }

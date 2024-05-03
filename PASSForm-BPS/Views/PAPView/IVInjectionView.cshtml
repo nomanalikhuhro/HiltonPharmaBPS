@@ -34,14 +34,25 @@
             border: 2px solid #d71921;
         }
 
-        table, th, td {
-            border: 1px solid black;
+        table {
+            font-family: Arial, sans-serif;
             border-collapse: collapse;
-            border-style: solid;
+            width: 100%;
         }
 
-        table, th {
-            padding: 10px;
+        th, td {
+            border: 1px solid #dddddd;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #d71921; /* Red background color */
+            color: white; /* White text color */
+            font-size: 12px;
+        }
+
+        td {
+            font-size: 10px;
         }
 
         .numfield {
@@ -149,6 +160,10 @@
 
             </tbody>
         </table>
+        <div style="padding-top: 2%; text-align: end; margin-right: 10%;">
+            <label>Capping:</label>
+            <input disabled class="numfield" type="text" id="EditCapping" style="width: 5%;" value="@Model.bpssalesrecordpapIvInjections.FirstOrDefault()?.Capping" />
+        </div>
     </div>
 
 

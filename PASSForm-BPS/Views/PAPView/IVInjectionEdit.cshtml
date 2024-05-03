@@ -151,6 +151,10 @@
 
             </tbody>
         </table>
+        <div style="padding-top: 2%; text-align: end; margin-right: 10%;">
+            <label>Capping:</label>
+            <input class="numfield" type="text" id="EditCapping" style="width: 5%;" value="@Model.bpssalesrecordpapIvInjections.FirstOrDefault()?.Capping" />
+        </div>
     </div>
     <div class="PAPbuttonmaindiv">
         <input class="PAPbutton" type="submit" value="Update" onclick="EditPAPIvinjectionBPS()" />

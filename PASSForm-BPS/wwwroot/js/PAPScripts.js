@@ -408,12 +408,13 @@ function CreatePAPIVInjectionBPS() {
             var productCode = document.getElementById("PackCode-" + j).innerHTML;
 
             var Discount = document.getElementById("Discount-" + j).value;
+            var Capp = document.getElementById("EditCapping").value;
 
 
             prdArr.push({
                 PackCode: productCode,
         
-                Discount: Discount,
+                Discount: Discount, Capping: Capp
 
             })
         }
@@ -732,12 +733,13 @@ function EditPAPIvinjectionBPS() {
         var productCode = document.getElementById("EditPackCode-" + j).innerHTML;
 
         var Discount = document.getElementById("EditDiscount-" + j).value;
+        var Capp = document.getElementById("EditCapping").value;
 
 
         prdArr.push({
             PackCode: productCode,
 
-            Discount: Discount,
+            Discount: Discount,Capping:Capp
 
         })
     }

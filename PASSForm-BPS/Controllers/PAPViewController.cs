@@ -2,6 +2,7 @@
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using MySql.Data.MySqlClient;
 
 using Org.BouncyCastle.Ocsp;
@@ -503,6 +504,7 @@ namespace PASSForm_BPS.Controllers
                             {
                                 string PackCode = p.PackCode;
                                 string Discount = p.Discount;
+                                string Capping = p.Capping;
 
 
                                 var outputParameter1 = new MySqlParameter
@@ -518,12 +520,14 @@ namespace PASSForm_BPS.Controllers
                                     "@p_PackCode," +
                                     " @p_Discount," +
                                     "@p_CreatedBy," +
+                                    "@p_Capping," +
                                     " p_Record_ID)",
                                     new MySqlParameter("@p_BPS_Record_ID", bpsrecordid),
                                     new MySqlParameter("@p_Team", Team),
                                     new MySqlParameter("@p_PackCode", PackCode),
                                     new MySqlParameter("@p_Discount", Discount),
                                     new MySqlParameter("@p_CreatedBy", EmpidSessionValue),
+                                    new MySqlParameter("@p_Capping", Capping),
                                     outputParameter1)
                                     .ToList();
 
@@ -742,8 +746,8 @@ namespace PASSForm_BPS.Controllers
                 {
                     BPSIvInjectionViewViewModels = products,
                     teams = TeamivinjectionpapList,
-                    BPSrequestpapIvInjections = bpsreqpapivinjection
-
+                    BPSrequestpapIvInjections = bpsreqpapivinjection,
+                    bpssalesrecordpapIvInjections = bpssalespapivinjection
 
                 };
 
@@ -1133,7 +1137,8 @@ where mcm.MacroBrickCode = '" + bpspaprephar.BrickCode + "'";
                 {
                     BPSIvInjectionViewViewModels = products,
                     teams = TeamivinjectionpapList,
-                    BPSrequestpapIvInjections = bpsreqpapivinjection
+                    BPSrequestpapIvInjections = bpsreqpapivinjection,
+                    bpssalesrecordpapIvInjections = bpssalespapivinjection
 
 
                 };
@@ -1214,6 +1219,7 @@ where mcm.MacroBrickCode = '" + bpspaprephar.BrickCode + "'";
                                     {
                                         string PackCode = p.PackCode;
                                         string Discount = p.Discount;
+                                        string Capping = p.Capping;
 
                                         using (var command = new MySqlCommand("sp_UpdateBpsIVInjectionSalesData", connection))
                                         {
@@ -1223,6 +1229,7 @@ where mcm.MacroBrickCode = '" + bpspaprephar.BrickCode + "'";
                                             command.Parameters.Add(new MySqlParameter("@p_PackCode", PackCode));
                                             command.Parameters.Add(new MySqlParameter("@p_Discount", Discount));
                                             command.Parameters.Add(new MySqlParameter("@p_UpdatedBy", EmpidSessionValue));
+                                            command.Parameters.Add(new MySqlParameter("@p_Capping", Capping));
 
                                             command.Transaction = trans;
                                             using (MySqlDataReader reader = command.ExecuteReader())

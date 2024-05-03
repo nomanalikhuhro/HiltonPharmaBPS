@@ -6,14 +6,25 @@
 <html>
 <head>
     <style>
-        table, th, td {
-            border: 1px solid black;
+        table {
+            font-family: Arial, sans-serif;
             border-collapse: collapse;
-            border-style: solid;
+            width: 100%;
         }
 
-        table, th {
-            padding: 10px;
+        th, td {
+            border: 1px solid #dddddd;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #d71921; /* Red background color */
+            color: white; /* White text color */
+            font-size: 12px;
+        }
+
+        td {
+            font-size: 10px;
         }
 
         .numfield {
@@ -77,9 +88,9 @@
 
         </tbody>
     </table>
-    <div style="padding-top: 2%; text-align: end; margin-right: 4%;">
+    <div style="text-align: end;">
         <label>Capping:</label>
-        <input class="numfield" type="text" id="EditCapping-@ViewBag.ChemCode" style="width: 5%;" value="" />
+        <input class="numfield" type="text" id="EditCapping-@ViewBag.ChemCode" style="width: 7%;" value="" />
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
