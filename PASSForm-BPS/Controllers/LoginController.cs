@@ -45,7 +45,11 @@ namespace PASSForm_BPS.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    var user = _passDbContext.Users.FirstOrDefault(u => u.UserEmail == model.UserEmail);
+                    //var user = _passDbContext.Users.FirstOrDefault(u => u.UserEmail == model.UserEmail);
+                    //var pass = _passDbContext.Users.FirstOrDefault(u => u.UserPassword == model.UserPassword);
+
+                    var user = _passDbContext.Users.FirstOrDefault(u => u.UserEmail == model.UserEmail && u.UserPassword == model.UserPassword);
+
                     var userWithDesignation = _passDbContext.Users
         .Where(u => u.UserEmail == model.UserEmail)
         .Join(
