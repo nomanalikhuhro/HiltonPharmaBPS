@@ -1,8 +1,7 @@
-﻿namespace PASSForm_BPS.Models
+﻿namespace PASSForm_BPS.ViewModel
 {
-    public class wf_worklist
+    public class BPSPAPPharmaciesApprovalModel
     {
-
         public int WFWorklistId { get; set; }
         public int? WFActivityInstanceId { get; set; }
         public string? Destination { get; set; }
@@ -21,9 +20,7 @@
         public string? TMCode { get; set; }
         public string? Statustype { get; set; }
         public string? CreatedBy { get; set; }
-
-        public string? ActionByName { get; set; }
-        public string? ActivityStatus { get; set; }
         public string? User_Name { get; set; }
+        public string? PAPType { get; set; }
     }
 }

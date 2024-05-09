@@ -1,7 +1,7 @@
-﻿
-@{
-    ViewData["Title"] = "PharmacieView";
+﻿@{
+    ViewData["Title"] = "PharmacieApprovalView";
     @model PASSForm_BPS.ViewModel.BPSRequestListViewModel;
+
 }
 
 <html>
@@ -40,16 +40,16 @@
             border: 2px solid #d71921;
         }
 
-  
-/*        table, th, td {
-            border: 1px solid black;
-            border-collapse: collapse;
-            border-style: solid;
-        }
 
-        table, th {
-            padding: 10px;
-        }*/
+        /*        table, th, td {
+                    border: 1px solid black;
+                    border-collapse: collapse;
+                    border-style: solid;
+                }
+
+                table, th {
+                    padding: 10px;
+                }*/
 
         .numfield {
             text-align: end;
@@ -75,7 +75,6 @@
         td {
             font-size: 10px;
         }
-  
     </style>
 </head>
 <body>
@@ -93,19 +92,19 @@
                         <div class="col-4">
                             <label class="label">Start Date:</label>
                             <div>
-                             @foreach (var disstartdate in Model.BPSrequestpaps)
-                                    {
+                                @foreach (var disstartdate in Model.BPSrequestpaps)
+                                {
                                     <input disabled id="startdate" type="text" value="@GlobalClass.StringDateFormat(@disstartdate.DiscountDateFrom.ToString())" />
-                                    }
+                                }
                             </div>
                         </div>
                         <div class="col-4">
                             <label class="label">End Date:</label>
                             <div>
-                             @foreach (var disenddate in Model.BPSrequestpaps)
-                                    {
-                                <input disabled id="enddate" type="text" value="@GlobalClass.StringDateFormat(@disenddate.DiscountDateTo.ToString())"  />
-                                    }
+                                @foreach (var disenddate in Model.BPSrequestpaps)
+                                {
+                                    <input disabled id="enddate" type="text" value="@GlobalClass.StringDateFormat(@disenddate.DiscountDateTo.ToString())" />
+                                }
                             </div>
                         </div>
                     </div>
@@ -152,8 +151,9 @@
                         <div class="col-6">
                             <label class="label">Remarks:</label>
                             <div>
-                                @foreach(var com in Model.BPSrequestpaps){
-                                <textarea disabled id="createcomments">@com.Remarks</textarea>
+                                @foreach (var com in Model.BPSrequestpaps)
+                                {
+                                    <textarea disabled id="createcomments">@com.Remarks</textarea>
                                 }
                             </div>
                         </div>
@@ -162,7 +162,7 @@
                             <div>
                                 @foreach (var dis in Model.BPSrequestpaps)
                                 {
-                                    <input type="text" disabled value="@dis.DiscountType"/>
+                                    <input type="text" disabled value="@dis.DiscountType" />
                                 }
                             </div>
                         </div>
@@ -177,20 +177,20 @@
     </div>
 
     <div id="tableAcc">
-         @foreach (var acc in Model.ChemistCodes)
-         {
-            @foreach(var bpschempappharmacies in Model.chemists)
+        @foreach (var acc in Model.ChemistCodes)
+        {
+            @foreach (var bpschempappharmacies in Model.chemists)
             {
                 if (bpschempappharmacies.ChemistCode == acc)
                 {
-                   <button class="accordion">@bpschempappharmacies.ChemistCode - @bpschempappharmacies.ChemistName</button>
+                    <button class="accordion">@bpschempappharmacies.ChemistCode - @bpschempappharmacies.ChemistName</button>
                 }
-             }
+            }
             <div class="panel">
-               @foreach (var salesphapap in Model.SalesPAPDataPharmacies)
+                @foreach (var salesphapap in Model.SalesPAPDataPharmacies)
                 {
                     @if (salesphapap.Key == acc)
-                   {
+                    {
                         <div style="overflow:auto; padding-top: 5%; padding-bottom: 5%; padding-left: 3%;">
                             <table>
                                 <thead>
@@ -229,12 +229,12 @@
                                             {
                                                 <th>Discount % </th>
                                             }
-                                           
+
                                         }
                                     </tr>
                                 </thead>
                                 <tbody style="font-size:13px;">
-                                    
+
                                     @foreach (var salesphapapdata in salesphapap.Value)
                                     {
                                         <tr>
@@ -265,19 +265,19 @@
                                                 {
                                                     <td style="text-align:end;">
                                                         <input disabled type="text" class="numfield" style="width:40%" value="@Salesphapapdata.Value">
-                                                        </td>
+                                                    </td>
                                                 }
                                                 else if (Salesphapapdata.Key == "ExpectedBusinessValue")
                                                 {
                                                     <td style="text-align:end;">
                                                         <input disabled type="text" class="numfield" style="width:40%" value="@string.Format("{0:#,0}", Salesphapapdata.Value)">
-                                                     </td>
+                                                    </td>
                                                 }
                                                 else if (Salesphapapdata.Key == "Discount")
                                                 {
                                                     <td style="text-align:end;">
                                                         <input disabled type="text" class="numfield" style="width:40%" value="@Salesphapapdata.Value">
-                                                       </td>
+                                                    </td>
                                                 }
                                             }
                                         </tr>
@@ -289,16 +289,21 @@
                         <div style="text-align: end;">
                             <label>Capping:</label>
 
-                            <input disabled class="numfield" type="text" style="width: 7%;" value="@Model.Bpssalesrecordpaps.FirstOrDefault()?.Capping"/>
+                            <input disabled class="numfield" type="text" style="width: 7%;" value="@Model.Bpssalesrecordpaps.FirstOrDefault()?.Capping" />
                         </div>
-           
-                   }
 
-               }
+                    }
+
+                }
             </div>
 
 
-           }
+        }
+    </div>
+
+    <div style="text-align: center; padding-top: 3%;">
+        <input type="button" class="btn btn-primary" value="Approve" />
+        <input type="button" class="btn btn-danger" value="Objection" />
     </div>
 
 

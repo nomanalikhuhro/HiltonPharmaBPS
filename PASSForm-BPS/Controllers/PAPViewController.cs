@@ -98,6 +98,58 @@ namespace PASSForm_BPS.Controllers
            
         }
 
+        public ActionResult PendingApprovalsPharmacies()
+        {
+            try
+            {
+                var Empid_SessionValue = HttpContext.Session.GetString("EmpIdbps");
+                var PharApprovallist = _passDbContext.BPSPAPPharmaciesApprovalModels.FromSqlRaw("call GetPendingApprovals_PAP(@Empid_SessionValue)"
+                                                        , new MySqlParameter("@Empid_SessionValue", Empid_SessionValue)).ToList();
+                return View(PharApprovallist);
+            }
+            catch (Exception ex)
+            {
+                DateTime timestampValue = DateTime.Now; // Replace with the desired DateTime value
+
+                GlobalClass.LogException(_passDbContext, ex, nameof(PendingApprovalsPharmacies), "Error message");
+                var feature = new Microsoft.AspNetCore.Diagnostics.ExceptionHandlerFeature
+                {
+                    Error = ex,
+
+                };
+                HttpContext.Features.Set(feature);
+                ViewBag.Error = ex;
+                return View("ErrorView");
+            }
+
+        }
+
+        public ActionResult PendingApprovalsIvInjection()
+        {
+            try
+            {
+                var Empid_SessionValue = HttpContext.Session.GetString("EmpIdbps");
+                var PharApprovallist = _passDbContext.BPSPAPPharmaciesApprovalModels.FromSqlRaw("call GetPendingApprovals_PAPivinjection(@Empid_SessionValue)"
+                                                        , new MySqlParameter("@Empid_SessionValue", Empid_SessionValue)).ToList();
+                return View(PharApprovallist);
+            }
+            catch (Exception ex)
+            {
+                DateTime timestampValue = DateTime.Now; // Replace with the desired DateTime value
+
+                GlobalClass.LogException(_passDbContext, ex, nameof(PendingApprovalsPharmacies), "Error message");
+                var feature = new Microsoft.AspNetCore.Diagnostics.ExceptionHandlerFeature
+                {
+                    Error = ex,
+
+                };
+                HttpContext.Features.Set(feature);
+                ViewBag.Error = ex;
+                return View("ErrorView");
+            }
+
+        }
+
         [HttpGet]
         public IActionResult Create(string RequestId, string PAPType)
         {
@@ -434,25 +486,27 @@ namespace PASSForm_BPS.Controllers
                     }
 
 
-                    //using (MySqlConnection connection = new MySqlConnection(_connectionString))
-                    //{
-                    //    connection.Open();
+                    //startworkflowpap
+                    using (MySqlConnection connection = new MySqlConnection(_connectionString))
+                    {
+                        connection.Open();
 
-                    //    using (MySqlCommand command = new MySqlCommand("SpStartWF_PAP", connection))
-                    //    {
-                    //        command.CommandType = CommandType.StoredProcedure;
+                        using (MySqlCommand command = new MySqlCommand("SpStartWF_PAP", connection))
+                        {
+                            command.CommandType = CommandType.StoredProcedure;
 
-                    //        command.Parameters.AddWithValue("p_TrackingId", PAPHeaderData.TrackingID);
-                    //        command.Parameters.AddWithValue("p_HCPReqId", hcprequest.HCPREQID);
-                    //        command.Parameters.AddWithValue("p_BpsId", bpsrecordid);
-                    //        command.Parameters.AddWithValue("p_User", EmpidSessionValue);
+                            command.Parameters.AddWithValue("p_TrackingId", PAPHeaderData.TrackingID);
+                            command.Parameters.AddWithValue("p_HCPReqId", hcprequest.HCPREQID);
+                            command.Parameters.AddWithValue("p_BpsId", bpsrecordid);
+                            command.Parameters.AddWithValue("p_User", EmpidSessionValue);
+                            command.Parameters.AddWithValue("p_paptype", 1);
 
-                    //        // Execute the stored procedure
-                    //        command.ExecuteNonQuery();
-                    //        command.CommandTimeout = 3000;
+                            // Execute the stored procedure
+                            command.ExecuteNonQuery();
+                            command.CommandTimeout = 3000;
 
-                    //    }
-                    //}
+                        }
+                    }
 
                 }
                 catch (Exception ex)
@@ -561,6 +615,28 @@ namespace PASSForm_BPS.Controllers
                             }
 
 
+                        }
+
+
+                        using (MySqlConnection connection = new MySqlConnection(_connectionString))
+                        {
+                            connection.Open();
+
+                            using (MySqlCommand command = new MySqlCommand("SpStartWF_PAP", connection))
+                            {
+                                command.CommandType = CommandType.StoredProcedure;
+
+                                command.Parameters.AddWithValue("p_TrackingId", PAPIvInjectionHeaderData.TrackingId);
+                                command.Parameters.AddWithValue("p_HCPReqId", hcprequest.HCPREQID);
+                                command.Parameters.AddWithValue("p_BpsId", bpsrecordid);
+                                command.Parameters.AddWithValue("p_User", EmpidSessionValue);
+                                command.Parameters.AddWithValue("p_paptype", 2);
+
+                                // Execute the stored procedure
+                                command.ExecuteNonQuery();
+                                command.CommandTimeout = 3000;
+
+                            }
                         }
                     }
                     catch (Exception ex)
@@ -796,6 +872,210 @@ namespace PASSForm_BPS.Controllers
                 return View("ErrorView");
             }
           
+        }
+
+        public ActionResult PharmacieApprovalView(int id)
+        {
+            try
+            {
+                BPSrequestpap bpspaprephar = _passDbContext.BPSrequestpaps.FirstOrDefault(h => h.BPS_Record_Id == id);
+                var bpsreqpappharmacies = _passDbContext.BPSrequestpaps
+     .Where(h => h.BPS_Record_Id == id)
+     .ToList();
+
+                var bpsreqpappharmaciesdis = _passDbContext.Distributers
+    .Where(h => h.DistributerCode == bpspaprephar.DistributerCode)
+    .ToList();
+                var bpsreqpappharmaciesmac = _passDbContext.Macrobricks
+    .Where(h => h.MacroBrickCode == bpspaprephar.BrickCode)
+    .ToList();
+
+
+                var bpsreqpappharmacieschem = _passDbContext.MacChemMappings
+                    .Where(mcm => mcm.MacroBrickCode == bpspaprephar.BrickCode)
+                    .Join(_passDbContext.Chemists, // Join with the Chemist table
+                          mcm => mcm.ChemistCode, // On MacChemMapping's Chemist_Code
+                          che => che.ChemistCode, // On Chemist's Chemist_Code
+                          (mcm, che) => new { che.ChemistCode, che.ChemistName }) // Select the fields
+                    .ToList();
+
+
+
+
+
+                var bpssalespappharmacies = _passDbContext.Bpssalesrecordpaps
+    .Where(h => h.Bps_RecordID == id)
+    .ToList();
+
+                Hcprequest_pap hcppharmaciespap = _passDbContext.HcprequestPAPs.FirstOrDefault(h => h.HCPREQID == bpspaprephar.HCPREQID);
+                var Teampharmaciespap = _passDbContext.Teams
+    .Where(h => h.TeamCode == hcppharmaciespap.TeamId)
+    .ToList();
+
+
+                //headerdatpostDatesaends
+                var chemistname = new List<Chemist>();
+                var resultsByChemistPaPPharmacies = new Dictionary<string, List<ExpandoObject>>();
+
+
+                var chemistCodes = _passDbContext.Bpssalesrecordpaps
+                    .Where(record => record.Bps_RecordID == id)
+                    .Select(record => record.ChemistCode.ToString()) // Convert int? to string
+                    .Distinct()
+                    .ToList();
+
+
+
+                foreach (var c in chemistCodes)
+                {
+                    var chemistName = _passDbContext.Chemists
+                        .Where(record => record.ChemistCode == c.ToString())
+                      .Select(record => new Chemist
+                      {
+                          ChemistCode = record.ChemistCode,
+                          ChemistName = record.ChemistName
+
+                      })
+                        .Distinct()
+                        .ToList();
+
+                    chemistname.AddRange(chemistName);
+
+
+
+
+
+
+
+                    var p_BPS_Record_ID_PaPPharmacies = new MySqlParameter("@p_BPS_Record_ID", id);
+                    var p_Chemist_Code_PaPPharmacies = new MySqlParameter("@p_ChemistCode", c);
+                    var preresults = new List<ExpandoObject>();
+
+                    using (var command = _passDbContext.Database.GetDbConnection().CreateCommand())
+                    {
+                        command.CommandText = "CALL sp_GenerateTablePharmaciesPAP(@p_Bps_Record_ID,@p_ChemistCode)";
+                        command.Parameters.Add(p_BPS_Record_ID_PaPPharmacies);
+                        command.Parameters.Add(p_Chemist_Code_PaPPharmacies);
+
+                        _passDbContext.Database.OpenConnection();
+
+                        using (var reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                dynamic result = new ExpandoObject();
+                                var expandoDict = result as IDictionary<string, object>;
+
+                                for (int i = 0; i < reader.FieldCount; i++)
+                                {
+                                    string columnName = reader.GetName(i);
+                                    object columnValue = reader[i];
+
+                                    expandoDict.Add(columnName, columnValue);
+                                }
+
+
+                                preresults.Add(result);
+                            }
+                        }
+                    }
+
+                    resultsByChemistPaPPharmacies[c.ToString()] = preresults;
+                }
+
+
+
+
+                var ViewModelPharmaciesView = new BPSRequestListViewModel
+                {
+                    BPSrequestpaps = bpsreqpappharmacies,
+                    Bpssalesrecordpaps = bpssalespappharmacies,
+                    Distributers = bpsreqpappharmaciesdis,
+                    Macrobricks = bpsreqpappharmaciesmac,
+                    teams = Teampharmaciespap,
+                    chemists = chemistname,
+                    SalesPAPDataPharmacies = resultsByChemistPaPPharmacies,
+                    ChemistCodes = chemistCodes
+
+                };
+                return View(ViewModelPharmaciesView);
+
+            }
+            catch (Exception ex)
+            {
+                DateTime timestampValue = DateTime.Now; // Replace with the desired DateTime value
+
+                GlobalClass.LogException(_passDbContext, ex, nameof(PharmacieView), "Error message");
+                var feature = new Microsoft.AspNetCore.Diagnostics.ExceptionHandlerFeature
+                {
+                    Error = ex,
+
+                };
+                HttpContext.Features.Set(feature);
+                ViewBag.Error = ex;
+                return View("ErrorView");
+            }
+
+        }
+
+        public ActionResult IVInjectionApprovedView(int id)
+        {
+            try
+            {
+                BPSrequestpapIvInjection bpspapreiv = _passDbContext.bps_request_papivinjection.FirstOrDefault(h => h.BPS_Record_ID == id);
+                var bpsreqpapivinjection = _passDbContext.bps_request_papivinjection
+     .Where(h => h.BPS_Record_ID == id)
+     .ToList();
+
+
+                var bpssalespapivinjection = _passDbContext.bps_salesrecord_papivinjection
+    .Where(h => h.BPS_Record_ID == id)
+    .ToList();
+
+                Hcprequest_pap hcpivinjectionpap = _passDbContext.HcprequestPAPs.FirstOrDefault(h => h.HCPREQID == bpspapreiv.HCPREQID);
+                var Teamivinjectionpap = _passDbContext.Teams
+    .Where(h => h.TeamCode == hcpivinjectionpap.TeamId)
+    .FirstOrDefault();
+                var TeamivinjectionpapList = _passDbContext.Teams
+    .Where(h => h.TeamCode == hcpivinjectionpap.TeamId)
+    .ToList();
+
+
+                var products = _passDbContext.BPSIvInjectionViewViewModels.FromSqlRaw("call sp_GenerateTableIVInjectionPAP(@p_Bps_Record_ID, @p_TeamName)",
+                                                new MySqlParameter("@p_Bps_Record_ID", id),
+                                                new MySqlParameter("@p_TeamName", Teamivinjectionpap.TeamName)).ToList();
+
+
+
+
+                var ViewModelPharmaciesView = new BPSRequestListViewModel
+                {
+                    BPSIvInjectionViewViewModels = products,
+                    teams = TeamivinjectionpapList,
+                    BPSrequestpapIvInjections = bpsreqpapivinjection,
+                    bpssalesrecordpapIvInjections = bpssalespapivinjection
+
+                };
+
+
+                return View(ViewModelPharmaciesView);
+
+            }
+            catch (Exception ex)
+            {
+                DateTime timestampValue = DateTime.Now; // Replace with the desired DateTime value
+
+                GlobalClass.LogException(_passDbContext, ex, nameof(PharmacieView), "Error message");
+                var feature = new Microsoft.AspNetCore.Diagnostics.ExceptionHandlerFeature
+                {
+                    Error = ex,
+
+                };
+                HttpContext.Features.Set(feature);
+                ViewBag.Error = ex;
+                return View("ErrorView");
+            }
+
         }
 
         public ActionResult PharmaEdit(int id)

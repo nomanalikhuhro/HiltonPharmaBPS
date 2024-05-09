@@ -116,6 +116,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUEFQVmlld1xDcmVhdGVfUGFydGlhbFZpZXcuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/BPSGit/PASSForm-BPS/Views/PAPView/IVInjectionApprovedView.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUEFQVmlld1xJVkluamVjdGlvbkFwcHJvdmVkVmlldy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/BPSGit/PASSForm-BPS/Views/PAPView/IVInjectionEdit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUEFQVmlld1xJVkluamVjdGlvbkVkaXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
@@ -130,6 +134,18 @@ build_metadata.AdditionalFiles.CssScope =
 
 [D:/BPSGit/PASSForm-BPS/Views/PAPView/IVINJECTION_CreateView.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUEFQVmlld1xJVklOSkVDVElPTl9DcmVhdGVWaWV3LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BPSGit/PASSForm-BPS/Views/PAPView/PendingApprovalsIvInjection.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUEFQVmlld1xQZW5kaW5nQXBwcm92YWxzSXZJbmplY3Rpb24uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BPSGit/PASSForm-BPS/Views/PAPView/PendingApprovalsPharmacies.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUEFQVmlld1xQZW5kaW5nQXBwcm92YWxzUGhhcm1hY2llcy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BPSGit/PASSForm-BPS/Views/PAPView/PharmacieApprovalView.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUEFQVmlld1xQaGFybWFjaWVBcHByb3ZhbFZpZXcuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/BPSGit/PASSForm-BPS/Views/PAPView/PharmaciesSubmitted.cshtml]

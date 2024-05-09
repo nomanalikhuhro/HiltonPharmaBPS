@@ -413,20 +413,35 @@
                             else if (emproleid == "2" || emproleid == "3")
                             {
                                 <div>
-                                    <a class="sidebar-link @(currentAction == "Index" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="Index" asp-route-id="2">Create Request</a>
-                                    <a class="sidebar-link @(currentAction == "ApprovedView" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="ApprovedView" asp-route-id="1">Submitted Request</a>
-                                    <a class="sidebar-link @(currentAction == "PendingView" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="PendingView" asp-route-id="2">Pending for My Approval</a>
-                                    <a class="sidebar-link @(currentAction == "TrackingIDStatus" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="TrackingIDStatus" asp-route-id="2">Request Status</a>
+                                    <a class="sidebar-link @(currentAction == "Index" ? "act" : "")" asp-area="" asp-controller="PAPView" asp-action="Index">Create Request</a>
+                                      <button class="dropdown-btn">
+                                             Subbmitted List
+                                      <i class="fa fa-caret-down"></i>
+                                      </button>
+                                    <div class="dropdown-container">
+                                        <a class="sidebar-link @(currentAction == "PharmaciesSubmitted" ? "act" : "")" asp-area="" asp-controller="PAPView" asp-action="PharmaciesSubmitted" asp-route-id="1">Pharmacies Request</a>
+                                        <a class="sidebar-link @(currentAction == "IVInjectionSubmitted" ? "act" : "")" asp-area="" asp-controller="PAPView" asp-action="IVInjectionSubmitted" asp-route-id="1">IVInjection Request</a>l
+                                    </div>
+                                     <button class="dropdown-btn">
+                                             Pending For Approval
+                                      <i class="fa fa-caret-down"></i>
+                                      </button>
+                                    <div class="dropdown-container">
+                                            <a class="sidebar-link @(currentAction == "PendingApprovalsPharmacies" ? "act" : "")" asp-area="" asp-controller="PAPView" asp-action="PendingApprovalsPharmacies" asp-route-id="1">Pharmacies Approval</a>
+                                            <a class="sidebar-link @(currentAction == "PendingApprovalsIvInjection" ? "act" : "")" asp-area="" asp-controller="PAPView" asp-action="PendingApprovalsIvInjection" asp-route-id="1">IVInjection Approval</a>
+                                    </div>
+                                    <a class="sidebar-link @(currentAction == "TrackingIDStatus" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="TrackingIDStatus" asp-route-id="1">Request Status</a>
 
                                 </div>
                             }
                             else
                             {
                                 <div>
-
-                                    <a class="sidebar-link @(currentAction == "PendingView" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="PendingView" asp-route-id="2">Pending for My Approval</a>
-                                    <a class="sidebar-link @(currentAction == "ApprovedView" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="ApprovedView" asp-route-id="1">Submitted Request</a>
-                                    <a class="sidebar-link @(currentAction == "TrackingIDStatus" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="TrackingIDStatus" asp-route-id="2">Request Status</a>
+                                    <a class="sidebar-link @(currentAction == "PharmaciesSubmitted" ? "act" : "")" asp-area="" asp-controller="PAPView" asp-action="PharmaciesSubmitted" asp-route-id="1">Pharmacies Request</a>
+                                    <a class="sidebar-link @(currentAction == "IVInjectionSubmitted" ? "act" : "")" asp-area="" asp-controller="PAPView" asp-action="IVInjectionSubmitted" asp-route-id="1">IVInjection Request</a>
+                                    <a class="sidebar-link @(currentAction == "PendingApprovalsPharmacies" ? "act" : "")" asp-area="" asp-controller="PAPView" asp-action="PendingApprovalsPharmacies" asp-route-id="1">Pharmacies Approval</a>
+                                    <a class="sidebar-link @(currentAction == "PendingApprovalsIvInjection" ? "act" : "")" asp-area="" asp-controller="PAPView" asp-action="PendingApprovalsIvInjection" asp-route-id="1">IVInjection Approval</a>
+                                    <a class="sidebar-link @(currentAction == "TrackingIDStatus" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="TrackingIDStatus" asp-route-id="1">Request Status</a>
 
                                 </div>
                             }

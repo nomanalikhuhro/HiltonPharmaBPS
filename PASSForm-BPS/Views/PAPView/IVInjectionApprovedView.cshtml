@@ -1,9 +1,5 @@
-﻿
-@{
-    ViewData["Title"] = "IVInjectionView";
-
-    //model PASSForm_BPS.Model.BPSIvInjectionViewViewModels
-
+﻿@{
+    ViewData["Title"] = "IVInjectionApprovedView";
     @model PASSForm_BPS.ViewModel.BPSRequestListViewModel;
 }
 
@@ -91,7 +87,7 @@
                         <div class="col-4">
                             <label class="label">End Date:</label>
                             <div>
-                             @foreach (var tdate in Model.BPSrequestpapIvInjections)
+                                @foreach (var tdate in Model.BPSrequestpapIvInjections)
                                 {
                                     <input disabled id="enddate" type="text" value="@GlobalClass.StringDateFormat(@tdate.DiscountToDate.ToString())" />
                                 }
@@ -156,8 +152,6 @@
                         </tr>
                     }
                 }
-
-
             </tbody>
         </table>
         <div style="padding-top: 2%; text-align: end; margin-right: 10%;">
@@ -166,6 +160,10 @@
         </div>
     </div>
 
+    <div style="text-align: center; padding-top: 3%;">
+        <input type="button" class="btn btn-primary" value="Approve" />
+        <input type="button" class="btn btn-danger" value="Objection" />
+    </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="~/js/PAPScripts.js"></script>

@@ -12,5 +12,7 @@
         public DateTime? UpdatedOn { get; set; }
         public string? UpdatedBy { get; set; }
         public int? StatusID { get; set; }
+        public int? TypeId  { get; set; }
+
     }
 }

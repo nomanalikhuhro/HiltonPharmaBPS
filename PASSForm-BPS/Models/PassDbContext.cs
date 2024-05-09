@@ -106,6 +106,7 @@ public partial class PassDbContext : DbContext
     public DbSet<BPSPAPPharmaciesListViewModel> BPSPAPPharmaciesListViewModels { get; set; }
     public DbSet<BPSPharmaciesPAPSalesViewModel> BPSPharmaciesPAPSalesViewModels { get; set; }
     public DbSet<BPSIvInjectionViewViewModel> BPSIvInjectionViewViewModels { get; set; }
+    public DbSet<BPSPAPPharmaciesApprovalModel> BPSPAPPharmaciesApprovalModels { get; set; }
     //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 
     //    => optionsBuilder.UseMySQL("Server=localhost;port=3307;user=root;Database=pass_db;convert zero datetime=true;");
@@ -702,9 +703,7 @@ public partial class PassDbContext : DbContext
 
         modelBuilder.Entity<Hcprequest_pap>().HasNoKey();
 
-        modelBuilder.Entity<BPSPAPPharmaciesListViewModel>().HasNoKey();
-        modelBuilder.Entity<BPSPharmaciesPAPSalesViewModel>().HasNoKey();
-        modelBuilder.Entity<BPSIvInjectionViewViewModel>().HasNoKey();
+
         //modelBuilder.Entity<Hcprequest_pap>(entity =>
         //{
         //    // Specify the table name if different from the class name
@@ -1749,6 +1748,11 @@ public partial class PassDbContext : DbContext
                 .HasColumnType("LONGTEXT");
 
         });
+
+        modelBuilder.Entity<BPSPAPPharmaciesListViewModel>().HasNoKey();
+        modelBuilder.Entity<BPSPharmaciesPAPSalesViewModel>().HasNoKey();
+        modelBuilder.Entity<BPSIvInjectionViewViewModel>().HasNoKey();
+        modelBuilder.Entity<BPSPAPPharmaciesApprovalModel>().HasNoKey();
 
         OnModelCreatingPartial(modelBuilder);
     }
