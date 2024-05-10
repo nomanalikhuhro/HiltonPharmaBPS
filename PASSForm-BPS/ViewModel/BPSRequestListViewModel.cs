@@ -8,6 +8,7 @@ namespace PASSForm_BPS.ViewModel
     {
 
         public string ChemistName { get; set; }
+        public int WFID { get; set; }
 
         public List<string> ChemistCodes { get; set; }
         public List<MacChemMapping> macChemMappings { get; set; }

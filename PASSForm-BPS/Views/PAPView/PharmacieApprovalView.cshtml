@@ -301,9 +301,15 @@
         }
     </div>
 
+    <div style="padding-top:20px;">
+        <label class="label">Comments:</label><br />
+        <textarea id="comments" style="width:40%;"></textarea>
+        <input value="@Model.WFID" id="wlstid" type="hidden" />
+    </div>
+
     <div style="text-align: center; padding-top: 3%;">
-        <input type="button" class="btn btn-primary" value="Approve" />
-        <input type="button" class="btn btn-danger" value="Objection" />
+        <input type="button" class="btn btn-primary" value="Approve" onclick="BPSPAPPharmaciesAproval()" />
+        <input type="button" class="btn btn-danger" value="Objection" onclick="BPSPAPPharmaciesObjection()" />
     </div>
 
 

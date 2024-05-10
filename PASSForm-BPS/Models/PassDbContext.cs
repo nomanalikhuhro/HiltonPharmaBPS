@@ -89,6 +89,7 @@ public partial class PassDbContext : DbContext
     public virtual DbSet<User> Users { get; set; }
 
     public virtual DbSet<Zone> Zones { get; set; }
+    public virtual DbSet<paptype> paptype { get; set; }
     public virtual DbSet<wf_activityinstance> Wf_Activityinstances { get; set; }
     public virtual DbSet<OutPutParameter> OutPutParameters { get; set; }
     public virtual DbSet<OutputParaMetersSales> OutputParaMetersSales { get; set; }
@@ -702,6 +703,7 @@ public partial class PassDbContext : DbContext
         });
 
         modelBuilder.Entity<Hcprequest_pap>().HasNoKey();
+        modelBuilder.Entity<paptype>().HasNoKey();
 
 
         //modelBuilder.Entity<Hcprequest_pap>(entity =>

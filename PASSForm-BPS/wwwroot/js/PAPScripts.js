@@ -789,5 +789,90 @@ function EditPAPIvinjectionBPS() {
 }
 
 
+function BPSPAPPharmaciesAproval() {
+    var wlstid = document.getElementById('wlstid').value;
+    var comments = document.getElementById("comments").value;
+    var trackingid = document.getElementById("papareqid").value;
+    var PAPType = document.getElementById("PAPType").value;
+    
+        $.ajax({
+            url: "/PAPView/BPSPAPPharmaciesApproval", // Replace with your controller and action names
+            type: 'POST', // Use GET or POST based on your server's requirements
+            data: { WlstId: wlstid, comments: comments, TrackingId: trackingid, PAPType: PAPType }, // Send the entire FormData object
+            success: function (response) {
+
+                if (data = true) {
+
+                    Swal.fire({
+                        icon: "success",
+                        title: 'Successfully Approved!',
+                        showConfirmButton: false,
+                        timer: 3600,
+                        width: 680,
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        customClass: {
+                            title: 'small-font',
+                            icon: 'small-icon'
+                        }
+                    });
+
+                } else {
+                    
+                }
+                setTimeout(function () {
+                    window.location.href = "/PAPView/PendingApprovalsPharmacies"; // you can pass true to reload function to ignore the client cache and reload from the server
+                }, 3500);
+            },
+            error: function (xhr, status, error) {
+                // Handle errors here
+                console.error("Error:", status, error);
+            }
+        });
+}
+
+function BPSPAPPharmacesObjection() {
+    var wlstid = document.getElementById('wlstid').value;
+    var comments = document.getElementById("comments").value;
+    var trackingid = document.getElementById("papareqid").value;
+    var PAPType = document.getElementById("PAPType").value;
+
+    $.ajax({
+        url: "/PAPView/BPSPAPPharmaciesObjection", // Replace with your controller and action names
+        type: 'POST', // Use GET or POST based on your server's requirements
+        data: { WlstId: wlstid, comments: comments, TrackingId: trackingid, PAPType: PAPType }, // Send the entire FormData object
+        success: function (response) {
+
+            if (data = true) {
+
+                Swal.fire({
+                    icon: "success",
+                    title: 'Successfully Approved!',
+                    showConfirmButton: false,
+                    timer: 3600,
+                    width: 680,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    customClass: {
+                        title: 'small-font',
+                        icon: 'small-icon'
+                    }
+                });
+
+            } else {
+
+            }
+            setTimeout(function () {
+                window.location.href = "/PAPView/PendingApprovalsPharmacies"; // you can pass true to reload function to ignore the client cache and reload from the server
+            }, 3500);
+        },
+        error: function (xhr, status, error) {
+            // Handle errors here
+            console.error("Error:", status, error);
+        }
+    });
+}
+
+
 
 

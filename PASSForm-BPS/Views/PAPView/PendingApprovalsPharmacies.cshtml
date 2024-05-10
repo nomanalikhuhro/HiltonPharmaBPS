@@ -40,6 +40,7 @@
                             <td>
                                 <form asp-action="PharmacieApprovalView" asp-controller="PAPView">
                                     <input type="hidden" name="Id" value="@bpslist.BpsId">
+                                    <input type="hidden" name="wfid" value="@bpslist.WFWorklistId">
                                     <button type="submit" class="icon-navigation" data-toggle="tooltip" data-placement="top" title="View"><i class="fa fa-eye"></i></button>
                                 </form>
                             </td>

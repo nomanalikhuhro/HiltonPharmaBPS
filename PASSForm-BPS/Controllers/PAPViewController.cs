@@ -874,7 +874,7 @@ namespace PASSForm_BPS.Controllers
           
         }
 
-        public ActionResult PharmacieApprovalView(int id)
+        public ActionResult PharmacieApprovalView(int id, int wfid)
         {
             try
             {
@@ -995,7 +995,8 @@ namespace PASSForm_BPS.Controllers
                     teams = Teampharmaciespap,
                     chemists = chemistname,
                     SalesPAPDataPharmacies = resultsByChemistPaPPharmacies,
-                    ChemistCodes = chemistCodes
+                    ChemistCodes = chemistCodes,
+                    WFID = wfid
 
                 };
                 return View(ViewModelPharmaciesView);
@@ -1588,7 +1589,102 @@ where mcm.MacroBrickCode = '" + bpspaprephar.BrickCode + "'";
 
         }
 
+        [HttpPost]
+        public ActionResult BPSPAPPharmaciesApproval(string WlstId, string comments, string TrackingId, string PAPType)
+        {
+            var EmpidSessionValue = HttpContext.Session.GetString("EmpIdbps");
+
+            try
+            {
+                paptype paptype = _passDbContext.paptype.FirstOrDefault(h => h.PAPType == PAPType);
+
+                using (MySqlConnection connection = new MySqlConnection(_connectionString))
+                {
+                    connection.Open();
+
+                    using (MySqlCommand command = new MySqlCommand("WF_PerformAction_TRK_PAP", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+
+                        command.Parameters.AddWithValue("p_WorklistId", WlstId);
+                        command.Parameters.AddWithValue("p_Action", "Approved");
+                        command.Parameters.AddWithValue("p_Comments", comments);
+                        command.Parameters.AddWithValue("p_User", EmpidSessionValue);
+                        command.Parameters.AddWithValue("p_Activity", null);
+                        command.Parameters.AddWithValue("p_TrackingID", TrackingId);
+                        command.Parameters.AddWithValue("p_PapType", paptype.TypeId);
+                        // Execute the stored procedure
+                        command.ExecuteNonQuery();
+                        //command.CommandTimeout = 3000;
+
+                    }
+                }
 
 
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
+
+
+
+            return null;
+        }
+
+        [HttpPost]
+        public ActionResult BPSPAPPharmaciesObjection(string WlstId, string comments, string TrackingId, string PAPType)
+        {
+            var EmpidSessionValue = HttpContext.Session.GetString("EmpIdbps");
+
+            try
+            {
+                paptype paptype = _passDbContext.paptype.FirstOrDefault(h => h.PAPType == PAPType);
+
+                using (MySqlConnection connection = new MySqlConnection(_connectionString))
+                {
+                    connection.Open();
+
+                    using (MySqlCommand command = new MySqlCommand("WF_PerformAction_TRK_PAP", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+
+                        command.Parameters.AddWithValue("p_WorklistId", WlstId);
+                        command.Parameters.AddWithValue("p_Action", "SendBackto");
+                        command.Parameters.AddWithValue("p_Comments", comments);
+                        command.Parameters.AddWithValue("p_User", EmpidSessionValue);
+                        command.Parameters.AddWithValue("p_Activity", null);
+                        command.Parameters.AddWithValue("p_TrackingID", TrackingId);
+                        command.Parameters.AddWithValue("p_PapType", paptype.TypeId);
+                        // Execute the stored procedure
+                        command.ExecuteNonQuery();
+                        //command.CommandTimeout = 3000;
+
+                    }
+                }
+
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
+
+
+
+            return null;
+        }
+
+
+        
+
+
+           
     }
 }
