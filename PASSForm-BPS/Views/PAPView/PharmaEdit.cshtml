@@ -8,7 +8,7 @@
 <html>
 <head>
     <style>
-        .maindiv {
+/*        .maindiv {
             height: auto;
             border: 2px solid white;
             width: 100%;
@@ -31,7 +31,7 @@
 
         .label {
             font-weight: bold;
-        }
+        }*/
 
         .teamssubdiv {
             width: 50%;
@@ -62,9 +62,9 @@
             font-size: 10px;
         }
 
-        .numfield {
+/*        .numfield {
             text-align: end;
-        }
+        }*/
     </style>
 </head>
 <body>
@@ -133,7 +133,7 @@
                 </div>
 
             </div>
-            <div style="padding-left:10px; padding-top:2%;">
+            <div style="padding-top:2%;">
                 <div class="dropdown" id="mTeamDropdown">
 
                     <button class="dropdown-toggle">Please Select Chemist</button>
@@ -170,15 +170,18 @@
                                 }
                             </div>
                         </div>
-                        <div class="col-6">
-                                <label class="label"> Discount Type::</label>
-                            <div>
-                                @foreach(var dist in Model.BPSrequestpaps)
-                                {
-                                        <input id="selecteddis" disabled type="text" value="@dist.DiscountType" />
-                                }
-                            </div>
+                        <div class="col-2">
+
                         </div>
+                            <div class="col-4">
+                                <label class="label"> Discount Type::</label>
+                                <div>
+                                    @foreach (var dist in Model.BPSrequestpaps)
+                                    {
+                                        <input id="selecteddis" disabled type="text" value="@dist.DiscountType" />
+                                    }
+                                </div>
+                            </div>
                     </div>
                 </div>
 
@@ -208,7 +211,7 @@
                     {
                         @if (salesphapap.Key == acc)
                         {
-                            <div style="overflow:auto; padding-top: 5%; padding-bottom: 5%; padding-left: 3%;" id="pre-@acc">
+                            <div style="overflow:auto; padding-top: 5%; padding-bottom: 2%; padding-left: 3%;" id="pre-@acc">
                                 <table>
                                     <thead style="height:50px; background: #d71921; color: white;">
                                         <tr>

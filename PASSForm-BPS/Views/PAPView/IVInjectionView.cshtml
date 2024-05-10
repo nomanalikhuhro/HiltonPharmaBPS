@@ -10,7 +10,7 @@
 <html>
 <head>
     <style>
-        .maindiv {
+        /*.maindiv {
             height: auto;
             border: 2px solid white;
             width: 100%;
@@ -24,7 +24,7 @@
 
         .label {
             font-weight: bold;
-        }
+        }*/
 
         .teamssubdiv {
             width: 50%;
@@ -55,20 +55,23 @@
             font-size: 10px;
         }
 
+
+
         .numfield {
             text-align: end;
             width: 12%;
         }
 
         .maintablediv {
-            padding-left: 8%;
-            padding-top: 5%;
+            padding-left: 20%;
+            padding-top: 2%;
+            width: 80%;
         }
     </style>
 </head>
 <body>
     <div style="padding-top:1%;">
-        <div class="maindiv">
+        <div class="maindiv" style="height:145px;">
             <div style="padding-top:1%;">
                 <div class="container">
                     <div class="row">
@@ -127,8 +130,8 @@
     </div>
 
     <div id="tableAcc" class="maintablediv">
-        <table style="width:90%;">
-            <thead style="height:50px; background: #d71921; color: white;">
+        <table>
+            <thead>
                 <tr style="font-size:12px;">
                     <th>Pack Code</th>
                     <th>Product Name</th>
@@ -160,9 +163,9 @@
 
             </tbody>
         </table>
-        <div style="padding-top: 2%; text-align: end; margin-right: 10%;">
+        <div style="padding-top: 2%; text-align: end;">
             <label>Capping:</label>
-            <input disabled class="numfield" type="text" id="EditCapping" style="width: 5%;" value="@Model.bpssalesrecordpapIvInjections.FirstOrDefault()?.Capping" />
+            <input disabled class="numfield" type="text" id="EditCapping" style="width: 7%;" value="@Model.bpssalesrecordpapIvInjections.FirstOrDefault()?.Capping" />
         </div>
     </div>
 

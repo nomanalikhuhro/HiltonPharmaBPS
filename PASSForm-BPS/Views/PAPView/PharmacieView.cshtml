@@ -7,7 +7,7 @@
 <html>
 <head>
     <style>
-        .maindiv {
+/*        .maindiv {
             height: auto;
             border: 2px solid white;
             width: 100%;
@@ -26,11 +26,8 @@
         #selecteddis {
             width: 30%;
             height: 30px;
-        }
+        }*/
 
-        .label {
-            font-weight: bold;
-        }
 
         .teamssubdiv {
             width: 50%;
@@ -51,9 +48,9 @@
             padding: 10px;
         }*/
 
-        .numfield {
+/*        .numfield {
             text-align: end;
-        }
+        }*/
 
         table {
             font-family: Arial, sans-serif;
@@ -157,12 +154,15 @@
                                 }
                             </div>
                         </div>
-                        <div class="col-6">
+                        <div class="col-2">
+                           
+                        </div>
+                        <div class="col-4">
                             <label class="label">Discount Type::</label>
                             <div>
                                 @foreach (var dis in Model.BPSrequestpaps)
                                 {
-                                    <input type="text" disabled value="@dis.DiscountType"/>
+                                    <input type="text" disabled value="@dis.DiscountType" />
                                 }
                             </div>
                         </div>
@@ -191,7 +191,7 @@
                 {
                     @if (salesphapap.Key == acc)
                    {
-                        <div style="overflow:auto; padding-top: 5%; padding-bottom: 5%; padding-left: 3%;">
+                        <div style="overflow:auto; padding-top: 5%; padding-bottom: 2%; padding-left: 3%;">
                             <table>
                                 <thead>
                                     <tr>

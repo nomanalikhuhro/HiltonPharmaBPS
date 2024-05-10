@@ -171,7 +171,7 @@ namespace PASSForm_BPS.Controllers
                     var PharmaTIDs = _passDbContext.BPSrequestpaps.FromSqlRaw(TID).FirstOrDefault();
                     if (PharmaTIDs != null)
                     {
-                        ViewBag.AlertMessage = "Request ID Not Found";
+                        ViewBag.AlertMessage = "Request ID Already Exist";
                         return PartialView("Create_PartialView");
                     }
                     else

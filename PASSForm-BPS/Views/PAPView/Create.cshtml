@@ -8,7 +8,7 @@
 <html>
 <head>
     <style>
-        .maindiv {
+/*        .maindiv {
             height: auto;
             border: 2px solid white;
             width: 100%;
@@ -27,11 +27,7 @@
         #selecteddis {
             width: 30%;
             height: 30px;
-        }
-
-        .label {
-            font-weight: bold;
-        }
+        }*/
 
         .teamssubdiv {
             width: 50%;
@@ -112,7 +108,7 @@
                 </div>
 
             </div>
-            <div style="padding-left:10px; padding-top:2%;">
+            <div style=" padding-top:2%;">
                 <div class="dropdown" id="mTeamDropdown">
 
                     <div class="dropdown-toggle" class="label">Please Select Chemist</div>
@@ -129,14 +125,17 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-6">
-                            <label>Remarks:</label>
+                            <label class="label">Remarks:</label>
                             <div>
                                 <textarea id="createcomments"></textarea><br />
                                 <span id="remarksError" class="text-danger error-message"></span>
                             </div>
                         </div>
-                        <div class="col-6">
-                            <label>Discount Type::</label>
+                        <div class="col-2">
+                            
+                        </div>
+                        <div class="col-4">
+                            <label class="label">Discount Type::</label>
                             <div>
                                 <select id="selecteddis">
                                     <option value="Select">Select</option>
