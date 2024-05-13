@@ -110,7 +110,10 @@
                             </div>
                         </div>
                         <div class="col-4">
-                            <input style="visibility:hidden;" value="@ViewBag.ivreqid" id="papivreqid" />
+                                @foreach (var reqid in Model.BPSrequestpapIvInjections)
+                                {
+                            <input style="visibility:hidden;" value="@reqid.TrackingId" id="papivreqid" />
+                                }
                         </div>
                         <div class="col-4">
                         </div>

@@ -877,7 +877,7 @@ function BPSPAPPharmacesObjection() {
 function BSPPAPIVInjectionApproval() {
     var wlstid = document.getElementById('wlstid').value;
     var comments = document.getElementById("comments").value;
-    var trackingid = document.getElementById("papareqid").value;
+    var trackingid = document.getElementById("papivreqid").value;
     var PAPType = document.getElementById("PAPType").value;
 
     $.ajax({
@@ -920,7 +920,7 @@ function BSPPAPIVInjectionApproval() {
 function BSPPAPIVInjectionRejection() {
     var wlstid = document.getElementById('wlstid').value;
     var comments = document.getElementById("comments").value;
-    var trackingid = document.getElementById("papareqid").value;
+    var trackingid = document.getElementById("papivreqid").value;
     var PAPType = document.getElementById("PAPType").value;
 
     $.ajax({
