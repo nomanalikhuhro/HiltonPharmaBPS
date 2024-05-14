@@ -790,6 +790,12 @@ function EditPAPIvinjectionBPS() {
 
 
 function BPSPAPPharmaciesAproval() {
+
+    var isValid = validateFormApprovalObjection(); // Validate the form
+
+    if (!isValid) {
+        return; // Stop further processing if form is invalid
+    }
     var wlstid = document.getElementById('wlstid').value;
     var comments = document.getElementById("comments").value;
     var trackingid = document.getElementById("papareqid").value;
@@ -832,6 +838,14 @@ function BPSPAPPharmaciesAproval() {
 }
 
 function BPSPAPPharmacesObjection() {
+
+
+    var isValid = validateFormApprovalObjection(); // Validate the form
+
+    if (!isValid) {
+        return; // Stop further processing if form is invalid
+    }
+
     var wlstid = document.getElementById('wlstid').value;
     var comments = document.getElementById("comments").value;
     var trackingid = document.getElementById("papareqid").value;
@@ -875,6 +889,12 @@ function BPSPAPPharmacesObjection() {
 
 
 function BSPPAPIVInjectionApproval() {
+
+    var isValid = validateFormApprovalObjection(); // Validate the form
+
+    if (!isValid) {
+        return; // Stop further processing if form is invalid
+    }
     var wlstid = document.getElementById('wlstid').value;
     var comments = document.getElementById("comments").value;
     var trackingid = document.getElementById("papivreqid").value;
@@ -918,6 +938,12 @@ function BSPPAPIVInjectionApproval() {
 
 
 function BSPPAPIVInjectionRejection() {
+
+    var isValid = validateFormApprovalObjection(); // Validate the form
+
+    if (!isValid) {
+        return; // Stop further processing if form is invalid
+    }
     var wlstid = document.getElementById('wlstid').value;
     var comments = document.getElementById("comments").value;
     var trackingid = document.getElementById("papivreqid").value;

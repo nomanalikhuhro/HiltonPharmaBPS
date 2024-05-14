@@ -77,3 +77,21 @@ function validateFormIvInjection() {
 
     return isValid;
 }
+
+function validateFormApprovalObjection() {
+    var isValid = true; // Assume form is valid initially
+
+    // Clear previous error messages
+    $(".error-message").text("");
+
+    // Validate Start Date
+    var startDate = $("#comments").val().trim();
+    if (startDate === "") {
+        $("#commentsError").text("Comments Required!");
+        isValid = false;
+    }
+
+
+
+    return isValid;
+}

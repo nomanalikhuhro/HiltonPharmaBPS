@@ -10,9 +10,9 @@
     //int a = Context.Session.GetInt32("EmpId");
 
     // var myValue = HttpContext.Session.GetString("EmpId");
-    
-        string currentAction = ViewContext.RouteData.Values["action"].ToString();
-   
+
+    string currentAction = ViewContext.RouteData.Values["action"].ToString();
+
 }
 
 
@@ -53,6 +53,13 @@
             /*         display: flex;*/
         }
 
+
+
+        img {
+            -webkit-filter: drop-shadow(5px 5px 5px #666666);
+            filter: drop-shadow(5px 5px 5px #666666);
+        }
+
         .sidebar {
             width: 250px;
             width: 250px;
@@ -65,34 +72,44 @@
             overflow: auto;
         }
 
-        img {
-            -webkit-filter: drop-shadow(5px 5px 5px #666666);
-            filter: drop-shadow(5px 5px 5px #666666);
-        }
+            .sidebar a {
+                display: block;
+                height: 30px;
+                border-bottom: 1px solid grey;
+                color: black;
+                font-size: 15px;
+                background: #ffffff;
+                padding: 16px;
+                text-decoration: none;
+                transition: background-color 2s ease-out 20ms
+            }
 
-        .sidebar a {
-            display: block;
-            height: 50px;
-            border-bottom: 1px solid grey;
-            color: black;
-            font-size: 15px;
-            background: #ffffff;
-            padding: 16px;
-            text-decoration: none;
-            transition: background-color 2s ease-out 20ms
-        }
-
-                    .sidebar a:hover {
-                background: linear-gradient(90deg, rgba(215,25,33,255) 47%, rgba(215,255,0,0.03974089635854339) 100%);
-                        color: white;
-                    }
+            /* .sidebar a:hover {
+                    background: linear-gradient(90deg, rgba(215,25,33,255) 47%, rgba(215,255,0,0.03974089635854339) 100%);
+                    color: white;
+                } */
 
 
-        /* Style the sidenav links and the dropdown button */
-        .sidebar a, .dropdown-btn {
+            /* Style the sidenav links and the dropdown button */
+            .sidebar a, .dropdown-btn {
+                padding: 6px 8px 6px 16px;
+                text-decoration: none;
+                font-size: 15px;
+                color: #818181;
+                display: block;
+                border: none;
+                background: none;
+                width: 100%;
+                text-align: left;
+                cursor: pointer;
+                outline: none;
+            }
+
+        /* For the nested button*/
+        .dropdown-btn2 {
             padding: 6px 8px 6px 16px;
             text-decoration: none;
-            font-size: 20px;
+            font-size: 15px;
             color: #818181;
             display: block;
             border: none;
@@ -103,7 +120,7 @@
             outline: none;
         }
 
-
+        /* End of For the nested button*/
 
         /* Main content */
         .main {
@@ -119,7 +136,6 @@
         .dropdown-container {
             display: none;
             background-color: white;
-
         }
 
         /* Optional: Style the caret down icon */
@@ -128,11 +144,14 @@
             padding-right: 8px;
         }
 
-        .dropdown-btn{
-            color:white;
-            background: linear-gradient(90deg, rgba(215,25,33,255) 47%, rgba(215,255,0,0.03974089635854339) 100%);
+        .dropdown-btn {
+            color: white;
+            /* background: linear-gradient(90deg, rgba(215,25,33,255) 47%, rgba(215,255,0,0.03974089635854339) 100%); */
+            background: linear-gradient(135deg, #FF6347 0%, #D32F2F 100%);
         }
-       
+
+
+
 
         .content {
             margin-left: 250px;
@@ -157,9 +176,9 @@
             }
 
         /*                .topnav a:hover {
-                            background-color: #555;
-                            color: #fff;
-                        }*/
+                                            background-color: #555;
+                                            color: #fff;
+                                        }*/
 
         @@media screen and (max-width: 700px) {
             .sidebar {
@@ -210,8 +229,8 @@
             animation: spin 2s linear infinite;
             margin-top: 19%;
             /* display: flex;
-                       justify-content: center;
-                       align-items: center; */
+                                       justify-content: center;
+                                       align-items: center; */
         }
 
         .inner-div {
@@ -321,11 +340,14 @@
         }
 
         a.sidebar-link.act {
-            background: linear-gradient(90deg, rgba(215,25,33,255) 47%, rgba(215,255,0,0.03974089635854339) 100%);
+            /* Old work of gradient0*/
+            /* background: linear-gradient(90deg, rgba(215,25,33,255) 47%, rgba(215,255,0,0.03974089635854339) 100%); */
+            /* background: linear-gradient(135deg, #FF6347 0%, #D3D3D3 100%); */
+            /* background: linear-gradient(135deg, #808080 0%, #FF6347 100%); */
+            background: #808080;
             color: white;
         }
 
-        
     </style>
 
 </head>
@@ -350,52 +372,14 @@
         <!-- Modal content -->
     }
     <div class="">
-       
+
         <div class="sidebar">
             <div style="text-align:center;margin-bottom:30px;">
                 <img src="~/images/logo.png" height="110px" width="140px" />
-                 <div>
-                     <div style="padding-top:20%">
+                <div>
+                    <div style="padding-top:20%">
                         <button class="dropdown-btn">
                             PASS BPS
-                            <i class="fa fa-caret-down"></i>
-                        </button>
-                        <div class="dropdown-container">
-                        @if (emproleid == "1")
-                        {
-
-                            <div>
-
-                                <a class="sidebar-link @(currentAction == "Create" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="Create">Create Request</a>
-                                <a class="sidebar-link @(currentAction == "ApprovedView" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="ApprovedView" asp-route-id="1">Submitted Request</a>
-                                <a class="sidebar-link @(currentAction == "TrackingIDStatus" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="TrackingIDStatus" asp-route-id="1">Request Status</a>
-                            </div>
-                        }
-                        else if (emproleid == "2" || emproleid == "3")
-                        {
-                            <div>
-                                <a class="sidebar-link @(currentAction == "Create" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="Create" asp-route-id="2">Create Request</a>
-                                <a class="sidebar-link @(currentAction == "ApprovedView" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="ApprovedView" asp-route-id="1">Submitted Request</a>
-                                <a class="sidebar-link @(currentAction == "PendingView" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="PendingView" asp-route-id="2">Pending for My Approval</a>
-                                <a class="sidebar-link @(currentAction == "TrackingIDStatus" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="TrackingIDStatus" asp-route-id="2">Request Status</a>
-
-                            </div>
-                        }
-                        else
-                        {
-                            <div>
-
-                                <a class="sidebar-link @(currentAction == "PendingView" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="PendingView" asp-route-id="2">Pending for My Approval</a>
-                                <a class="sidebar-link @(currentAction == "ApprovedView" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="ApprovedView" asp-route-id="1">Submitted Request</a>
-                                <a class="sidebar-link @(currentAction == "TrackingIDStatus" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="TrackingIDStatus" asp-route-id="2">Request Status</a>
-
-                            </div>
-                        }
-                        </div>
-                    </div>
-                    <div style="padding-top:5%">
-                        <button class="dropdown-btn">
-                            PAP BPS
                             <i class="fa fa-caret-down"></i>
                         </button>
                         <div class="dropdown-container">
@@ -404,33 +388,80 @@
 
                                 <div>
 
-                                    <a class="sidebar-link @(currentAction == "Index" ? "act" : "")" asp-area="" asp-controller="PAPView" asp-action="Index">Create Request</a>
-                                    <a class="sidebar-link @(currentAction == "PharmaciesSubmitted" ? "act" : "")" asp-area="" asp-controller="PAPView" asp-action="PharmaciesSubmitted" asp-route-id="1">Pharmacies Request</a>
-                                    <a class="sidebar-link @(currentAction == "IVInjectionSubmitted" ? "act" : "")" asp-area="" asp-controller="PAPView" asp-action="IVInjectionSubmitted" asp-route-id="1">IVInjection Request</a>
+                                    <a class="sidebar-link @(currentAction == "Create" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="Create">Create Request</a>
+                                    <a class="sidebar-link @(currentAction == "ApprovedView" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="ApprovedView" asp-route-id="1">Submitted Request</a>
                                     <a class="sidebar-link @(currentAction == "TrackingIDStatus" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="TrackingIDStatus" asp-route-id="1">Request Status</a>
                                 </div>
                             }
                             else if (emproleid == "2" || emproleid == "3")
                             {
                                 <div>
+                                    <a class="sidebar-link @(currentAction == "Create" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="Create" asp-route-id="2">Create Request</a>
+                                    <a class="sidebar-link @(currentAction == "ApprovedView" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="ApprovedView" asp-route-id="1">Submitted Request</a>
+                                    <a class="sidebar-link @(currentAction == "PendingView" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="PendingView" asp-route-id="2">Pending for My Approval</a>
+                                    <a class="sidebar-link @(currentAction == "TrackingIDStatus" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="TrackingIDStatus" asp-route-id="2">Request Status</a>
+
+                                </div>
+                            }
+                            else
+                            {
+                                <div>
+
+                                    <a class="sidebar-link @(currentAction == "PendingView" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="PendingView" asp-route-id="2">Pending for My Approval</a>
+                                    <a class="sidebar-link @(currentAction == "ApprovedView" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="ApprovedView" asp-route-id="1">Submitted Request</a>
+                                    <a class="sidebar-link @(currentAction == "TrackingIDStatus" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="TrackingIDStatus" asp-route-id="2">Request Status</a>
+
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <div style="padding-top:4%">
+                        <button class="dropdown-btn">
+                            PAP BPS
+                            <i class="fa fa-caret-down"></i>
+                        </button>
+                        <div class="dropdown-container">
+                            @if (emproleid == "1")
+                            {
+                                <div>
                                     <a class="sidebar-link @(currentAction == "Index" ? "act" : "")" asp-area="" asp-controller="PAPView" asp-action="Index">Create Request</a>
-                                      <button class="dropdown-btn">
-                                             Subbmitted List
-                                      <i class="fa fa-caret-down"></i>
-                                      </button>
+                                    <button class="dropdown-btn2">
+                                        Subbmitted List
+                                        <i class="fa fa-caret-down"></i>
+                                    </button>
                                     <div class="dropdown-container">
                                         <a class="sidebar-link @(currentAction == "PharmaciesSubmitted" ? "act" : "")" asp-area="" asp-controller="PAPView" asp-action="PharmaciesSubmitted" asp-route-id="1">Pharmacies Request</a>
                                         <a class="sidebar-link @(currentAction == "IVInjectionSubmitted" ? "act" : "")" asp-area="" asp-controller="PAPView" asp-action="IVInjectionSubmitted" asp-route-id="1">IVInjection Request</a>l
                                     </div>
-                                     <button class="dropdown-btn">
-                                             Pending For Approval
-                                      <i class="fa fa-caret-down"></i>
-                                      </button>
+
+                                    <a class="sidebar-link @(currentAction == "PAPTrackingIDStatusDetails" ? "act" : "")" asp-area="" asp-controller="PAPView" asp-action="PAPTrackingIDStatusDetails">Request Status</a>
+
+                                </div>
+
+
+
+                            }
+                            else if (emproleid == "2" || emproleid == "3")
+                            {
+                                <div>
+                                    <a class="sidebar-link @(currentAction == "Index" ? "act" : "")" asp-area="" asp-controller="PAPView" asp-action="Index">Create Request</a>
+                                    <button class="dropdown-btn">
+                                        Subbmitted List
+                                        <i class="fa fa-caret-down"></i>
+                                    </button>
                                     <div class="dropdown-container">
-                                            <a class="sidebar-link @(currentAction == "PendingApprovalsPharmacies" ? "act" : "")" asp-area="" asp-controller="PAPView" asp-action="PendingApprovalsPharmacies" asp-route-id="1">Pharmacies Approval</a>
-                                            <a class="sidebar-link @(currentAction == "PendingApprovalsIvInjection" ? "act" : "")" asp-area="" asp-controller="PAPView" asp-action="PendingApprovalsIvInjection" asp-route-id="1">IVInjection Approval</a>
+                                        <a class="sidebar-link @(currentAction == "PharmaciesSubmitted" ? "act" : "")" asp-area="" asp-controller="PAPView" asp-action="PharmaciesSubmitted" asp-route-id="1">Pharmacies Request</a>
+                                        <a class="sidebar-link @(currentAction == "IVInjectionSubmitted" ? "act" : "")" asp-area="" asp-controller="PAPView" asp-action="IVInjectionSubmitted" asp-route-id="1">IVInjection Request</a>l
                                     </div>
-                                    <a class="sidebar-link @(currentAction == "TrackingIDStatus" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="TrackingIDStatus" asp-route-id="1">Request Status</a>
+                                    <button class="dropdown-btn">
+                                        Pending For Approval
+                                        <i class="fa fa-caret-down"></i>
+                                    </button>
+                                    <div class="dropdown-container">
+                                        <a class="sidebar-link @(currentAction == "PendingApprovalsPharmacies" ? "act" : "")" asp-area="" asp-controller="PAPView" asp-action="PendingApprovalsPharmacies" asp-route-id="1">Pharmacies Approval</a>
+                                        <a class="sidebar-link @(currentAction == "PendingApprovalsIvInjection" ? "act" : "")" asp-area="" asp-controller="PAPView" asp-action="PendingApprovalsIvInjection" asp-route-id="1">IVInjection Approval</a>
+                                    </div>
+                                    <a class="sidebar-link @(currentAction == "PAPTrackingIDStatusDetails" ? "act" : "")" asp-area="" asp-controller="PAPView" asp-action="PAPTrackingIDStatusDetails">Request Status</a>
 
                                 </div>
                             }
@@ -441,7 +472,7 @@
                                     <a class="sidebar-link @(currentAction == "IVInjectionSubmitted" ? "act" : "")" asp-area="" asp-controller="PAPView" asp-action="IVInjectionSubmitted" asp-route-id="1">IVInjection Request</a>
                                     <a class="sidebar-link @(currentAction == "PendingApprovalsPharmacies" ? "act" : "")" asp-area="" asp-controller="PAPView" asp-action="PendingApprovalsPharmacies" asp-route-id="1">Pharmacies Approval</a>
                                     <a class="sidebar-link @(currentAction == "PendingApprovalsIvInjection" ? "act" : "")" asp-area="" asp-controller="PAPView" asp-action="PendingApprovalsIvInjection" asp-route-id="1">IVInjection Approval</a>
-                                    <a class="sidebar-link @(currentAction == "TrackingIDStatus" ? "act" : "")" asp-area="" asp-controller="ListView" asp-action="TrackingIDStatus" asp-route-id="1">Request Status</a>
+                                    <a class="sidebar-link @(currentAction == "PAPTrackingIDStatusDetails" ? "act" : "")" asp-area="" asp-controller="PAPView" asp-action="PAPTrackingIDStatusDetails">Request Status</a>>
 
                                 </div>
                             }
@@ -450,7 +481,7 @@
                 </div>
             </div>
 
-  
+
             <!-- Add more menu items as needed -->
         </div>
 
@@ -521,8 +552,8 @@
                     modal.style.display = "none";
                 }
             }
-           
-            
+
+
 
         });
 
@@ -541,6 +572,22 @@
             });
         }
 
+
+
+        var dropdown = document.getElementsByClassName("dropdown-btn2");
+        var i;
+
+        for (i = 0; i < dropdown.length; i++) {
+            dropdown[i].addEventListener("click", function () {
+                this.classList.toggle("active");
+                var dropdownContent = this.nextElementSibling;
+                if (dropdownContent.style.display === "block") {
+                    dropdownContent.style.display = "none";
+                } else {
+                    dropdownContent.style.display = "block";
+                }
+            });
+        }
 
     </script>
 </body>
