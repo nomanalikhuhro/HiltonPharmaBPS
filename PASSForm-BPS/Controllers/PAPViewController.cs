@@ -1683,7 +1683,7 @@ where mcm.MacroBrickCode = '" + bpspaprephar.BrickCode + "'";
 
 
         
-        public IActionResult PAPTrackingIDStatusDetails()
+        public IActionResult PAPTrackingIDStatusDetails( string reqid, string selectedLabel)
         {
             return View();
 
