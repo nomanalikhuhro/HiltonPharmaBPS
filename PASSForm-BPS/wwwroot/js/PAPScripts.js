@@ -985,3 +985,59 @@ function BSPPAPIVInjectionRejection() {
     });
 }
 
+
+function ReqidIdStatus() {
+    debugger;
+    var reqid = document.getElementById('papRequestIdstatus').value;
+    const selectedRadio = document.querySelector('input[name="options"]:checked');
+
+    // Get the corresponding label text
+    var selectedLabel = selectedRadio ? document.querySelector(`label[for="${selectedRadio.id}"]`).textContent : '';
+
+    if (selectedLabel === "") {
+        Swal.fire({
+            icon: "info",
+            title: 'Select Options Available!!',
+            showConfirmButton: false,
+            timer: 1500,
+            width: 380,
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            customClass: {
+                title: 'small-font',
+                icon: 'small-icon'
+            }
+        });
+    }
+
+    if (reqid === "") {
+        Swal.fire({
+            icon: "info",
+            title: 'Enter Tracking Id!!',
+            showConfirmButton: false,
+            timer: 1500,
+            width: 380,
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            customClass: {
+                title: 'small-font',
+                icon: 'small-icon'
+            }
+        });
+    }
+    
+
+    $.ajax({
+        url: "/PAPView/PAPTrackingIDStatusDetails", // Replace with your controller and action names
+        type: 'POST', // Use GET or POST based on your server's requirements
+        data: { reqid: reqid, selectedLabel: selectedLabel }, // Send the entire FormData object
+        success: function (response) {
+
+        },
+        error: function (xhr, status, error) {
+            // Handle errors here
+            console.error("Error:", status, error);
+        }
+    });
+}
+
