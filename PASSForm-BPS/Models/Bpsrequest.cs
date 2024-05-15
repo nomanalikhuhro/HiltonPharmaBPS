@@ -43,6 +43,7 @@ public partial class BpsRequest
     public string? TrackingId { get; set; }
     public string? PONumber { get; set; }
     public string? ActivityStatus { get; set; }
+    public string? FootFall { get; set; }
 
 
 

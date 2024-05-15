@@ -1,6 +1,8 @@
 ﻿@{
     Layout = null;
-    @model PASSForm_BPS.Models.PreeAccordionModel
+    //@model PASSForm_BPS.Models.PreeAccordionModel
+
+    @model List<PASSForm_BPS.Models.tblproduct>
 
     int preskucoloumindex = 0;
     int prevaluecoloumindex = 0;
@@ -12,7 +14,7 @@
     <table id="customers">
         <thead>
 
-            <tr style="font-size:10px;">
+@*            <tr style="font-size:10px;">
 
                 @foreach (var column in Model.Sku[0] as IDictionary<string, object>)
                 {
@@ -25,10 +27,41 @@
                     preskucoloumindex++;
                 }
 
+            </tr>*@
+
+            <tr style="font-size:10px;">
+                <th>Pack Code</th>
+                <th>Product Name</th>
+                <th>Description</th>
+
+                @if (ViewBag.postinputParameters != null)
+                {
+                    try
+                    {
+                        @foreach (var postmon in ViewBag.postinputParameters)
+                        {
+                            <th style="width:0%;" id="sku-pre-coloum-@preskucoloumindex">@postmon.Month/@postmon.Year</th>
+
+                            preskucoloumindex++;
+                        }
+                    }
+                    catch (Exception)
+                    {
+
+                        throw;
+                    }
+
+                }
+                else
+                {
+                    <th></th>
+                }
+
+
             </tr>
         </thead>
         <tbody id="tbl-pre-sku-@ViewBag.checkboxindex">
-            @if (Model.Sku != null)
+     @*       @if (Model.Sku != null)
             {
                 try
                 {
@@ -61,7 +94,7 @@
                                     var calculatedsku = (decimal)(Convert.ToDouble(column.Value ?? 0));
                                     <td style="text-align:right;" id="sku-pre-column-@ViewBag.checkboxindex-@packcodeIndex">
                                         
-                                    @*    @calculatedsku*@
+                     
 
                                         @(calculatedsku != 0 ? calculatedsku : column.Value)
                                     </td>
@@ -85,10 +118,7 @@
                                     </td>
                                     skucoloumIndex++;
                                 }
-                                @*                                else if (column.Key == "Actual Discount")
-                                {
-                                    <td id="sku-pre-actdis-@ViewBag.checkboxindex-@packcodeIndex-@skucoloumIndex">@column.Value</td>
-                                }*@
+                               
                                 else
                                 {
 
@@ -108,6 +138,61 @@
                     throw;
                 }
 
+            }*@
+            @if (Model != null)
+            {
+                int packcodeIndex = 0;
+                int rowIndex = 0;
+                try
+                {
+                    List<tblproduct> pr = new List<tblproduct>(ViewBag.products);
+                    double? unitprice = 0.0;
+                    @foreach (var item in Model)
+                    {
+
+
+                        unitprice = pr.Where(x => x.PackCode == item.PackCode).FirstOrDefault().UnitPrice;
+                        <tr style="font-size:10px;">
+                            <input id="pre-UnitPrice-@ViewBag.checkboxindex-@packcodeIndex" type="hidden" value="@unitprice" />
+                            <td id="sku-pre-pakcode-@ViewBag.checkboxindex-@packcodeIndex">
+                                @item.PackCode
+                            </td>
+                            <td id="sku-pre-product-@ViewBag.checkboxindex-@packcodeIndex">
+                                @item.ProductName
+                            </td>
+                            <td id="sku-pre-description-@ViewBag.checkboxindex-@packcodeIndex">
+                                @item.Description
+                            </td>
+                            @if (ViewBag.postinputParameters != null)
+                            {
+                                int columnIndex = 0;
+                                foreach (var postmon in ViewBag.postinputParameters)
+                                {
+                                    <td style="text-align:end">
+
+                                        <input id="sku-pre-column-@ViewBag.checkboxindex-@packcodeIndex-@columnIndex" type="text" value="" name="inputName" oninput="precalculateValue(@ViewBag.checkboxindex,@packcodeIndex,@columnIndex)" placeholder="0" style="text-align:right; width:35px;" />
+
+
+                                    </td>
+                                    columnIndex++;
+                                }
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+
+                        </tr>
+                        rowIndex++;
+                        packcodeIndex++;
+                    }
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+
             }
         </tbody>
     </table>
@@ -118,17 +203,36 @@
 <div id="values-@ViewBag.checkboxindex" class="@ViewBag.TotalCalculatedSkus" style="display:none; overflow:auto;">
     <table id="customers">
         <thead>
-            <tr style="font-size:10px;">
+           @* <tr style="font-size:10px;">
                 @foreach (var column in Model.Value[0] as IDictionary<string, object>)
                 {
 
                     <th id="value-pre-coloum-@prevaluecoloumindex">@column.Key</th>
                     prevaluecoloumindex++;
                 }
+            </tr>*@
+            <tr style="font-size:10px;">
+                <th>Pack Code</th>
+                <th>Product Name</th>
+                <th>Description</th>
+                @if (ViewBag.postinputParameters != null)
+                {
+                    @foreach (var postmon in ViewBag.postinputParameters)
+                    {
+                        <th style="width:0%;" id="value-pre-coloum-@prevaluecoloumindex">@postmon.Month/@postmon.Year</th>
+                        prevaluecoloumindex++;
+                    }
+                }
+                else
+                {
+                    <th></th>
+                }
+
+
             </tr>
         </thead>
         <tbody id="tbl-pre-value-@ViewBag.checkboxindex">
-            @if (Model.Sku != null)
+@*            @if (Model.Sku != null)
             {
                 try
                 {
@@ -151,10 +255,7 @@
                                 {
                                     <td id="value-pre-description-@ViewBag.checkboxindex-@packcodeIndex">@column.Value</td>
                                 }
-@*                                else if (column.Key == "ActualDiscount")
-                                {
-                                    <td id="value-pre-actdis-">@column.Value</td>
-                                }*@
+
                                 else if (column.Value == null)
                                 {
                                     <td style="text-align:right;" id="value-pre-column-@ViewBag.checkboxindex-@packcodeIndex-@valuecoloumIndex">0.00</td>
@@ -167,7 +268,7 @@
                                     totalCalculatedValues += calculatedValues;
                                     <td class="Comma" style="text-align:right;" id="value-pre-column-@ViewBag.checkboxindex-@packcodeIndex-@valuecoloumIndex">
                                         
-                                    @*    @calculatedValues.ToString("N2")*@
+                    
                                         @(calculatedValues != 0 ? calculatedValues : column.Value)
                                     </td>
                                     valuecoloumIndex++;
@@ -189,6 +290,45 @@
                     throw;
                 }
 
+            }*@
+
+            @if (Model != null)
+            {
+                int packcodeIndex = 0;
+                int rowIndex = 0;
+                @foreach (var item in Model)
+                {
+                    int valuecoloumIndex = 0;
+                    <tr style="font-size:10px;">
+                        <td id="value-pre-pakcode-@ViewBag.checkboxindex-@packcodeIndex">
+                            @item.PackCode
+                        </td>
+                        <td id="value-pre-product-@ViewBag.checkboxindex-@packcodeIndex">
+                            @item.ProductName
+                        </td>
+                        <td id="value-pre-description-@ViewBag.checkboxindex-@packcodeIndex">
+                            @item.Description
+                        </td>
+                        @if (ViewBag.postinputParameters != null)
+                        {
+                 
+                            foreach (var postmon in ViewBag.postinputParameters)
+                            {
+                                <td style="text-align:end;">
+                                    <input disabled id="value-pre-column-@ViewBag.checkboxindex-@packcodeIndex-@valuecoloumIndex" type="text"
+                                    @*name="postinputValue-@ViewBag.postcheckboxinde"*@ data-index="@ViewBag.checkboxindex" value="" placeholder="0" style="text-align:right; width:90px;" />
+                                </td>
+                                valuecoloumIndex++;
+                            }
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+
+                    </tr>
+                    packcodeIndex++;
+                }
             }
 
         </tbody>
@@ -199,12 +339,12 @@
 }
 
 <div style="text-align:right; margin-top:1%;">
-    <label>Chemist Total:</label>
+    <label>Chemist Total(Rs):</label>
 @*    <input class="Comma" disabled type="text" id="total-@ViewBag.checkboxindex" value="@totalCalculatedValues.ToString("N2")" style="margin-left: 2%; text-align:right;" />*@
     <input class="Comma" disabled type="text" id="total-@ViewBag.checkboxindex" value="@string.Format("{0:N2}", totalCalculatedValues)" style="margin-left: 2%; text-align:right;" />
 
 </div>
-<div style="text-align:right; margin-top:2%; margin-bottom:10px;">
+<div style="text-align:right; margin-top:2%; margin-bottom:10px; visibility:hidden">
 
     <label>Discount Percentage %:</label>
 
@@ -214,3 +354,7 @@
     <label>BPS %:</label>
     <input type="text" id="roi-${checkboxindex}" value="@totalCalculatedValues" style="margin-left: 2%;" />
 </div>*@
+<SCRIPT>
+
+
+</SCRIPT>

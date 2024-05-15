@@ -60,4 +60,7 @@ public partial class Hcprequest
     public string TrackingId { get; set; } = null!;
 
     public string? TeamId { get; set; }
+    public string? DoctorsCategory { get; set; }
+
+    
 }

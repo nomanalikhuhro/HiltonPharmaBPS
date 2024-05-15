@@ -141,6 +141,7 @@ function SubmittedForm() {
     //var startDateInput = document.getElementById('startdatepost-0').value;
     //var endDateInput = document.getElementById('enddatepost-0').value;
     var Comment = document.getElementById('createcomments').value;
+    var FootFall = document.getElementById('footfall').value;
     var currentDate = new Date();
 
     //if (DistributorCode == "" || DistributorCode = 'Select' || Comment == null) {
@@ -156,6 +157,7 @@ function SubmittedForm() {
         HCPREQID: HCPREQID,
         trackingid: HCPREQID,
         Comments: Comment,
+        FootFall: FootFall,
     };
 
 
@@ -179,7 +181,7 @@ function SubmittedForm() {
             var thElements = table.getElementsByTagName("th");
             var thCount = thElements.length;
 
-            var PreMon = (thCount - 6) / 2;
+            var PreMon = (thCount - 3);
 
             var preactualfromDate = new Date($('#startdatepre-' + button1rightPart).val());
             var prefromDate = preactualfromDate.getFullYear() + '-' +
@@ -258,13 +260,24 @@ function SubmittedForm() {
 
                 var salArr = [];
                 for (var k = 0; k < PreMon; k++) {
-                    var monthyearnames = document.getElementById("value-pre-coloum-" + (k + 3)).innerHTML;
-                    var YearPart = monthyearnames.split(' ');
-                    var Year = YearPart[0];
-                    var Month = YearPart[1];
+                    var monthyearnames = document.getElementById("value-pre-coloum-" + k).innerHTML;
+                    //var YearPart = monthyearnames.split(' ');
+                    //var Year = YearPart[0];
+                    //var Month = YearPart[1];
 
-                    var skuSales = document.getElementById("sku-pre-column-" + button1rightPart + "-" + j + "-" + k).innerHTML;
-                    var valueSales = document.getElementById("value-pre-column-" + button1rightPart + "-" + j + "-" + k).innerHTML;
+                    // Remove brackets if they exist
+                    monthyearnames = monthyearnames.replace('[', '').replace(']', '');
+
+                    var parts = monthyearnames.split("/"); // Split the string at "/"
+                    if (parts.length === 2) {
+                        var Month = parts[0];
+                        var Year = parts[1];
+                    } else {
+                        console.log("Invalid input string format");
+                    }
+
+                    var skuSales = document.getElementById("sku-pre-column-" + button1rightPart + "-" + j + "-" + k).value;
+                    var valueSales = document.getElementById("value-pre-column-" + button1rightPart + "-" + j + "-" + k).value;
 
                     salArr.push({ skuSales: skuSales, valueSales: valueSales, Year: Year, Month: Month });
                 }
@@ -370,6 +383,7 @@ function UpdateSubmittedForm() {
     //var startDateInput = document.getElementById('startdatepost-0').value;
     //var endDateInput = document.getElementById('enddatepost-0').value;
     var Comment = document.getElementById('createcomments').value;
+    var FootFall = document.getElementById('footfall').value;
     var currentDate = new Date();
     var HeaderData = {
 
@@ -380,6 +394,7 @@ function UpdateSubmittedForm() {
         HCPREQID: HCPREQID,
         trackingid: HCPREQID,
         Comments: Comment,
+        FootFall: FootFall,
     };
 
 
@@ -484,7 +499,7 @@ function UpdateSubmittedForm() {
             var salArr = [];
             for (var k = 0; k < PreMon; k++) {
                 var monthyearnames = document.getElementById("value-pre-coloum-" + (k)).innerHTML;
-                var YearPart = monthyearnames.split('_');
+                var YearPart = monthyearnames.split(' ');
                 var Year = YearPart[0];
                 var Month = YearPart[1];
 
@@ -670,6 +685,8 @@ function PreActivitySales() {
 
 var checkedItems;
 
+
+
 function teamsChange(val) {
 
 
@@ -702,7 +719,20 @@ function teamsChange(val) {
 
 
           //  if (existingHtml.indexOf(`id="chemist-${checkboxindex}"`) === -1) {
-        if (checkbox != null) {
+    if (checkbox != null) {
+
+        // Get the current date
+        var currentDate = new Date();
+        var currentYear = currentDate.getFullYear();
+        var currentMonth = currentDate.getMonth() + 1; // getMonth() is zero-based
+        var currentMonthFormatted = `${currentYear}-${String(currentMonth).padStart(2, '0')}`;
+
+        // Calculate the date 12 months ago
+        var lastYearDate = new Date();
+        lastYearDate.setMonth(currentDate.getMonth() - 11); // go back 11 months
+        var lastYear = lastYearDate.getFullYear();
+        var lastMonth = lastYearDate.getMonth() + 1;
+        var lastMonthFormatted = `${lastYear}-${String(lastMonth).padStart(2, '0')}`;
             html += `
   
  
@@ -734,14 +764,14 @@ function teamsChange(val) {
                     <div class="col-3">
                         <label style="font-weight:bold">Pre Activity Sales</label>
                     </div>
-                    <div class="col-3">
-                        <label>From:</label>
-                        <input type="month" id="startdatepre-${checkboxindex}" value="" style="margin-left: 2%;" />
-                    </div>
-                    <div class="col-3">
-                        <label>To:</label>
-                        <input type="month" id="enddatepre-${checkboxindex}" value="" style="margin-left: 2%;" />
-                    </div>
+                                           <div class="col-3">
+                            <label>From:</label>
+                            <input type="month" class="startdatepre" id="startdatepre-${checkboxindex}" style="margin-left: 2%;" min="${lastMonthFormatted}" max="${currentMonthFormatted}" />
+                        </div>
+                        <div class="col-3">
+                            <label>To:</label>
+                            <input type="month" class="enddatepre" id="enddatepre-${checkboxindex}" style="margin-left: 2%;" min="${lastMonthFormatted}" max="${currentMonthFormatted}" />
+                        </div>
                     <div class="col-3">
                      <label>Contribution % :</label>
                       <input id="Contribution-${checkboxindex}"  type="number"  Style=" text-align:right;text-align: right; width: 30%; margin-left: 5%;"></br>
@@ -840,6 +870,18 @@ function editteamsChange(val) {
 
     //  if (existingHtml.indexOf(`id="chemist-${checkboxindex}"`) === -1) {
     if (checkbox != null) {
+        // Get the current date
+        var currentDate = new Date();
+        var currentYear = currentDate.getFullYear();
+        var currentMonth = currentDate.getMonth() + 1; // getMonth() is zero-based
+        var currentMonthFormatted = `${currentYear}-${String(currentMonth).padStart(2, '0')}`;
+
+        // Calculate the date 12 months ago
+        var lastYearDate = new Date();
+        lastYearDate.setMonth(currentDate.getMonth() - 11); // go back 11 months
+        var lastYear = lastYearDate.getFullYear();
+        var lastMonth = lastYearDate.getMonth() + 1;
+        var lastMonthFormatted = `${lastYear}-${String(lastMonth).padStart(2, '0')}`;
         html += `
   
  
@@ -873,11 +915,11 @@ function editteamsChange(val) {
                     </div>
                     <div class="col-3">
                         <label>From:</label>
-                        <input type="month" id="startdatepre-${checkboxindex.toString().replace("{", "").replace("}", "")}" value="" style="margin-left: 2%;" />
+                        <input type="month" id="startdatepre-${checkboxindex.toString().replace("{", "").replace("}", "")}" value="" style="margin-left: 2%;" min="${lastMonthFormatted}" max="${currentMonthFormatted}" />
                     </div>
                     <div class="col-3">
                         <label>To:</label>
-                        <input type="month" id="enddatepre-${checkboxindex.toString().replace("{", "").replace("}", "") }" value="" style="margin-left: 2%;" />
+                        <input type="month" id="enddatepre-${checkboxindex.toString().replace("{", "").replace("}", "")}" value="" style="margin-left: 2%;"  min="${lastMonthFormatted}" max="${currentMonthFormatted}" />
                     </div>
                     <div class="col-3">
                      <label>Contribution % :</label>
@@ -1476,46 +1518,167 @@ function calculateValue(index, row, coloum) {
 
 }
 
-function EditcalculateValue(index, row, coloum) {
+function postcalculateValue(index, row, coloum) {
+
+
+
+    var inputValueId = 'sku-post-input-column-' + index + '-' + row + '-' + coloum; // ID of the input field you want to read
+    var valueInputId = 'value-post-input-column-' + index + '-' + row + '-' + coloum; // ID of the input field where you want to display the result
+    var valueUnitPrice = 'post-UnitPrice-' + index + "-" + row;
+    // var unitprice = document.getElementById("post-UnitPrice-" + index + "-" + row).value; 
+    var inputValue = document.getElementById(inputValueId);
+    var valueInput = document.getElementById(valueInputId);
+    var unitprice = document.getElementById(valueUnitPrice);
+
+
+    var inputValueValue = parseFloat(inputValue.value);
+
+    if (isNaN(inputValueValue)) {
+        // Perform the calculation, for example, divide by 2
+        /*     var calculatedValue = parseFloat(inputValueValue * parseFloat(unitprice.value)).toFixed(2);*/  //inputValueValue / 2;
+        var calculatedValue = parseFloat(parseFloat(inputValueValue || 0).toFixed(2) * parseFloat(unitprice.value)).toFixed(2);
+
+        var a = calculatedValue;
+
+        valueInput.value = a;
+    } else {
+        var calculatedValue = parseFloat(parseFloat(inputValueValue || 0).toFixed(2) * parseFloat(unitprice.value)).toFixed(2);
+
+        var a = calculatedValue;
+
+        valueInput.value = a;
+    }
+
+    var inputElements = document.querySelectorAll('input[data-index="post-' + index + '"]');
+
+
+    var editsum = 0;
+
+    // Iterate through input elements and add their values to the sum
+    for (var i = 0; i < inputElements.length; i++) {
+        var inputValue = parseFloat(inputElements[i].value) || 0; // Parse the input value as a float
+        editsum += inputValue;
+    }
+    editsum = parseFloat(editsum.toFixed(2));
+    var EditformattedTotalValue = formatNumberWithCommas(editsum);
+
+    // Display the sum
+
+    var totalInput = document.getElementById(`total-post-` + index);
+
+    totalInput.value = EditformattedTotalValue;
+
+
+}
+function precalculateValue(index, row, coloum) {
+
+
+
+    var inputValueId = 'sku-pre-column-' + index + '-' + row + '-' + coloum; // ID of the input field you want to read
+    var valueInputId = 'value-pre-column-' + index + '-' + row + '-' + coloum; // ID of the input field where you want to display the result
+    var valueUnitPrice = 'pre-UnitPrice-' + index + "-" + row;
+    // var unitprice = document.getElementById("post-UnitPrice-" + index + "-" + row).value; 
+    var inputValue = document.getElementById(inputValueId);
+    var valueInput = document.getElementById(valueInputId);
+    var unitprice = document.getElementById(valueUnitPrice);
+
+
+    var inputValueValue = parseFloat(inputValue.value);
+
+    if (isNaN(inputValueValue)) {
+        // Perform the calculation, for example, divide by 2
+        /*     var calculatedValue = parseFloat(inputValueValue * parseFloat(unitprice.value)).toFixed(2);*/  //inputValueValue / 2;
+        var calculatedValue = parseFloat(parseFloat(inputValueValue || 0).toFixed(2) * parseFloat(unitprice.value)).toFixed(2);
+
+        var a = calculatedValue;
+
+        valueInput.value = a;
+    } else {
+        var calculatedValue = parseFloat(parseFloat(inputValueValue || 0).toFixed(2) * parseFloat(unitprice.value)).toFixed(2);
+
+        var a = calculatedValue;
+
+        valueInput.value = a;
+    }
+
+    /*    var inputElements = document.querySelectorAll('input[name="postinputValue"]');*/
+
+    var inputElements = document.querySelectorAll('input[data-index="' + index + '"]');
+
+    var editsum = 0;
+
+    // Iterate through input elements and add their values to the sum
+    for (var i = 0; i < inputElements.length; i++) {
+        var inputValue = parseFloat(inputElements[i].value) || 0; // Parse the input value as a float
+        editsum += inputValue;
+    }
+    editsum = parseFloat(editsum.toFixed(2));
+    var EditformattedTotalValue = formatNumberWithCommas(editsum);
+
+    // Display the sum
+
+    var totalInput = document.getElementById(`total-` + index);
+
+    totalInput.value = EditformattedTotalValue;
+
+
+}
+function PreEditcalculateValue(index, row, coloum) {
+
+    var inputValueId = 'sku-pre-column-' + index + '-' + row + '-' + coloum; // ID of the input field you want to read
+    var valueInputId = 'value-pre-column-' + index + '-' + row + '-' + coloum; // ID of the input field where you want to display the result
+    var valueUnitPrice = 'sku-edit-UnitPrice-pre-row-' + index + "-" + row;
+    // var unitprice = document.getElementById("post-UnitPrice-" + index + "-" + row).value; 
+    var inputValue = document.getElementById(inputValueId);
+    var valueInput = document.getElementById(valueInputId);
+    var unitprice = document.getElementById(valueUnitPrice);
+
+
+    var inputValueValue = parseFloat(inputValue.value);
+
+    if (isNaN(inputValueValue)) {
+        // Perform the calculation, for example, divide by 2
+        /*     var calculatedValue = parseFloat(inputValueValue * parseFloat(unitprice.value)).toFixed(2);*/  //inputValueValue / 2;
+        var calculatedValue = parseFloat(parseFloat(inputValueValue || 0).toFixed(2) * parseFloat(unitprice.value)).toFixed(2);
+
+        var a = calculatedValue;
+
+        valueInput.value = a;
+    } else {
+        var calculatedValue = parseFloat(parseFloat(inputValueValue || 0).toFixed(2) * parseFloat(unitprice.value)).toFixed(2);
+
+        var a = calculatedValue;
+
+        valueInput.value = a;
+    }
+
+    /* var inputElements = document.querySelectorAll('input[name="editpostinputValue"]');*/
+
+/*    var inputElements = document.querySelectorAll('input[data-index="' + index + '"]');*/
+    var inputElements = document.querySelectorAll('input[data-index="pre-' + index + '"]');
+
 
     
 
-    //var inputValueId = 'sku-post-input-column-' + index + '-' + row + '-' + coloum; // ID of the input field you want to read
-    //var valueInputId = 'value-post-input-column-' + index + '-' + row + '-' + coloum; // ID of the input field where you want to display the result
-    //var valueUnitPrice = 'sku-edit-UnitPrice-post-row-' + coloum + '-' + row;
+    var editsum = 0;
 
-    //var inputValue = document.getElementById(inputValueId);
-    //var valueInput = document.getElementById(valueInputId);
-    //var unitprice = document.getElementById(valueUnitPrice);
+    // Iterate through input elements and add their values to the sum
+    for (var i = 0; i < inputElements.length; i++) {
+        var inputValue = parseFloat(inputElements[i].value) || 0; // Parse the input value as a float
+        editsum += inputValue;
+    }
+    editsum = parseFloat(editsum.toFixed(2));
+    var EditformattedTotalValue = formatNumberWithCommas(editsum);
 
+    // Display the sum
 
-    //var inputValueValue = parseFloat(inputValue.value);
+    var totalInput = document.getElementById(`total-` + index);
 
-    //if (!isNaN(inputValueValue)) {
+    totalInput.value = EditformattedTotalValue;
 
-    //    var calculatedValue = parseFloat(inputValueValue * parseFloat(unitprice.value)).toFixed(2);  //inputValueValue / 2;
+}
 
-    //    var a = calculatedValue;
-
-    //    valueInput.value = a;
-    //}
-
-    //var inputElements = document.querySelectorAll('input[name="editpostinputValue"]');
-
-    //var editsum = 0;
-
-
-    //for (var i = 0; i < inputElements.length; i++) {
-    //    var inputValue = parseFloat(inputElements[i].value) || 0; 
-    //    editsum += inputValue;
-    //}
-    //var EditformattedTotalValue = formatNumberWithCommas(editsum);
-
-
-    //var totalInput = document.getElementById(`total-post-` + index);
-
-    //totalInput.value = EditformattedTotalValue;
-
+function EditcalculateValue(index, row, coloum) {
 
     var inputValueId = 'sku-post-input-column-' + index + '-' + row + '-' + coloum; // ID of the input field you want to read
     var valueInputId = 'value-post-input-column-' + index + '-' + row + '-' + coloum; // ID of the input field where you want to display the result

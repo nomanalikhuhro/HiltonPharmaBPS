@@ -700,6 +700,9 @@ public partial class PassDbContext : DbContext
             entity.Property(e => e.VendorDetails)
                 .HasMaxLength(200)
                 .HasDefaultValueSql("'NULL'");
+            entity.Property(e => e.DoctorsCategory)
+    .HasMaxLength(200)
+    .HasDefaultValueSql("'NULL'");
         });
 
         modelBuilder.Entity<Hcprequest_pap>().HasNoKey();

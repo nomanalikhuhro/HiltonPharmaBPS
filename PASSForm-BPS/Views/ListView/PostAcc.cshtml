@@ -77,7 +77,7 @@
                                 {
                                     <td style="text-align:end">
 
-                                        <input  id="sku-post-input-column-@ViewBag.postcheckboxindex-@packcodeIndex-@columnIndex" type="text" name="inputName" value="" placeholder="0" oninput="calculateValue(@ViewBag.postcheckboxindex,@packcodeIndex,@columnIndex)" style="text-align:right; width:35px;" />
+                                        <input  id="sku-post-input-column-@ViewBag.postcheckboxindex-@packcodeIndex-@columnIndex" type="text" name="inputName" value="" placeholder="0" oninput="postcalculateValue(@ViewBag.postcheckboxindex,@packcodeIndex,@columnIndex)" style="text-align:right; width:35px;" />
                                       
 
                                     </td>
@@ -156,7 +156,7 @@
                             {
                                 <td style="text-align:end;">
                                     <input disabled id="value-post-input-column-@ViewBag.postcheckboxindex-@packcodeIndex-@columnIndex" type="text"
-                                    @*name="postinputValue-@ViewBag.postcheckboxinde"*@   data-index="@ViewBag.postcheckboxindex" value="" placeholder="0" style="text-align:right; width:90px;" />
+                                    @*name="postinputValue-@ViewBag.postcheckboxinde"*@   data-index="post-@ViewBag.postcheckboxindex" value="" placeholder="0" style="text-align:right; width:90px;" />
                                 </td>
                                 columnIndex++;
                             }
@@ -176,7 +176,7 @@
 
 </div>
 <div style="text-align:right; margin-top:1%;">
-    <label>Chemist Total:</label>
+    <label>Chemist Total(Rs):</label>
 @*    <input disabled type="text" id="total-post-@ViewBag.postcheckboxindex" style="margin-left: 2%; text-align:right;"  onchange="calltest()" />*@
     <input disabled type="text" id="total-post-@ViewBag.postcheckboxindex" style="margin-left: 2%; text-align:right;" />
 </div>
