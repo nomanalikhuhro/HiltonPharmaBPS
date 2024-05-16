@@ -1750,6 +1750,26 @@ function edittoggleSwitchAction(element, toggle) {
     }
 }
 
+function actualedittoggleSwitchAction(element, toggle) {
+    element.classList.toggle("on");
+
+    // Get the slider element within the clicked toggle-switch div
+    const toggleSlider = element.querySelector(".toggle-slider");
+
+    // Move the slider by changing its transform property
+    if (element.classList.contains("on")) {
+        toggleSlider.style.transform = "translateX(26px)";
+        document.getElementById("acvalue-" + toggle).style.display = "block";
+        document.getElementById("acsku-" + toggle).style.display = "none";
+
+    } else {
+        toggleSlider.style.transform = "translateX(0)";
+        document.getElementById("acsku-" + toggle).style.display = "block";
+        document.getElementById("acvalue-" + toggle).style.display = "none";
+
+    }
+}
+
 function editposttoggleSwitchAction(element, toggle) {
 
     // Toggle the "on" class to change the background color

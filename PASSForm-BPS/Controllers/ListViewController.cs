@@ -46,7 +46,7 @@ namespace PASSForm_BPS.Controllers
             {
                 var Empid_SessionValue = HttpContext.Session.GetString("EmpIdbps");
                 var Roleid = HttpContext.Session.GetString("roleid");
-
+                
                 if (Empid_SessionValue == null)
                 {
                     return RedirectToAction("Login", "Login");
@@ -98,7 +98,7 @@ namespace PASSForm_BPS.Controllers
             {
                 var Empid_SessionValue = HttpContext.Session.GetString("EmpIdbps");
                 var EmpRoleId = HttpContext.Session.GetString("roleid");
-
+                ViewBag.Role = EmpRoleId;
                 if (Empid_SessionValue == null)
                 {
                     return RedirectToAction("Login", "Login");
@@ -1610,12 +1610,12 @@ where HCPREQID = '" + trackingid + "'";
 
 
 
-                //            var dynamicValueModel = new PreeAccordionModel
-                //            {
-                //                Sku = results,
-                //                Value = valrestule
+                //var dynamicValueModel = new PreeAccordionModel
+                //{
+                //    Sku = results,
+                //    Value = valrestule
 
-                //            };
+                //};
 
                 //return View("PreAcc", dynamicValueModel);
             }
@@ -3756,349 +3756,592 @@ set Status_ID = 4, Comments = '" + comments + "' Where HCPREQID = '" + trackingi
             }
         }
 
-        public ActionResult CDEdit(string id, string anotherId, string thirdId, string statusId)
+        public ActionResult CDDetails(string id, string anotherid, int thirdId, string statusId, string screenId)
         {
             try
             {
-                var EmpRoleId = HttpContext.Session.GetString("roleid");
+
                 if (id == null)
                 {
                     return RedirectToAction("PendingView", "ListView", 2);
                 }
 
-                //if (EmpRoleId == "1")
-                //{
-                //    ViewBag.RoleId = "1";
-                //}
-                //else
-                //{
-                //    ViewBag.RoleId = "2";
-                //}
-
-
-
-
-
-                var Empid_SessionValue = HttpContext.Session.GetString("EmpIdbps");
-                ViewBag.Products = _passDbContext.Tblproducts.FromSqlRaw("select * from tblproduct").ToList();
+                        var Empid_SessionValue = HttpContext.Session.GetString("EmpIdbps");
+                ViewBag.WorklistId = thirdId;
                 var bpsrcordquery = @"SELECT bpsreq.*, bpsreq.HCPREQID as User_Name, bpsreq.Status_ID as StatusType, bpsreq.CreatedBy as TMCode FROM bps_request bpsreq where TrackingID = '" + id + "'";
-                var bpsrcord = _passDbContext.BpsRequests.FromSqlRaw(bpsrcordquery).ToList();
-                var bpsid = bpsrcord.FirstOrDefault()?.BpsRecordId;
-                var bpsComments = bpsrcord.FirstOrDefault()?.Comments;
+                        var bpsrcord = _passDbContext.BpsRequests.FromSqlRaw(bpsrcordquery).ToList();
+                        var statusid = bpsrcord.FirstOrDefault()?.StatusId;
+                        var bpsid = bpsrcord.FirstOrDefault()?.BpsRecordId;
+                        var bpsComments = bpsrcord.FirstOrDefault()?.Comments;
+                        ViewBag.Status = statusid;
+                        ViewBag.Screen = screenId;
+                        var macroBrickCodes = bpsrcord.FirstOrDefault()?.MacroBrickCode;
+                        var macrobridnamequery = @"SELECT * FROM macrobricks where MacroBrickCode = '" + macroBrickCodes + "'";
+                        var macname = _passDbContext.Macrobricks.FromSqlRaw(macrobridnamequery).ToList();
+                          var brickcode = macname.FirstOrDefault()?.MacroBrickCode;
+                        var distributerCodes = bpsrcord.FirstOrDefault()?.DistributerCode;
+                        var distributernamequery = @"SELECT * FROM distributer where DistributerCode = '" + distributerCodes + "'";
+                        var disname = _passDbContext.Distributers.FromSqlRaw(distributernamequery).ToList();
 
-                var macroBrickCodes = bpsrcord.FirstOrDefault()?.MacroBrickCode;
-                var macrobridnamequery = @"SELECT * FROM macrobricks where MacroBrickCode = '" + macroBrickCodes + "'";
-                var macname = _passDbContext.Macrobricks.FromSqlRaw(macrobridnamequery).ToList();
+                        var hcpreqquery = @"SELECT * FROM hcprequest where TrackingID = '" + id + "' ";
+                        var hcpreq = _passDbContext.Hcprequests.FromSqlRaw(hcpreqquery).ToList();
 
-                var macchemnamequery = @"SELECT mcm.*, che.ChemistName FROM mac_chem_mapping mcm
-Inner Join chemist che on
-mcm.Chemist_Code = che.Chemist_Code
-where mcm.MacroBrickCode = '" + macroBrickCodes + "'";
-                var macchemname = _passDbContext.MacChemMappings.FromSqlRaw(macchemnamequery).ToList();
-
-                var distributerCodes = bpsrcord.FirstOrDefault()?.DistributerCode;
-                var distributernamequery = @"SELECT * FROM distributer where DistributerCode = '" + distributerCodes + "'";
-                var disname = _passDbContext.Distributers.FromSqlRaw(distributernamequery).ToList();
-
-                var hcpreqquery = @"SELECT * FROM hcprequest where TrackingID  = '" + id + "' ";
-                var hcpreq = _passDbContext.Hcprequests.FromSqlRaw(hcpreqquery).ToList();
-
-                var tmcode = hcpreq.FirstOrDefault()?.Tmcode;
-                var area = hcpreq.FirstOrDefault()?.BaseArea;
-                var hcpreqid = hcpreq.FirstOrDefault()?.Hcpreqid;
-
-                var ternamequery = @"SELECT * FROM tblterritorymappings where TerritoryCode = '" + tmcode + "'";
-                var tername = _passDbContext.Tblterritorymappings.FromSqlRaw(ternamequery).ToList();
-                var terempid = tername.FirstOrDefault()?.EmpId;
-
-                var userquery = @"Select * from users where EMP_ID = '" + terempid + "'";
-                var usr = _passDbContext.Users.FromSqlRaw(userquery).ToList();
+                        var tmcode = hcpreq.FirstOrDefault()?.Tmcode;
+                        var area = hcpreq.FirstOrDefault()?.BaseArea;
+                        var hcpreqid = hcpreq.FirstOrDefault()?.Hcpreqid;
 
 
-                var teamquery = @"select * from hspreqteam where HCPREQID = '" + hcpreqid + "'";
-                var team = _passDbContext.Hspreqteams.FromSqlRaw(teamquery).ToList();
-                var teamid = team.FirstOrDefault()?.TeamCode;
 
-                //var teamquery = @"select * from teams where TeamCode = '" + hcpreqid + "'";
-                //var team = _passDbContext.Teams.FromSqlRaw(teamquery).ToList();
-                //var teamid = team.FirstOrDefault()?.TeamCode;
+                        var ternamequery = @"SELECT * FROM tblterritorymappings where TerritoryCode = '" + tmcode + "'";
+                        var tername = _passDbContext.Tblterritorymappings.FromSqlRaw(ternamequery).ToList();
+                        var terempid = tername.FirstOrDefault()?.EmpId;
 
-                string teamcode = hcpreq.FirstOrDefault().TeamId;
+                        var userquery = @"Select * from users where EMP_ID = '" + terempid + "'";
+                        var usr = _passDbContext.Users.FromSqlRaw(userquery).ToList();
 
-                var tquery = @"Select * from teams where TeamCode = '" + teamcode + "'";
-                var tname = _passDbContext.Teams.FromSqlRaw(tquery).ToList();
 
-                //headerdatpostDatesaends
-                var preDates = new List<CustomModel_PreDateRange>();
-                var postDates = new List<CustomModel_PostDateRange>();
-                var totalval = new List<CustomModel_Customers>();
-                var chemistname = new List<Chemist>();
-                var resultsByChemistPreUnits = new Dictionary<string, List<ExpandoObject>>();
-                var resultsByChemistPostUnits = new Dictionary<string, List<ExpandoObject>>();
-                var resultsByChemistPreValues = new Dictionary<string, List<ExpandoObject>>();
-                var resultsByChemistPostValues = new Dictionary<string, List<ExpandoObject>>();
+                        var teamquery = @"select * from hspreqteam where HCPREQID = '" + hcpreqid + "'";
+                        var team = _passDbContext.Hspreqteams.FromSqlRaw(teamquery).ToList();
+                        var teamid = team.FirstOrDefault()?.TeamCode;
+
+                        string teamcode = hcpreq.FirstOrDefault().TeamId;
+                        var tquery = @"Select * from teams where TeamCode = '" + teamcode + "'";
+                        var tname = _passDbContext.Teams.FromSqlRaw(tquery).ToList();
+                var T = tname.FirstOrDefault()?.TeamName;
+
+                        var File = @"SELECT * FROM uploadedfile WHERE TrackingId = '" + id + "' AND BPSID = '" + bpsid + "' AND Filetype = 'File'";
+
+                        var FilesNames = _passDbContext.Uploadedfiles.FromSqlRaw(File).ToList();
+
+
+                        //headerdatpostDatesaends
+                        var preDates = new List<CustomModel_PreDateRange>();
+                        var postDates = new List<CustomModel_PostDateRange>();
+                        var totalval = new List<CustomModel_Customers>();
+                        var chemistname = new List<Chemist>();
+                        var resultsByChemistPreUnits = new Dictionary<string, List<ExpandoObject>>();
+                        var resultsByChemistPostUnits = new Dictionary<string, List<ExpandoObject>>();
+                        var resultsByChemistPreValues = new Dictionary<string, List<ExpandoObject>>();
+                        var resultsByChemistPostValues = new Dictionary<string, List<ExpandoObject>>();
+                       var resultsku = new Dictionary<string, List<ExpandoObject>>();
+                       var resultval = new Dictionary<string, List<ExpandoObject>>();
                 var resultsByChemistSku = new Dictionary<string, List<ExpandoObject>>();
 
 
 
-                if (int.TryParse(anotherId, out int parsedId))
-                {
-                    var chemistCodes = _passDbContext.BpsSalesrecords
-                        .Where(record => record.BpsRecordId == parsedId)
-                        .Select(record => record.ChemistCode)
-                        .Distinct()
-                        .ToList();
-
-
-
-                    foreach (var c in chemistCodes)
-                    {
-                        var chemistName = _passDbContext.Chemists
-                            .Where(record => record.ChemistCode == c)
-                          .Select(record => new Chemist
-                          {
-                              ChemistCode = record.ChemistCode,
-                              ChemistName = record.ChemistName
-
-                          })
-                            .Distinct()
-                            .ToList();
-
-                        chemistname.AddRange(chemistName);
-
-                        var preDateRange = _passDbContext.BpsSalesrecords
-                            .Where(record => record.ChemistCode == c && record.BpsRecordId == bpsrcord.FirstOrDefault().BpsRecordId)
-                            .Select(record => new CustomModel_PreDateRange
-                            {
-                                Chemist_Code = record.ChemistCode,
-                                PreFromDate = record.PreFromdate,
-                                PreToDate = record.PreTodate,
-                                PreTotal = record.PreTotalSal,
-                                Contribution = record.Contribution,
-                                discountpercentage = record.DiscountPercentagePre
-                            })
-                            .Distinct()
-                            .ToList();
-
-                        preDates.AddRange(preDateRange);
-
-                        var postDateRange = _passDbContext.BpsSalesrecords
-                                .Where(record => record.ChemistCode == c && record.BpsRecordId == bpsrcord.FirstOrDefault().BpsRecordId)
-                                .Select(record => new CustomModel_PostDateRange
-                                {
-                                    Chemist_Code = record.ChemistCode,
-                                    PostFromDate = record.PostFromdate,
-                                    PostToDate = record.PostTodate,
-                                    PostTotal = record.PostTotalSal,
-                                    discountpostcentage = record.DiscountPercentagePost
-                                    //ROI = record.Roi,
-                                    //DiscountPercentage = record.DiscountPercentage,
-                                    //TotalRoiPercentage = record.TotalRoiPercentage
-                                })
+                        if (int.TryParse(anotherid, out int parsedId))
+                        {
+                            var chemistCodes = _passDbContext.BpsSalesrecords
+                                .Where(record => record.BpsRecordId == parsedId)
+                                .Select(record => record.ChemistCode)
                                 .Distinct()
                                 .ToList();
-                        postDates.AddRange(postDateRange);
 
-                        var TotalValuesChemist = _passDbContext.BpsSalesrecords
-    .Where(record => record.ChemistCode == c && record.BpsRecordId == bpsrcord.FirstOrDefault().BpsRecordId)
-    .Select(record => new CustomModel_Customers
-    {
-        totalwithoutdiscount = record.TotalWithoutDiscount,
-        totalwithdiscount = record.TotalWithDiscount,
-        bpspercentage = record.BPSPercentage,
-        totalroipercentage = record.TotalRoiPercentage,
-    })
-    .Distinct()
-    .ToList();
-                        totalval.AddRange(TotalValuesChemist);
 
-                        //preunits
-                        var p_pre_BPS_Record_ID_Param = new MySqlParameter("@p_BPS_Record_ID", anotherId);
-                        var p_pre_Chemist_Code_Param = new MySqlParameter("@p_Chemist_Code", c);
-                        var p_pre_Sales_Type_Param = new MySqlParameter("@p_SalesType", "pre");
-                        var preresults = new List<ExpandoObject>();
 
-                        using (var command = _passDbContext.Database.GetDbConnection().CreateCommand())
+                            foreach (var c in chemistCodes)
+                            {
+                                var chemistName = _passDbContext.Chemists
+                                    .Where(record => record.ChemistCode == c)
+                                  .Select(record => new Chemist
+                                  {
+                                      ChemistCode = record.ChemistCode,
+                                      ChemistName = record.ChemistName
+
+                                  })
+                                    .Distinct()
+                                    .ToList();
+
+                                chemistname.AddRange(chemistName);
+
+                               
+                                var preDateRange = _passDbContext.BpsSalesrecords
+                                    .Where(record => record.ChemistCode == c && record.BpsRecordId == bpsrcord.FirstOrDefault().BpsRecordId)
+                                    .Select(record => new CustomModel_PreDateRange
+                                    {
+                                        Chemist_Code = record.ChemistCode,
+                                        PreFromDate = record.PreFromdate,
+                                        PreToDate = record.PreTodate,
+                                        PreTotal = record.PreTotalSal,
+                                        Contribution = record.Contribution,
+                                        discountpercentage = record.DiscountPercentagePre,
+
+                                    })
+                                    .Distinct()
+                                    .ToList();
+
+                                preDates.AddRange(preDateRange);
+
+                                var postDateRange = _passDbContext.BpsSalesrecords
+                                        .Where(record => record.ChemistCode == c && record.BpsRecordId == bpsrcord.FirstOrDefault().BpsRecordId)
+                                        .Select(record => new CustomModel_PostDateRange
+                                        {
+                                            Chemist_Code = record.ChemistCode,
+                                            PostFromDate = record.PostFromdate,
+                                            PostToDate = record.PostTodate,
+                                            PostTotal = record.PostTotalSal,
+                                            discountpostcentage = record.DiscountPercentagePost,
+                                            //ROI = record.Roi,
+
+                                            //TotalRoiPercentage = record.TotalRoiPercentage
+                                        })
+                                        .Distinct()
+                                        .ToList();
+                                postDates.AddRange(postDateRange);
+
+                                var TotalValuesChemist = _passDbContext.BpsSalesrecords
+                                    .Where(record => record.ChemistCode == c && record.BpsRecordId == bpsrcord.FirstOrDefault().BpsRecordId)
+                                    .Select(record => new CustomModel_Customers
+                                    {
+                                        //grandtotal = record.GrandTotal,
+                                        totalwithdiscount = record.TotalWithDiscount,
+                                        totalwithoutdiscount = record.TotalWithoutDiscount,
+                                        bpspercentage = record.BPSPercentage,
+                                        totalroipercentage = record.TotalRoiPercentage,
+                                    })
+                                    .Distinct()
+                                    .ToList();
+                                totalval.AddRange(TotalValuesChemist);
+
+
+
+
+                                //preunits
+                                var p_pre_BPS_Record_ID_Param = new MySqlParameter("@p_BPS_Record_ID", anotherid);
+                                var p_pre_Chemist_Code_Param = new MySqlParameter("@p_Chemist_Code", c);
+                                var p_pre_Sales_Type_Param = new MySqlParameter("@p_SalesType", "pre");
+                                var preresults = new List<ExpandoObject>();
+
+                                using (var command = _passDbContext.Database.GetDbConnection().CreateCommand())
+                                {
+                                    command.CommandText = "CALL GeneratePivotTableUnitsPre(@p_BPS_Record_ID,@p_Chemist_Code,@p_SalesType)";
+                                    command.Parameters.Add(p_pre_BPS_Record_ID_Param);
+                                    command.Parameters.Add(p_pre_Chemist_Code_Param);
+                                    command.Parameters.Add(p_pre_Sales_Type_Param);
+
+                                    _passDbContext.Database.OpenConnection();
+
+                                    using (var reader = command.ExecuteReader())
+                                    {
+                                        while (reader.Read())
+                                        {
+                                            dynamic result = new ExpandoObject();
+                                            var expandoDict = result as IDictionary<string, object>;
+
+                                            for (int i = 0; i < reader.FieldCount; i++)
+                                            {
+                                                string columnName = reader.GetName(i);
+                                                object columnValue = reader[i];
+
+                                                expandoDict.Add(columnName, columnValue);
+                                            }
+
+
+                                            preresults.Add(result);
+                                        }
+                                    }
+                                }
+
+
+
+                                //postunits
+                                var p_post_BPS_Record_ID_Param = new MySqlParameter("@p_BPS_Record_ID", anotherid);
+                                var p_post_Chemist_Code_Param = new MySqlParameter("@p_Chemist_Code", c);
+                                var p_post_Sales_Type_Param = new MySqlParameter("@p_SalesType", "post");
+                                var postresults = new List<ExpandoObject>();
+
+                                using (var command = _passDbContext.Database.GetDbConnection().CreateCommand())
+                                {
+                                    command.CommandText = "CALL GeneratePivotTableUnitsPost(@p_BPS_Record_ID,@p_Chemist_Code,@p_SalesType)";
+                                    command.Parameters.Add(p_post_BPS_Record_ID_Param);
+                                    command.Parameters.Add(p_post_Chemist_Code_Param);
+                                    command.Parameters.Add(p_post_Sales_Type_Param);
+
+                                    _passDbContext.Database.OpenConnection();
+
+                                    using (var reader = command.ExecuteReader())
+                                    {
+                                        while (reader.Read())
+                                        {
+                                            dynamic result = new ExpandoObject();
+                                            var expandoDict = result as IDictionary<string, object>;
+
+                                            for (int i = 0; i < reader.FieldCount; i++)
+                                            {
+                                                string columnName = reader.GetName(i);
+                                                object columnValue = reader[i];
+
+                                                expandoDict.Add(columnName, columnValue);
+                                            }
+                                            postresults.Add(result);
+                                        }
+                                    }
+                                }
+
+
+                                //prevalues
+                                var p_preVal_BPS_Record_ID_Param = new MySqlParameter("@p_BPS_Record_ID", anotherid);
+                                var p_preVal_Chemist_Code_Param = new MySqlParameter("@p_Chemist_Code", c);
+                                var p_preVal_Sales_Type_Param = new MySqlParameter("@p_SalesType", "pre");
+                                var preValresults = new List<ExpandoObject>();
+
+                                using (var command = _passDbContext.Database.GetDbConnection().CreateCommand())
+                                {
+                                    command.CommandText = "CALL GeneratePivotTableValuesPre(@p_BPS_Record_ID,@p_Chemist_Code,@p_SalesType)";
+                                    command.Parameters.Add(p_preVal_BPS_Record_ID_Param);
+                                    command.Parameters.Add(p_preVal_Chemist_Code_Param);
+                                    command.Parameters.Add(p_preVal_Sales_Type_Param);
+
+                                    _passDbContext.Database.OpenConnection();
+
+                                    using (var reader = command.ExecuteReader())
+                                    {
+                                        while (reader.Read())
+                                        {
+                                            dynamic result = new ExpandoObject();
+                                            var expandoDict = result as IDictionary<string, object>;
+
+                                            for (int i = 0; i < reader.FieldCount; i++)
+                                            {
+                                                string columnName = reader.GetName(i);
+                                                object columnValue = reader[i];
+
+                                                expandoDict.Add(columnName, columnValue);
+                                            }
+
+                                            preValresults.Add(result);
+                                        }
+                                    }
+                                }
+
+
+                                //postvalues
+                                var p_postVal_BPS_Record_ID_Param = new MySqlParameter("@p_BPS_Record_ID", anotherid);
+                                var p_postVal_Chemist_Code_Param = new MySqlParameter("@p_Chemist_Code", c);
+                                var p_postVal_Sales_Type_Param = new MySqlParameter("@p_SalesType", "post");
+                                var postValresults = new List<ExpandoObject>();
+
+                                using (var command = _passDbContext.Database.GetDbConnection().CreateCommand())
+                                {
+                                    command.CommandText = "CALL GeneratePivotTableValuesPost(@p_BPS_Record_ID,@p_Chemist_Code,@p_SalesType)";
+                                    command.Parameters.Add(p_postVal_BPS_Record_ID_Param);
+                                    command.Parameters.Add(p_postVal_Chemist_Code_Param);
+                                    command.Parameters.Add(p_postVal_Sales_Type_Param);
+
+                                    _passDbContext.Database.OpenConnection();
+
+                                    using (var reader = command.ExecuteReader())
+                                    {
+                                        while (reader.Read())
+                                        {
+                                            dynamic result = new ExpandoObject();
+                                            var expandoDict = result as IDictionary<string, object>;
+
+                                            for (int i = 0; i < reader.FieldCount; i++)
+                                            {
+                                                string columnName = reader.GetName(i);
+                                                object columnValue = reader[i];
+
+                                                expandoDict.Add(columnName, columnValue);
+                                            }
+
+                                            postValresults.Add(result);
+                                        }
+                                    }
+                                }
+
+
+
+                        var Macname = _passDbContext.Macrobricks.FromSqlRaw("select * from macrobricks where macrobrickcode = '" + brickcode + "' ").FirstOrDefault();
+                        var Dates = _passDbContext.BpsSalesrecords.FromSqlRaw("select * from bps_salesrecord where BPS_Record_ID = '" + bpsid + "' ").FirstOrDefault();
+
+                        var skuquery = @"DECLARE @columns AS NVARCHAR(MAX);
+                                DECLARE @sql AS NVARCHAR(MAX);
+                                DECLARE @startDate AS DATE = '" + Dates.PreFromdate + "'" +
+                " DECLARE @endDate AS DATE = '" + Dates.PreTodate + "'" +
+
+                                 "        SET @columns = STUFF((                                                                         " +
+                                 "            SELECT ',' + QUOTENAME(YearMonth)                                                          " +
+                                 "                                                                                                       " +
+                                 "            FROM(                                                                                      " +
+                                 "                SELECT DISTINCT CONCAT(DATENAME(yyyy, Date), ' ', DATENAME(mm, Date)) AS YearMonth, Month(Date) as mon, year(Date) as yea    " +
+                                 "                                                                                                       " +
+                                 "                FROM [dbo].[DSR_HiltonDailySales_TeamToChemist2022-23]                                " +
+                                 "                                                                                                       " +
+                                 "                WHERE TeamName = '" + T + "' AND ClientCode = '" + c + "' AND MicroBrickCode in (select distinct MinorBrickCode from MacroMicroBrickMaping where MinorBrickName = '" + Macname.MacroBrickName + "')                   " +
+                                 "                                                                                                       " +
+                                 "                    AND Date >= @startDate AND Date <= @endDate                                        " +
+                                 "            ) OrderedMonths    order by yea, mon                                                                         " +
+                                 "                                                                                                       " +
+                                 "            FOR XML PATH(''), TYPE                                                                     " +
+                                 "        ).value('.', 'NVARCHAR(MAX)'), 1, 1, '');                                                      " +
+                                 "                                                                                                       " +
+                                 "        SET @sql = N'                                                                                  " +
+                                 "    SELECT*                                                                                            " +
+                                 "    FROM                                                                                               " +
+                                 "    (                                                                                                  " +
+                                 "        SELECT                                                                                         " +
+                                 "            sal.PackCode,                                                                           " +
+                                 "            sal.ProductName,     " +
+                                 "          sal.Description,                                                                         " +
+                                 "            CONCAT(DATENAME(yyyy, sal.Date), '' '', DATENAME(mm, sal.Date)) AS YearMonth,              " +
+                                 "            sal.[Sales-Units]                                                                        " +
+                                 "        FROM [dbo].[DSR_HiltonDailySales_TeamToChemist2022-23] sal                                    " +
+                                 "        WHERE sal.TeamName = ''" + T + "'' AND sal.ClientCode = ''" + c + "'' AND sal.MicroBrickCode in (select distinct MinorBrickCode from MacroMicroBrickMaping where MinorBrickName = ''" + Macname.MacroBrickName + "'')          " +
+                                 "            AND sal.Date >= @startDate AND sal.Date <= @endDate                                        " +
+                                 "    ) t                                                                                                " +
+                                 "    PIVOT                                                                                              " +
+                                 "    (                                                                                                  " +
+                                 "        SUM([Sales-Units])                                                                           " +
+                                 "        FOR YearMonth IN(' + @columns + ')                                                             " +
+                                 "    ) AS pivot_Table;                                                                                  " +
+                                 "        ';  " +
+
+                                 "                                                                                                       " +
+                                 "EXEC sp_executesql @sql, N'@startDate DATE, @endDate DATE', @startDate, @endDate;                      " +
+                                 "        ";
+
+
+
+
+                        var results = new List<ExpandoObject>();
+
+                        using (var command = _testSalesDbContext.Database.GetDbConnection().CreateCommand())
                         {
-                            command.CommandText = "CALL GeneratePivotTableUnitsPre(@p_BPS_Record_ID,@p_Chemist_Code,@p_SalesType)";
-                            command.Parameters.Add(p_pre_BPS_Record_ID_Param);
-                            command.Parameters.Add(p_pre_Chemist_Code_Param);
-                            command.Parameters.Add(p_pre_Sales_Type_Param);
+                            command.CommandText = skuquery;
 
-                            _passDbContext.Database.OpenConnection();
+                            _testSalesDbContext.Database.OpenConnection();
 
                             using (var reader = command.ExecuteReader())
                             {
-                                while (reader.Read())
+
+                                if (reader.HasRows)
                                 {
-                                    dynamic result = new ExpandoObject();
-                                    var expandoDict = result as IDictionary<string, object>;
-
-                                    for (int i = 0; i < reader.FieldCount; i++)
+                                    while (reader.Read())
                                     {
-                                        string columnName = reader.GetName(i);
-                                        object columnValue = reader[i];
+                                        var dataItem = new ExpandoObject() as IDictionary<string, object>;
 
-                                        expandoDict.Add(columnName, columnValue);
+
+                                        for (int i = 0; i < reader.FieldCount; i++)
+                                        {
+                                            var columnName = reader.GetName(i);
+
+                                            var columnValue = reader[i];
+                                            if (columnValue != DBNull.Value)
+                                            {
+                                                if (columnValue is string stringValue)
+                                                {
+
+                                                    if (string.IsNullOrEmpty(stringValue) || stringValue == "{}")
+                                                    {
+                                                        dataItem.Add(columnName, "0");
+                                                    }
+                                                    else
+                                                    {
+                                                        dataItem.Add(columnName, stringValue);
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    dataItem.Add(columnName, columnValue);
+                                                }
+                                            }
+                                            else
+                                            {
+                                                dataItem.Add(columnName, null);
+                                            }
+
+
+
+                                        }
+
+                                        results.Add((ExpandoObject)dataItem);
                                     }
-
-
-                                    preresults.Add(result);
                                 }
+                                //else
+                                //{
+
+                                //    return View("NoDataView");
+
+                                //}
                             }
                         }
 
 
 
-                        //postunits
-                        var p_post_BPS_Record_ID_Param = new MySqlParameter("@p_BPS_Record_ID", anotherId);
-                        var p_post_Chemist_Code_Param = new MySqlParameter("@p_Chemist_Code", c);
-                        var p_post_Sales_Type_Param = new MySqlParameter("@p_SalesType", "post");
-                        var postresults = new List<ExpandoObject>();
+                        var valuequery = @"DECLARE @columns AS NVARCHAR(MAX);
+                        DECLARE @sql AS NVARCHAR(MAX);
+                        DECLARE @startDate AS DATE = '" + Dates.PreFromdate + "'" +
+               " DECLARE @endDate AS DATE = '" + Dates.PreTodate + "'" +
 
-                        using (var command = _passDbContext.Database.GetDbConnection().CreateCommand())
+                                "        SET @columns = STUFF((                                                                         " +
+                                "            SELECT ',' + QUOTENAME(YearMonth)                                                          " +
+                                "                                                                                                       " +
+                                "            FROM(                                                                                      " +
+                                "                SELECT DISTINCT CONCAT(DATENAME(yyyy, Date), ' ', DATENAME(mm, Date)) AS YearMonth, Month(Date) as mon, year(Date) as yea     " +
+                                "                                                                                                       " +
+                                "                FROM [dbo].[DSR_HiltonDailySales_TeamToChemist2022-23]                                " +
+                                "                                                                                                       " +
+                                "                WHERE TeamName = '" + T + "' AND ClientCode = '" + c + "' AND MicroBrickCode in (select distinct MinorBrickCode from MacroMicroBrickMaping where MinorBrickName = '" + Macname.MacroBrickName + "')                  " +
+                                "                                                                                                       " +
+                                "                    AND Date >= @startDate AND Date <= @endDate                                        " +
+                                "            ) OrderedMonths   order by yea, mon                                                                         " +
+                                "                                                                                                       " +
+                                "            FOR XML PATH(''), TYPE                                                                     " +
+                                "        ).value('.', 'NVARCHAR(MAX)'), 1, 1, '');                                                      " +
+                                "                                                                                                       " +
+                                "        SET @sql = N'                                                                                  " +
+                                "    SELECT*                                                                                            " +
+                                "    FROM                                                                                               " +
+                                "    (                                                                                                  " +
+                                "        SELECT                                                                                         " +
+                                "            sal.PackCode,                                                                           " +
+                                "            sal.ProductName,                                                                              " +
+                                "            sal.Description,                                                                              " +
+                                "            CONCAT(DATENAME(yyyy, sal.Date), '' '', DATENAME(mm, sal.Date)) AS YearMonth,              " +
+                                "            sal.[Sales-ValueNP]                                                                        " +
+                                "        FROM [dbo].[DSR_HiltonDailySales_TeamToChemist2022-23] sal                                    " +
+                                "        WHERE sal.TeamName = ''" + T + "'' AND sal.ClientCode = ''" + c + "'' AND sal.MicroBrickCode in (select distinct MinorBrickCode from MacroMicroBrickMaping where MinorBrickName = ''" + Macname.MacroBrickName + "'')         " +
+                                "            AND sal.Date >= @startDate AND sal.Date <= @endDate                                        " +
+                                "    ) t                                                                                                " +
+                                "    PIVOT                                                                                              " +
+                                "    (                                                                                                  " +
+                                "        SUM([Sales-ValueNP])                                                                           " +
+                                "        FOR YearMonth IN(' + @columns + ')                                                             " +
+                                "    ) AS pivot_Table;                                                                                  " +
+                                "        ';                                                                                             " +
+                                "                                                                                                       " +
+                                "EXEC sp_executesql @sql, N'@startDate DATE, @endDate DATE', @startDate, @endDate;                      " +
+                                "        ";
+
+
+                        var valrestule = new List<ExpandoObject>();
+
+                        using (var command = _testSalesDbContext.Database.GetDbConnection().CreateCommand())
                         {
-                            command.CommandText = "CALL GeneratePivotTableUnitsPost(@p_BPS_Record_ID,@p_Chemist_Code,@p_SalesType)";
-                            command.Parameters.Add(p_post_BPS_Record_ID_Param);
-                            command.Parameters.Add(p_post_Chemist_Code_Param);
-                            command.Parameters.Add(p_post_Sales_Type_Param);
+                            command.CommandText = valuequery;
 
-                            _passDbContext.Database.OpenConnection();
+                            _testSalesDbContext.Database.OpenConnection();
 
                             using (var reader = command.ExecuteReader())
                             {
-                                while (reader.Read())
+                                // Check if there are rows to read
+                                if (reader.HasRows)
                                 {
-                                    dynamic result = new ExpandoObject();
-                                    var expandoDict = result as IDictionary<string, object>;
-
-                                    for (int i = 0; i < reader.FieldCount; i++)
+                                    while (reader.Read())
                                     {
-                                        string columnName = reader.GetName(i);
-                                        object columnValue = reader[i];
+                                        var dataItem = new ExpandoObject() as IDictionary<string, object>;
+                                        //dataItem.Add("Contribution %", 00);
+                                        for (int i = 0; i < reader.FieldCount; i++)
+                                        {
+                                            var columnName = reader.GetName(i);
+                                            var columnValue = reader[i];
+                                            if (columnValue != DBNull.Value)
+                                            {
+                                                if (columnValue is string stringValue)
+                                                {
+                                                    // Check if the string is empty or contains only {}
+                                                    if (string.IsNullOrEmpty(stringValue) || stringValue == "{}")
+                                                    {
+                                                        dataItem.Add(columnName, "0");
+                                                    }
+                                                    else
+                                                    {
+                                                        dataItem.Add(columnName, stringValue);
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    dataItem.Add(columnName, columnValue);
+                                                }
+                                            }
+                                            else
+                                            {
+                                                dataItem.Add(columnName, null);
+                                            }
 
-                                        expandoDict.Add(columnName, columnValue);
+                                            //dataItem.Add(columnName, columnValue);
+                                        }
+
+                                        valrestule.Add((ExpandoObject)dataItem);
                                     }
-                                    postresults.Add(result);
                                 }
+                                //else
+                                //{
+
+                                //    return View("NoDataView");
+
+                                //}
                             }
                         }
 
 
-                        //prevalues
-                        var p_preVal_BPS_Record_ID_Param = new MySqlParameter("@p_BPS_Record_ID", anotherId);
-                        var p_preVal_Chemist_Code_Param = new MySqlParameter("@p_Chemist_Code", c);
-                        var p_preVal_Sales_Type_Param = new MySqlParameter("@p_SalesType", "pre");
-                        var preValresults = new List<ExpandoObject>();
-
-                        using (var command = _passDbContext.Database.GetDbConnection().CreateCommand())
-                        {
-                            command.CommandText = "CALL GeneratePivotTableValuesPre(@p_BPS_Record_ID,@p_Chemist_Code,@p_SalesType)";
-                            command.Parameters.Add(p_preVal_BPS_Record_ID_Param);
-                            command.Parameters.Add(p_preVal_Chemist_Code_Param);
-                            command.Parameters.Add(p_preVal_Sales_Type_Param);
-
-                            _passDbContext.Database.OpenConnection();
-
-                            using (var reader = command.ExecuteReader())
-                            {
-                                while (reader.Read())
-                                {
-                                    dynamic result = new ExpandoObject();
-                                    var expandoDict = result as IDictionary<string, object>;
-
-                                    for (int i = 0; i < reader.FieldCount; i++)
-                                    {
-                                        string columnName = reader.GetName(i);
-                                        object columnValue = reader[i];
-
-                                        expandoDict.Add(columnName, columnValue);
-                                    }
-
-                                    preValresults.Add(result);
-                                }
-                            }
-                        }
-
-
-                        //postvalues
-                        var p_postVal_BPS_Record_ID_Param = new MySqlParameter("@p_BPS_Record_ID", anotherId);
-                        var p_postVal_Chemist_Code_Param = new MySqlParameter("@p_Chemist_Code", c);
-                        var p_postVal_Sales_Type_Param = new MySqlParameter("@p_SalesType", "post");
-                        var postValresults = new List<ExpandoObject>();
-
-                        using (var command = _passDbContext.Database.GetDbConnection().CreateCommand())
-                        {
-                            command.CommandText = "CALL GeneratePivotTableValuesPost(@p_BPS_Record_ID,@p_Chemist_Code,@p_SalesType)";
-                            command.Parameters.Add(p_postVal_BPS_Record_ID_Param);
-                            command.Parameters.Add(p_postVal_Chemist_Code_Param);
-                            command.Parameters.Add(p_postVal_Sales_Type_Param);
-
-                            _passDbContext.Database.OpenConnection();
-
-                            using (var reader = command.ExecuteReader())
-                            {
-                                while (reader.Read())
-                                {
-                                    dynamic result = new ExpandoObject();
-                                    var expandoDict = result as IDictionary<string, object>;
-
-                                    for (int i = 0; i < reader.FieldCount; i++)
-                                    {
-                                        string columnName = reader.GetName(i);
-                                        object columnValue = reader[i];
-
-                                        expandoDict.Add(columnName, columnValue);
-                                    }
-
-                                    postValresults.Add(result);
-                                }
-                            }
-                        }
                         resultsByChemistPreUnits[c] = preresults;
-                        resultsByChemistPostUnits[c] = postresults;
-                        resultsByChemistPreValues[c] = preValresults;
-                        resultsByChemistPostValues[c] = postValresults;
+                                resultsByChemistPostUnits[c] = postresults;
+                                resultsByChemistPreValues[c] = preValresults;
+                                resultsByChemistPostValues[c] = postValresults;
+                        resultsku[c] = results;
+                        resultval[c] = valrestule;
 
 
                     }
 
+
+
+
+
+
+
+
+                    //var dynamicValueModel = new PreeAccordionModel
+                    //{
+                    //    Sku = results
+
+                    //};
+
                     var DetailViewModel = new BPSDetailsViewModel
-                    {
-                        detailbps = bpsrcord,
-                        macrobricks = macname,
-                        distributers = disname,
-                        requesthcp = hcpreq,
-                        tblterritorymappings = tername,
-                        teams = tname,
-                        users = usr,
-                        SalesUnitsPre = resultsByChemistPreUnits,
-                        SalesUnitsPost = resultsByChemistPostUnits,
-                        SalesValuesPre = resultsByChemistPreValues,
-                        SalesValuesPost = resultsByChemistPostValues,
-                        ChemistCodes = chemistCodes,
-                        preDateRanges = preDates,
-                        postDateRanges = postDates,
-                        chemists = chemistname,
-                        customersmodels = totalval,
-                        macChemMappings = macchemname,
+                            {
+                                detailbps = bpsrcord,
+                                macrobricks = macname,
+                                distributers = disname,
+                                requesthcp = hcpreq,
+                                tblterritorymappings = tername,
+                                teams = tname,
+                                users = usr,
+                                SalesUnitsPre = resultsByChemistPreUnits,
+                                SalesUnitsPost = resultsByChemistPostUnits,
+                                SalesValuesPre = resultsByChemistPreValues,
+                                SalesValuesPost = resultsByChemistPostValues,
+                                ChemistCodes = chemistCodes,
+                                preDateRanges = preDates,
+                                postDateRanges = postDates,
+                                chemists = chemistname,
+                                uploadedfiles = FilesNames,
+                                customersmodels = totalval,
+                        PreeActualAccordionModel = resultsku,
+                        PreeActualAccordionModelValues = resultval
+
 
 
                     };
 
-                    ViewBag.Products = _passDbContext.Tblproducts.FromSqlRaw("select * from tblproduct").ToList();
-                    return View(DetailViewModel);
-
-                }
 
 
 
+                            return View(DetailViewModel);
+
+                        }
+
+    
+
+                    return View(null);
+ 
             }
             catch (Exception ex)
             {
                 DateTime timestampValue = DateTime.Now; // Replace with the desired DateTime value
 
-                GlobalClass.LogException(_passDbContext, ex, nameof(Edit), "Error message");
+                GlobalClass.LogException(_passDbContext, ex, nameof(Objection), "Error message");
                 var feature = new Microsoft.AspNetCore.Diagnostics.ExceptionHandlerFeature
                 {
                     Error = ex,
@@ -4108,8 +4351,6 @@ where mcm.MacroBrickCode = '" + macroBrickCodes + "'";
                 ViewBag.Error = ex;
                 return View("Error");
             }
-
-            return View();
 
         }
 

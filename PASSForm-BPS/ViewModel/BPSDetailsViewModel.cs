@@ -39,6 +39,8 @@ namespace PASSForm_BPS.ViewModel
         public Dictionary<string, List<ExpandoObject>> SalesValuesPost { get; set; }
         public Dictionary<string, List<ExpandoObject>> SalesUnitsPre { get; set; }
         public Dictionary<string, List<ExpandoObject>> SalesUnitsPost { get; set; }
+        public Dictionary<string, List<ExpandoObject>> PreeActualAccordionModel { get; set; }
+        public Dictionary<string, List<ExpandoObject>> PreeActualAccordionModelValues { get; set; }
 
     }
 

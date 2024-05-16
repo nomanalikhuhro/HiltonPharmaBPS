@@ -70,6 +70,26 @@
                                 @item.CreatedOn.Value.ToString("dd-MMM-yyyy")
                             </td>
                             <td>
+                                @if(ViewBag.Role == "14")
+                                {
+                                    <form asp-action="CDDetails" asp-controller="ListView">
+                                        <input type="hidden" name="id" value="@item.TrackingId">
+                                        <input type="hidden" name="anotherId" value="@item.BpsId">
+                                        <input type="hidden" name="thirdId" value="@item.WFWorklistId">
+                                        <input type="hidden" name="screenId" value="pendingscreen">
+                                        <button type="submit" class="icon-navigation" data-toggle="tooltip" data-placement="top" title="View"><i class="fa fa-eye"></i></button>
+                                    </form>
+                                }
+                                else if (ViewBag.Role == "18")
+                                {
+                                    <form asp-action="CDDetails" asp-controller="ListView">
+                                        <input type="hidden" name="id" value="@item.TrackingId">
+                                        <input type="hidden" name="anotherId" value="@item.BpsId">
+                                        <input type="hidden" name="thirdId" value="@item.WFWorklistId">
+                                        <input type="hidden" name="screenId" value="pendingscreen">
+                                        <button type="submit" class="icon-navigation" data-toggle="tooltip" data-placement="top" title="View"><i class="fa fa-eye"></i></button>
+                                    </form>
+                                }else{
                                 <form asp-action="Details" asp-controller="ListView">
                                     <input type="hidden" name="id" value="@item.TrackingId">
                                     <input type="hidden" name="anotherId" value="@item.BpsId">
@@ -77,6 +97,7 @@
                                     <input type="hidden" name="screenId" value="pendingscreen">
                                     <button type="submit" class="icon-navigation" data-toggle="tooltip" data-placement="top" title="View"><i class="fa fa-eye"></i></button>
                                 </form>
+                                }
 
                             </td>
                             

@@ -362,8 +362,8 @@ namespace PASSForm_BPS.Controllers
                                 DsrHiltonDailySalesTeamToChemist202223 model = new DsrHiltonDailySalesTeamToChemist202223();
                                 model.PackCode = reader["PackCode"].ToString();
                                 model.ProductName = reader["ProductName"].ToString();
-                                model.SalesUnits = reader["Sales_Units"].ToString();
-                                model.SalesValueNp = reader["Sales_ValueNP"].ToString();
+                                //model.SalesUnits = reader["Sales_Units"].ToString();
+                                //model.SalesValueNp = reader["Sales_ValueNP"].ToString();
 
 
 
@@ -379,7 +379,7 @@ namespace PASSForm_BPS.Controllers
             }
             catch (Exception ex)
             {
-                DateTime timestampValue = DateTime.Now; // Replace with the desired DateTime value
+                DateTime timestampValue = DateTime.Now; 
 
                 GlobalClass.LogException(_passDbContext, ex, nameof(GetChemist), "Error message");
                 var feature = new Microsoft.AspNetCore.Diagnostics.ExceptionHandlerFeature
@@ -1247,8 +1247,8 @@ where mcm.MacroBrickCode = '" + bpspaprephar.BrickCode + "'";
                                 DsrHiltonDailySalesTeamToChemist202223 model = new DsrHiltonDailySalesTeamToChemist202223();
                                 model.PackCode = reader["PackCode"].ToString();
                                 model.ProductName = reader["ProductName"].ToString();
-                                model.SalesUnits = reader["Sales_Units"].ToString();
-                                model.SalesValueNp = reader["Sales_ValueNP"].ToString();
+                                //model.SalesUnits = reader["Sales_Units"].ToString();
+                                //model.SalesValueNp = reader["Sales_ValueNP"].ToString();
 
 
 

@@ -50,14 +50,14 @@ public partial class DsrHiltonDailySalesTeamToChemist202223
 
     // public DateTime? Date { get; set; }
 
-    public string? SalesUnits { get; set; }
+    public Decimal? SalesUnits { get; set; }
 
 
     //public decimal? SalesValueTp { get; set; }
 
     //public decimal? SalesValueDp { get; set; }
 
-    public string? SalesValueNp { get; set; }
+    public decimal? SalesValueNp { get; set; }
 
     //public DateTime? LastUpdateDate { get; set; }
 
