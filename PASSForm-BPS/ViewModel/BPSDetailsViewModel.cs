@@ -41,6 +41,7 @@ namespace PASSForm_BPS.ViewModel
         public Dictionary<string, List<ExpandoObject>> SalesUnitsPost { get; set; }
         public Dictionary<string, List<ExpandoObject>> PreeActualAccordionModel { get; set; }
         public Dictionary<string, List<ExpandoObject>> PreeActualAccordionModelValues { get; set; }
+        public Dictionary<string, List<ExpandoObject>> VarianceMergeValues { get; set; }
 
     }
 
