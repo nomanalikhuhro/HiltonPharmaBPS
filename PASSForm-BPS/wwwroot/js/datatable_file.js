@@ -117,8 +117,9 @@ function SubmittedForm() {
     var totalwithdisss = document.getElementById("totalwithdis").value;
     var bpspercentagess = document.getElementById("bpspercentage").value;
     var totalroipercentagess = document.getElementById("totalroipercentage").value;
+    var FootFall = document.getElementById('footfall').value;
 
-    if (totalwithoutdisss == "" || totalwithdisss == "" || bpspercentagess == "" || totalroipercentagess == "" ) {
+    if (totalwithoutdisss == "" || totalwithdisss == "" || bpspercentagess == "" || totalroipercentagess == "" || FootFall == "" ) {
         //document.getElementById('totalwithoutdisss').classList.add("error-field");
         //document.getElementById('totalwithdisss').classList.add("error-field");
         //document.getElementById('bpspercentagess').classList.add("error-field");
@@ -141,7 +142,7 @@ function SubmittedForm() {
     //var startDateInput = document.getElementById('startdatepost-0').value;
     //var endDateInput = document.getElementById('enddatepost-0').value;
     var Comment = document.getElementById('createcomments').value;
-    var FootFall = document.getElementById('footfall').value;
+    
     var currentDate = new Date();
 
     //if (DistributorCode == "" || DistributorCode = 'Select' || Comment == null) {
@@ -260,7 +261,7 @@ function SubmittedForm() {
 
                 var salArr = [];
                 for (var k = 0; k < PreMon; k++) {
-                    var monthyearnames = document.getElementById("value-pre-coloum-" + k).innerHTML;
+                    var monthyearnames = document.getElementById("value-pre-coloum-" + button1rightPart + "-" + k).innerHTML;
                     //var YearPart = monthyearnames.split(' ');
                     //var Year = YearPart[0];
                     //var Month = YearPart[1];
@@ -498,7 +499,7 @@ function UpdateSubmittedForm() {
 
             var salArr = [];
             for (var k = 0; k < PreMon; k++) {
-                var monthyearnames = document.getElementById("value-pre-coloum-" + (k)).innerHTML;
+                var monthyearnames = document.getElementById("value-pre-coloum-" + button1rightPart  +"-"+ + k).innerHTML;
                 var YearPart = monthyearnames.split(' ');
                 var Year = YearPart[0];
                 var Month = YearPart[1];
@@ -519,7 +520,7 @@ function UpdateSubmittedForm() {
             //var postproductContribution = document.getElementById("sku-post-actdis-" + i + "-" + j).value;
             var salArr = [];
             for (var k = 0; k < numberOfPostMonths; k++) {
-                var monthyearnames = document.getElementById("value-post-coloum-" + k).innerHTML;
+                var monthyearnames = document.getElementById("value-post-coloum-" + button1rightPart + "-" + k).innerHTML;
 
                 var YearPart = monthyearnames.split(' ');
                 var PostYear = YearPart[0];

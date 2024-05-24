@@ -45,7 +45,7 @@ namespace PASSForm_BPS.Controllers
             {
                 var user = _passDbContext.Users.FirstOrDefault(u => u.UserEmail == model.UserEmail);
                 var userWithDesignation = _passDbContext.Users
-    .Where(u => u.UserEmail == model.UserEmail)
+                .Where(u => u.UserEmail == model.UserEmail)
     .Join(
         _passDbContext.Roles,
         user => user.RoleId,
@@ -189,7 +189,7 @@ namespace PASSForm_BPS.Controllers
                 HttpContext.Session.Remove("roleid");
                 return RedirectToAction("Login");
             }
-            return View();
+            return RedirectToAction("Login");
         }
 
     }

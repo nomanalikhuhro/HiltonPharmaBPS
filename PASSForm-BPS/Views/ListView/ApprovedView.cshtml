@@ -54,22 +54,22 @@
 
 
                             @if (@item.StatusId != 4 || ViewBag.IsRoleEdit == false)
-                                            {
+                             {
                                 <td class="text-center">
                                     <table>
                                         <tr>
                                             <td style="text-align:center;">
                                                 <form hidden asp-action="Edit" asp-controller="ListView">
 
-                                                   @* <input type="hidden" name="id" value="@item.TrackingId">
+                                                    <input type="hidden" name="id" value="@item.TrackingId">
                                                     <input type="hidden" name="anotherId" value="@item.BpsRecordId">
-                                                    <button type="submit" class="icon-navigation" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit" style="color:orange"></i></button>*@
+                                                    <button type="submit" class="icon-navigation" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit" style="color:orange"></i></button>
                                                 </form>
 
                                             </td>
 
                                             <td>
-                                                <form asp-action="CDDetails" asp-controller="ListView">
+                                                <form asp-action="Details" asp-controller="ListView">
                                                     <input type="hidden" name="id" value="@item.TrackingId">
                                                     <input type="hidden" name="anotherId" value="@item.BpsRecordId">
                                                     <button type="submit" class="icon-navigation" data-toggle="tooltip" data-placement="top" title="View"><i class="fa fa-eye"></i></button>
@@ -153,7 +153,7 @@
                                             </td>
 
                                             <td>
-                                                <form asp-action="CDDetails" asp-controller="ListView">
+                                                <form asp-action="Details" asp-controller="ListView">
                                                     <input type="hidden" name="id" value="@item.TrackingId">
                                                     <input type="hidden" name="anotherId" value="@item.BpsRecordId">
                                                     <input type="hidden" name="screenId" value="submitscreen">

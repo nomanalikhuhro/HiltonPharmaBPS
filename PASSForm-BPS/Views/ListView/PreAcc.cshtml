@@ -219,7 +219,7 @@
                 {
                     @foreach (var postmon in ViewBag.postinputParameters)
                     {
-                        <th style="width:0%;" id="value-pre-coloum-@prevaluecoloumindex">@postmon.Month/@postmon.Year</th>
+                        <th style="width:0%;" id="value-pre-coloum-@ViewBag.checkboxindex-@prevaluecoloumindex">@postmon.Month/@postmon.Year</th>
                         prevaluecoloumindex++;
                     }
                 }

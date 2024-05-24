@@ -173,7 +173,11 @@
 
                                     </div>
                                     <div class="col-4">
-
+                                        <label style="font-weight:bold;">Doctor Category:</label><br />
+                                        @foreach (var dc in Model.requesthcp)
+                                        {
+                                            <input disabled value="@dc.DoctorsCategory" style="width:100%; height:30px; margin-top:1%;"></input>
+                                        }
                                         <form asp-controller="ListView" asp-action="Create" style="padding-left:12px; visibility:hidden;">
                                             <label style="font-weight:bold;">Tracking ID:</label>
                                             <div>
@@ -478,7 +482,7 @@
                                                         }
                                                         else
                                                         {
-                                                            <th style="text-align:right;" id="value-pre-coloum-@pretvaluecoloumindexedit">@valuecolumn.Key</th>
+                                                            <th style="text-align:right;" id="value-pre-coloum-@acc-@pretvaluecoloumindexedit">@valuecolumn.Key</th>
                                                             pretvaluecoloumindexedit++;
                                                         }
                                                     }
@@ -754,7 +758,7 @@
                                                         }
                                                         else
                                                         {
-                                                            <th style="width:10%;" id="value-post-coloum-@postvaluecoloumindexedit">@valuecolumn.Key</th>
+                                                            <th style="width:10%;" id="value-post-coloum-@acc-@postvaluecoloumindexedit">@valuecolumn.Key</th>
                                                             postvaluecoloumindexedit++;
                                                         }
                                                     }

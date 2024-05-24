@@ -32,6 +32,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGlzdFZpZXdcQXBwcm92ZWRWaWV3LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/BPSGit/PASSForm-BPS/Views/ListView/CDDetails.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGlzdFZpZXdcQ0REZXRhaWxzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/BPSGit/PASSForm-BPS/Views/ListView/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGlzdFZpZXdcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 

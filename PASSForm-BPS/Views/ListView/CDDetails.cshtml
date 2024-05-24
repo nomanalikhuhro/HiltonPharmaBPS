@@ -22,6 +22,29 @@
 
     var resultval = new Dictionary<string, List<ExpandoObject>>();
 }
+<html>
+<head>
+    <title>Your View</title>
+    <style>
+
+
+
+
+
+
+
+        .hide {
+            display: none;
+        }
+
+        .error-field {
+            border: 1px solid red;
+            border-radius: 5px;
+        }
+
+    </style>
+</head>
+<body>
 <div style="padding-top: 15px;">
 
     <div style="border: 2px solid; background-color: white; border-radius: 10px; border-color: white; box-shadow: 1px 0px 9px 1px lightgray;">
@@ -173,168 +196,170 @@
                 }
                 <div class="panel">
                     <p style="text-align: center; font-weight: bold; font-size: 20px;">Pre-Sales</p>
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-6">
-                                <div style="text-align: center;">
-                                    <div class="container">
-                                        <div class="row">
-                                            <div class="col-4">
-                                                <p style="text-align:right; color: #d71921;">Sale Units</p>
-                                            </div>
-                                            <div class="col-4">
-                                                <div id="toggle-@toggle" class="toggle-switch" onclick="edittoggleSwitchAction(this,@toggle)">
-                                                    <div class="toggle-slider"></div>
-                                                </div>
-                                            </div>
-                                            <div class="col-4">
-                                                <p style="text-align:left; color: #d71921;">Sale Values</p>
-                                            </div>
+                    <div>
+                        <div style="text-align: center;">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-4">
+                                        <p style="text-align:right; color: #d71921;">Sale Units</p>
+                                    </div>
+                                    <div class="col-4">
+                                        <div id="toggle-@toggle" class="toggle-switch" onclick="edittoggleSwitchAction(this,@toggle)">
+                                            <div class="toggle-slider"></div>
                                         </div>
                                     </div>
+                                    <div class="col-4">
+                                        <p style="text-align:left; color: #d71921;">Sale Values</p>
+                                    </div>
                                 </div>
-                                <div style="padding-top:15px;">
-                                    <div class="container">
-                                        <div class="row">
-                                            <div class="col-4">
-                                                <label>From:</label>
-                                                @foreach (var group in Model.preDateRanges.Where(predat => predat.PreTotal != null && predat.Chemist_Code == acc)
-                                               .GroupBy(predat => predat.Chemist_Code))
-                                                {
-                                                    var predat = group.First();
+                            </div>
+                        </div>
+                        <div style="padding-top:15px;     text-align: center;
+    padding-left: 25%;
+    padding-bottom: 15px;">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-4">
+                                        <label>From:</label>
+                                        @foreach (var group in Model.preDateRanges.Where(predat => predat.PreTotal != null && predat.Chemist_Code == acc)
+                                       .GroupBy(predat => predat.Chemist_Code))
+                                        {
+                                            var predat = group.First();
 
-                                                    <input disabled type="text" value="@(predat.PreFromDate != null ? predat.PreFromDate.Value.ToString("MMM yyyy") : string.Empty)" style="margin-left: 2%; width:60%;" />
+                                            <input disabled type="text" value="@(predat.PreFromDate != null ? predat.PreFromDate.Value.ToString("MMM yyyy") : string.Empty)" style="margin-left: 2%; width:60%;" />
+                                        }
+                                    </div>
+                                    <div class="col-4">
+                                        <label>To:</label>
+                                        @foreach (var group in Model.preDateRanges.Where(predat => predat.PreTotal != null && predat.Chemist_Code == acc)
+                                       .GroupBy(predat => predat.Chemist_Code))
+                                        {
+                                            var predat = group.First();
+
+                                            <input disabled type="text" value="@(predat.PreToDate != null ? predat.PreToDate.Value.ToString("MMM yyyy") : string.Empty)" style="margin-left: 2%; width:70%;" />
+                                        }
+
+                                    </div>
+                                    <div class="col-4">
+                                        @foreach (var predat in Model.preDateRanges)
+                                        {
+                                            if (predat.PreTotal != null)
+                                            {
+                                                if (predat.Chemist_Code == acc)
+                                                {
+                                                    <div>
+                                                        <label>Contribution % :</label>
+                                                        <input disabled type="number" value="@(predat.Contribution != null ? string.Format("{0:yyyy-MM-dd}", predat.Contribution) : string.Empty)" style="text-align:right; width:40%;" />
+                                                    </div>
                                                 }
-                                            </div>
-                                            <div class="col-4">
-                                                <label>To:</label>
-                                                @foreach (var group in Model.preDateRanges.Where(predat => predat.PreTotal != null && predat.Chemist_Code == acc)
-                                               .GroupBy(predat => predat.Chemist_Code))
-                                                {
-                                                    var predat = group.First();
+                                            }
+                                        }
 
-                                                    <input disabled type="text" value="@(predat.PreToDate != null ? predat.PreToDate.Value.ToString("MMM yyyy") : string.Empty)" style="margin-left: 2%; width:70%;" />
-                                                }
-
-                                            </div>
-                                            <div class="col-4">
-                                                @foreach (var predat in Model.preDateRanges)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @foreach (var skupre in Model.SalesUnitsPre)
+                        {
+                            int cnt = 0;
+                            DataTable dt = new DataTable();
+                            DataRow dr;
+                            @if (skupre.Key == acc)
+                            {
+                                <div id="sku-@presku" style="overflow:auto;">
+                                    <table id="customers">
+                                        <thead>
+                                            <tr style="    font-size: 10px; background: #d71921; color: white; font-weight: bold;">
+                                                @foreach (var skucoloum in skupre.Value[0] as IDictionary<string, object>)
                                                 {
-                                                    if (predat.PreTotal != null)
+                                                    dt.Columns.Add(skucoloum.Key.ToString());
+                                           
+                                                    if (skucoloum.Key == "ActualDiscount")
                                                     {
-                                                        if (predat.Chemist_Code == acc)
-                                                        {
-                                                            <div>
-                                                                <label>Contribution % :</label>
-                                                                <input disabled type="number" value="@(predat.Contribution != null ? string.Format("{0:yyyy-MM-dd}", predat.Contribution) : string.Empty)" style="margin-left: 30%; text-align:right; width:40%;" />
-                                                            </div>
-                                                        }
+                                                        <td>Actual Discount</td>
                                                     }
-                                                }
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                @* @for (int i = 0; i < Model.SalesUnitsPre.Count; i++)
-                            {*@
-                                @foreach (var skupre in Model.SalesUnitsPre)
-                                {
-                                    int cnt = 0;
-                                    DataTable dt = new DataTable();
-                                    DataRow dr;
-                                    @if (skupre.Key == acc)
-                                    {
-                                        <div id="sku-@presku" style="overflow:auto;">
-                                            <table id="customers">
-                                                <thead>
-                                                    <tr style="    font-size: 10px; background: #d71921; color: white; font-weight: bold;">
-                                                        @foreach (var skucoloum in skupre.Value[0] as IDictionary<string, object>)
-                                                        {
-                                                            dt.Columns.Add(skucoloum.Key.ToString());
-                                                            if (skucoloum.Key == "ActualDiscount")
-                                                            {
-                                                                <td>Actual Discount</td>
-                                                            }
-                                                            else if (skucoloum.Key == "Contribution")
-                                                            {
-                                                                <td>Contribution</td>
-                                                            }
-                                                            else if (skucoloum.Key == "PackCode")
-                                                            {
-                                                                <td>Pack Code</td>
-                                                            }
-                                                            else if (skucoloum.Key == "ProductName")
-                                                            {
-                                                                <td>Product Name</td>
-                                                            }
-                                                            else if (skucoloum.Key == "Description")
-                                                            {
-                                                                <td>Description</td>
-                                                            }
-                                                            else
-                                                            {
-
-
-
-                                                                <td>
-
-                                                                    @skucoloum.Key
-                                                                </td>
-
-                                                            }
-
-                                                        }
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-
-                                                    @foreach (var skudata in skupre.Value)
+                                                    else if (skucoloum.Key == "Contribution")
+                                                    {
+                                                        <td>Contribution</td>
+                                                    }
+                                                    else if (skucoloum.Key == "PackCode")
+                                                    {
+                                                        <td>Pack Code</td>
+                                                    }
+                                                    else if (skucoloum.Key == "ProductName")
+                                                    {
+                                                        <td>Product Name</td>
+                                                    }
+                                                    else if (skucoloum.Key == "Description")
+                                                    {
+                                                        <td>Description</td>
+                                                    }
+                                                    else
                                                     {
 
-                                                        dt.Clear();
-                                                        dr = dt.NewRow();
-                                                        List<string> variance = new List<string>();
-                                                        <tr style="font-size:10px;">
-                                                            @foreach (var skudata1 in skudata)
-                                                            {
-                                                                if (skudata1.Key == "PackCode")
-                                                                {
-                                                                    dr[skudata1.Key.ToString()] = skudata1.Value;
-                                                                    <td>@skudata1.Value</td>
-                                                                }
-                                                                else if (skudata1.Key == "ProductName")
-                                                                {
-                                                                    dr[skudata1.Key.ToString()] = skudata1.Value;
-                                                                    <td>@skudata1.Value</td>
-                                                                }
-                                                                else if (skudata1.Key == "Description")
-                                                                {
-                                                                    dr[skudata1.Key.ToString()] = skudata1.Value;
-                                                                    <td>@skudata1.Value</td>
-                                                                }
-                                                                else
-                                                                {
 
-                                                                    dr[skudata1.Key.ToString()] = skudata1.Value;
 
-                                                                    <td style="text-align:right;">
+                                                        <td>
 
-                                                                        @skudata1.Value
-                                                                    </td>
+                                                            @skucoloum.Key
+                                                        </td>
 
-                                                                }
+                                                    }
 
-                                                                
-                                                                ;
-                                                            }
-                                                            @{dt.Rows.Add(dr);}
+                                                }
+                                            </tr>
+                                        </thead>
+                                        <tbody style="border: 1px solid lightgray;">
 
-                                                        </tr>
-                                                        @foreach (var skupre1 in Model.PreeActualAccordionModel)
+                                            @foreach (var skudata in skupre.Value)
+                                            {
+
+                                                dt.Clear();
+                                                dr = dt.NewRow();
+                                                List<string> variance = new List<string>();
+                                                <tr style="font-size:10px;">
+                                                    @foreach (var skudata1 in skudata)
+                                                    {
+                                                        if (skudata1.Key == "PackCode")
                                                         {
-                                                            // for (int i = 0; i < skupre1.Value.Count(); i++)
+                                                            dr[skudata1.Key.ToString()] = skudata1.Value;
+                                                            <td>@skudata1.Value</td>
+                                                        }
+                                                        else if (skudata1.Key == "ProductName")
+                                                        {
+                                                            dr[skudata1.Key.ToString()] = skudata1.Value;
+                                                            <td>@skudata1.Value</td>
+                                                        }
+                                                        else if (skudata1.Key == "Description")
+                                                        {
+                                                            dr[skudata1.Key.ToString()] = skudata1.Value;
+                                                            <td>@skudata1.Value</td>
+                                                        }
+                                                        else
+                                                        {
 
+                                                            dr[skudata1.Key.ToString()] = skudata1.Value;
+
+                                                            <td style="text-align:right;">
+                                                                <p>Input_Sales:</p>
+                                                                @skudata1.Value
+                                                            </td>
+
+                                                        }
+
+
+                                                   ;
+                                                    }
+                                                    @{
+                                                        dt.Rows.Add(dr);
+                                                    }
+
+                                                </tr>
+                                                @foreach (var skupre1 in Model.PreeActualAccordionModel)
+                                                {
+                                                        @if (skupre1.Key == acc)
+
+                                                        {
                                                             <tr style="font-size:10px;">
                                                                 @foreach (var skudata1 in skupre1.Value[cnt])
                                                                 {
@@ -342,23 +367,26 @@
                                                                     if (skudata1.Key == "PackCode")
                                                                     {
 
-                                                                        <td>@skudata1.Value</td>
+                                                                        @*<td>@skudata1.Value</td>*@
+                                                                        <td></td>
                                                                     }
                                                                     else if (skudata1.Key == "ProductName")
                                                                     {
-                                                                        <td>@skudata1.Value</td>
+                                                                        @*<td>@skudata1.Value</td>*@
+                                                                        <td></td>
                                                                     }
                                                                     else if (skudata1.Key == "Description")
                                                                     {
-                                                                        <td>@skudata1.Value</td>
+                                                                        @*<td>@skudata1.Value</td>*@
+                                                                        <td></td>
                                                                     }
                                                                     else
                                                                     {
 
-                                                                        double varian = Convert.ToDouble(skudata1.Value) -  Convert.ToDouble(dt.Rows[0].Field<string>(skudata1.Key));
+                                                                        double varian = Convert.ToDouble(skudata1.Value) - Convert.ToDouble(dt.Rows[0].Field<string>(skudata1.Key));
                                                                         variance.Add(varian.ToString());
                                                                         <td style="text-align:right;">
-
+                                                                            <p>Actual_Sales:</p>
                                                                             @skudata1.Value
                                                                         </td>
 
@@ -367,331 +395,38 @@
 
                                                                 }
                                                             </tr>
-                                                            <tr style="font-size:10px;">
-                                                                @{int i = 0;}
-                                                                @foreach (var skudata1 in skupre1.Value[cnt])
-                                                                {
-                                                                   
-                                                                    if (skudata1.Key == "PackCode")
-                                                                    {
 
-                                                                        <td>@skudata1.Value</td>
-                                                                    }
-                                                                    else if (skudata1.Key == "ProductName")
-                                                                    {
-                                                                        <td>@skudata1.Value</td>
-                                                                    }
-                                                                    else if (skudata1.Key == "Description")
-                                                                    {
-                                                                        <td>@(skudata1.Value + " Variance ")</td>
-                                                                    }
-                                                                    else
-                                                                    {
-
-                                                                       
-                                                                            <td style="text-align:right;">
-
-                                                                                @variance[i];
-                                                                        </td>
-
-                                                                        i++;
-
-
-                                                                    }
-
-
-                                                                }
-                                                            </tr>
-
-
-                                                            @*@foreach (var skudata2 in skupre1.Value)
-                                        {
-                                        <tr style="font-size:10px;">
-                                        @foreach (var skudata1 in skudata2)
-                                        {
-
-                                        if (skudata1.Key == "PackCode")
-                                        {
-
-                                        <td>@skudata1.Value</td>
-                                        }
-                                        else if (skudata1.Key == "ProductName")
-                                        {
-                                        <td>@skudata1.Value</td>
-                                        }
-                                        else if (skudata1.Key == "Description")
-                                        {
-                                        <td>@skudata1.Value</td>
-                                        }
-                                        else
-                                        {
-
-
-
-                                        <td style="text-align:right;">
-
-                                        @skudata1.Value
-                                        </td>
-
-                                        }
-
-
-                                        }
-                                        </tr>
-
-                                        }*@
-
-
-                                                        }
-                                                        cnt++;
-                                                    }
-
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    }
-                                }
-                                @*}*@
-                                @*  @foreach (var skupre in Model.SalesUnitsPre)
-                            {
-                            @if (skupre.Key == acc)
-                            {
-                            <div id="sku-@presku" style="overflow:auto;">
-                            <table id="customers">
-                            <thead>
-                            <tr style="    font-size: 10px; background: #d71921; color: white; font-weight: bold;">
-                            @foreach (var skucoloum in skupre.Value[0] as IDictionary<string, object>)
-                            {
-                            if (skucoloum.Key == "ActualDiscount")
-                            {
-                            <td>Actual Discount</td>
-                            }
-                            else if (skucoloum.Key == "Contribution")
-                            {
-                            <td>Contribution</td>
-                            }
-                            else  if (skucoloum.Key == "PackCode")
-                            {
-                            <td>Pack Code</td>
-                            }
-                            else if (skucoloum.Key == "ProductName")
-                            {
-                            <td>Product Name</td>
-                            }
-                            else if (skucoloum.Key == "Description")
-                            {
-                            <td>Description</td>
-                            }
-                            else
-                            {
-
-
-
-                            <td>
-
-                            @skucoloum.Key
-                            </td>
-
-                            }
-
-                            }
-                            </tr>
-                            </thead>
-                            <tbody>
-
-                            @foreach (var skudata in skupre.Value)
-                            {
-                            <tr style="font-size:10px;">
-                            @foreach (var skudata1 in skudata)
-                            {
-                            if (skudata1.Key == "PackCode")
-                            {
-                            <td>@skudata1.Value</td>
-                            }
-                            else if (skudata1.Key == "ProductName")
-                            {
-                            <td>@skudata1.Value</td>
-                            }
-                            else if (skudata1.Key == "Description")
-                            {
-                            <td>@skudata1.Value</td>
-                            }
-                            else
-                            {
-
-
-
-                            <td style="text-align:right;">
-
-                            @skudata1.Value
-                            </td>
-
-                            }
-
-
-                            }
-                            </tr>
-
-                            }
-                            </tbody>
-                            </table>
-                            </div>
-                            }
-                            }*@
-                                @foreach (var valpre in Model.SalesValuesPre)
-                                {
-                                    int cnt = 0;
-                                    DataTable dt = new DataTable();
-                                    DataRow dr;
-                                    @if (valpre.Key == acc)
-                                    {
-                                        <div id="value-@prevalue" style="overflow:auto; display:none">
-                                            <table id="customers">
-                                                <thead>
-                                                    <tr style="   font-size: 10px; background: #d71921; color: white; font-weight: bold;">
-                                                        @foreach (var valuecolumn in valpre.Value[0] as IDictionary<string, object>)
-                                                        {
-                                                            dt.Columns.Add(valuecolumn.Key.ToString());
-                                                            if (valuecolumn.Key == "ActualDiscount")
-                                                            {
-                                                                <td>Actual Discount</td>
-                                                            }
-                                                            else if (valuecolumn.Key == "Contribution")
-                                                            {
-                                                                <td>Contribution</td>
-                                                            }
-                                                            else if (valuecolumn.Key == "PackCode")
-                                                            {
-                                                                <td>Pack Code</td>
-                                                            }
-                                                            else if (valuecolumn.Key == "ProductName")
-                                                            {
-                                                                <td>Product Name</td>
-                                                            }
-                                                            else if (valuecolumn.Key == "Description")
-                                                            {
-                                                                <td>Description</td>
-                                                            }
-                                                            else
-                                                            {
-
-
-
-                                                                <td>
-
-                                                                    @valuecolumn.Key
-                                                                </td>
-
-                                                            }
-                                                        }
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-
-                                                    @foreach (var valdata in valpre.Value)
-                                                    {
-
-                                                        dt.Clear();
-                                                        dr = dt.NewRow();
-                                                        List<string> variance = new List<string>();
-                                                        <tr style="font-size:10px;">
-                                                            @foreach (var valdata1 in valdata)
-                                                            {
-                                                                if (valdata1.Key == "PackCode")
-                                                                {
-                                                                    dr[valdata1.Key.ToString()] = valdata1.Value;
-                                                                    <td>@valdata1.Value</td>
-                                                                }
-                                                                else if (valdata1.Key == "ProductName")
-                                                                {
-                                                                    dr[valdata1.Key.ToString()] = valdata1.Value;
-                                                                    <td>@valdata1.Value</td>
-                                                                }
-                                                                else if (valdata1.Key == "Description")
-                                                                {
-                                                                    dr[valdata1.Key.ToString()] = valdata1.Value;
-                                                                    <td>@valdata1.Value</td>
-                                                                }
-                                                                else
-                                                                {
-
-
-                                                                    dr[valdata1.Key.ToString()] = valdata1.Value;
-                                                                    <td class="Comma" style="text-align:right;">
-
-                                                                        @valdata1.Value
-                                                                    </td>
-
-                                                                }
-
-                                                            }
-                                                            @{
-                                                                dt.Rows.Add(dr);
-                                                            }
-                                                        </tr>
-                                                        @foreach (var acvalpre1 in Model.PreeActualAccordionModelValues)
-                                                        {
-                                                            // for (int i = 0; i < skupre1.Value.Count(); i++)
-
-                                                            <tr style="font-size:10px;">
-                                                                @foreach (var valdata1 in acvalpre1.Value[cnt])
-                                                                {
-
-                                                                    if (valdata1.Key == "PackCode")
-                                                                    {
-
-                                                                        <td>@valdata1.Value</td>
-                                                                    }
-                                                                    else if (valdata1.Key == "ProductName")
-                                                                    {
-                                                                        <td>@valdata1.Value</td>
-                                                                    }
-                                                                    else if (valdata1.Key == "Description")
-                                                                    {
-                                                                        <td>@valdata1.Value</td>
-                                                                    }
-                                                                    else
-                                                                    {
-
-                                                                        double varian = Convert.ToDouble(valdata1.Value) - Convert.ToDouble(dt.Rows[0].Field<string>(valdata1.Key));
-                                                                        variance.Add(varian.ToString());
-                                                                        <td style="text-align:right;">
-
-                                                                            @valdata1.Value
-                                                                        </td>
-
-                                                                    }
-
-
-                                                                }
-                                                            </tr>
                                                             <tr style="font-size:10px;">
                                                                 @{
                                                                     int i = 0;
                                                                 }
-                                                                @foreach (var valdata1 in acvalpre1.Value[cnt])
+                                                                @foreach (var skudata1 in skupre1.Value[cnt])
                                                                 {
 
-                                                                    if (valdata1.Key == "PackCode")
+                                                                    if (skudata1.Key == "PackCode")
                                                                     {
-
-                                                                        <td>@valdata1.Value</td>
+                                                                        <td></td>
+                                                                        @*<td>@skudata1.Value</td>*@
                                                                     }
-                                                                    else if (valdata1.Key == "ProductName")
+                                                                    else if (skudata1.Key == "ProductName")
                                                                     {
-                                                                        <td>@valdata1.Value</td>
+                                                                        <td></td>
+                                                                        @*<td>@skudata1.Value</td>*@
                                                                     }
-                                                                    else if (valdata1.Key == "Description")
+                                                                    else if (skudata1.Key == "Description")
                                                                     {
-                                                                        <td>@(valdata1.Value + " Variance ")</td>
+                                                                        <td></td>
+@*                                                                        <td>@(
+                                                                              skudata1.Value + " Variance "
+                                                                         )</td>*@
                                                                     }
                                                                     else
                                                                     {
 
 
                                                                         <td style="text-align:right;">
-
-                                                                            @variance[i]
+                                                                           <p>Variance:</p>
+                                                                           @variance[i];
                                                                         </td>
 
                                                                         i++;
@@ -702,140 +437,141 @@
 
                                                                 }
                                                             </tr>
-
-
                                                         }
-                                                        cnt++;
                                                     }
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    }
-                                }
-                                <div>
-                                    <div style="text-align:right; margin-top:2%;">
-                                        <label>Chemist Total(Rs):</label>
+                                                cnt++;
+                                            }
 
-
-                                        @foreach (var group in Model.preDateRanges.Where(predat => predat.PreTotal != null && predat.Chemist_Code == acc)
-                                       .GroupBy(predat => predat.Chemist_Code))
-                                        {
-                                            var predat = group.First();
-
-                                            <input disabled type="text" class="allinput-fields" value="@(predat.PreTotal != null ? string.Format("{0:yyyy-MM-dd}", predat.PreTotal) : string.Empty)" style="margin-left: 2%;" />
-                                        }
-
-                                    </div>
-                                    <div style="text-align:right; margin-top:2%; visibility:hidden;">
-                                        <label>Discount Percentage %:</label>
-
-
-                                        @foreach (var group in Model.preDateRanges.Where(predat => predat.PreTotal != null && predat.Chemist_Code == acc)
-                                       .GroupBy(predat => predat.Chemist_Code))
-                                        {
-                                            var predat = group.First();
-
-                                            <input disabled type="text" class="allinput-fields" value="@(predat.discountpercentage != null ? string.Format("{0:yyyy-MM-dd}", predat.discountpercentage) : string.Empty)" style="margin-left: 2%;" />
-                                        }
-
-                                    </div>
+                                        </tbody>
+                                    </table>
                                 </div>
+                            }
+                        }
 
-                            </div>
-                            <div class="col-6">
-                                <div style="text-align: center;">
-                                    <div class="container">
-                                        <div class="row">
-                                            <div class="col-4">
-                                                <p style="text-align:right; color: #d71921;">Sale Units</p>
-                                            </div>
-                                            <div class="col-4">
-                                                <div id="toggle-@toggle" class="toggle-switch" onclick="actualedittoggleSwitchAction(this,@toggle)">
-                                                    <div class="toggle-slider"></div>
-                                                </div>
-                                            </div>
-                                            <div class="col-4">
-                                                <p style="text-align:left; color: #d71921;">Sale Values</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                        @foreach (var valpre in Model.SalesValuesPre)
+                        {
+                            int cnt = 0;
+                            DataTable dt = new DataTable();
+                            DataRow dr;
+                            @if (valpre.Key == acc)
+                            {
+                                <div id="value-@prevalue" style="overflow:auto; display:none">
+                                    <table id="customers">
+                                        <thead>
+                                            <tr style="   font-size: 10px; background: #d71921; color: white; font-weight: bold;">
+                                                @foreach (var valuecolumn in valpre.Value[0] as IDictionary<string, object>)
+                                                {
+                                                    dt.Columns.Add(valuecolumn.Key.ToString());
+                                                    if (valuecolumn.Key == "ActualDiscount")
+                                                    {
+                                                        <td>Actual Discount</td>
+                                                    }
+                                                    else if (valuecolumn.Key == "Contribution")
+                                                    {
+                                                        <td>Contribution</td>
+                                                    }
+                                                    else if (valuecolumn.Key == "PackCode")
+                                                    {
+                                                        <td>Pack Code</td>
+                                                    }
+                                                    else if (valuecolumn.Key == "ProductName")
+                                                    {
+                                                        <td>Product Name</td>
+                                                    }
+                                                    else if (valuecolumn.Key == "Description")
+                                                    {
+                                                        <td>Description</td>
+                                                    }
+                                                    else
+                                                    {
 
 
 
+                                                        <td>
 
-                                @foreach (var skupre in Model.PreeActualAccordionModel)
-                                {
-                                    @if (skupre.Key == acc)
-                                    {
-                                        <div id="acsku-@presku" style="overflow:auto; padding-top:70px;">
-                                            <table id="customers">
-                                                <thead>
-                                                    <tr style="    font-size: 10px; background: #d71921; color: white; font-weight: bold;">
-                                                        @foreach (var skucoloum in skupre.Value[0] as IDictionary<string, object>)
+                                                            @valuecolumn.Key
+                                                        </td>
+
+                                                    }
+                                                }
+                                            </tr>
+                                        </thead>
+                                        <tbody style="border: 1px solid lightgray;">
+
+                                            @foreach (var valdata in valpre.Value)
+                                            {
+
+                                                dt.Clear();
+                                                dr = dt.NewRow();
+                                                List<string> variance = new List<string>();
+                                                <tr style="font-size:10px;">
+                                                    @foreach (var valdata1 in valdata)
+                                                    {
+                                                        if (valdata1.Key == "PackCode")
                                                         {
-                                                            if (skucoloum.Key == "ActualDiscount")
-                                                            {
-                                                                <td>Actual Discount</td>
-                                                            }
-                                                            else if (skucoloum.Key == "Contribution")
-                                                            {
-                                                                <td>Contribution</td>
-                                                            }
-                                                            else if (skucoloum.Key == "PackCode")
-                                                            {
-                                                                <td>Pack Code</td>
-                                                            }
-                                                            else if (skucoloum.Key == "ProductName")
-                                                            {
-                                                                <td>Product Name</td>
-                                                            }
-                                                            else if (skucoloum.Key == "Description")
-                                                            {
-                                                                <td>Description</td>
-                                                            }
-                                                            else
-                                                            {
+                                                            dr[valdata1.Key.ToString()] = valdata1.Value;
+                                                            <td>@valdata1.Value</td>
+                                                        }
+                                                        else if (valdata1.Key == "ProductName")
+                                                        {
+                                                            dr[valdata1.Key.ToString()] = valdata1.Value;
+                                                            <td>@valdata1.Value</td>
+                                                        }
+                                                        else if (valdata1.Key == "Description")
+                                                        {
+                                                            dr[valdata1.Key.ToString()] = valdata1.Value;
+                                                            <td>@valdata1.Value</td>
+                                                        }
+                                                        else
+                                                        {
 
 
-
-                                                                <td>
-
-                                                                    @skucoloum.Key
-                                                                </td>
-
-                                                            }
+                                                            dr[valdata1.Key.ToString()] = valdata1.Value;
+                                                            <td class="Comma" style="text-align:right;">
+                                                                <p>Input_Sales:</p>
+                                                                 @valdata1.Value
+                                                            </td>
 
                                                         }
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
 
-                                                    @foreach (var skudata in skupre.Value)
+                                                    }
+                                                    @{
+                                                        dt.Rows.Add(dr);
+                                                    }
+                                                </tr>
+                                                @foreach (var acvalpre1 in Model.PreeActualAccordionModelValues)
+                                                {
+                                                    // for (int i = 0; i < skupre1.Value.Count(); i++)
+                                                    @if (acvalpre1.Key == acc)
                                                     {
                                                         <tr style="font-size:10px;">
-                                                            @foreach (var skudata1 in skudata)
+                                                            @foreach (var valdata1 in acvalpre1.Value[cnt])
                                                             {
-                                                                if (skudata1.Key == "PackCode")
+
+                                                                if (valdata1.Key == "PackCode")
                                                                 {
-                                                                    <td>@skudata1.Value</td>
+
+                                                                    @*<td>@valdata1.Value</td>*@
+                                                                    <td></td>
                                                                 }
-                                                                else if (skudata1.Key == "ProductName")
+                                                                else if (valdata1.Key == "ProductName")
                                                                 {
-                                                                    <td>@skudata1.Value</td>
+                                                                    @*<td>@valdata1.Value</td>*@
+                                                                    <td></td>
                                                                 }
-                                                                else if (skudata1.Key == "Description")
+                                                                else if (valdata1.Key == "Description")
                                                                 {
-                                                                    <td>@skudata1.Value</td>
+                                                                    @*<td>@valdata1.Value</td>*@
+                                                                    <td></td>
                                                                 }
                                                                 else
                                                                 {
 
-
-
+                                                                    double varian = Convert.ToDouble(valdata1.Value) - Convert.ToDouble(dt.Rows[0].Field<string>(valdata1.Key));
+                                                                    variance.Add(varian.ToString());
                                                                     <td style="text-align:right;">
-
-                                                                        @skudata1.Value
+                                                                        <p>Actual_Sales:</p>
+                                                                       @valdata1.Value
                                                                     </td>
 
                                                                 }
@@ -843,111 +579,89 @@
 
                                                             }
                                                         </tr>
-
-                                                    }
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    }
-                                }
-
-                                @foreach (var acvalpre in Model.PreeActualAccordionModelValues)
-                                {
-                                    @if (acvalpre.Value.Count != 0)
-                                    {
-                                        @if (acvalpre.Key == acc)
-                                        {
-                                            <div id="acvalue-@prevalue" style="overflow:auto; display:none; padding-top:70px;">
-                                                <table id="customers">
-                                                    <thead>
-                                                        <tr style="   font-size: 10px; background: #d71921; color: white; font-weight: bold;">
-                                                            @foreach (var valuecolumn in acvalpre.Value[0] as IDictionary<string, object>)
+                                                        <tr style="font-size:10px;">
+                                                            @{
+                                                                int i = 0;
+                                                            }
+                                                            @foreach (var valdata1 in acvalpre1.Value[cnt])
                                                             {
 
-                                                                if (valuecolumn.Key == "ActualDiscount")
+                                                                if (valdata1.Key == "PackCode")
                                                                 {
-                                                                    <td>Actual Discount</td>
+
+                                                                    @*<td>@valdata1.Value</td>*@
+                                                                    <td></td>
                                                                 }
-                                                                else if (valuecolumn.Key == "Contribution")
+                                                                else if (valdata1.Key == "ProductName")
                                                                 {
-                                                                    <td>Contribution</td>
+                                                                    @*<td>@valdata1.Value</td>*@
+                                                                    <td></td>
                                                                 }
-                                                                else if (valuecolumn.Key == "PackCode")
+                                                                else if (valdata1.Key == "Description")
                                                                 {
-                                                                    <td>Pack Code</td>
-                                                                }
-                                                                else if (valuecolumn.Key == "ProductName")
-                                                                {
-                                                                    <td>Product Name</td>
-                                                                }
-                                                                else if (valuecolumn.Key == "Description")
-                                                                {
-                                                                    <td>Description</td>
+                                                                    @*<td>@(valdata1.Value + " Variance ")</td>*@
+                                                                    <td></td>
                                                                 }
                                                                 else
                                                                 {
-                                                                    <td>
 
-                                                                        @valuecolumn.Key
+
+                                                                    <td style="text-align:right">
+                                                                   @*     <input disabled style="text-align:right; width:85%" type="text"  value="">*@
+                                                                       <p>Variance:</p>
+                                                                         @variance[i]
                                                                     </td>
 
+                                                                    i++;
+
+
                                                                 }
+
+
                                                             }
                                                         </tr>
-                                                    </thead>
-                                                    <tbody>
-
-                                                        @foreach (var valdata in acvalpre.Value)
-                                                        {
-                                                            <tr style="font-size:10px;">
-                                                                @foreach (var valdata1 in valdata)
-                                                                {
-                                                                    if (valdata1.Key == "PackCode")
-                                                                    {
-                                                                        <td>@valdata1.Value</td>
-                                                                    }
-                                                                    else if (valdata1.Key == "ProductName")
-                                                                    {
-                                                                        <td>@valdata1.Value</td>
-                                                                    }
-                                                                    else if (valdata1.Key == "Description")
-                                                                    {
-                                                                        <td>@valdata1.Value</td>
-                                                                    }
-                                                                    else
-                                                                    {
+                                                    }
 
 
+                                                }
+                                                cnt++;
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                        }
+                        <div>
+                            <div style="text-align:right; margin-top:2%;">
+                                <label>Chemist Total(Rs):</label>
 
-                                                                        <td class="Comma" style="text-align:right;">
-                                                                            @*  <input disabled  type="text" value="@valdata1.Value">*@
-                                                                            @valdata1.Value
-                                                                        </td>
 
-                                                                    }
+                                @foreach (var group in Model.preDateRanges.Where(predat => predat.PreTotal != null && predat.Chemist_Code == acc)
+                               .GroupBy(predat => predat.Chemist_Code))
+                                {
+                                    var predat = group.First();
 
-                                                                }
-                                                            </tr>
-
-                                                        }
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        }
-                                    }
-                                    else
-                                    {
-                                        <div>
-                                            <p>Data Not Available!</p>
-                                        </div>
-                                    }
-
+                                    <input disabled type="text" class="allinput-fields" value="@(predat.PreTotal != null ? string.Format("{0:yyyy-MM-dd}", predat.PreTotal) : string.Empty)" style="margin-left: 2%;" />
                                 }
 
+                            </div>
+                            <div style="text-align:right; margin-top:2%; visibility:hidden;">
+                                <label>Discount Percentage %:</label>
+
+
+                                @foreach (var group in Model.preDateRanges.Where(predat => predat.PreTotal != null && predat.Chemist_Code == acc)
+                               .GroupBy(predat => predat.Chemist_Code))
+                                {
+                                    var predat = group.First();
+
+                                    <input disabled type="text" class="allinput-fields" value="@(predat.discountpercentage != null ? string.Format("{0:yyyy-MM-dd}", predat.discountpercentage) : string.Empty)" style="margin-left: 2%;" />
+                                }
 
                             </div>
                         </div>
+
                     </div>
+
                     <p style="text-align: center; font-weight: bold; font-size: 20px;">Post-Sales</p>
 
                     <div style="text-align: center;">
@@ -967,7 +681,8 @@
                             </div>
                         </div>
                     </div>
-                    <div style="padding-top:15px; text-align:center;">
+                    <div style="padding-top:15px; text-align:center;     padding-left: 25%;
+    padding-bottom: 15px;">
                         <div class="container">
                             <div class="row">
                                 <div class="col-4">
@@ -992,19 +707,7 @@
 
                                 </div>
                                 <div class="col-4">
-                                    @* @foreach (var predat in Model.postDateRanges)
-                                {
-                                if (predat.PostTotal != null)
-                                {
-                                if (predat.Chemist_Code == acc)
-                                {
-                                <div>
-                                <label>Contribution % :</label>
-                                <input disabled type="number" value="@(predat.con != null ? string.Format("{0:yyyy-MM-dd}", predat.Contribution) : string.Empty)" style="margin-left: 30%; text-align:right; width:40%;" />
-                                </div>
-                                }
-                                }
-                                }*@
+
 
                                 </div>
                             </div>
@@ -1321,9 +1024,12 @@
             if (panel.style.maxHeight) {
                 panel.style.maxHeight = null;
             } else {
-                panel.style.maxHeight = panel.scrollHeight + "px";
+                panel.style.maxHeight = panel.scrollHeight + "%";
             }
         });
     }
 </script>
 
+</body>
+
+</html>

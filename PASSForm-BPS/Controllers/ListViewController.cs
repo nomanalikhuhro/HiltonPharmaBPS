@@ -2510,7 +2510,9 @@ where mcm.MacroBrickCode = '" + macroBrickCodes + "'";
 
                     var hcpreqid = _passDbContext.Hcprequests.FromSqlRaw("select * from hcprequest where trackingid = '" + HeaderData1.TrackingId + "'").FirstOrDefault().Hcpreqid;
 
-                    var bpsid = _passDbContext.BpsRequests.FromSqlRaw("select * from bps_request where TrackingId = '" + HeaderData1.TrackingId + "'").FirstOrDefault().BpsRecordId;
+                    var bpsid = _passDbContext.BpsRequests.FromSqlRaw("select *,'FootFall' AS  StatusType, 'ActivityStatus' AS User_Name, 'Comments' AS TMCode from bps_request where TrackingId = '" + HeaderData1.TrackingId + "'").FirstOrDefault().BpsRecordId;
+                    
+
                     using (var connection = new MySqlConnection(_connectionString))
                     {
                         connection.Open();
@@ -2550,6 +2552,7 @@ where mcm.MacroBrickCode = '" + macroBrickCodes + "'";
                             {
                                 command.Transaction = trans;
                                 command.ExecuteNonQuery();
+                                trans.Commit();
                             }
 
 
@@ -3128,6 +3131,7 @@ set Status_ID = 4, Comments = '" + comments + "' Where HCPREQID = '" + trackingi
         public IActionResult BPSApproval(List<IFormFile> Files, string WlstId, string comments, string TrackingId)
         {
             try
+            
             {
                 var EmpidSessionValue = HttpContext.Session.GetString("EmpIdbps");
                 foreach (var fileName in Files)
@@ -3160,20 +3164,7 @@ set Status_ID = 4, Comments = '" + comments + "' Where HCPREQID = '" + trackingi
                 }
 
 
-                //var wlstParameter = new MySqlParameter("wlstid", 39);
-                //var destination = _passDbContext.Wf_Worklists
-                //    .FromSqlRaw("SELECT w.*, w.WFActivityInstanceId as TrackingId, w.WFActivityInstanceId AS HcpReqId, w.WFWorklistId as  BpsId, w.Action as TMCode, w.status as Statustype, w.FinishDate as CreatedBy,\r\n\r\nw.ActionBy as  ActionByName, w.StartDate as User_Name, w.StartDate as CreatedOn  FROM wf_worklist w where w.WFWorklistId = @wlstid", wlstParameter)
-                //    .ToList();
-                //var desValues = destination.Select(destination => destination.Destination).FirstOrDefault();
 
-
-
-                //var user = @"SELECT * FROM pass_db.users WHERE EMP_ID = '" + desValues + "'";
-                //var uemail = _passDbContext.Users.FromSqlRaw(user).ToList();
-                //var useremails = uemail.FirstOrDefault()?.UserEmail;
-
-
-                //GlobalClass.Email(useremails, TrackingId, "Approved");
 
 
                 return Ok("Files uploaded successfully");
@@ -3845,6 +3836,7 @@ set Status_ID = 4, Comments = '" + comments + "' Where HCPREQID = '" + trackingi
 
                     foreach (var c in chemistCodes)
                     {
+
                         var chemistName = _passDbContext.Chemists
                             .Where(record => record.ChemistCode == c)
                           .Select(record => new Chemist
@@ -4057,9 +4049,9 @@ set Status_ID = 4, Comments = '" + comments + "' Where HCPREQID = '" + trackingi
 
 
                         var Macname = _passDbContext.Macrobricks.FromSqlRaw("select * from macrobricks where macrobrickcode = '" + brickcode + "' ").FirstOrDefault();
-                        var Dates = _passDbContext.BpsSalesrecords.FromSqlRaw("select * from bps_salesrecord where BPS_Record_ID = '" + bpsid + "' ").FirstOrDefault();
+                        var Dates = _passDbContext.BpsSalesrecords.FromSqlRaw("select * from bps_salesrecord where BPS_Record_ID = '" + bpsid + "' and Chemist_Code = '"+c+"' ").FirstOrDefault();
 
-                        string productQuery = "SELECT PackCode, ProductName, Description FROM passdb_uat.tblproduct WHERE TeamCode = @TeamCode";
+                        string productQuery = "SELECT PackCode, ProductName, Description FROM tblproduct WHERE TeamCode = @TeamCode";
 
                         List<string> productValues = new List<string>();
 

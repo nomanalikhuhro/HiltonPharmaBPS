@@ -52,7 +52,7 @@
                     {
                         @foreach (var postmon in ViewBag.PreMonthYear)
                         {
-                            <th style="width:0%;" id="sku-pre-coloum-@preskucoloumindex">@postmon.Month  @postmon.Year</th>
+                            <th style="width:0%;" id="sku-pre-coloum-@ViewBag.checkboxindex-@preskucoloumindex">@postmon.Year @postmon.Month</th>
 
                             preskucoloumindex++;
                         }
@@ -250,7 +250,7 @@
                 {
                     @foreach (var postmon in ViewBag.PreMonthYear)
                     {
-                        <th style="width:0%;" id="value-pre-coloum-@prevaluecoloumindex">@postmon.Month @postmon.Year</th>
+                        <th style="width:0%;" id="value-pre-coloum-@ViewBag.checkboxindex-@prevaluecoloumindex">@postmon.Year @postmon.Month</th>
                         prevaluecoloumindex++;
                     }
                 }
