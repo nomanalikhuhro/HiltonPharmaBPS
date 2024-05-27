@@ -725,12 +725,12 @@ function teamsChange(val) {
         // Get the current date
         var currentDate = new Date();
         var currentYear = currentDate.getFullYear();
-        var currentMonth = currentDate.getMonth() + 1; // getMonth() is zero-based
+        var currentMonth = currentDate.getMonth(); // getMonth() is zero-based
         var currentMonthFormatted = `${currentYear}-${String(currentMonth).padStart(2, '0')}`;
 
         // Calculate the date 12 months ago
         var lastYearDate = new Date();
-        lastYearDate.setMonth(currentDate.getMonth() - 11); // go back 11 months
+        lastYearDate.setMonth(currentDate.getMonth() - 12); // go back 11 months
         var lastYear = lastYearDate.getFullYear();
         var lastMonth = lastYearDate.getMonth() + 1;
         var lastMonthFormatted = `${lastYear}-${String(lastMonth).padStart(2, '0')}`;
@@ -874,12 +874,12 @@ function editteamsChange(val) {
         // Get the current date
         var currentDate = new Date();
         var currentYear = currentDate.getFullYear();
-        var currentMonth = currentDate.getMonth() + 1; // getMonth() is zero-based
+        var currentMonth = currentDate.getMonth(); // getMonth() is zero-based
         var currentMonthFormatted = `${currentYear}-${String(currentMonth).padStart(2, '0')}`;
 
         // Calculate the date 12 months ago
         var lastYearDate = new Date();
-        lastYearDate.setMonth(currentDate.getMonth() - 11); // go back 11 months
+        lastYearDate.setMonth(currentDate.getMonth() - 12); // go back 11 months
         var lastYear = lastYearDate.getFullYear();
         var lastMonth = lastYearDate.getMonth() + 1;
         var lastMonthFormatted = `${lastYear}-${String(lastMonth).padStart(2, '0')}`;

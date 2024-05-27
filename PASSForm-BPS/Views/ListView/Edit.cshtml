@@ -150,7 +150,7 @@
                                         </div>
                                     </div>
                                     <div class="col-4">
-                                        <label style="font-weight:bold;">MacroBrick:</label>
+                                        <label style="font-weight:bold;">MicroBrick:</label>
                                         <div>
                                             @foreach (var mac in Model.macrobricks)
                                             {
@@ -173,7 +173,7 @@
 
                                     </div>
                                     <div class="col-4">
-                                        <label style="font-weight:bold;">Doctor Category:</label><br />
+                                        <label style="font-weight:bold;">Category:</label><br />
                                         @foreach (var dc in Model.requesthcp)
                                         {
                                             <input disabled value="@dc.DoctorsCategory" style="width:100%; height:30px; margin-top:1%;"></input>
@@ -188,7 +188,7 @@
                                         </form>
                                     </div>
                                     <div class="col-4">
-                                        <label style="font-weight:bold;">FootFall:</label><br />
+                                        <label style="font-weight:bold;">Average Footfall Per Day:</label><br />
                                         @foreach (var ft in Model.detailbps)
                                         {
                                             <input value="@ft.FootFall" id="footfall" style="width:100%; height:30px; margin-top:1%;"></input>

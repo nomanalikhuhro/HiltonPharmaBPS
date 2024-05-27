@@ -21,6 +21,9 @@
     string roleId = httpContext.HttpContext.Session.GetString("roleid");
 
     var resultval = new Dictionary<string, List<ExpandoObject>>();
+
+    double contri = 0.00;
+    double calcontri = 0.00;
 }
 <html>
 <head>
@@ -124,7 +127,7 @@
                                     </div>
                                 </div>
                                 <div class="col-4">
-                                    <label style="font-weight:bold;">MacroBrick:</label>
+                                    <label style="font-weight:bold;">MicroBrick:</label>
                                     <div>
                                         @foreach (var mac in Model.macrobricks)
                                         {
@@ -150,7 +153,7 @@
                                     </div>
                                     <div class="col-4">
 
-                                        <label style="font-weight:bold;">Doctor Category:</label><br />
+                                        <label style="font-weight:bold;">Category:</label><br />
                                         @foreach (var dc in Model.requesthcp)
                                         {
                                             <input disabled value="@dc.DoctorsCategory" style="width:100%; height:30px; margin-top:1%;"></input>
@@ -166,7 +169,7 @@
 
                                     </div>
                                     <div class="col-4">
-                                        <label style="font-weight:bold;">FootFall:</label><br />
+                                            <label style="font-weight:bold;">Average Footfall Per Day::</label><br />
                                         @foreach (var ft in Model.detailbps)
                                         {
                                             <input disabled value="@ft.FootFall" id="footfall" style="width:100%; height:30px; margin-top:1%;"></input>
@@ -249,10 +252,16 @@
                                                 {
                                                     <div>
                                                         <label>Contribution % :</label>
-                                                        <input disabled type="number" value="@(predat.Contribution != null ? string.Format("{0:yyyy-MM-dd}", predat.Contribution) : string.Empty)" style="text-align:right; width:40%;" />
-                                                    </div>
+                                                        <input disabled id="Contribution-@acc" type="number" value="@(predat.Contribution != null ? string.Format("{0:yyyy-MM-dd}", predat.Contribution) : string.Empty)" style="text-align:right; width:40%;" />
+                                                            
+                                                        </div>
+                                                    }
+@*                                                    contri = predat.Contribution.ToString();
+                                                    calcontri = contri / 100;*@
+
+                                                     contri = Convert.ToDouble(predat.Contribution);
+                                                     calcontri = contri / 100;
                                                 }
-                                            }
                                         }
 
                                     </div>
@@ -382,12 +391,15 @@
                                                                     }
                                                                     else
                                                                     {
-
-                                                                        double varian = Convert.ToDouble(skudata1.Value) - Convert.ToDouble(dt.Rows[0].Field<string>(skudata1.Key));
+                                                                        var calculatedactualskus = (decimal)(Convert.ToDouble(skudata1.Value ?? 0) * calcontri);
+                                                                        double calculatedActualSkusValue = Convert.ToDouble(calculatedactualskus);
+                                                                        double dataTableValue = Convert.ToDouble(dt.Rows[0].Field<string>(skudata1.Key));
+                                                                        double varian = calculatedActualSkusValue - dataTableValue;
+                                                                        
                                                                         variance.Add(varian.ToString());
                                                                         <td style="text-align:right;">
                                                                             <p>Actual_Sales:</p>
-                                                                            @skudata1.Value
+                                                                            @(calculatedActualSkusValue != 0.00 ? calculatedActualSkusValue : skudata1.Value)
                                                                         </td>
 
                                                                     }
@@ -566,7 +578,7 @@
                                                                 }
                                                                 else
                                                                 {
-
+                                                                        
                                                                     double varian = Convert.ToDouble(valdata1.Value) - Convert.ToDouble(dt.Rows[0].Field<string>(valdata1.Key));
                                                                     variance.Add(varian.ToString());
                                                                     <td style="text-align:right;">

@@ -255,7 +255,7 @@
                                             </div>
                                         </div>
                                         <div class="col-4">
-                                            <label style="font-weight:bold;">MacroBrick:</label>
+                                            <label style="font-weight:bold;">MicroBrick:</label>
                                             <div>
                                                 <select style="width: 99%; height: 30px;" id="selectedbrick" onchange="getchembybrickcode()">
                                                     <option value="Select">Select</option>
@@ -282,7 +282,7 @@
                                         <div class="col-4">
                                             @foreach (var dc in Model.requesthcp)
                                             {
-                                            <label style="font-weight:bold;">Doctor Category:</label><br />
+                                            <label style="font-weight:bold;">Category:</label><br />
                                             <input disabled value="@dc.DoctorsCategory" style="width:100%; height:30px; margin-top:1%;"></input>
                                             }
                                             <form asp-controller="ListView" asp-action="Create" style="padding-left:12px; visibility:hidden;">
@@ -295,7 +295,7 @@
                                             </form>
                                         </div>
                                         <div class="col-4">
-                                            <label style="font-weight:bold;">FootFall:</label><br />
+                                            <label style="font-weight:bold;">Average Footfall Per Day:</label><br />
                                             <input id="footfall" style="width:100%; height:30px; margin-top:1%;"></input>
                                             <label class="hide" id="CommentsErrorLabel" style="color:red;font-size:10px;">Required! Please Enter FootFall</label>
                                         </div>
