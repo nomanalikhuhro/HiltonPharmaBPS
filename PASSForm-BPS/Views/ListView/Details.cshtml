@@ -186,17 +186,52 @@
                                             </form>
 
                                         </div>
-                                        <div class="col-4">
+                                        
+                                       @* <div class="col-4">
                                             <label style="font-weight:bold;">Average Footfall Per Day:</label><br />
                                             @foreach (var ft in Model.detailbps)
                                             {
                                             <input disabled value="@ft.FootFall" id="footfall" style="width:100%; height:30px; margin-top:1%;"></input>
                                             }
 
-                                        </div>
+                                        </div>*@
                                     </div>
                                 </div>
                             </div>
+
+                            @* Footfall Table *@
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Location</th>
+                                        <th scope="col">Footfall</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (ViewBag.footfall != null)
+                                    {
+                                        int cnt = 0;
+                                        // var footfallview = ViewBag.footfall as DataTable;
+                                        @foreach (var item in ViewBag.footfall)
+                                        {
+                                            <tr>
+                                                <td>
+
+                                                    Location @(cnt += 1)
+
+                                                </td>
+
+                                                <td>
+                                                    @item
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                            @* End of Footfall *@
+
                         </div>
                     </div>
                 }

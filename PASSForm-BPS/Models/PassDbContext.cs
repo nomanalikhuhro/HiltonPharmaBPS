@@ -74,6 +74,13 @@ public partial class PassDbContext : DbContext
 
     public virtual DbSet<Tblhcpterritorymapping> Tblhcpterritorymappings { get; set; }
 
+
+
+    public virtual DbSet<tbl_doctorshospital_footfall> TblDoctorsHospitalFootfall { get; set; }
+
+
+
+
     public virtual DbSet<Tblteamsmapping> Tblteamsmappings { get; set; }
 
     public virtual DbSet<Tblterritory> Tblterritories { get; set; }
@@ -262,6 +269,8 @@ public partial class PassDbContext : DbContext
     // Additional configuration can go here, such as relationships and constraints
 });
         modelBuilder.Entity<BPSrequestpapIvInjection>().HasNoKey();
+
+        modelBuilder.Entity<tbl_doctorshospital_footfall>().HasNoKey();
 
         modelBuilder.Entity<BpsSalesrecord>(entity =>
         {

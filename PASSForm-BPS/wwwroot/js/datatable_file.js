@@ -43,27 +43,123 @@ function enableSearchButton(inputElement, checkboxindex) {
 
 function getchembybrickcode() {
 
-
+    debugger;
     var searchButtons = document.getElementsByClassName('searchbutton');
     if (searchButtons.length > 0) {
         var searchbutton = searchButtons[0];
         searchbutton.removeAttribute('disabled');
     }
-    var selectedbrick = document.getElementById('selectedbrick').value;
-    var parts = selectedbrick.split('-');
+   // var selectedbrick = document.getElementById('selectedbrick').value;
+   // var parts = selectedbrick.split('-');
 
-    // Extract the left part (the part before the '-')
-    var leftValue = parts[0].trim();
+   // // Extract the left part (the part before the '-')
+   // var leftValue = parts[0].trim();
+
+   // //=============== New MultiBrick Work ============
+        
+   //     // Get the ul element
+   //   //  var ulElement = document.querySelector('.select2-selection__rendered');
+
+   //     // Get all the li elements inside the ul
+   //// var liElements = ulElement.querySelectorAll('li.select2-selection__choice');
+
+   // var liElements = $('#selectedbrick').parent().children().find('li.select2-selection__choice');
+
+   //     // Create an empty object to store the data
+   //     var dataObject = [];
+
+   // // Iterate over each li element
+   // liElements.each(function () {
+ 
+
+   //     var li = this;
+   //     // Get the title attribute and text content of the li element
+   //     var title = li.getAttribute('title');
+   //     var text = li.textContent.trim();
+
+   //     // Split the title to extract the code and company name
+   //     var parts = title.split(' - ');
+   //     var code = parts[0];
+   //     var companyName = parts.slice(1).join(' - ');
+
+   //     dataObject.push(code);
+
+   //     // Add the data to the object using the index as the key
+   //     //dataObject[index] = {
+   //     //    /*code:*/ code,
+   //     //    //companyName: companyName,
+   //     //    //text: text
+   //     //};
+   // });
+
+   // // var values = JSON.stringify($(this).attr("#distributer"));
+
+
+   // var dataString = dataObject.join(','); // JSON.stringify(dataObject);
+   // // Output the resulting object
+   // console.log(dataObject);
+
+    var dataString = $('#selectedbrick option:selected')
+        .toArray().map(item => item.value).join();
+
+
+    var dataStringget = $('#selectedchemist option:selected')
+        .toArray().map(item => item.value);
+    //var dataString = dataObject.join(','); // JSON.stringify(dataObject);
+    // Output the resulting object
+    console.log(dataString);
+    //=============== End of New MultiBrick Work ============
+
 
     $.ajax({
         url: "/ListView/CreateAccordion", // Replace with your controller and action names
         method: "GET", // Use GET or POST based on your server's requirements
-        data: { brickValue: leftValue }, // Send the unique identifier as data
+        data: { brickValue: dataString }, // Send the unique identifier as data
         success: function (data) {
-            document.getElementById('selectedchemist').innerHTML = data.macChemMappings;
-            $('#tableAcc').empty();
+           // document.getElementById('selectedchemist').innerHTML = data.macChemMappings;
+           // $('#tableAcc').empty();
             // Handle the server's response here
             // $("#tableAcc").html(data);
+
+           // $('#selectedchemist').innerHTML('');
+            $('#selectedchemist').empty();
+            $('#selectedchemist').append(data.macChemMappings)
+            $.each(dataStringget, function (item, key) {
+                $("#selectedchemist option[value='" + key + "']").prop('selected', true);
+            });
+            $('#selectedchemist').selectpicker('refresh');
+
+
+            $('#tableAcc').children().each(function (k,l) {
+                debugger;
+                var checkboxS = $(this);
+                if (checkboxS.attr("_id") !== undefined) {
+                    if ($('#selectedchemist option[value=' + checkboxS.attr("_id") + ']').length == 0) {
+                        checkboxS.remove();
+                    }
+                }
+                if (checkboxS.attr("_idbtn") !== undefined) {
+                    if ($('#selectedchemist option[value=' + checkboxS.attr("_idbtn") + ']').length == 0) {
+                        checkboxS.remove();
+                    }
+                }
+            });
+
+            CalculateBPSPercentage();
+            //$('#selectedchemist option').each(function (checkboxS) {
+
+            //    debugger;
+            //    var checkboxS = $(this);
+               
+            //    if (checkboxS.is(':selected')) {
+
+            //    }
+            //    else {
+            //        $('#tableAcc').find('[_id="' + checkboxS.val() + '"]').remove();
+            //        $('#tableAcc').find('[_idbtn="' + checkboxS.val() + '"]').remove();
+            //    }
+            //});
+
         },
         error: function (xhr, status, error) {
             // Handle errors here
@@ -72,35 +168,107 @@ function getchembybrickcode() {
     });
 }
 
-function getbrickbydiscode() {
-    var selecteddis = document.getElementById('distributer').value;
+function getbrickbydiscode()
+{
+    debugger;
+    //var selecteddis = document.getElementById('distributer').value
+
+    //// Code to target multiple distributor
+    ///*
+    //    need to manage each element with each index
+    //*/
+
+
+    //// Get the ul element
+    //var ulElement = document.querySelector('.select2-selection__rendered');
+
+    //// Get all the li elements inside the ul
+    //var liElements = ulElement.querySelectorAll('li.select2-selection__choice');
+
+    //// Create an empty object to store the data
+    //var dataObject = [];
+
+    //// Iterate over each li element
+    //liElements.forEach(function (li, index) {
+    //    // Get the title attribute and text content of the li element
+    //    var title = li.getAttribute('title');
+    //    var text = li.textContent.trim();
+
+    //    // Split the title to extract the code and company name
+    //    var parts = title.split(' - ');
+    //    var code = parts[0];
+    //    var companyName = parts.slice(1).join(' - ');
+
+    //    dataObject.push(code);
+
+    //    // Add the data to the object using the index as the key
+    //    //dataObject[index] = {
+    //    //    /*code:*/ code,
+    //    //    //companyName: companyName,
+    //    //    //text: text
+    //    //};
+    //});
+
+    //// var values = JSON.stringify($(this).attr("#distributer"));
+   
+    var dataString = $('#distributer option:selected')
+        .toArray().map(item => item.value).join();
+    //var dataString = dataObject.join(','); // JSON.stringify(dataObject);
+    // Output the resulting object
+    console.log("DisCode: " + dataString);
+    // Here the Variable dataObject
+
+
+    var dataStringget = $('#selectedbrick option:selected')
+        .toArray().map(item => item.value);
+    // End of Code to target multiple distributor
+
     var tcode = document.getElementById('TCode').value;
-    var parts = selecteddis.split('-');
+    //var parts = selecteddis.split('-');
 
     // Extract the left part (the part before the '-')
-    var leftValue = parts[0].trim();
+   // var leftValue = parts[0].trim();
 
     $.ajax({
         url: "/ListView/GetMacrobrick", // Replace with your controller and action names
         method: "GET", // Use GET or POST based on your server's requirements
-        data: { disValue: leftValue, territorycode: tcode  }, // Send the unique identifier as data
+        data: { disValue: dataString, territorycode: tcode  }, // Send the unique identifier as data
         success: function (data) {
 
             $('#selectedbrick').empty();
 
             // Add default option
-            $('#selectedbrick').append($('<option>', {
-                value: 'Select',
-                text: 'Select'
-            }));
+           // $('#selectedbrick').append('<option value="0">Select</option>');
 
+            //$('#selectedbrick').append($('<option>', {
+            //    value: '0',
+            //    text: 'Select'
+            //}));
+
+            //$('#selectedbrick').append('<option value="" selected disabled>Please Select MacroBrick</option>');
+
+            
             // Populate options with brick code and name
             $.each(data, function (index, item) {
+              //  $('#selectedbrick').append('<option value='item.macrobrickCode'>'item.macrobrickCode + ' - ' + item.macroBrickName'</option>');
                 $('#selectedbrick').append($('<option>', {
-                    value: item.macrobrickCode + ' - ' + item.macroBrickName,
+                    /*  value: item.macrobrickCode + ' - ' + item.macroBrickName,*/
+                    value: item.macrobrickCode,
                     text: item.macrobrickCode + ' - ' + item.macroBrickName
                 }));
             });
+            
+            $.each(dataStringget, function (item, key) {
+                $("#selectedbrick option[value='" + key + "']").prop('selected', true);
+            });
+            $('#selectedbrick').selectpicker('refresh');
+
+            //if (data.length > 0) {
+                $('#selectedbrick').trigger('change');
+         //   }
+            //if ($('#selectedbrick').parent().children().find('li.select2-selection__choice').length > 0) {
+            //    debugger;
+            //}
 
         },
         error: function (xhr, status, error) {
@@ -113,13 +281,21 @@ function getbrickbydiscode() {
 function SubmittedForm() {
     debugger;
 
+    var Maccodes = $('#selectedbrick option:selected')
+        .toArray().map(item => item.value);
+
+    var Disccodes = $('#distributer option:selected')
+        .toArray().map(item => item.value);
+
+    
+
     var totalwithoutdisss = document.getElementById("totalwithoutdis").value;
     var totalwithdisss = document.getElementById("totalwithdis").value;
     var bpspercentagess = document.getElementById("bpspercentage").value;
     var totalroipercentagess = document.getElementById("totalroipercentage").value;
-    var FootFall = document.getElementById('footfall').value;
+    //var FootFall = document.getElementById('footfall').value;
 
-    if (totalwithoutdisss == "" || totalwithdisss == "" || bpspercentagess == "" || totalroipercentagess == "" || FootFall == "" ) {
+    if (totalwithoutdisss == "" || totalwithdisss == "" || bpspercentagess == "" || totalroipercentagess == ""  ) {
         //document.getElementById('totalwithoutdisss').classList.add("error-field");
         //document.getElementById('totalwithdisss').classList.add("error-field");
         //document.getElementById('bpspercentagess').classList.add("error-field");
@@ -158,7 +334,7 @@ function SubmittedForm() {
         HCPREQID: HCPREQID,
         trackingid: HCPREQID,
         Comments: Comment,
-        FootFall: FootFall,
+        //FootFall: FootFall,
     };
 
 
@@ -331,7 +507,7 @@ function SubmittedForm() {
 
             url: "/ListView/CreateBpsRecord", // Replace with the URL of your controller action
             method: "POST", // Use POST since you are sending data
-            data: { Salesarr1: salesArrString, HeaderData1: HeaderData },
+            data: { diccodes: Disccodes,maccodes:Maccodes ,Salesarr1: salesArrString, HeaderData1: HeaderData },
             success: function (data) {
                 console.log("Data sent to server:", { Salesarr1: Salesarr, HeaderData1: HeaderData });
 
@@ -384,7 +560,7 @@ function UpdateSubmittedForm() {
     //var startDateInput = document.getElementById('startdatepost-0').value;
     //var endDateInput = document.getElementById('enddatepost-0').value;
     var Comment = document.getElementById('createcomments').value;
-    var FootFall = document.getElementById('footfall').value;
+    //var FootFall = document.getElementById('footfall').value;
     var currentDate = new Date();
     var HeaderData = {
 
@@ -395,7 +571,7 @@ function UpdateSubmittedForm() {
         HCPREQID: HCPREQID,
         trackingid: HCPREQID,
         Comments: Comment,
-        FootFall: FootFall,
+        //FootFall: FootFall,
     };
 
 
@@ -689,34 +865,61 @@ var checkedItems;
 
 
 function teamsChange(val) {
+    debugger;
 
-
-
-        var checkboxes = document.querySelectorAll(".dropdown-content input[type='checkbox']");
+    var checkboxes = $('#selectedchemist');
+        //var selected = [];
+      //  var checkboxes = document.querySelectorAll(".dropdown-content input[type='checkbox']");
         checkedItems = [];
         var checkboxindex = 0;
         var html = '';
 
         var checkbox = null;
-        var attrid;
-        checkboxes.forEach(function (checkboxS) {
-            if (checkboxS.checked && $('#tableAcc').find('[_id="' + checkboxS.id +'"]').length == 0) {
+    var attrid;
 
-                checkbox = checkboxS.value
-                attrid = checkboxS.id
-                checkboxindex = checkboxS.id;
-              //  checkedItems.push(checkbox.value);
+    //checkboxes.children().each(function (k, checkboxS) {
+    $('#selectedchemist option').each(function (checkboxS) {
+
+       // debugger;
+        var checkboxS = $(this);
+        if (checkboxS.is(':selected') && $('#tableAcc').find('[_id="' + checkboxS.val() + '"]').length == 0) {
+
+            checkbox = checkboxS.text()
+            attrid = checkboxS.val()
+            checkboxindex = checkboxS.val();
+            //  checkedItems.push(checkbox.value);
+
+        }
+        if (checkboxS.is(':selected')) {
+
+        }
+        else {
+            $('#tableAcc').find('[_id="' + checkboxS.val() + '"]').remove();
+            $('#tableAcc').find('[_idbtn="' + checkboxS.val() + '"]').remove();
+        }
+    });
+
+   // $('#selectedchemist option').each(function () {
+   //     var checkboxS = $(this);
+   //// checkboxes.children().each(function (k, checkboxS) {
+   //    // debugger;
+   //     if (checkboxS.is(':selected') && $('#tableAcc').find('[_id="' + checkboxS.val() +'"]').length == 0) {
+
+   //             checkbox = checkboxS.text()
+   //             attrid = checkboxS.val()
+   //         checkboxindex = checkboxS.val();
+   //           //  checkedItems.push(checkbox.value);
                
-            }
-            if (checkboxS.checked) {
+   //         }
+   //        if (checkboxS.is(':selected')) {
                 
-            }
-            else {
-                $('#tableAcc').find('[_id="' + checkboxS.id + '"]').remove();
-                $('#tableAcc').find('[_idbtn="' + checkboxS.id + '"]').remove();
-            }
+   //         }
+   //         else {
+   //            $('#tableAcc').find('[_id="' + checkboxS.val() + '"]').remove();
+   //            $('#tableAcc').find('[_idbtn="' + checkboxS.val() + '"]').remove();
+   //         }
            
-        });
+   //     });
 
 
           //  if (existingHtml.indexOf(`id="chemist-${checkboxindex}"`) === -1) {
@@ -832,15 +1035,14 @@ function teamsChange(val) {
             $('#tableAcc').append(html);
         }
 
-
-
-
+    CalculateBPSPercentage();
 }
 
 
 function editteamsChange(val) {
 
-    var checkboxes = document.querySelectorAll(".dropdown-content input[type='checkbox']");
+    var checkboxes = $('#selectededitchemist');
+   // var checkboxes = document.querySelectorAll(".dropdown-content input[type='checkbox']");
     checkedItems = [];
     var checkboxindex = 0;
     var html = '';
@@ -848,27 +1050,47 @@ function editteamsChange(val) {
     var checkbox = null;
     var attrid;
     var chkid;
-    checkboxes.forEach(function (checkboxS) {
-        chkid = checkboxS.id.toString().replace("{", "").replace("}", "");
-        if (checkboxS.checked && $('#UpdateTableAcc').find('[_id="' + chkid + '"]').length == 0) {
 
-            checkbox = checkboxS.value
-            attrid = chkid
-            checkboxindex = chkid;
+    //checkboxes.forEach(function (checkboxS) {
+    //    chkid = checkboxS.id.toString().replace("{", "").replace("}", "");
+    //    if (checkboxS.checked && $('#UpdateTableAcc').find('[_id="' + chkid + '"]').length == 0) {
+
+    //        checkbox = checkboxS.value
+    //        attrid = chkid
+    //        checkboxindex = chkid;
+    //        //  checkedItems.push(checkbox.value);
+
+    //    }
+    //    if (checkboxS.checked) {
+
+    //    }
+    //    else {
+    //        $('#UpdateTableAcc').find('[_id="' + chkid + '"]').remove();
+    //        $('#UpdateTableAcc').find('[_idbtn="' + chkid + '"]').remove();
+    //    }
+
+    //});
+
+    $('#selectededitchemist option').each(function (checkboxS) {
+
+        // debugger;
+        var checkboxS = $(this);
+        if (checkboxS.is(':selected') && $('#UpdateTableAcc').find('[_id="' + checkboxS.val() + '"]').length == 0) {
+
+            checkbox = checkboxS.text()
+            attrid = checkboxS.val()
+            checkboxindex = checkboxS.val();
             //  checkedItems.push(checkbox.value);
 
         }
-        if (checkboxS.checked) {
+        if (checkboxS.is(':selected')) {
 
         }
         else {
-            $('#UpdateTableAcc').find('[_id="' + chkid + '"]').remove();
-            $('#UpdateTableAcc').find('[_idbtn="' + chkid + '"]').remove();
+            $('#UpdateTableAcc').find('[_id="' + checkboxS.val() + '"]').remove();
+            $('#UpdateTableAcc').find('[_idbtn="' + checkboxS.val() + '"]').remove();
         }
-
     });
-
-
     //  if (existingHtml.indexOf(`id="chemist-${checkboxindex}"`) === -1) {
     if (checkbox != null) {
         // Get the current date
@@ -985,6 +1207,8 @@ function editteamsChange(val) {
         $('#UpdateTableAcc').append(html);
     }
 
+
+    EditCalculateBPSPercentage();
 
 
 

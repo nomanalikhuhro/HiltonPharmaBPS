@@ -11,6 +11,8 @@ using System.Data;
 using System.Dynamic;
 using System.Globalization;
 using System.Text.Json;
+using Newtonsoft.Json.Linq;
+using Org.BouncyCastle.Ocsp;
 
 namespace PASSForm_BPS.Controllers
 {
@@ -213,11 +215,11 @@ namespace PASSForm_BPS.Controllers
                         ViewBag.Status = statusid;
                         ViewBag.Screen = screenId;
                         var macroBrickCodes = bpsrcord.FirstOrDefault()?.MacroBrickCode;
-                        var macrobridnamequery = @"SELECT * FROM macrobricks where MacroBrickCode = '" + macroBrickCodes + "'";
+                        var macrobridnamequery = @"SELECT * FROM macrobricks where MacroBrickCode in (select code from bpsdetails where BPS_Record_ID = " + bpsid + " and PrefencesId = 2)";
                         var macname = _passDbContext.Macrobricks.FromSqlRaw(macrobridnamequery).ToList();
 
                         var distributerCodes = bpsrcord.FirstOrDefault()?.DistributerCode;
-                        var distributernamequery = @"SELECT * FROM distributer where DistributerCode = '" + distributerCodes + "'";
+                        var distributernamequery = @"SELECT * FROM distributer where DistributerCode in (select code from bpsdetails where BPS_Record_ID = " + bpsid + " and PrefencesId = 1)";
                         var disname = _passDbContext.Distributers.FromSqlRaw(distributernamequery).ToList();
 
                         var hcpreqquery = @"SELECT * FROM hcprequest where TrackingID = '" + id + "' ";
@@ -518,7 +520,67 @@ namespace PASSForm_BPS.Controllers
 
                             };
 
+                            /*
+                             * Fetching HcpRequestId from BPS_Record table and giving parameter to 
+                             * Footfall sp
+                             */
 
+
+
+                            // var hcpreqquery = @"SELECT HCPREQID FROM bps_request where TrackingID = '" + Tracking_ID + "'";
+                            // var hcpreqquery = @"SELECT HCPREQID FROM hcprequest where TrackingID = '" + Tracking_ID + "'";
+                            //  _passDbContext.Hcprequests.FromSqlRaw(hcpreqquery).ToList();
+                            // var hcpreq = _passDbContext.Hcprequests.FromSqlRaw(@"SELECT *, FROM hcprequest where TrackingID = '" + Tracking_ID + "'").ToList();
+
+
+                            //============= Working Code =============
+
+                            //var hcpreqquery = @"SELECT * FROM hcprequest where TrackingID = '" + Tracking_ID + "' ";
+                            //var hcpreq = _passDbContext.Hcprequests.FromSqlRaw(hcpreqquery).ToList();
+
+                            //============= Working Code =============
+
+                            //var footfallQuery = _passDbContext.Hcprequests.FromSqlRaw($"call sp_Footfall({hcpreqquery})")
+                            //            .ToList();
+                            //ViewBag.footfall = hcpreq;
+
+                            //var hcpreqquery = $"SELECT HCPREQID FROM bps_request where TrackingId = '{Tracking_ID}'";
+
+                            // Fetch Hcprequests based on tracking ID
+                            //var hcpreq = _passDbContext.Hcprequests.FromSqlRaw(hcpreqquery).ToList();
+
+                            // Assuming the stored procedure sp_Footfall expects HCPREQID as a parameter
+                            // Modify the query string to include the HCPREQID retrieved from the previous query
+                            DataSet dataSet = new DataSet();
+                            using (MySqlConnection connection = new MySqlConnection(_connectionString))
+                            {
+                                using (MySqlCommand command = new MySqlCommand("sp_footfall", connection))
+                                {
+                                    command.CommandType = CommandType.StoredProcedure;
+
+                                    // Add the parameter for the stored procedure
+                                    command.Parameters.AddWithValue("HcpReqId", hcpreq.FirstOrDefault().Hcpreqid);
+
+                                    // Create a SqlDataAdapter to fill the DataSet
+                                    using (MySqlDataAdapter adapter = new MySqlDataAdapter(command))
+                                    {
+                                        // Open the connection
+                                        connection.Open();
+
+                                        // Fill the DataSet
+                                        adapter.Fill(dataSet);
+                                    }
+                                }
+                            }
+                            DataTable dataTable = dataSet.Tables[0];
+
+                            List<string> list = dataTable.AsEnumerable()
+                       .Select(r => r.Field<string>("footfall"))
+                       .ToList();
+                            // var footfallQuery = dataTable;//_passDbContext.TblDoctorsHospitalFootfall.FromSqlRaw($"call sp_Footfall(205)").ToList();
+
+                            // Assuming ViewBag is used to pass data to a view
+                            ViewBag.footfall = list;
 
 
                             return View(DetailViewModel);
@@ -544,11 +606,16 @@ namespace PASSForm_BPS.Controllers
                         ViewBag.Status = statusid;
                         ViewBag.Screen = screenId;
                         var macroBrickCodes = bpsrcord.FirstOrDefault()?.MacroBrickCode;
-                        var macrobridnamequery = @"SELECT * FROM macrobricks where MacroBrickCode = '" + macroBrickCodes + "'";
+                        // var macrobridnamequery = @"SELECT * FROM macrobricks where MacroBrickCode = '" + macroBrickCodes + "'";
+                        var macrobridnamequery = @"SELECT * FROM macrobricks where MacroBrickCode in (select code from bpsdetails where BPS_Record_ID = " + bpsid + " and PrefencesId = 2)";
+
                         var macname = _passDbContext.Macrobricks.FromSqlRaw(macrobridnamequery).ToList();
 
                         var distributerCodes = bpsrcord.FirstOrDefault()?.DistributerCode;
-                        var distributernamequery = @"SELECT * FROM distributer where DistributerCode = '" + distributerCodes + "'";
+
+
+                        //var distributernamequery = @"SELECT * FROM distributer where DistributerCode = '" + distributerCodes + "'";
+                        var distributernamequery = @"SELECT * FROM distributer where DistributerCode in (select code from bpsdetails where BPS_Record_ID = " + bpsid + " and PrefencesId = 1)";
                         var disname = _passDbContext.Distributers.FromSqlRaw(distributernamequery).ToList();
 
                         var hcpreqquery = @"SELECT * FROM hcprequest where TrackingID = '" + id + "' ";
@@ -868,6 +935,7 @@ namespace PASSForm_BPS.Controllers
         {
             try
             {
+
                 string Tracking_ID = inputValue?.Trim();
                 var EmpRoleId = HttpContext.Session.GetString("roleid");
 
@@ -956,14 +1024,18 @@ namespace PASSForm_BPS.Controllers
         .ToList();
 
 
-                            var diskrec = _passDbContext.DisterMappings.FromSqlRaw("call sp_GetDistributerDetails(@Tracking_ID)"
-                                , new MySqlParameter("@Tracking_ID", param1)).ToList();
+                            ////var diskrec = _passDbContext.DisterMappings.FromSqlRaw("call sp_GetDistributerDetails(@Tracking_ID)"
+                            ////    , new MySqlParameter("@Tracking_ID", param1)).ToList();
+
+
+                            var diskrecquery = @"select * from distributer";
+                            var diskrec = _passDbContext.Distributers.FromSqlRaw(diskrecquery).ToList();
 
                             //          var macrobrickrec = _passDbContext.TerbrickMappings.FromSqlRaw("call sp_GetMacroBrickDetails(@Tracking_ID)"
                             //, new MySqlParameter("@Tracking_ID", param1)).ToList();
 
                             var teamname = _passDbContext.Hcprequests.FromSqlRaw("call sp_GetTemDetails(@Tracking_ID)"
-            , new MySqlParameter("@Tracking_ID", param1)).ToList();
+                            , new MySqlParameter("@Tracking_ID", param1)).ToList();
 
                             var tn = teamname.Select(x => x.TeamId).FirstOrDefault();
 
@@ -975,11 +1047,72 @@ namespace PASSForm_BPS.Controllers
                             {
                                 requesthcp = bpsrecords,
                                 //terbrickMappings = macrobrickrec,
-                                disterMappings = diskrec,
+                                //disterMappings = diskrec,
+                                Distributers = diskrec,
+
                                 hspreqteams = teamname,
                                 users = tmquery,
                                 teams = tname
                             };
+
+
+                            /*
+                             * Fetching HcpRequestId from BPS_Record table and giving parameter to 
+                             * Footfall sp
+                             */
+
+
+
+                            // var hcpreqquery = @"SELECT HCPREQID FROM bps_request where TrackingID = '" + Tracking_ID + "'";
+                            // var hcpreqquery = @"SELECT HCPREQID FROM hcprequest where TrackingID = '" + Tracking_ID + "'";
+                            //  _passDbContext.Hcprequests.FromSqlRaw(hcpreqquery).ToList();
+                            // var hcpreq = _passDbContext.Hcprequests.FromSqlRaw(@"SELECT *, FROM hcprequest where TrackingID = '" + Tracking_ID + "'").ToList();
+
+                            var hcpreqquery = @"SELECT * FROM hcprequest where TrackingID = '" + Tracking_ID + "' ";
+                            var hcpreq = _passDbContext.Hcprequests.FromSqlRaw(hcpreqquery).ToList();
+                            //var footfallQuery = _passDbContext.Hcprequests.FromSqlRaw($"call sp_Footfall({hcpreqquery})")
+                            //            .ToList();
+                            //ViewBag.footfall = hcpreq;
+
+                            //var hcpreqquery = $"SELECT HCPREQID FROM bps_request where TrackingId = '{Tracking_ID}'";
+
+                            // Fetch Hcprequests based on tracking ID
+                            //var hcpreq = _passDbContext.Hcprequests.FromSqlRaw(hcpreqquery).ToList();
+
+                            // Assuming the stored procedure sp_Footfall expects HCPREQID as a parameter
+                            // Modify the query string to include the HCPREQID retrieved from the previous query
+                            DataSet dataSet = new DataSet();
+                            using (MySqlConnection connection = new MySqlConnection(_connectionString))
+                            {
+                                using (MySqlCommand command = new MySqlCommand("sp_footfall", connection))
+                                {
+                                    command.CommandType = CommandType.StoredProcedure;
+
+                                    // Add the parameter for the stored procedure
+                                    command.Parameters.AddWithValue("HcpReqId", hcpreq.FirstOrDefault().Hcpreqid);
+
+                                    // Create a SqlDataAdapter to fill the DataSet
+                                    using (MySqlDataAdapter adapter = new MySqlDataAdapter(command))
+                                    {
+                                        // Open the connection
+                                        connection.Open();
+
+                                        // Fill the DataSet
+                                        adapter.Fill(dataSet);
+                                    }
+                                }
+                            }
+                            DataTable dataTable = dataSet.Tables[0];
+
+                                List<string> list = dataTable.AsEnumerable()
+                           .Select(r => r.Field<string>("footfall"))
+                           .ToList();
+                           // var footfallQuery = dataTable;//_passDbContext.TblDoctorsHospitalFootfall.FromSqlRaw($"call sp_Footfall(205)").ToList();
+
+                            // Assuming ViewBag is used to pass data to a view
+                            ViewBag.footfall = list;
+
+
 
                             return View(combinedViewModel);
                         }
@@ -1029,17 +1162,17 @@ namespace PASSForm_BPS.Controllers
             try
             {
                 var chemrecords = _passDbContext.MacChemMappings.FromSqlRaw("call sp_ChemistRecords(@MacCode)"
-, new MySqlParameter("@MacCode", brickValue)).ToList();
+                , new MySqlParameter("@MacCode", brickValue)).ToList();
 
-                string html = "<option value=\"Select\">Select</option>";
+                string html = "";// "<option value=Select>Select</option>";
                 foreach (var items in chemrecords)
                 {
 
 
                     var optionValue = $"{items.ChemistCode} - {items.ChemistName}";
+                    html += "<option value = "+ items.ChemistCode + "> "+ optionValue + " </option>";
 
-
-                    html += $"<label><input id=\"{items.ChemistCode}\" type=\"checkbox\" value=\"{optionValue}\">{optionValue}</label>";
+                   // html += $"<label><input id=\"{items.ChemistCode}\" type=\"checkbox\" value=\"{optionValue}\">{optionValue}</label>";
 
 
                 }
@@ -1071,12 +1204,34 @@ namespace PASSForm_BPS.Controllers
         {
             try
             {
+                /* Start of Multiple disValue*/
+
+
+                //List<MySqlParameter> parameters = new List<MySqlParameter>();
+
+                //foreach (var key in disValue.Keys)
+                //{
+                //    parameters.Add(new MySqlParameter($"@DisCode{key}", disValue[key]));
+                //}
+
+                //parameters.Add(new MySqlParameter("@TerritoryCode", territorycode));
+
+                //var parameterNames = string.Join(",", parameters.Select(p => p.ParameterName));
+                //var query = $"CALL sp_GETMacroBrick({parameterNames})";
+
+                //var result = _passDbContext.DisMacMappings.FromSqlRaw(query, parameters.ToArray()).ToList();
+
+
+
+                /* End of of Multiple disValue*/
 
 
                 var macrobrickrecords = _passDbContext.DisMacMappings.FromSqlRaw("call sp_GETMacroBrick(@DisCode,@TerritoryCode)"
     , new MySqlParameter("@DisCode", disValue)
     , new MySqlParameter("@TerritoryCode", territorycode)).ToList();
 
+
+                // Check the return variable after changing the code
                 return Json(macrobrickrecords);
             }
             catch (Exception ex)
@@ -1088,7 +1243,7 @@ namespace PASSForm_BPS.Controllers
         }
 
         [HttpPost]
-        public bool CreateBpsRecord(string Salesarr1, BpsRequest HeaderData1)
+        public bool CreateBpsRecord(string[] diccodes, string[] maccodes,string Salesarr1, BpsRequest HeaderData1)
         {
 
             List<CustomModel_Customers> model = JsonSerializer.Deserialize<List<CustomModel_Customers>>(Salesarr1);
@@ -1225,10 +1380,29 @@ namespace PASSForm_BPS.Controllers
                     }
                 }
 
+                var discodesstr = String.Join(",", diccodes.ToArray());
+                var maccodesstr = String.Join(",", maccodes.ToArray());
+                using (MySqlConnection connection = new MySqlConnection(_connectionString))
+                {
+                    connection.Open();
 
+                    using (MySqlCommand command = new MySqlCommand("SpInsertBpsDetails", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
 
+                        command.Parameters.AddWithValue("p_bpsrecordid", bpsrecordid);
+                        command.Parameters.AddWithValue("p_MacroBrickCodes", maccodesstr);
+                        command.Parameters.AddWithValue("p_DistributerCodes", discodesstr);
+                       
 
+                        // Execute the stored procedure
+                        command.ExecuteNonQuery();
+                        command.CommandTimeout = 3000;
 
+                    }
+                }
+
+               
                 using (MySqlConnection connection = new MySqlConnection(_connectionString))
                 {
                     connection.Open();
@@ -2164,7 +2338,8 @@ where HCPREQID = '" + trackingid + "'";
                 var bpsComments = bpsrcord.FirstOrDefault()?.Comments;
 
                 var macroBrickCodes = bpsrcord.FirstOrDefault()?.MacroBrickCode;
-                var macrobridnamequery = @"SELECT * FROM macrobricks where MacroBrickCode = '" + macroBrickCodes + "'";
+                //var macrobridnamequery = @"SELECT * FROM macrobricks where MacroBrickCode = '" + macroBrickCodes + "'";
+                var macrobridnamequery = @"SELECT * FROM macrobricks where MacroBrickCode in (select code from bpsdetails where BPS_Record_ID = " + bpsid + " and PrefencesId = 2)";
                 var macname = _passDbContext.Macrobricks.FromSqlRaw(macrobridnamequery).ToList();
 
                 var macchemnamequery = @"SELECT mcm.*, che.ChemistName FROM mac_chem_mapping mcm
@@ -2174,7 +2349,9 @@ where mcm.MacroBrickCode = '" + macroBrickCodes + "'";
                 var macchemname = _passDbContext.MacChemMappings.FromSqlRaw(macchemnamequery).ToList();
 
                 var distributerCodes = bpsrcord.FirstOrDefault()?.DistributerCode;
-                var distributernamequery = @"SELECT * FROM distributer where DistributerCode = '" + distributerCodes + "'";
+                // var distributernamequery = @"SELECT * FROM distributer where DistributerCode = '" + distributerCodes + "'";
+
+                var distributernamequery = @"SELECT * FROM distributer where DistributerCode in (select code from bpsdetails where BPS_Record_ID = " + bpsid + " and PrefencesId = 1)";
                 var disname = _passDbContext.Distributers.FromSqlRaw(distributernamequery).ToList();
 
                 var hcpreqquery = @"SELECT * FROM hcprequest where TrackingID  = '" + id + "' ";
@@ -2398,6 +2575,67 @@ where mcm.MacroBrickCode = '" + macroBrickCodes + "'";
                         }
 
 
+                        /*
+                         * Fetching HcpRequestId from BPS_Record table and giving parameter to 
+                         * Footfall sp
+                           */             
+
+
+
+                        // var hcpreqquery = @"SELECT HCPREQID FROM bps_request where TrackingID = '" + Tracking_ID + "'";
+                        // var hcpreqquery = @"SELECT HCPREQID FROM hcprequest where TrackingID = '" + Tracking_ID + "'";
+                        //  _passDbContext.Hcprequests.FromSqlRaw(hcpreqquery).ToList();
+                        // var hcpreq = _passDbContext.Hcprequests.FromSqlRaw(@"SELECT *, FROM hcprequest where TrackingID = '" + Tracking_ID + "'").ToList();
+
+                        //var hcpreqquery = @"SELECT * FROM hcprequest where TrackingID = '" + Tracking_ID + "' ";
+                        //var hcpreq = _passDbContext.Hcprequests.FromSqlRaw(hcpreqquery).ToList();
+                        //var footfallQuery = _passDbContext.Hcprequests.FromSqlRaw($"call sp_Footfall({hcpreqquery})")
+                        //            .ToList();
+                        //ViewBag.footfall = hcpreq;
+
+                        //var hcpreqquery = $"SELECT HCPREQID FROM bps_request where TrackingId = '{Tracking_ID}'";
+
+                        // Fetch Hcprequests based on tracking ID
+                        //var hcpreq = _passDbContext.Hcprequests.FromSqlRaw(hcpreqquery).ToList();
+
+                        // Assuming the stored procedure sp_Footfall expects HCPREQID as a parameter
+                        // Modify the query string to include the HCPREQID retrieved from the previous query
+                        DataSet dataSet = new DataSet();
+                        using (MySqlConnection connection = new MySqlConnection(_connectionString))
+                        {
+                            using (MySqlCommand command = new MySqlCommand("sp_footfall", connection))
+                            {
+                                command.CommandType = CommandType.StoredProcedure;
+
+                                // Add the parameter for the stored procedure
+                                command.Parameters.AddWithValue("HcpReqId", hcpreq.FirstOrDefault().Hcpreqid);
+
+                                // Create a SqlDataAdapter to fill the DataSet
+                                using (MySqlDataAdapter adapter = new MySqlDataAdapter(command))
+                                {
+                                    // Open the connection
+                                    connection.Open();
+
+                                    // Fill the DataSet
+                                    adapter.Fill(dataSet);
+                                }
+                            }
+                        }
+                        DataTable dataTable = dataSet.Tables[0];
+
+                        List<string> list = dataTable.AsEnumerable()
+                                            .Select(r => r.Field<string>("footfall"))
+                                            .ToList();
+                        // var footfallQuery = dataTable;//_passDbContext.TblDoctorsHospitalFootfall.FromSqlRaw($"call sp_Footfall(205)").ToList();
+
+                        // Assuming ViewBag is used to pass data to a view
+                        ViewBag.footfall = list;
+
+                        // End of Footfall
+
+
+
+
                         //postvalues
                         var p_postVal_BPS_Record_ID_Param = new MySqlParameter("@p_BPS_Record_ID", anotherId);
                         var p_postVal_Chemist_Code_Param = new MySqlParameter("@p_Chemist_Code", c);
@@ -2491,7 +2729,7 @@ where mcm.MacroBrickCode = '" + macroBrickCodes + "'";
         }
 
         [HttpPost]
-        public IActionResult UpdateBpsRecords(string Updatedatalist, string trackingid, BpsRequest HeaderData1)
+        public IActionResult UpdateBpsRecords(string[] diccodes, string[] maccodes, string Updatedatalist, string trackingid, BpsRequest HeaderData1)
         {
 
 
@@ -2673,26 +2911,47 @@ where mcm.MacroBrickCode = '" + macroBrickCodes + "'";
                         }
                     }
 
+                    //var discodesstr = String.Join(",", diccodes.ToArray());
+                    //var maccodesstr = String.Join(",", maccodes.ToArray());
+                    //using (MySqlConnection connection = new MySqlConnection(_connectionString))
+                    //{
+                    //    connection.Open();
 
-                    using (MySqlConnection connection = new MySqlConnection(_connectionString))
-                    {
-                        connection.Open();
+                    //    using (MySqlCommand command = new MySqlCommand("SpupdateBpsDetails", connection))
+                    //    {
+                    //        command.CommandType = CommandType.StoredProcedure;
 
-                        using (MySqlCommand command = new MySqlCommand("SpStartWF", connection))
-                        {
-                            command.CommandType = CommandType.StoredProcedure;
+                    //        command.Parameters.AddWithValue("p_bpsrecordid", bpsid);
+                    //        command.Parameters.AddWithValue("p_MacroBrickCodes", maccodesstr);
+                    //        command.Parameters.AddWithValue("p_DistributerCodes", discodesstr);
 
-                            command.Parameters.AddWithValue("p_TrackingId", trackingid);
-                            command.Parameters.AddWithValue("p_HCPReqId", hcpreqid);
-                            command.Parameters.AddWithValue("p_BpsId", bpsid);
-                            command.Parameters.AddWithValue("p_User", EmpidSessionValue);
 
-                            // Execute the stored procedure
-                            command.ExecuteNonQuery();
-                            command.CommandTimeout = 3000;
+                    //        // Execute the stored procedure
+                    //        command.ExecuteNonQuery();
+                    //        command.CommandTimeout = 3000;
 
-                        }
-                    }
+                    //    }
+                    //}
+
+                    //using (MySqlConnection connection = new MySqlConnection(_connectionString))
+                    //{
+                    //    connection.Open();
+
+                    //    using (MySqlCommand command = new MySqlCommand("SpStartWF", connection))
+                    //    {
+                    //        command.CommandType = CommandType.StoredProcedure;
+
+                    //        command.Parameters.AddWithValue("p_TrackingId", trackingid);
+                    //        command.Parameters.AddWithValue("p_HCPReqId", hcpreqid);
+                    //        command.Parameters.AddWithValue("p_BpsId", bpsid);
+                    //        command.Parameters.AddWithValue("p_User", EmpidSessionValue);
+
+                    //        // Execute the stored procedure
+                    //        command.ExecuteNonQuery();
+                    //        command.CommandTimeout = 3000;
+
+                    //    }
+                    //}
 
                 }
                 catch (Exception ex)
@@ -3123,7 +3382,6 @@ set Status_ID = 4, Comments = '" + comments + "' Where HCPREQID = '" + trackingi
 
 
         }
-
 
 
 
@@ -3580,9 +3838,6 @@ set Status_ID = 4, Comments = '" + comments + "' Where HCPREQID = '" + trackingi
         }
 
 
-
-
-
         [HttpPost]
         public IActionResult ASMActivity(List<IFormFile> Files, string TrackingId)
         {
@@ -3751,6 +4006,7 @@ set Status_ID = 4, Comments = '" + comments + "' Where HCPREQID = '" + trackingi
         }
 
         public ActionResult CDDetails(string id, string anotherid, int thirdId, string statusId, string screenId)
+        
         {
             try
             {
@@ -3761,8 +4017,8 @@ set Status_ID = 4, Comments = '" + comments + "' Where HCPREQID = '" + trackingi
                 }
 
                         var Empid_SessionValue = HttpContext.Session.GetString("EmpIdbps");
-                ViewBag.WorklistId = thirdId;
-                var bpsrcordquery = @"SELECT bpsreq.*, bpsreq.HCPREQID as User_Name, bpsreq.Status_ID as StatusType, bpsreq.CreatedBy as TMCode FROM bps_request bpsreq where TrackingID = '" + id + "'";
+                        ViewBag.WorklistId = thirdId;
+                        var bpsrcordquery = @"SELECT bpsreq.*, bpsreq.HCPREQID as User_Name, bpsreq.Status_ID as StatusType, bpsreq.CreatedBy as TMCode FROM bps_request bpsreq where TrackingID = '" + id + "'";
                         var bpsrcord = _passDbContext.BpsRequests.FromSqlRaw(bpsrcordquery).ToList();
                         var statusid = bpsrcord.FirstOrDefault()?.StatusId;
                         var bpsid = bpsrcord.FirstOrDefault()?.BpsRecordId;
@@ -3772,7 +4028,7 @@ set Status_ID = 4, Comments = '" + comments + "' Where HCPREQID = '" + trackingi
                         var macroBrickCodes = bpsrcord.FirstOrDefault()?.MacroBrickCode;
                         var macrobridnamequery = @"SELECT * FROM macrobricks where MacroBrickCode = '" + macroBrickCodes + "'";
                         var macname = _passDbContext.Macrobricks.FromSqlRaw(macrobridnamequery).ToList();
-                          var brickcode = macname.FirstOrDefault()?.MacroBrickCode;
+                        var brickcode = macname.FirstOrDefault()?.MacroBrickCode;
                         var distributerCodes = bpsrcord.FirstOrDefault()?.DistributerCode;
                         var distributernamequery = @"SELECT * FROM distributer where DistributerCode = '" + distributerCodes + "'";
                         var disname = _passDbContext.Distributers.FromSqlRaw(distributernamequery).ToList();
@@ -3783,10 +4039,47 @@ set Status_ID = 4, Comments = '" + comments + "' Where HCPREQID = '" + trackingi
                         var tmcode = hcpreq.FirstOrDefault()?.Tmcode;
                         var area = hcpreq.FirstOrDefault()?.BaseArea;
                         var hcpreqid = hcpreq.FirstOrDefault()?.Hcpreqid;
+                        var hcpid = hcpreq.FirstOrDefault()?.Hcpid;
+                        var actualcat = _passDbContext.Hcpdetails.FromSqlRaw(@"SELECT * FROM hcpdetails where hcpid = " + hcpid + "").FirstOrDefault().Category;
+
+                        ViewBag.actualcat = actualcat;
+
+                DataSet dataSet = new DataSet();
+                using (MySqlConnection connection = new MySqlConnection(_connectionString))
+                {
+                    using (MySqlCommand command = new MySqlCommand("sp_footfall", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+
+                        // Add the parameter for the stored procedure
+                        command.Parameters.AddWithValue("HcpReqId", hcpreqid);
+
+                        // Create a SqlDataAdapter to fill the DataSet
+                        using (MySqlDataAdapter adapter = new MySqlDataAdapter(command))
+                        {
+                            // Open the connection
+                            connection.Open();
+
+                            // Fill the DataSet
+                            adapter.Fill(dataSet);
+                        }
+                    }
+                }
+                DataTable dataTable = dataSet.Tables[0];
+
+                List<string> list = dataTable.AsEnumerable()
+           .Select(r => r.Field<string>("footfall"))
+           .ToList();
+                // var footfallQuery = dataTable;//_passDbContext.TblDoctorsHospitalFootfall.FromSqlRaw($"call sp_Footfall(205)").ToList();
+
+                // Assuming ViewBag is used to pass data to a view
+                ViewBag.footfall = list;
+                //var footfallQuery = $"call sp_Footfall({hcpreqid})";
 
 
 
-                        var ternamequery = @"SELECT * FROM tblterritorymappings where TerritoryCode = '" + tmcode + "'";
+
+                var ternamequery = @"SELECT * FROM tblterritorymappings where TerritoryCode = '" + tmcode + "'";
                         var tername = _passDbContext.Tblterritorymappings.FromSqlRaw(ternamequery).ToList();
                         var terempid = tername.FirstOrDefault()?.EmpId;
 
@@ -3801,7 +4094,7 @@ set Status_ID = 4, Comments = '" + comments + "' Where HCPREQID = '" + trackingi
                         string teamcode = hcpreq.FirstOrDefault().TeamId;
                         var tquery = @"Select * from teams where TeamCode = '" + teamcode + "'";
                         var tname = _passDbContext.Teams.FromSqlRaw(tquery).ToList();
-                var T = tname.FirstOrDefault()?.TeamName;
+                        var T = tname.FirstOrDefault()?.TeamName;
 
                         var File = @"SELECT * FROM uploadedfile WHERE TrackingId = '" + id + "' AND BPSID = '" + bpsid + "' AND Filetype = 'File'";
 
@@ -3817,10 +4110,10 @@ set Status_ID = 4, Comments = '" + comments + "' Where HCPREQID = '" + trackingi
                         var resultsByChemistPostUnits = new Dictionary<string, List<ExpandoObject>>();
                         var resultsByChemistPreValues = new Dictionary<string, List<ExpandoObject>>();
                         var resultsByChemistPostValues = new Dictionary<string, List<ExpandoObject>>();
-                       var resultsku = new Dictionary<string, List<ExpandoObject>>();
-                       var resultval = new Dictionary<string, List<ExpandoObject>>();
-                       var MergeValPre = new Dictionary<string, List<ExpandoObject>>();
-                var resultsByChemistSku = new Dictionary<string, List<ExpandoObject>>();
+                        var resultsku = new Dictionary<string, List<ExpandoObject>>();
+                        var resultval = new Dictionary<string, List<ExpandoObject>>();
+                        var MergeValPre = new Dictionary<string, List<ExpandoObject>>();
+                        var resultsByChemistSku = new Dictionary<string, List<ExpandoObject>>();
 
 
 
@@ -4523,12 +4816,4 @@ EXEC sp_executesql @query;
         }
 
     }
-
-
-
-
-
-
-
 }
-

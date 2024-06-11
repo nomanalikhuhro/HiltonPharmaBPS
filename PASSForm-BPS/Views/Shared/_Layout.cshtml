@@ -39,6 +39,8 @@
     <script src="~/lib/select2/dist/js/select2.full.js"></script>
     <script src="~/lib/select2/dist/js/select2.min.js"></script>
     <script src="~/lib/select2/dist/js/select2.js"></script>
+    <link href="~/lib/select/dist/css/bootstrap-select.min.css" rel="stylesheet" />
+   
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/js/select2.min.js" defer></script>
 
 
@@ -415,7 +417,7 @@
                             }
                         </div>
                     </div>
-                    <div style="padding-top:4%; visibility:hidden">
+                    <div style="padding-top:4%;">
                         <button class="dropdown-btn">
                             PAP BPS
                             <i class="fa fa-caret-down"></i>
@@ -523,11 +525,18 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="~/datatable/jquery.datatables.js"></script>
+
     <script src="~/datatable/jquery.datatables.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/select/dist/js/bootstrap-select.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/datatable_file.js" asp-append-version="true"></script>
     <script src="~/lib/sweetalert2/sweetalert2.all.min.js"></script>
+
+    
+   @* <link href="~/css/css/bootstrap.min.css" rel="stylesheet" />*@
+   
+    
     @await RenderSectionAsync("Scripts", required: false)
     <script>
 

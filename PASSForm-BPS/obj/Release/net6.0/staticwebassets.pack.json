@@ -193,6 +193,10 @@
       "PackagePath": "staticwebassets\\Images\\logo.png"
     },
     {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\css\\CSS\\bootstrap.min.css",
+      "PackagePath": "staticwebassets\\css\\CSS\\bootstrap.min.css"
+    },
+    {
       "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\css\\DataTableCss\\jquery.dataTables.css",
       "PackagePath": "staticwebassets\\css\\DataTableCss\\jquery.dataTables.css"
     },
@@ -359,6 +363,14 @@
     {
       "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\font-awesome-4.7.0\\font-awesome-4.7.0\\scss\\font-awesome.scss",
       "PackagePath": "staticwebassets\\font-awesome-4.7.0\\font-awesome-4.7.0\\scss\\font-awesome.scss"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\js\\JS\\bootstrap.bundle.min.js",
+      "PackagePath": "staticwebassets\\js\\JS\\bootstrap.bundle.min.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\js\\JS\\jquery.min.js",
+      "PackagePath": "staticwebassets\\js\\JS\\jquery.min.js"
     },
     {
       "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\js\\PAPScripts.js",
@@ -1335,6 +1347,14 @@
     {
       "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select2\\jquery-3.2.1.min.js",
       "PackagePath": "staticwebassets\\lib\\select2\\jquery-3.2.1.min.js"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select\\dist\\css\\bootstrap-select.min.css",
+      "PackagePath": "staticwebassets\\lib\\select\\dist\\css\\bootstrap-select.min.css"
+    },
+    {
+      "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\select\\dist\\js\\bootstrap-select.min.js",
+      "PackagePath": "staticwebassets\\lib\\select\\dist\\js\\bootstrap-select.min.js"
     },
     {
       "Id": "D:\\BPSGit\\PASSForm-BPS\\wwwroot\\lib\\sweetalert2\\sweetalert2.all.min.js",

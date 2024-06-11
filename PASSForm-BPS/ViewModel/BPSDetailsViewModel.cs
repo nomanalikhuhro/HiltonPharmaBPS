@@ -13,6 +13,7 @@ namespace PASSForm_BPS.ViewModel
         public List<Hspreqteam> hspreqteams { get; set; }
 
         public List<Hcprequest> requesthcp { get; set; }
+        public List<Hcpdetail> hcpdetail { get; set; }
         public List<Tblterritorymapping> tblterritorymappings  { get; set; }
         public List<Team> teams  { get; set; }
         public List<User> users  { get; set; }

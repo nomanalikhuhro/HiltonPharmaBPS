@@ -30,12 +30,6 @@
     <title>Your View</title>
     <style>
 
-
-
-
-
-
-
         .hide {
             display: none;
         }
@@ -55,8 +49,21 @@
 
         tr:nth-child(3n+3) {
             background-color: white; /* Gold color */
+        }       
+
+        .cell {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #dddddd;
         }
 
+        .cell2 {
+            flex: 1;
+            padding: 8px;
+            border-top: 1px solid #dddddd; /* Add right border to create column separators */
+            border-right: 1px solid #dddddd; /* Add right border to create column separators */
+            border-bottom: 2px solid black; /* Add solid bottom border */
+        }
 
     </style>
 </head>
@@ -181,15 +188,84 @@
                                         </form>
 
                                     </div>
+                                    @* Actual Category Coming from hcpDetails table *@
                                     <div class="col-4">
-                                            <label style="font-weight:bold;">Average Footfall Per Day::</label><br />
-                                        @foreach (var ft in Model.detailbps)
-                                        {
-                                            <input disabled value="@ft.FootFall" id="footfall" style="width:100%; height:30px; margin-top:1%;"></input>
-                                        }
+                                            <label style="font-weight:bold;">Actual Category:</label><br />
+                                            @*@foreach (var hd in Model.hcpdetail)
+                                            {*@
+                                            <input disabled value="@ViewBag.actualcat" id="acCategory" style="width:100%; height:30px; margin-top:1%;"></input>
+                                         @*   }*@
 
                                     </div>
+                                        @*<div class="col-4">
+                                            <label style="font-weight:bold;">Average Footfall Per Day::</label><br />
+                                            @foreach (var ft in Model.detailbps)
+                                            {
+                                            <input disabled value="@ft.FootFall" id="footfall" style="width:100%; height:30px; margin-top:1%;"></input>
+                                            }
+
+                                            </div>*@
+                                        @* End of Actual Category *@
+
+                                        
+
                                 </div>
+                            </div>
+
+                            <div class="container">
+                                    @* Footfall table *@
+
+                                    @* old table *@
+                                    @*<table class="table">
+                                <thead>
+                                <tr>
+                                <th scope="col">location</th>
+                                <th scope="col">footfall</th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @if (ViewBag.footfall != null)
+                                {
+                                int cnt = 0;
+                                // var footfallview = ViewBag.footfall as DataTable;
+                                @foreach (var item in ViewBag.footfall)
+                                {
+                                <tr>
+                                <td>
+                                Location @(cnt += 1)
+                                </td>
+
+                                <td>
+                                @item
+                                </td>
+                                </tr>
+                                }
+                                }
+                                </tbody>
+                                </table>*@
+
+
+                                    <div class="container table">
+                                        <div class="row header">
+                                            <div class="cell2">Location</div>
+                                            <div class="cell2">Footfall</div>
+                                            
+                                        </div>
+                                        @if (ViewBag.footfall != null)
+                                        {
+                                            // Loop through the ViewBag.footfall data to generate rows
+                                            for (int i = 0; i < ViewBag.footfall.Count; i++)
+                                            {
+                                            // Each iteration of the loop represents a pair of "Location" and "Footfall" values
+                                                <div class="row">
+                                                    <div class="cell">Location @(i + 1)</div>
+                                                    <div class="cell">@ViewBag.footfall[i]</div>
+                                                </div>
+                                            }
+                                        }
+                                    </div>
+                                    @* End of footfall *@
                             </div>
                         </div>
                     </div>
