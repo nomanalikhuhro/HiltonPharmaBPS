@@ -18,6 +18,9 @@ public partial class Tblhcpterritorymapping
     public DateTime? CreatedOn { get; set; }
 
     public int? LastModifiedBy { get; set; }
+    
+    // Added Category against tblHCPTerritoryMapping
+    public string? Category { get; set; }
 
     public DateTime? LastModifiedOn { get; set; }
 

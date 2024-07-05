@@ -95,7 +95,47 @@ namespace PASSForm_BPS.Controllers
         }
 
 
+        public List<string> getfootfall(int hcpid)
+        {
+            try
+            {
+                DataSet dataSet = new DataSet();
+                using (MySqlConnection connection = new MySqlConnection(_connectionString))
+                {
+                    using (MySqlCommand command = new MySqlCommand("sp_footfall", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
 
+                        // Add the parameter for the stored procedure
+                        command.Parameters.AddWithValue("HcpReqId", hcpid);
+
+                        // Create a SqlDataAdapter to fill the DataSet
+                        using (MySqlDataAdapter adapter = new MySqlDataAdapter(command))
+                        {
+                            // Open the connection
+                            connection.Open();
+
+                            // Fill the DataSet
+                            adapter.Fill(dataSet);
+                        }
+                    }
+                }
+                DataTable dataTable = dataSet.Tables[0];
+
+                List<string> list = dataTable.AsEnumerable()
+           .Select(r => r.Field<string>("footfall"))
+           .ToList();
+                // var footfallQuery = dataTable;//_passDbContext.TblDoctorsHospitalFootfall.FromSqlRaw($"call sp_Footfall(205)").ToList();
+
+                // Assuming ViewBag is used to pass data to a view
+                return list;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
 
         public ActionResult PendingView(int id, string thirdId)
         {
@@ -551,37 +591,38 @@ namespace PASSForm_BPS.Controllers
 
                             // Assuming the stored procedure sp_Footfall expects HCPREQID as a parameter
                             // Modify the query string to include the HCPREQID retrieved from the previous query
-                            DataSet dataSet = new DataSet();
-                            using (MySqlConnection connection = new MySqlConnection(_connectionString))
-                            {
-                                using (MySqlCommand command = new MySqlCommand("sp_footfall", connection))
-                                {
-                                    command.CommandType = CommandType.StoredProcedure;
+                            //     DataSet dataSet = new DataSet();
+                            //     using (MySqlConnection connection = new MySqlConnection(_connectionString))
+                            //     {
+                            //         using (MySqlCommand command = new MySqlCommand("sp_footfall", connection))
+                            //         {
+                            //             command.CommandType = CommandType.StoredProcedure;
 
-                                    // Add the parameter for the stored procedure
-                                    command.Parameters.AddWithValue("HcpReqId", hcpreq.FirstOrDefault().Hcpreqid);
+                            //             // Add the parameter for the stored procedure
+                            //             command.Parameters.AddWithValue("HcpReqId", hcpreq.FirstOrDefault().Hcpreqid);
 
-                                    // Create a SqlDataAdapter to fill the DataSet
-                                    using (MySqlDataAdapter adapter = new MySqlDataAdapter(command))
-                                    {
-                                        // Open the connection
-                                        connection.Open();
+                            //             // Create a SqlDataAdapter to fill the DataSet
+                            //             using (MySqlDataAdapter adapter = new MySqlDataAdapter(command))
+                            //             {
+                            //                 // Open the connection
+                            //                 connection.Open();
 
-                                        // Fill the DataSet
-                                        adapter.Fill(dataSet);
-                                    }
-                                }
-                            }
-                            DataTable dataTable = dataSet.Tables[0];
+                            //                 // Fill the DataSet
+                            //                 adapter.Fill(dataSet);
+                            //             }
+                            //         }
+                            //     }
+                            //     DataTable dataTable = dataSet.Tables[0];
 
-                            List<string> list = dataTable.AsEnumerable()
-                       .Select(r => r.Field<string>("footfall"))
-                       .ToList();
-                            // var footfallQuery = dataTable;//_passDbContext.TblDoctorsHospitalFootfall.FromSqlRaw($"call sp_Footfall(205)").ToList();
+                            //     List<string> list = dataTable.AsEnumerable()
+                            //.Select(r => r.Field<string>("footfall"))
+                            //.ToList();
+                            //     // var footfallQuery = dataTable;//_passDbContext.TblDoctorsHospitalFootfall.FromSqlRaw($"call sp_Footfall(205)").ToList();
 
-                            // Assuming ViewBag is used to pass data to a view
-                            ViewBag.footfall = list;
+                            //     // Assuming ViewBag is used to pass data to a view
+                            //     ViewBag.footfall = list;
 
+                            ViewBag.footfall = getfootfall(hcpreq.FirstOrDefault().Hcpreqid);
 
                             return View(DetailViewModel);
 
@@ -904,6 +945,7 @@ namespace PASSForm_BPS.Controllers
                             };
 
 
+                            ViewBag.footfall = getfootfall(hcpreq.FirstOrDefault().Hcpreqid);
                             return View(DetailViewModel);
 
                         }
@@ -1081,37 +1123,37 @@ namespace PASSForm_BPS.Controllers
 
                             // Assuming the stored procedure sp_Footfall expects HCPREQID as a parameter
                             // Modify the query string to include the HCPREQID retrieved from the previous query
-                            DataSet dataSet = new DataSet();
-                            using (MySqlConnection connection = new MySqlConnection(_connectionString))
-                            {
-                                using (MySqlCommand command = new MySqlCommand("sp_footfall", connection))
-                                {
-                                    command.CommandType = CommandType.StoredProcedure;
+                            // DataSet dataSet = new DataSet();
+                            // using (MySqlConnection connection = new MySqlConnection(_connectionString))
+                            // {
+                            //     using (MySqlCommand command = new MySqlCommand("sp_footfall", connection))
+                            //     {
+                            //         command.CommandType = CommandType.StoredProcedure;
 
-                                    // Add the parameter for the stored procedure
-                                    command.Parameters.AddWithValue("HcpReqId", hcpreq.FirstOrDefault().Hcpreqid);
+                            //         // Add the parameter for the stored procedure
+                            //         command.Parameters.AddWithValue("HcpReqId", hcpreq.FirstOrDefault().Hcpreqid);
 
-                                    // Create a SqlDataAdapter to fill the DataSet
-                                    using (MySqlDataAdapter adapter = new MySqlDataAdapter(command))
-                                    {
-                                        // Open the connection
-                                        connection.Open();
+                            //         // Create a SqlDataAdapter to fill the DataSet
+                            //         using (MySqlDataAdapter adapter = new MySqlDataAdapter(command))
+                            //         {
+                            //             // Open the connection
+                            //             connection.Open();
 
-                                        // Fill the DataSet
-                                        adapter.Fill(dataSet);
-                                    }
-                                }
-                            }
-                            DataTable dataTable = dataSet.Tables[0];
+                            //             // Fill the DataSet
+                            //             adapter.Fill(dataSet);
+                            //         }
+                            //     }
+                            // }
+                            // DataTable dataTable = dataSet.Tables[0];
 
-                                List<string> list = dataTable.AsEnumerable()
-                           .Select(r => r.Field<string>("footfall"))
-                           .ToList();
-                           // var footfallQuery = dataTable;//_passDbContext.TblDoctorsHospitalFootfall.FromSqlRaw($"call sp_Footfall(205)").ToList();
+                            //     List<string> list = dataTable.AsEnumerable()
+                            //.Select(r => r.Field<string>("footfall"))
+                            //.ToList();
+                            //// var footfallQuery = dataTable;//_passDbContext.TblDoctorsHospitalFootfall.FromSqlRaw($"call sp_Footfall(205)").ToList();
 
-                            // Assuming ViewBag is used to pass data to a view
-                            ViewBag.footfall = list;
-
+                            // // Assuming ViewBag is used to pass data to a view
+                            // ViewBag.footfall = list;
+                            ViewBag.footfall = getfootfall(hcpreq.FirstOrDefault().Hcpreqid);
 
 
                             return View(combinedViewModel);
@@ -2578,7 +2620,7 @@ where mcm.MacroBrickCode = '" + macroBrickCodes + "'";
                         /*
                          * Fetching HcpRequestId from BPS_Record table and giving parameter to 
                          * Footfall sp
-                           */             
+                           */
 
 
 
@@ -2600,36 +2642,38 @@ where mcm.MacroBrickCode = '" + macroBrickCodes + "'";
 
                         // Assuming the stored procedure sp_Footfall expects HCPREQID as a parameter
                         // Modify the query string to include the HCPREQID retrieved from the previous query
-                        DataSet dataSet = new DataSet();
-                        using (MySqlConnection connection = new MySqlConnection(_connectionString))
-                        {
-                            using (MySqlCommand command = new MySqlCommand("sp_footfall", connection))
-                            {
-                                command.CommandType = CommandType.StoredProcedure;
+                        //DataSet dataSet = new DataSet();
+                        //using (MySqlConnection connection = new MySqlConnection(_connectionString))
+                        //{
+                        //    using (MySqlCommand command = new MySqlCommand("sp_footfall", connection))
+                        //    {
+                        //        command.CommandType = CommandType.StoredProcedure;
 
-                                // Add the parameter for the stored procedure
-                                command.Parameters.AddWithValue("HcpReqId", hcpreq.FirstOrDefault().Hcpreqid);
+                        //        // Add the parameter for the stored procedure
+                        //        command.Parameters.AddWithValue("HcpReqId", hcpreq.FirstOrDefault().Hcpreqid);
 
-                                // Create a SqlDataAdapter to fill the DataSet
-                                using (MySqlDataAdapter adapter = new MySqlDataAdapter(command))
-                                {
-                                    // Open the connection
-                                    connection.Open();
+                        //        // Create a SqlDataAdapter to fill the DataSet
+                        //        using (MySqlDataAdapter adapter = new MySqlDataAdapter(command))
+                        //        {
+                        //            // Open the connection
+                        //            connection.Open();
 
-                                    // Fill the DataSet
-                                    adapter.Fill(dataSet);
-                                }
-                            }
-                        }
-                        DataTable dataTable = dataSet.Tables[0];
+                        //            // Fill the DataSet
+                        //            adapter.Fill(dataSet);
+                        //        }
+                        //    }
+                        //}
+                        //DataTable dataTable = dataSet.Tables[0];
 
-                        List<string> list = dataTable.AsEnumerable()
-                                            .Select(r => r.Field<string>("footfall"))
-                                            .ToList();
-                        // var footfallQuery = dataTable;//_passDbContext.TblDoctorsHospitalFootfall.FromSqlRaw($"call sp_Footfall(205)").ToList();
+                        //List<string> list = dataTable.AsEnumerable()
+                        //                    .Select(r => r.Field<string>("footfall"))
+                        //                    .ToList();
+                        //// var footfallQuery = dataTable;//_passDbContext.TblDoctorsHospitalFootfall.FromSqlRaw($"call sp_Footfall(205)").ToList();
 
-                        // Assuming ViewBag is used to pass data to a view
-                        ViewBag.footfall = list;
+                        //// Assuming ViewBag is used to pass data to a view
+                        //ViewBag.footfall = list;
+
+                        ViewBag.footfall = getfootfall(hcpreq.FirstOrDefault().Hcpreqid);
 
                         // End of Footfall
 
@@ -3395,8 +3439,8 @@ set Status_ID = 4, Comments = '" + comments + "' Where HCPREQID = '" + trackingi
                 foreach (var fileName in Files)
                 {
                     var result = _passDbContext.Wf_Uploadfilespaths
-    .FromSqlRaw("CALL spBPSUploadFile(" + WlstId + ", '" + fileName.FileName + "')")
-    .ToList();
+                    .FromSqlRaw("CALL spBPSUploadFile(" + WlstId + ", '" + fileName.FileName + "')")
+                    .ToList();
                 }
 
                 using (MySqlConnection connection = new MySqlConnection(_connectionString))
@@ -4023,15 +4067,20 @@ set Status_ID = 4, Comments = '" + comments + "' Where HCPREQID = '" + trackingi
                         var statusid = bpsrcord.FirstOrDefault()?.StatusId;
                         var bpsid = bpsrcord.FirstOrDefault()?.BpsRecordId;
                         var bpsComments = bpsrcord.FirstOrDefault()?.Comments;
+                
                         ViewBag.Status = statusid;
                         ViewBag.Screen = screenId;
                         var macroBrickCodes = bpsrcord.FirstOrDefault()?.MacroBrickCode;
-                        var macrobridnamequery = @"SELECT * FROM macrobricks where MacroBrickCode = '" + macroBrickCodes + "'";
-                        var macname = _passDbContext.Macrobricks.FromSqlRaw(macrobridnamequery).ToList();
+                //var macrobridnamequery = @"SELECT * FROM macrobricks where MacroBrickCode = '" + macroBrickCodes + "'";
+                var macrobridnamequery = @"SELECT * FROM macrobricks where MacroBrickCode in (select code from bpsdetails where BPS_Record_ID = " + bpsid + " and PrefencesId = 2)";
+                var macname = _passDbContext.Macrobricks.FromSqlRaw(macrobridnamequery).ToList();
                         var brickcode = macname.FirstOrDefault()?.MacroBrickCode;
+
+
                         var distributerCodes = bpsrcord.FirstOrDefault()?.DistributerCode;
-                        var distributernamequery = @"SELECT * FROM distributer where DistributerCode = '" + distributerCodes + "'";
-                        var disname = _passDbContext.Distributers.FromSqlRaw(distributernamequery).ToList();
+                // var distributernamequery = @"SELECT * FROM distributer where DistributerCode = '" + distributerCodes + "'";
+                var distributernamequery = @"SELECT * FROM distributer where DistributerCode in (select code from bpsdetails where BPS_Record_ID = " + bpsid + " and PrefencesId = 1)";
+                var disname = _passDbContext.Distributers.FromSqlRaw(distributernamequery).ToList();
 
                         var hcpreqquery = @"SELECT * FROM hcprequest where TrackingID = '" + id + "' ";
                         var hcpreq = _passDbContext.Hcprequests.FromSqlRaw(hcpreqquery).ToList();
@@ -4040,40 +4089,41 @@ set Status_ID = 4, Comments = '" + comments + "' Where HCPREQID = '" + trackingi
                         var area = hcpreq.FirstOrDefault()?.BaseArea;
                         var hcpreqid = hcpreq.FirstOrDefault()?.Hcpreqid;
                         var hcpid = hcpreq.FirstOrDefault()?.Hcpid;
-                        var actualcat = _passDbContext.Hcpdetails.FromSqlRaw(@"SELECT * FROM hcpdetails where hcpid = " + hcpid + "").FirstOrDefault().Category;
+                        var actualcat = _passDbContext.Tblhcpterritorymappings.FromSqlRaw(@"SELECT * FROM tblhcpterritorymappings where hcpid = " + hcpid + " and  TerritoryCode = '"+ tmcode +"' ").FirstOrDefault().Category;
 
                         ViewBag.actualcat = actualcat;
 
-                DataSet dataSet = new DataSet();
-                using (MySqlConnection connection = new MySqlConnection(_connectionString))
-                {
-                    using (MySqlCommand command = new MySqlCommand("sp_footfall", connection))
-                    {
-                        command.CommandType = CommandType.StoredProcedure;
+                //     DataSet dataSet = new DataSet();
+                //     using (MySqlConnection connection = new MySqlConnection(_connectionString))
+                //     {
+                //         using (MySqlCommand command = new MySqlCommand("sp_footfall", connection))
+                //         {
+                //             command.CommandType = CommandType.StoredProcedure;
 
-                        // Add the parameter for the stored procedure
-                        command.Parameters.AddWithValue("HcpReqId", hcpreqid);
+                //             // Add the parameter for the stored procedure
+                //             command.Parameters.AddWithValue("HcpReqId", hcpreqid);
 
-                        // Create a SqlDataAdapter to fill the DataSet
-                        using (MySqlDataAdapter adapter = new MySqlDataAdapter(command))
-                        {
-                            // Open the connection
-                            connection.Open();
+                //             // Create a SqlDataAdapter to fill the DataSet
+                //             using (MySqlDataAdapter adapter = new MySqlDataAdapter(command))
+                //             {
+                //                 // Open the connection
+                //                 connection.Open();
 
-                            // Fill the DataSet
-                            adapter.Fill(dataSet);
-                        }
-                    }
-                }
-                DataTable dataTable = dataSet.Tables[0];
+                //                 // Fill the DataSet
+                //                 adapter.Fill(dataSet);
+                //             }
+                //         }
+                //     }
+                //     DataTable dataTable = dataSet.Tables[0];
 
-                List<string> list = dataTable.AsEnumerable()
-           .Select(r => r.Field<string>("footfall"))
-           .ToList();
-                // var footfallQuery = dataTable;//_passDbContext.TblDoctorsHospitalFootfall.FromSqlRaw($"call sp_Footfall(205)").ToList();
+                //     List<string> list = dataTable.AsEnumerable()
+                //.Select(r => r.Field<string>("footfall"))
+                //.ToList();
+                //     // var footfallQuery = dataTable;//_passDbContext.TblDoctorsHospitalFootfall.FromSqlRaw($"call sp_Footfall(205)").ToList();
 
-                // Assuming ViewBag is used to pass data to a view
-                ViewBag.footfall = list;
+                //     // Assuming ViewBag is used to pass data to a view
+                //     ViewBag.footfall = list;
+                ViewBag.footfall = getfootfall(hcpreq.FirstOrDefault().Hcpreqid);
                 //var footfallQuery = $"call sp_Footfall({hcpreqid})";
 
 

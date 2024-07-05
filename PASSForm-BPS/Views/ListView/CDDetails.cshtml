@@ -24,6 +24,7 @@
 
     double contri = 0.00;
     double calcontri = 0.00;
+    var actcat = ViewBag.actualcat;
 }
 <html>
 <head>
@@ -249,7 +250,7 @@
                                     <div class="container table">
                                         <div class="row header">
                                             <div class="cell2">Location</div>
-                                            <div class="cell2">Footfall</div>
+                                            <div class="cell2">Average Footfall/Day</div>
                                             
                                         </div>
                                         @if (ViewBag.footfall != null)
@@ -527,7 +528,7 @@
 
                                                                         <td style="text-align:right;">
                                                                            <p>Variance:</p>
-                                                                           @variance[i];
+                                                                           @variance[i]
                                                                         </td>
 
                                                                         i++;

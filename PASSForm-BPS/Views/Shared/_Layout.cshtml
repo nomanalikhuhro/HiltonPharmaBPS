@@ -379,7 +379,84 @@
             <div style="text-align:center;margin-bottom:30px;">
                 <img src="~/images/logo.png" height="110px" width="140px" />
                 <div>
-                    <div style="padding-top:20%">
+
+                    @* 14 June Prototype Changes by Mohsin *@
+
+                    @* @if (emproleid == "1")
+                    {
+                        <div b-4y19ry60bp="" style="padding-top:20%">
+                            <button b-4y19ry60bp="" class="dropdown-btn">
+                                PAP BPS for Retail/Pharmacies
+                                <i b-4y19ry60bp="" class="fa fa-caret-down"></i>
+                            </button>
+                            <div b-4y19ry60bp="" class="dropdown-container" style="display: none;">
+                                <div b-4y19ry60bp="">
+
+                                    <a class="sidebar-link " href="/ListView/Create">Create Request</a>
+                                    <a class="sidebar-link @(currentAction == "PharmaciesSubmitted" ? "act" : "")" asp-area="" asp-controller="PAPView" asp-action="PharmaciesSubmitted" asp-route-id="1">Submitted Request</a>
+                                    <a class="sidebar-link " href="/ListView/TrackingIDStatus/1">Pending for My Approval</a>
+
+                                    <a class="sidebar-link " href="/ListView/TrackingIDStatus/1">Request Status</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div b-4y19ry60bp="" style="padding-top:8%">
+                            <button b-4y19ry60bp="" class="dropdown-btn active">
+                                PAP BPS for Commercial
+                                <i b-4y19ry60bp="" class="fa fa-caret-down"></i>
+                            </button>
+                            <div b-4y19ry60bp="" class="dropdown-container" style="display: block;">
+                                <div b-4y19ry60bp="">
+
+                                    <a class="sidebar-link " href="/ListView/Create">Create Request</a>
+                                    <a class="sidebar-link act" href="/ListView/ApprovedView/1">Submitted Request</a><a class="sidebar-link " href="/ListView/TrackingIDStatus/1">Pending for My Approval</a>
+
+                                    <a class="sidebar-link " href="/ListView/TrackingIDStatus/1">Request Status</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div b-4y19ry60bp="" style="padding-top:8%">
+                            <button b-4y19ry60bp="" class="dropdown-btn active">
+                                PAP BPS for Local Purchae (LP)
+                                <i b-4y19ry60bp="" class="fa fa-caret-down"></i>
+                            </button>
+                            <div b-4y19ry60bp="" class="dropdown-container" style="display: block;">
+                                <div b-4y19ry60bp="">
+
+                                    <a class="sidebar-link " href="/ListView/Create">Create Request</a>
+                                    <a class="sidebar-link act" href="/ListView/ApprovedView/1">Submitted Request</a><a class="sidebar-link " href="/ListView/TrackingIDStatus/1">Pending for My Approval</a>
+
+                                    <a class="sidebar-link " href="/ListView/TrackingIDStatus/1">Request Status</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div b-4y19ry60bp="" style="padding-top:8%">
+                            <button b-4y19ry60bp="" class="dropdown-btn active">
+                                PAP BPS for I/V (Blanket Approval)
+                                <i b-4y19ry60bp="" class="fa fa-caret-down"></i>
+                            </button>
+                            <div b-4y19ry60bp="" class="dropdown-container" style="display: block;">
+                                <div b-4y19ry60bp="">
+
+                                    <a class="sidebar-link @(currentAction == "Index" ? "act" : "")" asp-area="" asp-controller="PAPView" asp-action="Index">Create Request</a>
+                                    <a class="sidebar-link @(currentAction == "IVInjectionSubmitted" ? "act" : "")" asp-area="" asp-controller="PAPView" asp-action="IVInjectionSubmitted" asp-route-id="1">Submitted Request</a>l
+                                    <a class="sidebar-link " href="/ListView/TrackingIDStatus/1">Pending for My Approval</a>
+
+                                    <a class="sidebar-link @(currentAction == "PAPTrackingIDStatusDetails" ? "act" : "")" asp-area="" asp-controller="PAPView" asp-action="PAPTrackingIDStatusDetails">Request Status</a>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    } *@
+
+                    @* End of 14 June Prototype Changes by Mohsin *@
+
+                     @* Commented for SS purpose *@
+                        <div style="padding-top:20%">
                         <button class="dropdown-btn">
                             PASS BPS
                             <i class="fa fa-caret-down"></i>
@@ -417,7 +494,13 @@
                             }
                         </div>
                     </div>
-                    <div style="padding-top:4%;">
+
+                    @* PAP SideBar Visibility 
+                       Now Dispay is : Visible
+                       Commented just for the SS purpose *@
+                   
+                   
+                     <div style="padding-top:4%; display:none;">
                         <button class="dropdown-btn">
                             PAP BPS
                             <i class="fa fa-caret-down"></i>
@@ -482,7 +565,6 @@
                     </div>
                 </div>
             </div>
-
 
             <!-- Add more menu items as needed -->
         </div>

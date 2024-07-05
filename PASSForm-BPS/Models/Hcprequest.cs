@@ -43,6 +43,7 @@ public partial class Hcprequest
 
     public string? PasscategoryCode { get; set; }
 
+
     public sbyte? PrevPlan { get; set; }
 
     public string? CreatedBy { get; set; }

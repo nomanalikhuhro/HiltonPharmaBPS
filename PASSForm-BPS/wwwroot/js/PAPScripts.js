@@ -987,7 +987,7 @@ function BSPPAPIVInjectionRejection() {
 
 
 function ReqidIdStatus() {
-    debugger;
+    //debugger;
     var reqid = document.getElementById('papRequestIdstatus').value;
     const selectedRadio = document.querySelector('input[name="options"]:checked');
 

@@ -184,8 +184,18 @@
 
                                                 </div>
                                             </form>
-
+                                            
                                         </div>
+                                        @if(roleId == "18" || roleId == "14")
+                                        {
+                                            <div class="col-4">
+                                                <label style="font-weight:bold;">Actual Category:</label><br />
+                                               
+                                                <input disabled value="@ViewBag.actualcat" id="acCategory" style="width:100%; height:30px; margin-top:1%;">
+                                                
+
+                                            </div>
+                                        }
                                         
                                        @* <div class="col-4">
                                             <label style="font-weight:bold;">Average Footfall Per Day:</label><br />
@@ -204,7 +214,7 @@
                                 <thead>
                                     <tr>
                                         <th scope="col">Location</th>
-                                        <th scope="col">Footfall</th>
+                                        <th scope="col">Average Footfall/Day</th>
 
                                     </tr>
                                 </thead>

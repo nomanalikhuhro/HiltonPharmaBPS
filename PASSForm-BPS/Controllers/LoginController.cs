@@ -43,20 +43,20 @@ namespace PASSForm_BPS.Controllers
 
             if (ModelState.IsValid)
             {
-                var user = _passDbContext.Users.FirstOrDefault(u => u.UserEmail == model.UserEmail);
+                var user = _passDbContext.Users.FirstOrDefault(u => u.UserEmail == model.UserEmail && u.UserPassword == model.UserPassword);
                 var userWithDesignation = _passDbContext.Users
                 .Where(u => u.UserEmail == model.UserEmail)
-    .Join(
-        _passDbContext.Roles,
-        user => user.RoleId,
-        role => role.RoleId,
-        (user, role) => new
-        {
-            User = user,
-            RoleName = role.RoleName
-        }
-    )
-    .FirstOrDefault();
+                .Join(
+                    _passDbContext.Roles,
+                    user => user.RoleId,
+                    role => role.RoleId,
+                    (user, role) => new
+                    {
+                        User = user,
+                        RoleName = role.RoleName
+                    }
+                )
+                .FirstOrDefault();
 
                 if (user != null)
                 {
@@ -64,10 +64,9 @@ namespace PASSForm_BPS.Controllers
                     {
                         if (user.RoleId! == 1)
                         {
-
                             HttpContext.Session.SetString("EmpIdbps", userWithDesignation.User.EmpId.ToString());
                             HttpContext.Session.SetString("roleid", userWithDesignation.User.RoleId.ToString());
-                           HttpContext.Session.SetString("uname", userWithDesignation.User.UserName.ToString());
+                            HttpContext.Session.SetString("uname", userWithDesignation.User.UserName.ToString());
                             HttpContext.Session.SetString("rolename", userWithDesignation.RoleName.ToString());
 
 
@@ -159,12 +158,11 @@ namespace PASSForm_BPS.Controllers
                         ModelState.AddModelError("Invalid Login", "Invalid");
                         ViewBag.Message = "Login Failed";
                     }
-
-
-
                 }
-
-
+                else
+                {
+                    ViewBag.ErrorMessage = "Incorrect email or password.";
+                }
 
                 return View("Login", model);
             }

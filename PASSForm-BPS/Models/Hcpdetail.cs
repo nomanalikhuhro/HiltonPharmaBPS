@@ -25,7 +25,7 @@ public partial class Hcpdetail
 
     public string? City { get; set; }
 
-    public string? Category { get; set; }
+    //public string? Category { get; set; }
 
     public virtual ICollection<Hcphospital> Hcphospitals { get; set; } = new List<Hcphospital>();
 

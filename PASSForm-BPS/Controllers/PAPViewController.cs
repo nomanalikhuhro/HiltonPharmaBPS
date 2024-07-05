@@ -186,8 +186,8 @@ namespace PASSForm_BPS.Controllers
                         Hcprequest_pap hcprequest = _passDbContext.HcprequestPAPs.FirstOrDefault(h => h.TrackingID == RequestId.Trim());
 
                         List<Team> teams = _passDbContext.Teams
-        .Where(h => h.TeamCode == hcprequest.TeamId.Trim())
-        .ToList();
+                            .Where(h => h.TeamCode == hcprequest.TeamId.Trim())
+                            .ToList();
 
 
 
@@ -223,8 +223,8 @@ namespace PASSForm_BPS.Controllers
                         Team team = _passDbContext.Teams.FirstOrDefault(h => h.TeamCode == hcprequest.TeamId);
 
                         List<Team> teams = _passDbContext.Teams
-    .Where(h => h.TeamCode == hcprequest.TeamId.Trim())
-    .ToList();
+                                            .Where(h => h.TeamCode == hcprequest.TeamId.Trim())
+                                            .ToList();
 
                         var products = _passDbContext.Tblproducts.FromSqlRaw("call sp_GetTeamProducts(@p_TeamName)"
                                                         , new MySqlParameter("@p_TeamName", team.TeamName)).ToList();
@@ -267,7 +267,7 @@ namespace PASSForm_BPS.Controllers
             try
             {
                 var macrobrickrecords = _passDbContext.DisMacMappings.FromSqlRaw("call sp_GetMacroBrickDetails(@DisCode)"
-    , new MySqlParameter("@DisCode", disValue)).ToList();
+                                        , new MySqlParameter("@DisCode", disValue)).ToList();
 
                 return Json(macrobrickrecords);
             }
@@ -1683,15 +1683,12 @@ where mcm.MacroBrickCode = '" + bpspaprephar.BrickCode + "'";
 
 
         
-        public IActionResult PAPTrackingIDStatusDetails( string reqid, string selectedLabel)
+        public IActionResult PAPTrackingIDStatusDetails(string reqid, string selectedLabel)
         {
+
             return View();
 
         }
-
-
-
-
 
     }
 }
