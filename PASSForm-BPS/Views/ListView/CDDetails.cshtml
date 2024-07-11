@@ -343,13 +343,14 @@
                                                     <div>
                                                         <label>Contribution % :</label>
                                                         <input disabled id="Contribution-@acc" type="number" value="@(predat.Contribution != null ? string.Format("{0:yyyy-MM-dd}", predat.Contribution) : string.Empty)" style="text-align:right; width:40%;" />
-                                                            
+                                                           
+                                                           
                                                         </div>
                                                     }
 @*                                                    contri = predat.Contribution.ToString();
                                                     calcontri = contri / 100;*@
 
-                                                     contri = Convert.ToDouble(predat.Contribution);
+                                                     contri = predat.Contribution != null && predat.Contribution != "" ? Convert.ToDouble(predat.Contribution) : 0;
                                                      calcontri = contri / 100;
                                                 }
                                         }
@@ -1092,20 +1093,27 @@
         </div>
     </div>
 
-    <div>
-        <label style="font-weight:bold; @((roleId == "16" && poNumber != null) ? "display:none;" : "")">Comments:</label><br />
-        <textarea id="comments" style="width:60%; height:100px; margin-top:1%; @((roleId == "16" && poNumber != null) ? "display:none;" : "")"></textarea><br>
-        <label class="hide" id="CommentsErrorLabel" style="color:red;font-size:10px;">Required! Please Enter Comments</label>
-        <input type="text" style="visibility:hidden;" id="wlstid" value="@ViewBag.WorklistId"></input>
-    </div>
+        
+       
+            @if(screentype == "pendingscreen")
+            {
+                <div>
+                    <label style="font-weight:bold; @((roleId == "16" && poNumber != null) ? "display:none;" : "")">Comments:</label><br />
+                    <textarea id="comments" style="width:60%; height:100px; margin-top:1%; @((roleId == "16" && poNumber != null) ? "display:none;" : "")"></textarea><br>
+                    <label class="hide" id="CommentsErrorLabel" style="color:red;font-size:10px;">Required! Please Enter Comments</label>
+                    <input type="text" style="visibility:hidden;" id="wlstid" value="@ViewBag.WorklistId"></input>
+                </div>
 
-    <div style="text-align:center; padding-top:3%;">
-        <input id="approvebps" type="button" class="btn btn-primary" value="Approve" onclick="BpsApproval()" />
+                <div style="text-align:center; padding-top:3%;">
+                    <input id="approvebps" type="button" class="btn btn-primary" value="Approve" onclick="BpsApproval()" />
 
-        <input id="pbjectionbps" type="button" class="btn btn-danger" value="Objection" onclick="BpsObjection()" />
+                    <input id="pbjectionbps" type="button" class="btn btn-danger" value="Objection" onclick="BpsObjection()" />
 
-    </div>
-
+                </div>
+            }
+           
+        
+        
 
 </div>
 

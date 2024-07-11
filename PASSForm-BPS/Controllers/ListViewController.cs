@@ -13,6 +13,7 @@ using System.Globalization;
 using System.Text.Json;
 using Newtonsoft.Json.Linq;
 using Org.BouncyCastle.Ocsp;
+using MySqlX.XDevAPI;
 
 namespace PASSForm_BPS.Controllers
 {
@@ -4092,6 +4093,9 @@ set Status_ID = 4, Comments = '" + comments + "' Where HCPREQID = '" + trackingi
                         var actualcat = _passDbContext.Tblhcpterritorymappings.FromSqlRaw(@"SELECT * FROM tblhcpterritorymappings where hcpid = " + hcpid + " and  TerritoryCode = '"+ tmcode +"' ").FirstOrDefault().Category;
 
                         ViewBag.actualcat = actualcat;
+
+
+              
 
                 //     DataSet dataSet = new DataSet();
                 //     using (MySqlConnection connection = new MySqlConnection(_connectionString))

@@ -82,12 +82,13 @@
                             }
                             else if (ViewBag.Role == "18" || ViewBag.Role == "14")
                             {
+                                //Session["isrefer"] = 0;
                                 <td class="text-center">
                                     <table>
                                         <tr>
                                             <td style="text-align:center;">
                                                 <form hidden asp-action="Edit" asp-controller="ListView">
-
+                                                    
                                                     @* <input type="hidden" name="id" value="@item.TrackingId">
                                             <input type="hidden" name="anotherId" value="@item.BpsRecordId">
                                             <button type="submit" class="icon-navigation" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit" style="color:orange"></i></button>*@

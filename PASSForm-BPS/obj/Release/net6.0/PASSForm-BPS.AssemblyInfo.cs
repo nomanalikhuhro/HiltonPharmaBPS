@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PASSForm-BPS")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+78fda07c899a3d266f07d351ac74bd4f4ecc49b0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+84a29e0efa1fcd7382662edd9239efcb910871e6")]
 [assembly: System.Reflection.AssemblyProductAttribute("PASSForm-BPS")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PASSForm-BPS")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
