@@ -1,0 +1,65 @@
+﻿@model IEnumerable<PASSForm_BPS.Models.TransactionDetails>
+@{
+    ViewData["Title"] = "Submitted";
+
+}
+<div style="padding-top:5%;">
+
+
+        <div style="overflow-x: auto; border: 2px solid; background-color: white; border-radius: 10px; border-color: white; box-shadow: 1px 0px 9px 1px lightgray;">
+            <table class="table hide" id="App_DataTable">
+                <thead>
+                    <tr class="table table-striped">
+                        
+                        <th>Invoice Number</th>
+                        <th>Invoice Date</th>
+                        
+                        <th>Order No</th>
+                       @*  <th>Created By</th> *@
+                        <th>Created On</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var Orderlist in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Orderlist.InvoiceNumber
+                            </td>
+                            <td>@Orderlist.InvoiceDate</td>
+                            
+                            <td>@Orderlist.OrderNo</td>
+                            @* <td>@Orderlist.Createdby</td> *@
+                            <td>@Orderlist.Createdon.Value.ToString("dd-MMM-yyyy")</td>
+                             <td>
+                                <form asp-action="OrderListEdit" asp-controller="DiscountClaim" style="display:inline-block;">
+                                   <input type="hidden" name="id" value="@Orderlist.Id" />
+                                    <button type="submit" class="icon-navigation" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i></button>
+                                </form>
+                                <form asp-action="OrderListView" asp-controller="DiscountClaim" style="display:inline-block;">
+                                    
+                                    <button  type="submit" class="icon-navigation" data-toggle="tooltip" data-placement="top" title="View"><i class="fa fa-eye"></i></button>
+                                </form>
+                            </td> 
+                        
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+
+        $(document).ready(function () {
+            $('#App_DataTable').DataTable({
+
+            });
+        });
+
+    </script>
+
+
