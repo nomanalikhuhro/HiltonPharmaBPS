@@ -17,7 +17,7 @@ namespace PASSForm_BPS.Models
         public int? Updatedby { get; set; }
         public DateTime? Updatedon { get; set; }
         public string? OrderNo { get; set; } 
-        public string? PackCode { get; set; } 
+        //public string? PackCode { get; set; } 
         public int? TransactionId { get; set; }
        
 

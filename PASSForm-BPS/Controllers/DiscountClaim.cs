@@ -70,5 +70,26 @@ namespace PASSForm_BPS.Controllers
             }
             return RedirectToAction("SubmittedList");
         }
+
+        public IActionResult DiscountClaimPendingApproval() 
+        {
+            try
+            {
+                var PendingList = _passDbContext.TransactionDetails.FromSqlRaw("call OrderList").ToList();
+                return View(PendingList);
+
+            }
+
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = ex.Message;
+            }
+            return View();
+        }
+        public IActionResult ViewDiscountClaim() 
+        { 
+            return View(); 
+        }
     }
+    
 }
