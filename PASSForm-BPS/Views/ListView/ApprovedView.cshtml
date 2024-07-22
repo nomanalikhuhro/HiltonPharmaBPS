@@ -51,7 +51,7 @@
                             <td>@item.CreatedBy - @item.User_Name</td>
                             <td>@item.CreatedOn.Value.ToString("dd-MMM-yyyy")</td>
 
-                            @if (item.StatusId == 4 && ViewBag.IsRoleEdit == true && (ViewBag.Role != "18" && ViewBag.Role != "14"))
+                            @if (item.StatusId == 4 && ViewBag.empid == item.CreatedBy && ViewBag.IsRoleEdit == true && (ViewBag.Role != "18" && ViewBag.Role != "14"))
                             {
                                
                                 <td class="text-center">

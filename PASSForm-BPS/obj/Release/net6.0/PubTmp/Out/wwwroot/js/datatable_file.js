@@ -547,6 +547,7 @@ function SubmittedForm() {
 
 function UpdateSubmittedForm() {
 
+    debugger;
     var Dis = document.getElementById("distributer");
     var selectedDistributorValue = Dis.value || "";
     var discode = selectedDistributorValue.split('-');
@@ -581,6 +582,7 @@ function UpdateSubmittedForm() {
 
     var chemistCount = $("#tableAcc").find("button").length;
     $("#UpdateTableAcc").find("button").each(function (index) {
+        debugger;
         var buttonId = $(this).attr("id");
         var parts = buttonId.split('-');
 
@@ -633,6 +635,7 @@ function UpdateSubmittedForm() {
         ;
         var postselectedMonthsAndYear = [];
         while (postactualfromDate <= postactualtoDate) {
+            debugger;
             postselectedMonthsAndYear.push({
                 month: postactualfromDate.toLocaleString('default', { month: 'long' }),
                 year: postactualfromDate.getFullYear()
@@ -665,7 +668,7 @@ function UpdateSubmittedForm() {
 
         //Products For Pre Sales Against Each Chemist
         for (var j = 0; j < productPreSkuCount; j++) {
-
+            debugger;
             var productName = document.getElementById("sku-pre-product-" + button1rightPart + "-" + j).innerHTML;
             var productCode = document.getElementById("sku-pre-pakcode-" + button1rightPart + "-" + j).innerHTML;
             var postproductDescription = document.getElementById("sku-pre-description-" + button1rightPart + "-" + j).innerHTML;
@@ -675,13 +678,14 @@ function UpdateSubmittedForm() {
 
             var salArr = [];
             for (var k = 0; k < PreMon; k++) {
+                debugger;
                 var monthyearnames = document.getElementById("value-pre-coloum-" + button1rightPart  +"-"+ + k).innerHTML;
                 var YearPart = monthyearnames.split(' ');
                 var Year = YearPart[0];
                 var Month = YearPart[1];
 
-                var skuSales = document.getElementById("sku-pre-column-" + button1rightPart + "-" + j + "-" + k).innerHTML;
-                var valueSales = document.getElementById("value-pre-column-" + button1rightPart + "-" + j + "-" + k).innerHTML;
+                var skuSales = document.getElementById("sku-pre-column-" + button1rightPart + "-" + j + "-" + k).value;
+                var valueSales = document.getElementById("value-pre-column-" + button1rightPart + "-" + j + "-" + k).value;
 
                 salArr.push({ skuSales: skuSales, valueSales: valueSales, Year: Year, Month: Month });
             }
@@ -689,13 +693,14 @@ function UpdateSubmittedForm() {
         }
         //Products For Post Sales Against Each Chemist
         for (var j = 0; j < productPostCount; j++) {
-
+            debugger;
             var productName = document.getElementById("post-product-" + button1rightPart + "-" + j).innerText;
             var productCode = document.getElementById("post-pakcode-" + button1rightPart + "-" + j).innerText;
             var postproductDescription = document.getElementById("post-description-" + button1rightPart + "-" + j).innerText;
             //var postproductContribution = document.getElementById("sku-post-actdis-" + i + "-" + j).value;
             var salArr = [];
             for (var k = 0; k < numberOfPostMonths; k++) {
+                debugger;
                 var monthyearnames = document.getElementById("value-post-coloum-" + button1rightPart + "-" + k).innerHTML;
 
                 var YearPart = monthyearnames.split(' ');
@@ -719,9 +724,10 @@ function UpdateSubmittedForm() {
 
                 salArr.push({ skuSales: skuSales, valueSales: valueSales, Month: PostMonth, Year: PostYear });
             }
+            debugger;
             prdArr.push({ ProductName: productName, productCode: productCode, postproductDescription: postproductDescription, Contribution: preContribution, SalesType: "Post", Sale: salArr, posttotal: posttotal, discountpostcentage: discountpostcentage })
         }
-
+        debugger;
         Updatearr.push({ ChemistCode: ChemistCode, ProductArr: prdArr, postfromDate: postfromDate, posttoDate: posttoDate, prefromDate: prefromDate, pretoDate: pretoDate, totalwithoutdiscount: totalwithoutdiscount, totalwithdiscount: totalwithdiscount, bpspercentage: bpspercentage, totalroipercentage: totalroipercentage });
 
 

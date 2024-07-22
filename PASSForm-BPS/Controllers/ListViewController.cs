@@ -71,7 +71,7 @@ namespace PASSForm_BPS.Controllers
                 { ViewBag.IsRoleEdit = false; }
                 else { ViewBag.IsRoleEdit = true; }
 
-
+                ViewBag.empid = Empid_SessionValue;
                 var requests = _passDbContext.BpsRequests.FromSqlRaw("call sp_BPSRecordsList(" + Roleid + "," + Empid_SessionValue + ")").ToList();
                 return View(requests);
 
