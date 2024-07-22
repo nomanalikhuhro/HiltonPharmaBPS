@@ -4,4 +4,6 @@
 
 /.vs/PassForm-BPS/FileContentIndex
 /PASSForm-BPS/obj/Release/net6.0/PASSForm-BPS.assets.cache
+/PASSForm-BPS/bin/
+/PASSForm-BPS/obj/
 /.gitignore

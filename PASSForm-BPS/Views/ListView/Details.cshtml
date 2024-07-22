@@ -921,7 +921,7 @@
                     </div>
                     }
 
-                    @if (poNumber == null && roleId == "2" || roleId == "3")
+                    @* @if (poNumber == null && roleId == "2" || roleId == "3")
                     {
                         @if (screentype == "pendingscreen")
                         {
@@ -931,8 +931,8 @@
 
                         </div>
                         }
-                    }
-                    else if (roleId == "12" || roleId == "13" || roleId == "14" || roleId == "18" || roleId == "22" || roleId == "23")
+                    } *@
+                    @if (roleId == "12" || roleId == "13" || roleId == "14" || roleId == "18" || roleId == "22" || roleId == "23" || roleId == "2" || roleId == "3")
                     {
                         @if (screentype == "pendingscreen")
                         {
