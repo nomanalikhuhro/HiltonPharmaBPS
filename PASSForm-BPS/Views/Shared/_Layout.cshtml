@@ -456,7 +456,7 @@
                     @* End of 14 June Prototype Changes by Mohsin *@
 
                      @* Commented for SS purpose *@
-                        <div style="padding-top:20%">
+                        <div style="padding-top:20%; display:none;">
                         <button class="dropdown-btn">
                             PASS BPS
                             <i class="fa fa-caret-down"></i>
@@ -500,7 +500,7 @@
                        Commented just for the SS purpose *@
                    
                    
-                     <div style="padding-top:4%; display:none;">
+                     <div style="padding-top:4%; ">
                         <button class="dropdown-btn">
                             PAP BPS
                             <i class="fa fa-caret-down"></i>
@@ -563,6 +563,29 @@
                             }
                         </div>
                     </div>
+
+                    <div style="padding-top:4%; ">
+                        <button class="dropdown-btn">
+                            Discount Claim
+                            <i class="fa fa-caret-down"></i>
+                        </button>
+                        <div class="dropdown-container">
+                            
+                                <div>
+                                <a class="sidebar-link @(currentAction == "SubmittedList" ? "act" : "")" asp-area="" asp-controller="DiscountClaim" asp-action="SubmittedList">Submitted Request</a>
+                                   
+                                   
+                                </div>
+
+
+
+                           
+                           
+                           
+                            
+                        </div>
+                    </div>
+
                 </div>
             </div>
 

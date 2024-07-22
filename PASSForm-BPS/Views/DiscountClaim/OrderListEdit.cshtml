@@ -1,0 +1,107 @@
+﻿@model IEnumerable<PASSForm_BPS.Models.TransactionDetails>
+@{
+    ViewData["Title"] = "Edit";
+
+}
+
+
+
+    <style>
+        .form-container {
+            padding: 5% 10%;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-title {
+            margin-bottom: 30px;
+        }
+    </style>
+    <title>Order Form</title>
+
+
+    <div class="container form-container">
+        <h2 class="form-title">Order Details</h2>
+        @foreach (var Orderlist in Model)
+        {
+            <form asp-action="OrderListEditById" asp-controller="DiscountClaim" class="mb-4 p-3 border rounded">
+                <div class="form-group">
+                    <label for="InvoiceNumber">Invoice Number</label>
+                    <input type="text" id="InvoiceNumber" name="InvoiceNumber" value="@Orderlist.InvoiceNumber" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label for="InvoiceDate">Invoice Date</label>
+                    <input type="text" id="InvoiceDate" name="InvoiceDate" value="@Orderlist.InvoiceDate" class="form-control" readonly />
+                </div>
+                <div class="form-group">
+                    <label for="ProductCode">Product Code</label>
+                <input type="text" id="ProductCode" name="ProductCode" value="@Orderlist.PackCode" class="form-control" />
+                </div>
+            <div class="form-group">
+                <label for="OrderID">Order ID</label>
+                <input type="text" id="OrderID" name="OrderID" value="@Orderlist.OrderID" class="form-control" readonly />
+            </div>
+            <div class="form-group">
+                <label for="OrderNo">Order No</label>
+                <input type="text" id="OrderNo" name="OrderNo" value="@Orderlist.OrderNo" class="form-control" readonly />
+            </div>
+                <div class="form-group">
+                <label for="Quantity">Quantity</label>
+                <input type="text" id="Quantity" name="Quantity" value="@Orderlist.Quantity" class="form-control" />
+                </div>
+               
+                <input type="hidden" name="id" value="@Orderlist.Id" />
+                <button type="submit" class="btn btn-primary">Edit</button>
+            @if (ViewBag.Message != null)
+            {
+                <div class="error-message">@ViewBag.Message</div>
+            }
+            </form>
+        }
+    </div>
+
+
+
+
+    @* <div style="padding-top:5%;">
+        <div style="overflow-x: auto; border: 2px solid; background-color: white; border-radius: 10px; border-color: white; box-shadow: 1px 0px 9px 1px lightgray;">
+            <table class="table hide" id="App_DataTable">
+                <thead>
+                    <tr class="table table-striped">
+                        <th>Invoice Number</th>
+                        <th>Invoice Date</th>
+                        <th>Product Code</th>
+                        <th>Order No</th>
+                        <th>Created On</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var Orderlist in Model)
+                    {
+                        <tr>
+                            <td>
+                                <input type="text" value="@Orderlist.InvoiceNumber" />
+                            </td>
+                            <td>
+                                <input type="text" value="@Orderlist.InvoiceDate" />
+                            </td>
+                            <td>
+                                <input type="text" value="@Orderlist.ProductCode" />
+                            </td>
+                            <td>
+                                <input type="text" value="@Orderlist.OrderNo" />
+                            </td>
+                            <td>
+                                <input type="text" value="@Orderlist.Createdon.Value.ToString("dd-MMM-yyyy")" />
+                            </td>
+                           
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        </div> *@
+ 

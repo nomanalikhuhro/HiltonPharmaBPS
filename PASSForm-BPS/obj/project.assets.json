@@ -12710,19 +12710,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\out.dev1\\.nuget\\packages\\": {}
+    "C:\\Users\\out.dev4\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\BPSGit\\PASSForm-BPS\\PASSForm-BPS.csproj",
+      "projectUniqueName": "D:\\BPS Discount Claim\\PASSForm-BPS\\PASSForm-BPS.csproj",
       "projectName": "PASSForm-BPS",
-      "projectPath": "D:\\BPSGit\\PASSForm-BPS\\PASSForm-BPS.csproj",
-      "packagesPath": "C:\\Users\\out.dev1\\.nuget\\packages\\",
-      "outputPath": "D:\\BPSGit\\PASSForm-BPS\\obj\\",
+      "projectPath": "D:\\BPS Discount Claim\\PASSForm-BPS\\PASSForm-BPS.csproj",
+      "packagesPath": "C:\\Users\\out.dev4\\.nuget\\packages\\",
+      "outputPath": "D:\\BPS Discount Claim\\PASSForm-BPS\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\out.dev1\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\out.dev4\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -12731,8 +12731,12 @@
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "C:\\Program Files\\dotnet\\library-packs": {},
+<<<<<<< Updated upstream
         "https://api.nuget.org/v3/index.json": {},
         "https://nuget.devexpress.com/v1lWyN2CGVB2hq1riCouSaeQhY6KVq9LW2ZVjwWVt4O2EgkDee/api/v3/index.json": {}
+=======
+        "https://api.nuget.org/v3/index.json": {}
+>>>>>>> Stashed changes
       },
       "frameworks": {
         "net6.0": {
@@ -12825,7 +12829,11 @@
             "privateAssets": "all"
           }
         },
+<<<<<<< Updated upstream
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.300\\RuntimeIdentifierGraph.json"
+=======
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.302\\RuntimeIdentifierGraph.json"
+>>>>>>> Stashed changes
       }
     }
   }

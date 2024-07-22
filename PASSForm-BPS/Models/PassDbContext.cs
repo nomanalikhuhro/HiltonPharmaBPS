@@ -109,6 +109,7 @@ public partial class PassDbContext : DbContext
     public virtual DbSet<wf_uploadfilespath> Wf_Uploadfilespaths { get; set; }
 
     public virtual DbSet<Hcprequest_pap> HcprequestPAPs { get; set; }
+    public virtual DbSet<TransactionDetails> TransactionDetails { get; set; }
 
 
     public DbSet<BPSPAPPharmaciesListViewModel> BPSPAPPharmaciesListViewModels { get; set; }
@@ -716,6 +717,7 @@ public partial class PassDbContext : DbContext
 
         modelBuilder.Entity<Hcprequest_pap>().HasNoKey();
         modelBuilder.Entity<paptype>().HasNoKey();
+        modelBuilder.Entity<TransactionDetails>().HasNoKey();
 
 
         //modelBuilder.Entity<Hcprequest_pap>(entity =>
