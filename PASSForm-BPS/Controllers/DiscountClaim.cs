@@ -60,8 +60,6 @@ namespace PASSForm_BPS.Controllers
             {
                 var Orderlist = _passDbContext.Database.ExecuteSqlRaw($"call sp_UpdateOrderdetails({Id}, '{InvoiceNumber}', '{ProductCode}', {Quantity})");
                 ViewBag.Message = "Successfully Updated";
-                
-               
             }
 
             catch (Exception ex)
@@ -89,6 +87,10 @@ namespace PASSForm_BPS.Controllers
         public IActionResult ViewDiscountClaim() 
         { 
             return View(); 
+        }
+        public IActionResult RequestStatus() 
+        {
+            return View();
         }
     }
     

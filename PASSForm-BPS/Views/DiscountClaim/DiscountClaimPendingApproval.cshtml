@@ -1,0 +1,71 @@
+﻿@model IEnumerable<PASSForm_BPS.Models.TransactionDetails>
+@{
+    ViewData["Title"] = "DiscountClaimPendingApproval";
+}
+
+
+<html>
+
+<head>
+    <title>Your View</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div style="padding-top: 5%;">
+
+        <div style="border:2px solid; background-color: white; border-radius: 10px; border-color: white; box-shadow: 1px 0px 9px 1px lightgray; overflow-x: auto;">
+
+            <table class="table hide" id="App_DataTable">
+                <thead>
+                    <tr class="table table-striped">
+                        <th>BPS Request Id</th>
+                        <th>Territory Code</th>
+                        <th>Workflow Status</th>
+                        <th>Activity Status</th>
+                        <th>Created By</th>
+                        @* <th>Created On</th> *@
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="table table-striped">
+                        <td>001</td>
+                        <td>AGG-GHJ-JKJ</td>
+                        <td>Pending</td>
+                        <td>Activity Not Started</td>
+                        <td>Zeeshan Hafeez</td>
+                        <td>
+                            <form asp-action="ViewDiscountClaim" asp-controller="DiscountClaim" style="display:inline-block;">
+                                <button type="submit" class="icon-navigation" data-toggle="tooltip" data-placement="top" title="View"><i class="fa fa-eye"></i></button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="~/js/datatable_file.js"></script>
+    <script>
+
+
+
+        $(document).ready(function () {
+
+            $('#App_DataTable').DataTable({
+                //"order": [[4, "desc"]],
+                "order": [[4, "desc"]], //or asc
+                "columnDefs": [{ type: 'date', 'targets': [4] }],
+                //order: false,
+                //columnDefs: [{
+                //    targets: "_all",
+                //    orderable: false
+                //}],// Order by the first column (index 0) in descending order
+            });
+        });
+
+     
+    </script>
+
+</body>
+</html>

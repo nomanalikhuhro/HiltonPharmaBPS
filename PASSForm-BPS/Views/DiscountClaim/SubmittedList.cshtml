@@ -1,11 +1,8 @@
 ﻿@model IEnumerable<PASSForm_BPS.Models.TransactionDetails>
 @{
     ViewData["Title"] = "Submitted";
-
 }
 <div style="padding-top:5%;">
-
-
         <div style="overflow-x: auto; border: 2px solid; background-color: white; border-radius: 10px; border-color: white; box-shadow: 1px 0px 9px 1px lightgray;">
             <table class="table hide" id="App_DataTable">
                 <thead>
@@ -13,7 +10,6 @@
                         
                         <th>Invoice Number</th>
                         <th>Invoice Date</th>
-                        
                         <th>Order No</th>
                        @*  <th>Created By</th> *@
                         <th>Created On</th>
@@ -42,15 +38,12 @@
                                     <button  type="submit" class="icon-navigation" data-toggle="tooltip" data-placement="top" title="View"><i class="fa fa-eye"></i></button>
                                 </form>
                             </td> 
-                        
                     </tr>
                     }
                 </tbody>
             </table>
         </div>
     </div>
-
-
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
 

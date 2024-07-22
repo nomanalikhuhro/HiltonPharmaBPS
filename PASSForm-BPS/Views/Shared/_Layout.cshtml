@@ -573,16 +573,16 @@
                             
                                 <div>
                                 <a class="sidebar-link @(currentAction == "SubmittedList" ? "act" : "")" asp-area="" asp-controller="DiscountClaim" asp-action="SubmittedList">Submitted Request</a>
-                                   
-                                   
+
                                 </div>
+                            <div>
+                                <a class="sidebar-link @(currentAction == "DiscountClaimPendingApproval" ? "act" : "")" asp-area="" asp-controller="DiscountClaim" asp-action="DiscountClaimPendingApproval">Pending For Approval</a>
 
+                            </div>
+                            <div>
+                                <a class="sidebar-link @(currentAction == "RequestStatus" ? "act" : "")" asp-area="" asp-controller="DiscountClaim" asp-action="RequestStatus">Request Status</a>
 
-
-                           
-                           
-                           
-                            
+                            </div>
                         </div>
                     </div>
 

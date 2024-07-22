@@ -21,11 +21,5 @@ namespace PASSForm_BPS.Models
         public int? TransactionId { get; set; }
        
 
-
-
-
-        
-
-
     }
 }
